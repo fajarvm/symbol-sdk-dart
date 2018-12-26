@@ -1,18 +1,11 @@
-A library for Dart developers.
-
-Created from templates made available by Stagehand under a BSD-style
-[license](https://github.com/dart-lang/stagehand/blob/master/LICENSE).
+A software development kit (SDK) for building NEM2 applications with Dart (version 2.0 and above).
 
 ## Usage
 
 A simple usage example:
 
 ```dart
-import 'package:nem2_sdk_dart/nem2_sdk_dart.dart';
-
-main() {
-  var awesome = new Awesome();
-}
+import 'package:nem2_sdk_dart/export.dart';
 ```
 
 ## Features and bugs
