@@ -14,6 +14,25 @@ class HexCodec extends Codec<List<int>, String> {
 
   @override
   Converter<List<int>, String> get encoder => const HexEncoder();
+
+  /// Converts a [hexString] into a byte array. Optionally return null,
+  /// when the parameter [returnNull] is set to true.
+  getBytes(final String hexString, {final bool returnNull: false}) {
+    try {
+      return decoder.convert(hexString);
+    } catch (error) {
+      if (returnNull) {
+        return null;
+      } else {
+        throw error;
+      }
+    }
+  }
+
+  /// Converts a byte array to a hex string.
+  getString(final List<int> bytes) {
+    return encoder.convert(bytes);
+  }
 }
 
 /**
