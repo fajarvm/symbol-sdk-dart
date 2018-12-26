@@ -29,10 +29,6 @@ class HexDecoder extends Converter<String, List<int>> {
     }
 
     String cleanInput = StringUtils.removeAllWhitespaces(hexString.toLowerCase());
-    if (cleanInput.isEmpty) {
-      throw new ArgumentError("Input string cannot be empty");
-    }
-
     if ((cleanInput.length % 2) != 0) {
       cleanInput = "0" + cleanInput;
     }
@@ -40,8 +36,13 @@ class HexDecoder extends Converter<String, List<int>> {
     // fill byte array with value
     Uint8List bytes = new Uint8List(cleanInput.length ~/ 2);
     for (var i = 0; i < bytes.length; ++i) {
-      bytes[i] = (HexCodec.DIGITS_LOWER.indexOf(cleanInput[i * 2]) << 4) +
-          (HexCodec.DIGITS_LOWER.indexOf(cleanInput[i * 2 + 1]));
+      int firstDigit = HexCodec.DIGITS_LOWER.indexOf(cleanInput[i * 2]);
+      int secondDigit = HexCodec.DIGITS_LOWER.indexOf(cleanInput[i * 2 + 1]);
+      if (firstDigit == -1 || secondDigit == -1) {
+        throw new FormatException("Invalid input. Invalid character in hexString: $hexString");
+      }
+
+      bytes[i] = (firstDigit << 4) + secondDigit;
     }
 
     return bytes;
@@ -54,7 +55,7 @@ class HexDecoder extends Converter<String, List<int>> {
 class HexEncoder extends Converter<List<int>, String> {
   final bool toLowerCase;
 
-  const HexEncoder({bool this.toLowerCase: false});
+  const HexEncoder({bool this.toLowerCase: true});
 
   @override
   String convert(List<int> bytes) {
@@ -68,6 +69,10 @@ class HexEncoder extends Converter<List<int>, String> {
       sb.write('${(byte < 16 ? '0' : '')}${byte.toRadixString(16)}');
     }
 
-    return sb.toString();
+    if (!toLowerCase) {
+      return sb.toString().toUpperCase();
+    } else {
+      return sb.toString();
+    }
   }
 }
