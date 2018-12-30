@@ -10,7 +10,8 @@ class PublicKey {
   /// Creates a public key based on the given [hexString]
   static PublicKey fromHexString(final String hexString) {
     try {
-      final String paddedHexString = 0 == hexString.length % 2 ? hexString : "0" + hexString;
+      final String paddedHexString =
+          0 == hexString.length % 2 ? hexString : "0" + hexString;
       return new PublicKey(hex.decode(paddedHexString));
     } catch (error) {
       throw new CryptoException(error.toString());
@@ -32,6 +33,6 @@ class PublicKey {
 
   @override
   String toString() {
-    return hex.encode(getRaw());
+    return hex.encode(this._value);
   }
 }

@@ -13,11 +13,9 @@
  * This allows the user to get all of a library’s functionality by importing a single file.
  */
 
-/**
- * This the main library that exports all classes of the NEM2 SDK Dart project.
- */
-library nem2_sdk_dart.export;
+/// This the main library that exports all classes of the NEM2 SDK Dart project.
+library nem2_sdk_dart.export_all;
 
-// Export any libraries intended for clients of this package.
+/// Export any libraries intended for clients of this package.
 export "package:nem2_sdk_dart/core.dart";
 export "package:nem2_sdk_dart/sdk.dart";

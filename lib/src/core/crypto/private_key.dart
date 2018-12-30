@@ -10,8 +10,9 @@ class PrivateKey {
   /// Creates a private key based on the given [hexString]
   static PrivateKey fromHexString(final String hexString) {
     try {
-      final String paddedHexString = 0 == hexString.length % 2 ? hexString : "0" + hexString;
-      return new PrivateKey(decodeBigInt(hex.decode(paddedHexString)));
+      final String paddedHexString =
+          0 == hexString.length % 2 ? hexString : "0" + hexString;
+      return new PrivateKey(ByteUtils.toBigInt(hex.decode(paddedHexString)));
     } catch (error) {
       throw new CryptoException(error.toString());
     }
@@ -33,7 +34,7 @@ class PrivateKey {
 
   /// Returns the bytes value of this [PrivateKey]
   Uint8List getBytes() {
-    return encodeBigInt(this._value);
+    return ByteUtils.bigIntToBytes(this._value);
   }
 
   @override
@@ -46,6 +47,6 @@ class PrivateKey {
 
   @override
   String toString() {
-    return hex.encode(getBytes());
+    return hex.encode(getBytes().toList());
   }
 }
