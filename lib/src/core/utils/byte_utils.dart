@@ -79,6 +79,7 @@ class ByteUtils {
     for (int i = 0; i < bytes.length; ++i) {
       result = result << 8;
       result += new BigInt.from((isNegative ? (bytes[i] ^ 0xff) : bytes[i]));
+      // result += (BigInt.one * new BigInt.from(bytes[i] & 0xFF)) << (i * 8);
     }
 
     return isNegative ? (result + BigInt.one) * BIG_INT_NEGATIVE_ONE : result;

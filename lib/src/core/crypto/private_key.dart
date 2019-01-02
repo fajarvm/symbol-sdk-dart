@@ -12,7 +12,13 @@ class PrivateKey {
     try {
       final String paddedHexString =
           0 == hexString.length % 2 ? hexString : "0" + hexString;
-      return new PrivateKey(ByteUtils.toBigInt(hex.decode(paddedHexString)));
+      // TODO: Use StringEncoder
+      final Uint8List encodedBytes = Utf8Encoder().convert(paddedHexString);
+      // TODO: convert the encodedBytes into bytes by a HexCodec
+      // hexBytes = hex.decode(encodedBytes);
+      // and then do ByteUtils.toBigInt(hexBytes);
+      final BigInt bigIntFromByes = ByteUtils.toBigInt(encodedBytes);
+      return new PrivateKey(bigIntFromByes);
     } catch (error) {
       throw new CryptoException(error.toString());
     }
