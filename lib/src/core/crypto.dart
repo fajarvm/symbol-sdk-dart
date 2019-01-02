@@ -1,6 +1,5 @@
 library nem2_sdk_dart.core.crypto;
 
-import "dart:convert" show Utf8Codec, Utf8Decoder, Utf8Encoder;
 import "dart:typed_data" show Uint8List;
 
 import "package:convert/convert.dart" show hex;

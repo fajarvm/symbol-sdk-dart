@@ -10,14 +10,8 @@ class PrivateKey {
   /// Creates a private key based on the given [hexString]
   static PrivateKey fromHexString(final String hexString) {
     try {
-      final String paddedHexString =
-          0 == hexString.length % 2 ? hexString : "0" + hexString;
-      // TODO: Use StringEncoder
-      final Uint8List encodedBytes = Utf8Encoder().convert(paddedHexString);
-      // TODO: convert the encodedBytes into bytes by a HexCodec
-      // hexBytes = hex.decode(encodedBytes);
-      // and then do ByteUtils.toBigInt(hexBytes);
-      final BigInt bigIntFromByes = ByteUtils.toBigInt(encodedBytes);
+      Uint8List bytes = HexUtils.getBytes(hexString);
+      final BigInt bigIntFromByes = ByteUtils.toBigInt(bytes);
       return new PrivateKey(bigIntFromByes);
     } catch (error) {
       throw new CryptoException(error.toString());

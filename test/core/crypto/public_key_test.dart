@@ -1,9 +1,9 @@
-library nem2_sdk_dart.test.core.utils.public_key_test;
+library nem2_sdk_dart.test.core.crypto.public_key_test;
+
+import "dart:typed_data" show Uint8List;
 
 import "package:test/test.dart";
 import "package:nem2_sdk_dart/src/core/crypto.dart";
-
-import "dart:typed_data" show Uint8List;
 
 final Uint8List TEST_BYTES = Uint8List.fromList([0x22, 0xAB, 0x71]);
 final Uint8List MODIFIED_TEST_BYTES = Uint8List.fromList([0x22, 0xAB, 0x72]);
@@ -27,7 +27,8 @@ void testCreatePublicKey() {
   });
 
   test("cannot create public key from malformed hex string", () {
-    expect(() => PublicKey.fromHexString("22G75"), throwsA(TypeMatcher<CryptoException>()));
+    expect(() => PublicKey.fromHexString("22G75"),
+        throwsA(TypeMatcher<CryptoException>()));
   });
 }
 
@@ -48,7 +49,8 @@ void testHashCode() {
 
   test("hash codes are equal for equivalent objects", () {
     expect(new PublicKey(TEST_BYTES).hashCode, equals(hashCode));
-    expect(new PublicKey(MODIFIED_TEST_BYTES).hashCode, isNot(equals(hashCode)));
+    expect(
+        new PublicKey(MODIFIED_TEST_BYTES).hashCode, isNot(equals(hashCode)));
   });
 }
 
