@@ -35,11 +35,10 @@ void testCreatePrivateKey() {
 
   test("create private key from a hex string", () {
     final PrivateKey key = PrivateKey.fromHexString("227F");
-    int intParse = int.parse("227F", radix: 16);
-    BigInt bigIntHex = BigInt.from(intParse);
     BigInt bigIntPK = key.getRaw();
+    BigInt bigIntParsed = BigInt.parse("227F", radix: 16);
 
-    expect(bigIntPK, equals(bigIntHex));
+    expect(bigIntPK, equals(bigIntParsed));
     expect(bigIntPK.isNegative, false);
   });
 

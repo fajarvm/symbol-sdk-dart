@@ -9,11 +9,12 @@ import "package:nem2_sdk_dart/src/core/crypto/ed25519/arithmetic/arithmetic.dart
 import "package:nem2_sdk_dart/src/core/utils.dart" show ByteUtils;
 
 class TestUtils {
-  static final BigInt D = BigInt.from(-121665) * (BigInt.from(121666).modInverse(Ed25519Field.P));
+  static final BigInt D =
+      BigInt.from(-121665) * (BigInt.from(121666).modInverse(Ed25519Field.P));
 
   /// Converts a field element to a BigInteger.
   static BigInt toBigIntFromEd25519FieldElement(final Ed25519FieldElement f) {
-    return ByteUtils.toBigInt(f.encode().getRaw());
+    return ByteUtils.toBigIntUnsigned(f.encode().getRaw());
   }
 
   /// Converts a BigInteger to a field element.
@@ -22,7 +23,8 @@ class TestUtils {
   }
 
   /// Gets the affine x-coordinate from a given affine y-coordinate and the sign of x.
-  static BigInt getAffineXFromAffineY(final BigInt y, final bool shouldBeNegative) {
+  static BigInt getAffineXFromAffineY(
+      final BigInt y, final bool shouldBeNegative) {
     /// x = sign(x) * sqrt((y^2 - 1) / (d * y^2 + 1))
     final BigInt u = (y * y - BigInt.one) % Ed25519Field.P;
     final BigInt v = ((D * y * y) + BigInt.one) % Ed25519Field.P;
@@ -32,11 +34,13 @@ class TestUtils {
       if (BigInt.zero != (v * x * x + u) % Ed25519Field.P) {
         throw new ArgumentError("not a valid Ed25519GroupElement");
       }
-      x = (x * TestUtils.toBigIntFromEd25519FieldElement(Ed25519Field.I)) % Ed25519Field.P;
+      x = (x * TestUtils.toBigIntFromEd25519FieldElement(Ed25519Field.I)) %
+          Ed25519Field.P;
     }
 
     final bool isNegative = BigInt.one == (x % BigInt.from(2));
-    if ((shouldBeNegative && !isNegative) || (!shouldBeNegative && isNegative)) {
+    if ((shouldBeNegative && !isNegative) ||
+        (!shouldBeNegative && isNegative)) {
       x = negateBigInt(x);
       x = x % Ed25519Field.P;
       x = x;
@@ -48,7 +52,9 @@ class TestUtils {
   /// Calculates and returns the square root of a fraction of u and v.
   /// The sign is unpredictable.
   static BigInt getSqrtOfFraction(final BigInt u, final BigInt v) {
-    final BigInt tmp = (u * v.pow(7)).modPow((BigInt.one << 252) - BigInt.from(3), Ed25519Field.P) % Ed25519Field.P;
+    final BigInt tmp = (u * v.pow(7))
+            .modPow((BigInt.one << 252) - BigInt.from(3), Ed25519Field.P) %
+        Ed25519Field.P;
     return ((tmp * u) * v.pow(3)) % Ed25519Field.P;
   }
 

@@ -72,18 +72,57 @@ class ByteUtils {
     return byteList;
   }
 
-  /// Converts a byte array to a BigInt (negative is preserved)
-  static BigInt toBigInt(final List<int> bytes) {
-    final bool isNegative = (bytes[0] & 0x80) != 0;
-    BigInt result = BigInt.zero;
-    for (int i = 0; i < bytes.length; ++i) {
-      result = result << 8;
-      result += new BigInt.from((isNegative ? (bytes[i] ^ 0xff) : bytes[i]));
-      // result += (BigInt.one * new BigInt.from(bytes[i] & 0xFF)) << (i * 8);
+  /// Converts a byte array to a BigInt. Negative is preserved.
+  static BigInt toBigInt(List<int> s, {bool fixSign = false}) {
+    int data = 0;
+    if (s == null || s.length == 0) {
+      return BigInt.zero;
+    }
+    bool neg = false;
+    int v = 0;
+    if (!fixSign && s[0] & 0xFF > 0x7F) {
+      neg = true;
+    }
+    if (neg) {
+      for (int byte in s) {
+        v = (v << 8) | (~((byte & 0xFF) - 256));
+      }
+      data = ~v;
+    } else {
+      for (int byte in s) {
+        v = (v << 8) | (byte & 0xFF);
+      }
+      data = v;
     }
 
-    return isNegative ? (result + BigInt.one) * BIG_INT_NEGATIVE_ONE : result;
+    return BigInt.from(data);
   }
+
+  /// Converts a byte array to a BigInt (unsigned)
+  static BigInt toBigIntUnsigned(final List<int> bytes) {
+    BigInt b = BigInt.zero;
+    for (int i = 0; i < bytes.length; i++) {
+      b += BigInt.one * BigInt.from(bytes[i] & 0xff) << (i * 8);
+    }
+
+    return b;
+  }
+
+//  static BigInt toBigInt(final List<int> bytes) {
+//    final bool isNegative = (bytes[0] & 0x80) != 0;
+//    BigInt b = BigInt.zero;
+//    for (int i = 0; i < bytes.length; i++) {
+////      b = b << 8;
+////      b += new BigInt.from((isNegative ? (bytes[i] ^ 0xff) : bytes[i]));
+//      b += (BigInt.one * new BigInt.from(bytes[i] & 0xFF)) << (i * 8); // NEM impl
+//    }
+//
+//    if (isNegative) {
+//      return (b + BigInt.one) * BIG_INT_NEGATIVE_ONE;
+//    }
+//
+//    return b;
+//  }
 
   /// copied from package:dart-cryptoutils by stevenroose
   static Uint8List bigIntToBytes(BigInt input) {

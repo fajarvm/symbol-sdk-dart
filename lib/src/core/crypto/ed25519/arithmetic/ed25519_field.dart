@@ -4,8 +4,9 @@ part of nem2_sdk_dart.core.crypto.ed25519.arithmetic;
 /// The field has p = 2^255 - 19 elements.
 class Ed25519Field {
   /// P: 2^255 - 19
-  static final BigInt P = ByteUtils.toBigInt(hex.decode(
-      "7fffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffed"));
+  static final BigInt P = BigInt.parse(
+      "7fffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffed",
+      radix: 16);
   static final Ed25519FieldElement ZERO = _getFieldElement(0);
   static final Ed25519FieldElement ONE = _getFieldElement(1);
   static final Ed25519FieldElement TWO = _getFieldElement(2);
