@@ -12,17 +12,17 @@ main() {
 
   test("Ed25519Field.ZERO is as expected", () {
     expect(BigInt.zero,
-        equals(TestUtils.toBigIntFromEd25519FieldElement(Ed25519Field.ZERO)));
+        equals(TestUtils.toBigIntFromFE(Ed25519Field.ZERO)));
   });
 
   test("Ed25519Field.ONE is as expected", () {
     expect(BigInt.one,
-        equals(TestUtils.toBigIntFromEd25519FieldElement(Ed25519Field.ONE)));
+        equals(TestUtils.toBigIntFromFE(Ed25519Field.ONE)));
   });
 
   test("Ed25519Field.TWO is as expected", () {
     expect(BigInt.two,
-        equals(TestUtils.toBigIntFromEd25519FieldElement(Ed25519Field.TWO)));
+        equals(TestUtils.toBigIntFromFE(Ed25519Field.TWO)));
   });
 
   test("Ed25519Field.D is as expected", () {
@@ -30,7 +30,7 @@ main() {
         "37095705934669439343138083508754565189542113879843219016388785533085940283555");
 
     expect(
-        D, equals(TestUtils.toBigIntFromEd25519FieldElement(Ed25519Field.D)));
+        D, equals(TestUtils.toBigIntFromFE(Ed25519Field.D)));
   });
 
   test("Ed25519Field.D_Times_TWO is as expected", () {
@@ -39,7 +39,7 @@ main() {
 
     expect(
         D_times_Two,
-        equals(TestUtils.toBigIntFromEd25519FieldElement(
+        equals(TestUtils.toBigIntFromFE(
             Ed25519Field.D_Times_TWO)));
   });
 
@@ -48,7 +48,7 @@ main() {
         "19681161376707505956807079304988542015446066515923890162744021073123829784752");
 
     expect(
-        I, equals(TestUtils.toBigIntFromEd25519FieldElement(Ed25519Field.I)));
+        I, equals(TestUtils.toBigIntFromFE(Ed25519Field.I)));
 
     /// Assert (i^2 == -1):
     BigInt result1 = I * I % Ed25519Field.P;
