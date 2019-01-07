@@ -1,3 +1,0 @@
-class UInt64DTO {
-
-}
