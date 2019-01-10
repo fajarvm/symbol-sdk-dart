@@ -3,5 +3,5 @@
  */
 library nem2_sdk_dart.core;
 
-export "package:nem2_sdk_dart/src/core/crypto.dart";
-export "package:nem2_sdk_dart/src/core/utils.dart";
+export 'package:nem2_sdk_dart/src/core/crypto.dart';
+export 'package:nem2_sdk_dart/src/core/utils.dart';

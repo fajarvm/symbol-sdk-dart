@@ -1,4 +1,4 @@
-part of nem2_sdk_dart.sdk.model.account;
+library nem2_sdk_dart.sdk.model.account.address;
 
 /**
  * The address structure describes an address with its network.

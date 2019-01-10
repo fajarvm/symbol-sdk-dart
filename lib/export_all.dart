@@ -17,5 +17,5 @@
 library nem2_sdk_dart.export_all;
 
 /// Export any libraries intended for clients of this package.
-export "package:nem2_sdk_dart/core.dart";
-export "package:nem2_sdk_dart/sdk.dart";
+export 'package:nem2_sdk_dart/core.dart';
+export 'package:nem2_sdk_dart/sdk.dart';

@@ -1,4 +1,4 @@
-part of nem2_sdk_dart.core.utils;
+library nem2_sdk_dart.core.utils.string_utils;
 
 /// A collection of utility functions to manipulate a String
 class StringUtils {

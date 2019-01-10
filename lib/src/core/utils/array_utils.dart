@@ -1,4 +1,7 @@
-part of nem2_sdk_dart.core.utils;
+library nem2_sdk_dart.core.utils.array_utils;
+
+import 'dart:typed_data' show Uint8List;
+import 'byte_utils.dart';
 
 /// A collection of utility functions to manipulate arrays
 class ArrayUtils {
