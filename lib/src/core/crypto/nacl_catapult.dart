@@ -7,11 +7,11 @@ import "dart:core";
 import "package:convert/convert.dart";
 import 'package:fixnum/fixnum.dart';
 
-class KeyPair {
+class NaclKeyPair {
   Uint8List _publicKey;
   Uint8List _secretKey;
 
-  KeyPair(publicKeyLength, secretKeyLength) {
+  NaclKeyPair(publicKeyLength, secretKeyLength) {
     _publicKey = Uint8List(publicKeyLength);
     _secretKey = Uint8List(secretKeyLength);
   }
@@ -316,15 +316,15 @@ class Box {
    *   Generates a new random key pair for box and
    *   returns it as an object with publicKey and secretKey members:
    * */
-  static KeyPair keyPair() {
-    KeyPair kp = new KeyPair(publicKeyLength, secretKeyLength);
+  static NaclKeyPair keyPair() {
+    NaclKeyPair kp = new NaclKeyPair(publicKeyLength, secretKeyLength);
 
     NaclCatapult.crypto_box_keypair(kp.publicKey, kp.secretKey);
     return kp;
   }
 
-  static KeyPair keyPair_fromSecretKey(Uint8List secretKey) {
-    KeyPair kp = new KeyPair(publicKeyLength, secretKeyLength);
+  static NaclKeyPair keyPair_fromSecretKey(Uint8List secretKey) {
+    NaclKeyPair kp = new NaclKeyPair(publicKeyLength, secretKeyLength);
     Uint8List sk = kp.secretKey;
     Uint8List pk = kp.publicKey;
 
@@ -706,15 +706,15 @@ class Signature {
   /*
    *   Signs the message using the secret key and returns a signed message.
    * */
-  static KeyPair keyPair() {
-    KeyPair kp = new KeyPair(publicKeyLength, secretKeyLength);
+  static NaclKeyPair keyPair() {
+    NaclKeyPair kp = new NaclKeyPair(publicKeyLength, secretKeyLength);
 
     NaclCatapult.crypto_sign_keypair(kp.publicKey, kp.secretKey, false);
     return kp;
   }
 
-  static KeyPair keyPair_fromSecretKey(Uint8List secretKey) {
-    KeyPair kp = new KeyPair(publicKeyLength, secretKeyLength);
+  static NaclKeyPair keyPair_fromSecretKey(Uint8List secretKey) {
+    NaclKeyPair kp = new NaclKeyPair(publicKeyLength, secretKeyLength);
     Uint8List pk = kp.publicKey;
     Uint8List sk = kp.secretKey;
 
@@ -728,8 +728,8 @@ class Signature {
     return kp;
   }
 
-  static KeyPair keyPair_fromSeed(Uint8List seed) {
-    KeyPair kp = new KeyPair(publicKeyLength, secretKeyLength);
+  static NaclKeyPair keyPair_fromSeed(Uint8List seed) {
+    NaclKeyPair kp = new NaclKeyPair(publicKeyLength, secretKeyLength);
     Uint8List pk = kp.publicKey;
     Uint8List sk = kp.secretKey;
 

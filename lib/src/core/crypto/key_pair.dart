@@ -7,7 +7,6 @@ import 'package:nem2_sdk_dart/core.dart'
 
 /// Represents a key pair
 class KeyPair {
-
   final Uint8List _privateKey;
   final Uint8List _publicKey;
 
@@ -28,7 +27,7 @@ class KeyPair {
   Uint8List get privateKey => _privateKey;
 
   /// Creates a key pair from a [hexEncodedPrivateKey] string.
-  KeyPair createFromPrivateKeyString(final String hexEncodedPrivateKey) {
+  static KeyPair createFromPrivateKeyString(final String hexEncodedPrivateKey) {
     final Uint8List privateKey = HexUtils.getBytes(hexEncodedPrivateKey);
     if (CryptoUtils.KEY_SIZE != privateKey.length) {
       throw new CryptoException(
@@ -41,17 +40,17 @@ class KeyPair {
   }
 
   /// Signs a data buffer with a key pair.
-  Uint8List sign(final KeyPair keyPair, final Uint8List data) {
+  static Uint8List sign(final KeyPair keyPair, final Uint8List data) {
     return null;
   }
 
   /// Verifies a signature.
-  bool verify(final Uint8List publicKey, final Uint8List data,
+  static bool verify(final Uint8List publicKey, final Uint8List data,
       final Uint8List signature) {
     return false;
   }
 
-  Uint8List deriveSharedKey(
+  static Uint8List deriveSharedKey(
       final KeyPair keyPair, final Uint8List publicKey, final Uint8List salt) {
     return null;
   }

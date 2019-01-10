@@ -12,14 +12,14 @@ class CryptoUtils {
   static const int HALF_HASH_SIZE = 32;
 
   static Uint8List extractPublicKey(final Uint8List privateKey) {
-    var c = _nacl_catapult2.default.catapult;
-    var d = prepareForScalarMult(sk, hashfunc);
-
-    var p = [c.gf(), c.gf(), c.gf(), c.gf()];
-    var pk = new Uint8List(KEY_SIZE);
-    c.scalarbase(p, d);
-    c.pack(pk, p);
-    return pk;
+//    var c = _nacl_catapult2.default.catapult;
+//    var d = prepareForScalarMult(sk, hashfunc);
+//
+//    var p = [c.gf(), c.gf(), c.gf(), c.gf()];
+//    var pk = new Uint8List(KEY_SIZE);
+//    c.scalarbase(p, d);
+//    c.pack(pk, p);
+//    return pk;
   }
 
   /// Decodes two hex characters into a byte.

@@ -4,7 +4,7 @@ import "dart:typed_data" show Uint8List;
 
 import "package:test/test.dart";
 
-import "package:nem2_sdk_dart/src/core/utils.dart";
+import "package:nem2_sdk_dart/src/core/utils.dart" show HexUtils;
 
 main() {
   test("getBytes() can convert valid string to byte array", () {
