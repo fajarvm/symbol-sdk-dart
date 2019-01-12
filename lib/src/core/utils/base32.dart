@@ -10,6 +10,8 @@ class Base32 {
   static const int ENCODED_BLOCK_SIZE = 8;
 
   static const ALPHABET = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ234567';
+  // TODO: some illegal characters are currently converted into 0xFF
+  // TODO: remove 0xFF -> remove all illegal characters from the lookup table?
   static const DIGIT_LOOKUP_TABLE = const [
     /// '0', '1', '2', '3', '4', '5', '6', '7'
     0xFF, 0xFF, 0x1A, 0x1B, 0x1C, 0x1D, 0x1E, 0x1F,
@@ -89,7 +91,7 @@ class Base32 {
 
   /// Converts a [hexString] to a [String] representation of the base32 bytes.
   static String encodeHexString(final String hexString) {
-    final Uint8List bytes = HexUtils.hexStringToBytes(hexString);
+    final Uint8List bytes = HexUtils.getBytes(hexString);
     return encode(bytes);
   }
 
@@ -111,12 +113,14 @@ class Base32 {
     for (int i = 0; i < base32Encoded.length; i++) {
       lookup = base32Encoded.codeUnitAt(i) - '0'.codeUnitAt(0);
       if (lookup < 0 || lookup >= DIGIT_LOOKUP_TABLE.length) {
-        continue;
+        throw ArgumentError(
+            "illegal base32 character ${base32Encoded[i]}");
       }
 
       digit = DIGIT_LOOKUP_TABLE[lookup];
       if (digit == 0xFF) {
-        continue;
+        throw ArgumentError(
+            "illegal base32 character ${base32Encoded[i]}");
       }
 
       if (index <= 3) {
