@@ -9,33 +9,29 @@ import '../blockchain/network_type.dart';
 /// The account structure describes an account private key, public key,
 /// address and allows signing transactions.
 class Account {
-  final String _keyPair;
-  final PublicAccount _publicAccount;
+  final KeyPair _keyPair;
+  final Address _address;
 
-  Account._(this._keyPair, this._publicAccount);
+  Account._(this._address, this._keyPair);
 
   factory Account(
-      {final String privateKey = null, final NetworkType networkType = null}) {
-    if (networkType == null) {
-      throw new ArgumentError("A networkType must not be null");
+      {final Address address = null, final KeyPair keyPair = null}) {
+    if (address == null || keyPair == null) {
+      throw new ArgumentError(
+          "A address and/or a keyPair must not be null to create a new Account.");
     }
 
-    if (privateKey != null) {
-      // const KeyPair keyPair = KeyPair.
-    }
-
-    throw new ArgumentError(
-        "A privateKey and/or a networkType must not be null to create a new Account.");
+    return new Account._(address, keyPair);
   }
 
-  /// Create an Account from a given private key
+  /// Creates an Account from a the [privateKey] string for a specific [networkType]
   static Account createFromPrivateKey(
       final String privateKey, final NetworkType networkType) {
     final KeyPair keyPair = KeyPair.createFromPrivateKeyString(privateKey);
-    final String rawAddressString = Address.addressToString(
+    final String rawAddress = Address.addressToString(
         Address.publicKeyToAddress(keyPair.publicKey, networkType));
 
-    // Address address = Address.createFromRawAddress(rawAddressString);
-    return new Account();
+    return new Account(
+        address: Address.createFromRawAddress(rawAddress), keyPair: keyPair);
   }
 }

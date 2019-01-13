@@ -10,8 +10,7 @@ class Base32 {
   static const int ENCODED_BLOCK_SIZE = 8;
 
   static const ALPHABET = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ234567';
-  // TODO: some illegal characters are currently converted into 0xFF
-  // TODO: remove 0xFF -> remove all illegal characters from the lookup table?
+  // TODO: illegal characters are currently converted into 0xFF
   static const DIGIT_LOOKUP_TABLE = const [
     /// '0', '1', '2', '3', '4', '5', '6', '7'
     0xFF, 0xFF, 0x1A, 0x1B, 0x1C, 0x1D, 0x1E, 0x1F,

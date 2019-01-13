@@ -1,6 +1,7 @@
 library nem2_sdk_dart.core.utils.crypto_utils;
 
 import 'dart:typed_data' show Uint8List;
+import 'package:nem2_sdk_dart/src/core/crypto/nacl_catapult.dart';
 
 /// A utility class that provides various functions for converting
 /// one type of data to another
