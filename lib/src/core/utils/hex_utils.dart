@@ -10,7 +10,7 @@ class HexUtils {
   /// Converts a hex string to a byte array.
   static List<int> getBytes(final String hexString) {
     try {
-      return getBytesInternal(hexString);
+      return _getBytesInternal(hexString);
     } catch (e) {
       throw new ArgumentError(e);
     }
@@ -20,7 +20,7 @@ class HexUtils {
   /// The output will be null if the input is malformed
   static List<int> tryGetBytes(final String hexString) {
     try {
-      return getBytesInternal(hexString);
+      return _getBytesInternal(hexString);
     } catch (e) {
       return null;
     }
@@ -38,7 +38,7 @@ class HexUtils {
 
   // -------------------- private / protected functions -------------------- //
 
-  static List<int> getBytesInternal(final String hexString) {
+  static List<int> _getBytesInternal(final String hexString) {
     final String paddedHexString =
         0 == hexString.length % 2 ? hexString : "0" + hexString;
     final List<int> encodedBytes = utf8.encode(paddedHexString);
@@ -48,18 +48,4 @@ class HexUtils {
     }
     return hex.decode(sb.toString());
   }
-
-  /// TODO: !DELETE! This method produces the same output as getBytesInternal()
-//  /// Converts a [hexString] to [Uint8List]
-//  static Uint8List hexStringToBytes(final String hexString) {
-//    int i = 0;
-//    final Uint8List bytes = new Uint8List(hexString.length ~/ 2);
-//    final RegExp regex = new RegExp('[0-9a-f]{2}');
-//    for (Match match in regex.allMatches(hexString.toLowerCase())) {
-//      bytes[i++] = int.parse(
-//          hexString.toLowerCase().substring(match.start, match.end),
-//          radix: 16);
-//    }
-//    return bytes;
-//  }
 }

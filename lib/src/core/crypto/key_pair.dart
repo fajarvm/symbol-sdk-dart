@@ -5,6 +5,8 @@ import 'dart:typed_data' show Uint8List;
 import 'package:nem2_sdk_dart/core.dart'
     show CryptoUtils, CryptoException, HexUtils;
 
+import 'package:nem2_sdk_dart/src/core/crypto/nacl_catapult.dart';
+
 /// Represents a key pair
 class KeyPair {
   final Uint8List _privateKey;
@@ -16,8 +18,10 @@ class KeyPair {
   factory KeyPair({Uint8List privateKey = null, Uint8List publicKey = null}) {
     // TODO: complete
 
+    return new KeyPair._(privateKey, publicKey);
+
     /// unreachable code
-    throw new StateError("Illegal state");
+    // throw new StateError("Illegal state");
   }
 
   /// Gets the public key
@@ -36,7 +40,7 @@ class KeyPair {
 
     Uint8List publicKey = CryptoUtils.extractPublicKey(privateKey);
 
-    return null;
+    return new KeyPair(privateKey: privateKey, publicKey: publicKey);
   }
 
   /// Signs a data buffer with a key pair.

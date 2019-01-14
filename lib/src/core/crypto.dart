@@ -14,6 +14,8 @@ import 'package:nem2_sdk_dart/src/core/utils.dart';
 
 /// implementations
 export 'crypto/key_pair.dart';
+export 'crypto/nacl.dart';
+export 'crypto/nacl_catapult.dart';
 //part 'crypto/signature.dart';
 
 /// exceptions
