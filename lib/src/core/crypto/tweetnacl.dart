@@ -1,4 +1,4 @@
-library nem2_sdk_dart.core.crypto.nacl;
+library nem2_sdk_dart.core.crypto.tweetnacl;
 
 import 'dart:typed_data';
 import "dart:convert";
@@ -21,8 +21,9 @@ class NaclKeyPair {
   Uint8List get secretKey => _secretKey;
 }
 
-
-/// Box algorithm, Public-key authenticated encryption
+/*
+ *   Box algorithm, Public-key authenticated encryption
+ * */
 class Box {
   //Length of public key in bytes.
   static final int publicKeyLength = 32;
@@ -228,7 +229,7 @@ class Box {
   Uint8List before() {
     if (this._sharedKey == null) {
       this._sharedKey = Uint8List(sharedKeyLength);
-      Nacl.crypto_box_beforenm(
+      TweetNaclFast.crypto_box_beforenm(
           this._sharedKey, this._theirPublicKey, this._mySecretKey);
     }
 
@@ -263,7 +264,7 @@ class Box {
     for (int i = 0; i < mlen; i++) m[i + zerobytesLength] = message[i + moff];
 
     if (0 !=
-        Nacl.crypto_box_afternm(c, m, m.length, theNonce, _sharedKey))
+        TweetNaclFast.crypto_box_afternm(c, m, m.length, theNonce, _sharedKey))
       return null;
 
     // wrap byte_buf_t on c offset@boxzerobytesLength
@@ -299,7 +300,7 @@ class Box {
     for (int i = 0; i < boxlen; i++)
       c[i + boxzerobytesLength] = box[i + boxoff];
 
-    if (Nacl.crypto_box_open_afternm(
+    if (TweetNaclFast.crypto_box_open_afternm(
             m, c, c.length, theNonce, _sharedKey) !=
         0) return null;
 
@@ -319,7 +320,7 @@ class Box {
   static NaclKeyPair keyPair() {
     NaclKeyPair kp = new NaclKeyPair(publicKeyLength, secretKeyLength);
 
-    Nacl.crypto_box_keypair(kp.publicKey, kp.secretKey);
+    TweetNaclFast.crypto_box_keypair(kp.publicKey, kp.secretKey);
     return kp;
   }
 
@@ -331,7 +332,7 @@ class Box {
     // copy sk
     for (int i = 0; i < sk.length; i++) sk[i] = secretKey[i];
 
-    Nacl.crypto_scalarmult_base(pk, sk);
+    TweetNaclFast.crypto_scalarmult_base(pk, sk);
     return kp;
   }
 }
@@ -445,7 +446,7 @@ class SecretBox {
 
     for (int i = 0; i < mlen; i++) m[i + zerobytesLength] = message[i + moff];
 
-    if (0 != Nacl.crypto_secretbox(c, m, m.length, theNonce, _key))
+    if (0 != TweetNaclFast.crypto_secretbox(c, m, m.length, theNonce, _key))
       return null;
 
     // TBD optimizing ...
@@ -512,7 +513,8 @@ class SecretBox {
     for (int i = 0; i < boxlen; i++)
       c[i + boxzerobytesLength] = box[i + boxoff];
 
-    if (0 != Nacl.crypto_secretbox_open(m, c, c.length, theNonce, _key))
+    if (0 !=
+        TweetNaclFast.crypto_secretbox_open(m, c, c.length, theNonce, _key))
       return null;
 
     // wrap byte_buf_t on m offset@zerobytesLength
@@ -545,7 +547,7 @@ class ScalarMult {
 
     Uint8List q = Uint8List(scalarLength);
 
-    Nacl.crypto_scalarmult(q, n, p);
+    TweetNaclFast.crypto_scalarmult(q, n, p);
 
     return q;
   }
@@ -559,7 +561,7 @@ class ScalarMult {
 
     Uint8List q = Uint8List(scalarLength);
 
-    Nacl.crypto_scalarmult_base(q, n);
+    TweetNaclFast.crypto_scalarmult_base(q, n);
 
     return q;
   }
@@ -580,7 +582,7 @@ class Hash {
 
     Uint8List out = Uint8List(hashLength);
 
-    Nacl.crypto_hash(out, message);
+    TweetNaclFast.crypto_hash(out, message);
 
     return out;
   }
@@ -633,7 +635,7 @@ class Signature {
     // signed message
     Uint8List sm = Uint8List(mlen + signatureLength);
 
-    Nacl.crypto_sign(sm, -1, message, moff, mlen, _mySecretKey);
+    TweetNaclFast.crypto_sign(sm, -1, message, moff, mlen, _mySecretKey);
 
     return sm;
   }
@@ -665,7 +667,7 @@ class Signature {
     Uint8List tmp = Uint8List(smlen);
 
     if (0 !=
-        Nacl.crypto_sign_open(
+        TweetNaclFast.crypto_sign_open(
             tmp, -1, signedMessage, smoff, smlen, _theirPublicKey)) return null;
 
     // message
@@ -698,7 +700,7 @@ class Signature {
     for (int i = 0; i < signatureLength; i++) sm[i] = signature[i];
     for (int i = 0; i < message.length; i++)
       sm[i + signatureLength] = message[i];
-    return (Nacl.crypto_sign_open(
+    return (TweetNaclFast.crypto_sign_open(
             m, -1, sm, 0, sm.length, _theirPublicKey) >=
         0);
   }
@@ -709,7 +711,7 @@ class Signature {
   static NaclKeyPair keyPair() {
     NaclKeyPair kp = new NaclKeyPair(publicKeyLength, secretKeyLength);
 
-    Nacl.crypto_sign_keypair(kp.publicKey, kp.secretKey, false);
+    TweetNaclFast.crypto_sign_keypair(kp.publicKey, kp.secretKey, false);
     return kp;
   }
 
@@ -737,13 +739,13 @@ class Signature {
     for (int i = 0; i < seedLength; i++) sk[i] = seed[i];
 
     // generate pk from sk
-    Nacl.crypto_sign_keypair(pk, sk, true);
+    TweetNaclFast.crypto_sign_keypair(pk, sk, true);
 
     return kp;
   }
 }
 
-class Nacl {
+class TweetNaclFast {
   static final Uint8List _0 =
       Uint8List.fromList([0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]); //16
   static final Uint8List _9 = Uint8List.fromList([
@@ -1398,7 +1400,7 @@ class Nacl {
     return 0;
   }
 
-  // "expand 32-byte k"
+// "expand 32-byte k"
   static final Uint8List _sigma = Uint8List.fromList([
     101,
     120,
@@ -1993,9 +1995,9 @@ class Nacl {
     t12 += 38 * t28;
     t13 += 38 * t29;
     t14 += 38 * t30;
-    // t15 left as is
+// t15 left as is
 
-    // first car
+// first car
     c = 1;
     v = t0 + c + 65535;
     c = v >> 16;
@@ -2047,7 +2049,7 @@ class Nacl {
     t15 = v - c * 65536;
     t0 += c - 1 + 37 * (c - 1);
 
-    // second car
+// second car
     c = 1;
     v = t0 + c + 65535;
     c = v >> 16;
@@ -2224,7 +2226,7 @@ class Nacl {
     Uint8List s = Uint8List(32);
     crypto_scalarmult(s, x, y);
 
-    /*String dbgt = "";
+/*String dbgt = "";
 		for (int dbg = 0; dbg < s.length; dbg ++) dbgt += " "+s[dbg];
 		Log.d(TAG, "crypto_box_beforenm -> "+dbgt);
 
@@ -2825,7 +2827,7 @@ class Nacl {
     return n;
   }
 
-  // TBD 64bits of n
+// TBD 64bits of n
   ///int crypto_hash(Uint8List out, Uint8List m, long n)
   static int crypto_hash_off(
       Uint8List out, Uint8List m, final int moff, int n) {
@@ -2863,7 +2865,8 @@ class Nacl {
     n = 256 - 128 * (n < 112 ? 1 : 0);
     x[n - 9] = 0;
 
-    _ts64(x, n - 8, Int64(b << 3) /*(b / 0x20000000) | 0, b << 3*/);
+    _ts64(x, n - 8, Int64(b << 3) /*(b / 0x20000000) | 0, b << 3*/
+        );
 
     crypto_hashblocks_hl(hh, hl, x, 0, n);
 
@@ -2881,7 +2884,7 @@ class Nacl {
     return crypto_hash_off(out, m, 0, m != null ? m.length : 0);
   }
 
-  // gf: long[16]
+// gf: long[16]
   ///private static void add(gf p[4],gf q[4])
   static void _add(List<Int64List> p, List<Int64List> q) {
     Int64List a = Int64List(16);
@@ -3083,7 +3086,7 @@ class Nacl {
     _modL(r, 0, x);
   }
 
-  // TBD... 64bits of n
+// TBD... 64bits of n
   ///int crypto_sign(Uint8List sm, long * smlen, Uint8List m, long n, Uint8List sk)
   static int crypto_sign(Uint8List sm, int dummy /* *smlen not used*/,
       Uint8List m, final int moff, int /*long*/ n, Uint8List sk) {
@@ -3216,12 +3219,12 @@ class Nacl {
 
     n -= 64;
     if (_crypto_verify_32(sm, smoff, t, 0) != 0) {
-      // optimizing it
+// optimizing it
       ///for (i = 0; i < n; i ++) m[i] = 0;
       return -1;
     }
 
-    // TBD optimizing ...
+// TBD optimizing ...
     ///for (i = 0; i < n; i ++) m[i] = sm[i + 64 + smoff];
     ///*mlen = n;
 

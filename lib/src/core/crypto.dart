@@ -1,7 +1,9 @@
 library nem2_sdk_dart.core.crypto;
 
-import 'dart:typed_data' show Uint8List;
-import 'package:convert/convert.dart' show hex;
+//import 'dart:typed_data' show Uint8List;
+//import 'package:convert/convert.dart' show hex;
+import 'package:tweetnacl/tweetnacl.dart';
+
 import 'package:nem2_sdk_dart/src/core/utils.dart';
 
 /// interfaces
@@ -14,8 +16,7 @@ import 'package:nem2_sdk_dart/src/core/utils.dart';
 
 /// implementations
 export 'crypto/key_pair.dart';
-export 'crypto/nacl.dart';
-export 'crypto/nacl_catapult.dart';
+export 'crypto/tweetnacl.dart';
 //part 'crypto/signature.dart';
 
 /// exceptions

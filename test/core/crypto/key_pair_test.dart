@@ -1,13 +1,9 @@
 library nem2_sdk_dart.test.core.crypto.key_pair_test;
 
-import "dart:typed_data" show Uint8List;
-
 import "package:test/test.dart";
 
-import 'package:nem2_sdk_dart/src/core/crypto/nacl_catapult.dart';
-
 import "package:nem2_sdk_dart/src/core/crypto.dart" show KeyPair;
-import "package:nem2_sdk_dart/src/core/utils.dart" show HexUtils, CryptoUtils;
+import "package:nem2_sdk_dart/src/core/utils.dart" show HexUtils;
 
 main() {
   const List<String> TEST_PRIVATE_KEYS = [

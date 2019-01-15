@@ -10,9 +10,9 @@ environment:
   sdk: '>=2.1.0 <3.0.0'
 
 dependencies:
-  pointycastle: ^1.0.0
   convert: ^2.1.1
   fixnum: ^0.10.9
+  pointycastle: ^1.0.0
 
 dev_dependencies:
   test: ^1.5.1
