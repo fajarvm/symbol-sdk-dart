@@ -2,7 +2,6 @@ library nem2_sdk_dart.core.crypto;
 
 //import 'dart:typed_data' show Uint8List;
 //import 'package:convert/convert.dart' show hex;
-import 'package:tweetnacl/tweetnacl.dart';
 
 import 'package:nem2_sdk_dart/src/core/utils.dart';
 

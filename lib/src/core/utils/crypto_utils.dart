@@ -54,9 +54,14 @@ class CryptoUtils {
     // hash function based on length. 32 = SHA3-256, 64 = SHA3-512
     // JavaScript: array.copy(d, array.uint8View(sha3Hasher.arrayBuffer(sk)));
     // clamp(d);
-    final ByteBuffer buffer = sk.buffer;
+
+    final SHA3Digest sha3digest = new SHA3Digest(512);
+    sha3digest.reset();
+    Uint8List hash = sha3digest.process(sk);
+    final ByteBuffer buffer = hash.buffer;
     final Uint8List d = buffer.asUint8List(sk.offsetInBytes, sk.lengthInBytes);
     clamp(d);
+    sha3digest.reset();
     return d;
   }
 
