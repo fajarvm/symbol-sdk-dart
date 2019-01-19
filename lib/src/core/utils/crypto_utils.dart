@@ -25,12 +25,15 @@ class CryptoUtils {
     }
 
 //    TweetNacl.KeyPair kp = TweetNacl.Signature.keyPair_fromSeed(privateKeySeed);
-//
 //    return kp.publicKey;
 
-    Uint8List d = prepareForScalarMult(privateKeySeed);
+//    final Uint8List pk = new Uint8List(KEY_SIZE);
+//    TweetNacl.TweetNaclFast.crypto_sign_keypair(pk, privateKeySeed, true);
+//    return pk;
+
+    final Uint8List d = prepareForScalarMult(privateKeySeed);
     List<Int64List> p = [gf(), gf(), gf(), gf()];
-    Uint8List pk = new Uint8List(KEY_SIZE);
+    final Uint8List pk = new Uint8List(KEY_SIZE);
     TweetNacl.TweetNaclFast.scalarbase(p, d, 0);
     TweetNacl.TweetNaclFast.pack(pk, p);
 
@@ -56,10 +59,9 @@ class CryptoUtils {
     // clamp(d);
 
     final SHA3Digest sha3digest = new SHA3Digest(512);
-    sha3digest.reset();
     Uint8List hash = sha3digest.process(sk);
     final ByteBuffer buffer = hash.buffer;
-    final Uint8List d = buffer.asUint8List(sk.offsetInBytes, sk.lengthInBytes);
+    final Uint8List d = buffer.asUint8List(0, HASH_SIZE);
     clamp(d);
     sha3digest.reset();
     return d;

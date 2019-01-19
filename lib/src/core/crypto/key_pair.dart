@@ -30,15 +30,15 @@ class KeyPair {
 
   /// Creates a key pair from a [hexEncodedPrivateKey] string.
   static KeyPair createFromPrivateKeyString(final String hexEncodedPrivateKey) {
-    final Uint8List privateKey = HexUtils.getBytes(hexEncodedPrivateKey);
-    if (CryptoUtils.KEY_SIZE != privateKey.length) {
+    final Uint8List privateKeySeed = HexUtils.getBytes(hexEncodedPrivateKey);
+    if (CryptoUtils.KEY_SIZE != privateKeySeed.length) {
       throw new CryptoException(
-          "Private key has unexpected size: ${privateKey.length}");
+          "Private key has unexpected size: ${privateKeySeed.length}");
     }
 
-    Uint8List publicKey = CryptoUtils.extractPublicKey(privateKey);
+    final Uint8List publicKey = CryptoUtils.extractPublicKey(privateKeySeed);
 
-    return new KeyPair(privateKey: privateKey, publicKey: publicKey);
+    return new KeyPair(privateKey: privateKeySeed, publicKey: publicKey);
   }
 
   /// Signs a data buffer with a key pair.
