@@ -1,12 +1,12 @@
 library nem2_sdk_dart.core.utils.hex_utils;
 
 import 'dart:convert' show utf8;
-import 'dart:typed_data' show Uint8List;
-
 import 'package:convert/convert.dart' show hex;
 
 /// A utility class that provides functions for converting hex strings
 class HexUtils {
+  const HexUtils();
+
   /// Converts a hex string to a byte array.
   static List<int> getBytes(final String hexString) {
     try {
@@ -42,10 +42,6 @@ class HexUtils {
     final String paddedHexString =
         0 == hexString.length % 2 ? hexString : "0" + hexString;
     final List<int> encodedBytes = utf8.encode(paddedHexString);
-    final StringBuffer sb = new StringBuffer();
-    for (int byte in encodedBytes) {
-      sb.writeCharCode(byte);
-    }
-    return hex.decode(sb.toString());
+    return hex.decode(String.fromCharCodes(encodedBytes));
   }
 }

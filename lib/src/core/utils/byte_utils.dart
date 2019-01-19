@@ -1,7 +1,7 @@
 library nem2_sdk_dart.core.utils.byte_utils;
 
-import 'dart:typed_data' show Uint8List;
 import 'dart:math' show pow;
+import 'dart:typed_data' show Uint8List;
 
 /// A collection of utility functions to manipulate bytes
 class ByteUtils {

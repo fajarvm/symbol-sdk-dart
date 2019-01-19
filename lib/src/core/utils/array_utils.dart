@@ -1,6 +1,7 @@
 library nem2_sdk_dart.core.utils.array_utils;
 
 import 'dart:typed_data' show Uint8List;
+
 import 'byte_utils.dart';
 
 /// A collection of utility functions to manipulate arrays
@@ -71,5 +72,34 @@ class ArrayUtils {
         value = 0;
       }
     }
+  }
+
+  /// Returns true if two specified arrays of bytes are equal to one another.
+  ///
+  /// Two arrays are considered equal if both arrays contain the same number
+  /// of elements, and all corresponding pairs of elements in the two arrays
+  /// are equal.  In other words, two arrays are equal if they contain the
+  /// same elements in the same order.  Also, two array references are
+  /// considered equal if both are null
+  static bool equals(Uint8List a, Uint8List a2) {
+    if (a == a2) {
+      return true;
+    }
+    if (a == null || a2 == null) {
+      return false;
+    }
+
+    final int length = a.lengthInBytes;
+    if (length != a2.lengthInBytes) {
+      return false;
+    }
+
+    for (int i = 0; i < length; i++) {
+      if (a[i] != a2[i]) {
+        return false;
+      }
+    }
+
+    return true;
   }
 }
