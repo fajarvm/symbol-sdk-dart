@@ -29,18 +29,13 @@ class HexUtils {
   /// Converts a byte array to a hex string.
   static String getString(final List<int> bytes) {
     final String encodedString = hex.encode(bytes);
-    final List<int> decodedBytes = new List<int>();
-    for (var i = 0; i < encodedString.length; i++) {
-      decodedBytes.add(encodedString.codeUnitAt(i));
-    }
-    return utf8.decode(decodedBytes);
+    return utf8.decode(encodedString.codeUnits);
   }
 
   // -------------------- private / protected functions -------------------- //
 
   static List<int> _getBytesInternal(final String hexString) {
-    final String paddedHexString =
-        0 == hexString.length % 2 ? hexString : "0" + hexString;
+    final String paddedHexString = 0 == hexString.length % 2 ? hexString : "0" + hexString;
     final List<int> encodedBytes = utf8.encode(paddedHexString);
     return hex.decode(String.fromCharCodes(encodedBytes));
   }
