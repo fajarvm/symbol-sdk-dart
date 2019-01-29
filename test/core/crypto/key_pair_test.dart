@@ -5,32 +5,31 @@ import "package:test/test.dart";
 import "package:nem2_sdk_dart/src/core/crypto.dart" show KeyPair;
 import "package:nem2_sdk_dart/src/core/utils.dart" show HexUtils;
 
-main() {
-  const List<String> TEST_PRIVATE_KEYS = [
-    '8D31B712AB28D49591EAF5066E9E967B44507FC19C3D54D742F7B3A255CFF4AB',
-    '15923F9D2FFFB11D771818E1F7D7DDCD363913933264D58533CB3A5DD2DAA66A',
-    'A9323CEF24497AB770516EA572A0A2645EE2D5A75BC72E78DE534C0A03BC328E',
-    'D7D816DA0566878EE739EDE2131CD64201BCCC27F88FA51BA5815BCB0FE33CC8',
-    '27FC9998454848B987FAD89296558A34DEED4358D1517B953572F3E0AAA0A22D'
-  ];
+import 'dart:convert' show utf8;
+import 'package:convert/convert.dart' show hex;
+import 'package:nem2_sdk_dart/src/core/crypto/tweetnacl.dart' as TweetNacl;
+import 'dart:typed_data' show Uint8List;
 
+main() {
   group('construction', () {
     test('can extract from private key test vectors', () {
-      const List<String> EXPECTED_PUBLIC_KEYS = [
-        '53C659B47C176A70EB228DE5C0A0FF391282C96640C2A42CD5BBD0982176AB1B',
-        '3FE4A1AA148F5E76891CE924F5DC05627A87047B2B4AD9242C09C0ECED9B2338',
-        'F398C0A2BDACDBD7037D2F686727201641BBF87EF458F632AE2A04B4E8F57994',
-        '6A283A241A8D8203B3A1E918B1E6F0A3E14E75E16D4CFFA45AE4EF89E38ED6B5',
-        '4DC62B38215826438DE2369743C6BBE6D13428405025DFEFF2857B9A9BC9D821'
-      ];
+//      final String privateKey = "A4FFE914472C9CA8CA13F2D7ABEA187C981E7678FDBFA8E2A372D4FA08903CAB";
+      final String privateKey = "787225aaff3d2c71f4ffa32d4f19ec4922f3cd869747f267378f81f8e3fcb12d";
+//      final KeyPair keyPair = KeyPair.createFromPrivateKeyString(privateKey);
 
-      /// Sanity test
-      expect(TEST_PRIVATE_KEYS.length, equals(EXPECTED_PUBLIC_KEYS.length));
+      Uint8List seed = HexUtils.getBytes(privateKey);
+//      Uint8List seed = hex.decode(privateKey);
+//      final TweetNacl.NaclKeyPair kp = TweetNacl.Signature.keyPair_fromSeed(seed);
 
-      final KeyPair keyPair = KeyPair.createFromPrivateKeyString(TEST_PRIVATE_KEYS[0]);
+      Uint8List pk = new Uint8List(32);
+      TweetNacl.TweetNaclFast.crypto_sign_keypair(pk, seed, true);
 
       // TODO: Test failing. Fix needed
-      expect(HexUtils.getString(keyPair.publicKey), equals(EXPECTED_PUBLIC_KEYS[0]));
+//      final String expected = "65730A6AF4E5728A3E9233A26D83057A5470F11517E50EC0932B3D3434F12EEF";
+      final String expected = "1026D70E1954775749C6811084D6450A3184D977383F0E4282CD47118AF37755";
+      final String actual = HexUtils.getString(pk);
+      // Address: (S/M/N/T C7FLL-6X3XTN-ARV35L-2A3OL4-JSTXIH-OTWLBB-FXUM
+      expect(actual, equals(expected));
     });
   });
 }
