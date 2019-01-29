@@ -19,8 +19,7 @@ class CryptoUtils {
     if (privateKeySeed == null) {
       throw new ArgumentError('privateKeySeed may not be null');
     }
-    if (privateKeySeed.lengthInBytes != 32 &&
-        privateKeySeed.lengthInBytes != 33) {
+    if (privateKeySeed.lengthInBytes != 32 && privateKeySeed.lengthInBytes != 33) {
       throw new ArgumentError('Incorrect length of privateKeySeed');
     }
 
@@ -81,5 +80,11 @@ class CryptoUtils {
       }
     }
     return r;
+  }
+
+  static void wipe(Uint8List byte) {
+    for(int i = 0; i< byte.length; i++) {
+       byte[i] = 0;
+    }
   }
 }

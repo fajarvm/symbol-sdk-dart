@@ -6,6 +6,15 @@ import 'byte_utils.dart';
 
 /// A collection of utility functions to manipulate arrays
 class ArrayUtils {
+  /// Copies elements from the source array to a destination array
+  static void copy(Uint8List dest, Uint8List source,
+      {final int numElementsToCopy = 0, final int destOffset = 0, final int srcOffset = 0}) {
+    final int length = numElementsToCopy == 0 ? dest.lengthInBytes : numElementsToCopy;
+    for (int i = 0; i < length; i++) {
+      dest[destOffset + i] = source[srcOffset + i];
+    }
+  }
+
   /// Duplicates a given byte array
   static Uint8List duplicate(final Uint8List source) {
     final Uint8List copy = new Uint8List(source.length);

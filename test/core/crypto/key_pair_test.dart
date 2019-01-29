@@ -27,11 +27,10 @@ main() {
       /// Sanity test
       expect(TEST_PRIVATE_KEYS.length, equals(EXPECTED_PUBLIC_KEYS.length));
 
-      final KeyPair keyPair =
-          KeyPair.createFromPrivateKeyString(TEST_PRIVATE_KEYS[0]);
+      final KeyPair keyPair = KeyPair.createFromPrivateKeyString(TEST_PRIVATE_KEYS[0]);
 
-      expect(HexUtils.getString(keyPair.publicKey),
-          equals(EXPECTED_PUBLIC_KEYS[0]));
+      // TODO: Test failing. Fix needed
+      expect(HexUtils.getString(keyPair.publicKey), equals(EXPECTED_PUBLIC_KEYS[0]));
     });
   });
 }
