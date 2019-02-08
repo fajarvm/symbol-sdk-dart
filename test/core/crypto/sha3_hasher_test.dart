@@ -32,20 +32,18 @@ main() {
       // sanity check
       expect(expectedOutput.length, equals(inputs.length));
 
-//      for (int i = 0; i < inputs.length; i++) {
-      final String inputHex = inputs[3];
-      final Uint8List inputBuffer = HexUtils.getBytes(inputHex);
-      final expectedHash = expectedOutput[3];
+      for (int i = 0; i < inputs.length; i++) {
+        final String inputHex = inputs[3];
+        final Uint8List inputBuffer = HexUtils.getBytes(inputHex);
+        final expectedHash = expectedOutput[3];
 
-      Uint8List hash = new Uint8List(length);
-      print('Before hash: ' + hash.toString());
-      Sha3Hasher.hash(hash, inputBuffer, length: length);
-      print('After hash: ' + hash.toString());
+        Uint8List hash = Sha3Hasher.hash(inputBuffer, length: length);
 
-      final String hashString = HexUtils.getString(hash).toUpperCase();
-      // TODO: Test failing. Fix needed
-      expect(hashString, equals(expectedHash));
-//      }
+        final String hashString = HexUtils.getString(hash).toUpperCase();
+        expect(hashString, equals(expectedHash));
+      }
     });
+
+    /// TODO: complete unit test
   });
 }
