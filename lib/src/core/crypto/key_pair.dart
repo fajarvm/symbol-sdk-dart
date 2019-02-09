@@ -31,11 +31,14 @@ class KeyPair {
   /// Gets the private key
   Uint8List get privateKey => _privateKey;
 
-  /// Creates a key pair from a [hexEncodedPrivateKey] string.
+  /// Creates a key pair from a [hexEncodedPrivateKey] string. The public key is extracted from
+  /// the private key. This method throws a [CryptoException] when an invalid length of the
+  /// private key string is found.
   static KeyPair createFromPrivateKeyString(final String hexEncodedPrivateKey) {
     final Uint8List privateKeySeed = HexUtils.getBytes(hexEncodedPrivateKey);
     if (CryptoUtils.KEY_SIZE != privateKeySeed.length) {
-      throw new CryptoException("Private key has unexpected size: ${privateKeySeed.length}");
+      throw new CryptoException(
+          "Private key has an unexpected size. Expected: ${CryptoUtils.KEY_SIZE}, Got: ${privateKeySeed.length}");
     }
 
     final Uint8List publicKey = CryptoUtils.extractPublicKey(privateKeySeed);

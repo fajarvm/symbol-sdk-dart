@@ -5,10 +5,10 @@ import 'dart:typed_data' show Uint8List;
 import "package:test/test.dart";
 
 import "package:nem2_sdk_dart/src/core/crypto.dart" show CryptoException, KeyPair;
-import "package:nem2_sdk_dart/src/core/utils.dart" show HexUtils;
+import "package:nem2_sdk_dart/src/core/utils.dart" show HexUtils, CryptoUtils;
 
 main() {
-  final List<String> PRIVATE_KEYS = [
+  final List<String> TEST_PRIVATE_KEYS = [
     '8D31B712AB28D49591EAF5066E9E967B44507FC19C3D54D742F7B3A255CFF4AB',
     '15923F9D2FFFB11D771818E1F7D7DDCD363913933264D58533CB3A5DD2DAA66A',
     'A9323CEF24497AB770516EA572A0A2645EE2D5A75BC72E78DE534C0A03BC328E',
@@ -27,35 +27,38 @@ main() {
       ];
 
       // Sanity check
-      expect(PRIVATE_KEYS.length, equals(EXPECTED_PUBLIC_KEYS.length));
+      expect(TEST_PRIVATE_KEYS.length, equals(EXPECTED_PUBLIC_KEYS.length));
 
-      for (int i = 0; i < PRIVATE_KEYS.length; i++) {
-        String privateKeyHex = PRIVATE_KEYS[i];
+      for (int i = 0; i < TEST_PRIVATE_KEYS.length; i++) {
+        // Prepare
+        String privateKeyHex = TEST_PRIVATE_KEYS[i];
         String expectedPublicKey = EXPECTED_PUBLIC_KEYS[i];
-
         KeyPair keyPair = KeyPair.createFromPrivateKeyString(privateKeyHex);
 
+        // Assert
         String actualPubKey = HexUtils.getString(keyPair.publicKey).toUpperCase();
-        String actualPrivKey = HexUtils.getString(keyPair.privateKey).toUpperCase();
+        String actualPrivateKey = HexUtils.getString(keyPair.privateKey).toUpperCase();
         expect(actualPubKey, equals(expectedPublicKey));
-        expect(actualPrivKey, equals(privateKeyHex));
+        expect(actualPrivateKey, equals(privateKeyHex));
       }
     });
 
     test('cannot extract from invalid private key', () {
       final List<String> INVALID_KEYS = [
         '', // empty
-        '53C659B47C176A70EB228DE5C0A0FF391282C96640C2A42CD5BBD0982176AB', // short
-        '53C659B47C176A70EB228DE5C0A0FF391282C96640C2A42CD5BBD0982176AB1BBB' // long
+        '53C659B47C176A70EB228DE5C0A0FF391282C96640C2A42CD5BBD0982176AB', // too short
+        '53C659B47C176A70EB228DE5C0A0FF391282C96640C2A42CD5BBD0982176AB1BBB' // too long
       ];
 
-      for (var invalidPrivKey in INVALID_KEYS) {
-        final Uint8List privateKeySeed = HexUtils.getBytes(invalidPrivKey);
+      for (var invalidPrivateKey in INVALID_KEYS) {
+        final Uint8List privateKeySeed = HexUtils.getBytes(invalidPrivateKey);
         expect(
-            () => KeyPair.createFromPrivateKeyString(invalidPrivKey),
+            () => KeyPair.createFromPrivateKeyString(invalidPrivateKey),
             throwsA(predicate((e) =>
                 e is CryptoException &&
-                e.message == 'Private key has unexpected size: ${privateKeySeed.length}')));
+                e.message ==
+                    'Private key has an unexpected size. '
+                    'Expected: ${CryptoUtils.KEY_SIZE}, Got: ${privateKeySeed.length}')));
       }
     });
   });
