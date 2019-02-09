@@ -7,12 +7,18 @@ import 'byte_utils.dart';
 /// A collection of utility functions to manipulate arrays
 class ArrayUtils {
   /// Copies elements from the source array to a destination array
-  static void copy(Uint8List dest, Uint8List source,
+  static void copy(List<int> dest, List<int> source,
       {final int numElementsToCopy = 0, final int destOffset = 0, final int srcOffset = 0}) {
-    final int length = numElementsToCopy == 0 ? dest.lengthInBytes : numElementsToCopy;
+    final int length = numElementsToCopy == 0 ? dest.length : numElementsToCopy;
     for (int i = 0; i < length; i++) {
       dest[destOffset + i] = source[srcOffset + i];
     }
+  }
+
+  /// Determines whether or not an array is zero-filled.
+  /// Returns true if all elements of the array is zero-filled, false otherwise.
+  static bool isZero(List<int> input) {
+    return input.every((value) => (0 == value));
   }
 
   /// Duplicates a given byte array
@@ -90,21 +96,24 @@ class ArrayUtils {
   /// are equal.  In other words, two arrays are equal if they contain the
   /// same elements in the same order.  Also, two array references are
   /// considered equal if both are null
-  static bool equals(Uint8List a, Uint8List a2) {
-    if (a == a2) {
+  static bool deepEqual(List<int> first, List<int> second, {int numElementsToCompare = 0}) {
+    // type comparison
+    if (first == second) {
       return true;
     }
-    if (a == null || a2 == null) {
+    if (first == null || second == null) {
       return false;
     }
 
-    final int length = a.lengthInBytes;
-    if (length != a2.lengthInBytes) {
+    // length comparison
+    final int length = numElementsToCompare > 0 ? numElementsToCompare : first.length;
+    if (length > first.length || length > second.length) {
       return false;
     }
 
+    // value comparison
     for (int i = 0; i < length; i++) {
-      if (a[i] != a2[i]) {
+      if (first[i] != second[i]) {
         return false;
       }
     }

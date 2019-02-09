@@ -2,10 +2,10 @@ library nem2_sdk_dart.test.core.crypto.key_pair_test;
 
 import 'dart:typed_data' show Uint8List;
 
-import "package:test/test.dart";
+import 'package:test/test.dart';
 
-import "package:nem2_sdk_dart/src/core/crypto.dart" show CryptoException, KeyPair;
-import "package:nem2_sdk_dart/src/core/utils.dart" show HexUtils, CryptoUtils;
+import 'package:nem2_sdk_dart/src/core/crypto.dart' show CryptoException, KeyPair;
+import 'package:nem2_sdk_dart/src/core/utils.dart' show ArrayUtils, CryptoUtils, HexUtils;
 
 main() {
   final List<String> TEST_PRIVATE_KEYS = [
@@ -16,6 +16,7 @@ main() {
     '27FC9998454848B987FAD89296558A34DEED4358D1517B953572F3E0AAA0A22D'
   ];
 
+  // KeyPair creation
   group('construction', () {
     test('can extract from private key test vectors', () {
       final List<String> EXPECTED_PUBLIC_KEYS = [
@@ -60,6 +61,46 @@ main() {
                     'Private key has an unexpected size. '
                     'Expected: ${CryptoUtils.KEY_SIZE}, Got: ${privateKeySeed.length}')));
       }
+    });
+  });
+
+  // Signing
+  group('sign', () {
+    test('fills the signature', () {
+      // Prepare
+      KeyPair keyPair = CryptoUtils.createRandomKeyPair();
+      Uint8List payload = CryptoUtils.getRandomBytes(100);
+
+      Uint8List signature = KeyPair.sign(keyPair, payload);
+
+      // Assert
+      Uint8List emptySig = new Uint8List(CryptoUtils.SIGNATURE_SIZE);
+      expect(ArrayUtils.deepEqual(signature, emptySig), false);
+    });
+
+    test('returns same signature for same data signed by same key pairs', () {
+      // Prepare
+      String privateKey = HexUtils.getString(CryptoUtils.getRandomBytes(CryptoUtils.KEY_SIZE));
+      KeyPair keyPair1 = KeyPair.createFromPrivateKeyString(privateKey);
+      KeyPair keyPair2 = KeyPair.createFromPrivateKeyString(privateKey);
+      Uint8List payload = CryptoUtils.getRandomBytes(100);
+
+      Uint8List signature1 = KeyPair.sign(keyPair1, payload);
+      Uint8List signature2 = KeyPair.sign(keyPair2, payload);
+
+      expect(ArrayUtils.deepEqual(signature1, signature2), true);
+    });
+
+    test('returns different signature for data signed by different key pairs', () {
+      // Prepare
+      KeyPair keyPair1 = CryptoUtils.createRandomKeyPair();
+      KeyPair keyPair2 = CryptoUtils.createRandomKeyPair();
+      Uint8List payload = CryptoUtils.getRandomBytes(100);
+
+      Uint8List signature1 = KeyPair.sign(keyPair1, payload);
+      Uint8List signature2 = KeyPair.sign(keyPair2, payload);
+
+      expect(ArrayUtils.deepEqual(signature1, signature2), false);
     });
   });
 }

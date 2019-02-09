@@ -48,8 +48,7 @@ class KeyPair {
 
   /// Signs a data buffer with a key pair.
   static Uint8List sign(final KeyPair keyPair, final Uint8List data) {
-    // TODO: implement
-    return null;
+    return CryptoUtils.sign(data, keyPair.publicKey, keyPair.privateKey);
   }
 
   /// Verifies a signature.

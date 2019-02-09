@@ -1526,7 +1526,7 @@ class TweetNaclFast {
 
   static int crypto_secretbox(
       Uint8List c, Uint8List m, int d, Uint8List n, Uint8List k) {
-    int i;
+    // int i;
     if (d < 32) return -1;
     crypto_stream_xor(c, 0, m, 0, d, n, k);
     _crypto_onetimeauth(c, 16, c, 32, d - 32, c);
@@ -1537,7 +1537,7 @@ class TweetNaclFast {
 
   static int crypto_secretbox_open(
       Uint8List m, Uint8List c, int d, Uint8List n, Uint8List k) {
-    int i;
+    // int i;
     Uint8List x = Uint8List(32);
     if (d < 32) return -1;
     crypto_stream(x, 0, 32, n, k);
@@ -3045,7 +3045,7 @@ class TweetNaclFast {
     0x10
   ]);
 
-  static void _modL(Uint8List r, final int roff, Int64List x) {
+  static void modL(Uint8List r, final int roff, Int64List x) {
     int carry;
     int i, j;
 
@@ -3075,7 +3075,7 @@ class TweetNaclFast {
     }
   }
 
-  static void _reduce(Uint8List r) {
+  static void reduce(Uint8List r) {
     Int64List x = Int64List(64);
     int i;
 
@@ -3083,7 +3083,7 @@ class TweetNaclFast {
 
     for (i = 0; i < 64; i++) r[i] = 0;
 
-    _modL(r, 0, x);
+    modL(r, 0, x);
   }
 
 // TBD... 64bits of n
@@ -3114,13 +3114,13 @@ class TweetNaclFast {
     for (i = 0; i < 32; i++) sm[32 + i] = d[32 + i];
 
     crypto_hash_off(r, sm, 32, n + 32);
-    _reduce(r);
+    reduce(r);
     scalarbase(p, r, 0);
     pack(sm, p);
 
     for (i = 0; i < 32; i++) sm[i + 32] = sk[i + 32];
     crypto_hash_off(h, sm, 0, n + 64);
-    _reduce(h);
+    reduce(h);
 
     for (i = 0; i < 64; i++) x[i] = 0;
 
@@ -3130,7 +3130,7 @@ class TweetNaclFast {
       for (j = 0; j < 32; j++)
         x[i + j] += (h[i] & 0xff) * (d[j] & 0xff).toInt();
 
-    _modL(sm, 32, x);
+    modL(sm, 32, x);
 
     return 0;
   }
@@ -3210,7 +3210,7 @@ class TweetNaclFast {
 
     crypto_hash_off(h, m, 0, n);
 
-    _reduce(h);
+    reduce(h);
     _scalarmult(p, q, h, 0);
 
     scalarbase(q, sm, 32 + smoff);
