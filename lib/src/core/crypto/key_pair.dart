@@ -4,7 +4,6 @@ import 'dart:typed_data' show Uint8List;
 
 import 'package:nem2_sdk_dart/src/core/utils.dart' show CryptoUtils, HexUtils;
 import 'package:nem2_sdk_dart/src/core/crypto/crypto_exception.dart';
-import 'package:nem2_sdk_dart/src/core/crypto/tweetnacl.dart' as TweetNacl;
 
 /// Represents a key pair
 class KeyPair {
@@ -39,26 +38,26 @@ class KeyPair {
       throw new CryptoException("Private key has unexpected size: ${privateKeySeed.length}");
     }
 
-    // final Uint8List publicKey = CryptoUtils.extractPublicKey(privateKeySeed);
-    final TweetNacl.NaclKeyPair kp = TweetNacl.Signature.keyPair_fromSeed(privateKeySeed);
-    CryptoUtils.wipe(kp.secretKey);
-    final Uint8List publicKey = kp.publicKey;
+    final Uint8List publicKey = CryptoUtils.extractPublicKey(privateKeySeed);
 
     return new KeyPair(privateKey: privateKeySeed, publicKey: publicKey);
   }
 
   /// Signs a data buffer with a key pair.
   static Uint8List sign(final KeyPair keyPair, final Uint8List data) {
+    // TODO: implement
     return null;
   }
 
   /// Verifies a signature.
   static bool verify(final Uint8List publicKey, final Uint8List data, final Uint8List signature) {
+    // TODO: implement
     return false;
   }
 
   static Uint8List deriveSharedKey(
       final KeyPair keyPair, final Uint8List publicKey, final Uint8List salt) {
+    // TODO: implement
     return null;
   }
 }

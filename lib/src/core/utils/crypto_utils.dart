@@ -2,8 +2,9 @@ library nem2_sdk_dart.core.utils.crypto_utils;
 
 import 'dart:typed_data' show Uint8List, Int64List, ByteBuffer;
 
-import 'package:pointycastle/export.dart' show HMac, SHA3Digest;
 import 'package:nem2_sdk_dart/src/core/crypto/tweetnacl.dart' as TweetNacl;
+
+import '../crypto/sha3nist.dart';
 
 /// A utility class that provides various functions for converting
 /// one type of data to another
@@ -23,13 +24,6 @@ class CryptoUtils {
       throw new ArgumentError('Incorrect length of privateKeySeed');
     }
 
-//    TweetNacl.KeyPair kp = TweetNacl.Signature.keyPair_fromSeed(privateKeySeed);
-//    return kp.publicKey;
-
-//    final Uint8List pk = new Uint8List(KEY_SIZE);
-//    TweetNacl.TweetNaclFast.crypto_sign_keypair(pk, privateKeySeed, true);
-//    return pk;
-
     final Uint8List d = prepareForScalarMult(privateKeySeed);
     List<Int64List> p = [gf(), gf(), gf(), gf()];
     final Uint8List pk = new Uint8List(KEY_SIZE);
@@ -40,6 +34,7 @@ class CryptoUtils {
   }
 
   /// Decodes two hex characters into a byte.
+  /// TODO: implement
   static int toByte(final String char1, final String char2) {
     final int byte = tryParseByte(char1, char2);
 
@@ -47,22 +42,17 @@ class CryptoUtils {
   }
 
   /// Decodes two hex characters into a byte. Returns null.
+  /// TODO: implement
   static int tryParseByte(final String char1, final String char2) {
     return null;
   }
 
   static prepareForScalarMult(final Uint8List sk) {
-    // final Uint8List d = new Uint8List(HASH_SIZE);
-    // hash function based on length. 32 = SHA3-256, 64 = SHA3-512
-    // JavaScript: array.copy(d, array.uint8View(sha3Hasher.arrayBuffer(sk)));
-    // clamp(d);
-
-    final SHA3Digest sha3digest = new SHA3Digest(512);
+    final SHA3DigestNist sha3digest = new SHA3DigestNist(512);
     Uint8List hash = sha3digest.process(sk);
     final ByteBuffer buffer = hash.buffer;
     final Uint8List d = buffer.asUint8List(0, HASH_SIZE);
     clamp(d);
-    sha3digest.reset();
     return d;
   }
 
@@ -83,8 +73,8 @@ class CryptoUtils {
   }
 
   static void wipe(Uint8List byte) {
-    for(int i = 0; i< byte.length; i++) {
-       byte[i] = 0;
+    for (int i = 0; i < byte.length; i++) {
+      byte[i] = 0;
     }
   }
 }

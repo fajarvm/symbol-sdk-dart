@@ -6,6 +6,8 @@ import 'sha3nist.dart';
 import '../utils/hex_utils.dart';
 import '../utils/array_utils.dart';
 
+// TODO: DELETE THIS CLASS.
+// TODO: I don't think this class is needed. Just use the SHA3DigestNist directly?
 class Sha3Hasher {
   final SHA3DigestNist _hasher;
 
@@ -45,7 +47,6 @@ class Sha3Hasher {
 
   void finalize(Uint8List result) {
     result = this._hasher.process(result);
-//    ArrayUtils.copy(result, this._hasher.process(result));
   }
 
   // ------------------------------ private / protected functions ------------------------------ //
