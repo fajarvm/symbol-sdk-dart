@@ -1,7 +1,8 @@
 library nem2_sdk_dart.test.core.crypto.sha3_hasher_test;
 
-import "package:test/test.dart";
 import "dart:typed_data" show Uint8List;
+
+import "package:test/test.dart";
 
 import "package:nem2_sdk_dart/src/core/crypto.dart" show Sha3Hasher, SHA3DigestNist;
 import "package:nem2_sdk_dart/src/core/utils.dart" show HexUtils;

@@ -4,8 +4,8 @@ import 'dart:typed_data' show Uint8List;
 
 import 'package:test/test.dart';
 
-import 'package:nem2_sdk_dart/src/core/crypto.dart' show CryptoException, KeyPair;
-import 'package:nem2_sdk_dart/src/core/utils.dart' show ArrayUtils, CryptoUtils, HexUtils;
+import 'package:nem2_sdk_dart/src/core/crypto.dart' show CryptoException, Ed25519, KeyPair;
+import 'package:nem2_sdk_dart/src/core/utils.dart' show ArrayUtils, HexUtils;
 
 main() {
   final List<String> TEST_PRIVATE_KEYS = [
@@ -59,7 +59,7 @@ main() {
                 e is CryptoException &&
                 e.message ==
                     'Private key has an unexpected size. '
-                    'Expected: ${CryptoUtils.KEY_SIZE}, Got: ${privateKeySeed.length}')));
+                    'Expected: ${Ed25519.KEY_SIZE}, Got: ${privateKeySeed.length}')));
       }
     });
   });
@@ -68,22 +68,22 @@ main() {
   group('sign', () {
     test('fills the signature', () {
       // Prepare
-      KeyPair keyPair = CryptoUtils.createRandomKeyPair();
-      Uint8List payload = CryptoUtils.getRandomBytes(100);
+      KeyPair keyPair = Ed25519.createRandomKeyPair();
+      Uint8List payload = Ed25519.getRandomBytes(100);
 
       Uint8List signature = KeyPair.sign(keyPair, payload);
 
       // Assert
-      Uint8List emptySig = new Uint8List(CryptoUtils.SIGNATURE_SIZE);
+      Uint8List emptySig = new Uint8List(Ed25519.SIGNATURE_SIZE);
       expect(ArrayUtils.deepEqual(signature, emptySig), false);
     });
 
     test('returns same signature for same data signed by same key pairs', () {
       // Prepare
-      String privateKey = HexUtils.getString(CryptoUtils.getRandomBytes(CryptoUtils.KEY_SIZE));
+      String privateKey = HexUtils.getString(Ed25519.getRandomBytes(Ed25519.KEY_SIZE));
       KeyPair keyPair1 = KeyPair.createFromPrivateKeyString(privateKey);
       KeyPair keyPair2 = KeyPair.createFromPrivateKeyString(privateKey);
-      Uint8List payload = CryptoUtils.getRandomBytes(100);
+      Uint8List payload = Ed25519.getRandomBytes(100);
 
       Uint8List signature1 = KeyPair.sign(keyPair1, payload);
       Uint8List signature2 = KeyPair.sign(keyPair2, payload);
@@ -93,9 +93,9 @@ main() {
 
     test('returns different signature for data signed by different key pairs', () {
       // Prepare
-      KeyPair keyPair1 = CryptoUtils.createRandomKeyPair();
-      KeyPair keyPair2 = CryptoUtils.createRandomKeyPair();
-      Uint8List payload = CryptoUtils.getRandomBytes(100);
+      KeyPair keyPair1 = Ed25519.createRandomKeyPair();
+      KeyPair keyPair2 = Ed25519.createRandomKeyPair();
+      Uint8List payload = Ed25519.getRandomBytes(100);
 
       Uint8List signature1 = KeyPair.sign(keyPair1, payload);
       Uint8List signature2 = KeyPair.sign(keyPair2, payload);

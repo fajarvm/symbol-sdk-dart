@@ -1,17 +1,18 @@
-library nem2_sdk_dart.core.utils.crypto_utils;
+library nem2_sdk_dart.core.crypto.ed25519;
+
 
 import 'dart:typed_data' show ByteBuffer, Int64List, Uint8List;
 
-import '../crypto/crypto_exception.dart';
-import '../crypto/key_pair.dart';
-import '../crypto/sha3nist.dart';
-import '../crypto/tweetnacl.dart' as TweetNacl;
+import 'crypto_exception.dart';
+import 'key_pair.dart';
+import 'sha3nist.dart';
+import 'tweetnacl.dart' as TweetNacl;
 
 import '../utils/hex_utils.dart';
 import '../utils/array_utils.dart';
 
-/// A utility class that provides various custom cryptographic operations
-class CryptoUtils {
+/// This class provides various custom cryptographic operations
+class Ed25519 {
   static const int KEY_SIZE = 32;
   static const int SIGNATURE_SIZE = 64;
   static const int HALF_SIGNATURE_SIZE = 32;

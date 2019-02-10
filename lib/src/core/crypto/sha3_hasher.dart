@@ -4,7 +4,6 @@ import 'dart:typed_data' show Uint8List;
 
 import 'sha3nist.dart';
 import '../utils/hex_utils.dart';
-import '../utils/array_utils.dart';
 
 // TODO: DELETE THIS CLASS.
 // TODO: I don't think this class is needed. Just use the SHA3DigestNist directly?

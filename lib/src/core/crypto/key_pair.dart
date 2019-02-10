@@ -2,8 +2,10 @@ library nem2_sdk_dart.core.crypto.key_pair;
 
 import 'dart:typed_data' show Uint8List;
 
-import 'package:nem2_sdk_dart/src/core/utils.dart' show CryptoUtils, HexUtils;
+import 'package:nem2_sdk_dart/src/core/utils.dart' show HexUtils;
 import 'package:nem2_sdk_dart/src/core/crypto/crypto_exception.dart';
+
+import 'ed25519.dart';
 
 /// Represents a key pair
 class KeyPair {
@@ -36,19 +38,19 @@ class KeyPair {
   /// private key string is found.
   static KeyPair createFromPrivateKeyString(final String hexEncodedPrivateKey) {
     final Uint8List privateKeySeed = HexUtils.getBytes(hexEncodedPrivateKey);
-    if (CryptoUtils.KEY_SIZE != privateKeySeed.length) {
+    if (Ed25519.KEY_SIZE != privateKeySeed.length) {
       throw new CryptoException(
-          "Private key has an unexpected size. Expected: ${CryptoUtils.KEY_SIZE}, Got: ${privateKeySeed.length}");
+          "Private key has an unexpected size. Expected: ${Ed25519.KEY_SIZE}, Got: ${privateKeySeed.length}");
     }
 
-    final Uint8List publicKey = CryptoUtils.extractPublicKey(privateKeySeed);
+    final Uint8List publicKey = Ed25519.extractPublicKey(privateKeySeed);
 
     return new KeyPair(privateKey: privateKeySeed, publicKey: publicKey);
   }
 
   /// Signs a data buffer with a key pair.
   static Uint8List sign(final KeyPair keyPair, final Uint8List data) {
-    return CryptoUtils.sign(data, keyPair.publicKey, keyPair.privateKey);
+    return Ed25519.sign(data, keyPair.publicKey, keyPair.privateKey);
   }
 
   /// Verifies a signature.
