@@ -2886,7 +2886,7 @@ class TweetNaclFast {
 
 // gf: long[16]
   ///private static void add(gf p[4],gf q[4])
-  static void _add(List<Int64List> p, List<Int64List> q) {
+  static void add(List<Int64List> p, List<Int64List> q) {
     Int64List a = Int64List(16);
     Int64List b = Int64List(16);
     Int64List c = Int64List(16);
@@ -2950,7 +2950,7 @@ class TweetNaclFast {
     r[31] ^= _par25519_off(tx, 0) << 7;
   }
 
-  static void _scalarmult(
+  static void scalarmult(
       List<Int64List> p, List<Int64List> q, Uint8List s, final int soff) {
     int i;
 
@@ -2965,8 +2965,8 @@ class TweetNaclFast {
           1);
 
       _cswap(p, q, b);
-      _add(q, p);
-      _add(p, p);
+      add(q, p);
+      add(p, p);
       _cswap(p, q, b);
     }
   }
@@ -2983,7 +2983,7 @@ class TweetNaclFast {
     _set25519(q[1], _Y);
     _set25519(q[2], _gf1);
     _M_off(q[3], 0, _X, 0, _Y, 0);
-    _scalarmult(p, q, s, soff);
+    scalarmult(p, q, s, soff);
   }
 
   static int crypto_sign_keypair(Uint8List pk, Uint8List sk, bool seeded) {
@@ -3135,7 +3135,7 @@ class TweetNaclFast {
     return 0;
   }
 
-  static int _unpackneg(List<Int64List> r, Uint8List p) {
+  static int unpackneg(List<Int64List> r, Uint8List p) {
     Int64List t = Int64List(16);
     Int64List chk = Int64List(16);
     Int64List num = Int64List(16);
@@ -3202,7 +3202,7 @@ class TweetNaclFast {
 
     if (n < 64) return -1;
 
-    if (_unpackneg(q, pk) != 0) return -1;
+    if (unpackneg(q, pk) != 0) return -1;
 
     for (i = 0; i < n; i++) m[i] = sm[i + smoff];
 
@@ -3211,10 +3211,10 @@ class TweetNaclFast {
     crypto_hash_off(h, m, 0, n);
 
     reduce(h);
-    _scalarmult(p, q, h, 0);
+    scalarmult(p, q, h, 0);
 
     scalarbase(q, sm, 32 + smoff);
-    _add(p, q);
+    add(p, q);
     pack(t, p);
 
     n -= 64;

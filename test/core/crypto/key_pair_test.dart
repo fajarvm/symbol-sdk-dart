@@ -103,4 +103,20 @@ main() {
       expect(ArrayUtils.deepEqual(signature1, signature2), false);
     });
   });
+
+  // Verify
+  group('verify', () {
+    test('returns true for data signed with same key pair', () {
+      // Prepare
+      KeyPair keyPair = Ed25519.createRandomKeyPair();
+      Uint8List payload = Ed25519.getRandomBytes(100);
+      Uint8List signature = KeyPair.sign(keyPair, payload);
+
+      bool isVerified = KeyPair.verify(keyPair.publicKey, payload, signature);
+
+      // Assert
+      // TODO: Fix unit test! Currently failing.
+      expect(isVerified, true);
+    });
+  });
 }

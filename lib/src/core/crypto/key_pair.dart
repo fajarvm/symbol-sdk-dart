@@ -55,8 +55,7 @@ class KeyPair {
 
   /// Verifies a signature.
   static bool verify(final Uint8List publicKey, final Uint8List data, final Uint8List signature) {
-    // TODO: implement
-    return false;
+    return Ed25519.verify(publicKey, data, signature);
   }
 
   static Uint8List deriveSharedKey(

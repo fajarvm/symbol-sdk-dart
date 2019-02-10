@@ -60,7 +60,7 @@ class Ed25519 {
 
     final Uint8List h = new Uint8List(HASH_SIZE); // result
     hasher.reset();
-    hasher.update(signature, 0, HALF_SIGNATURE_SIZE);
+    hasher.update(signature.sublist(0, HALF_SIGNATURE_SIZE), 0, HALF_SIGNATURE_SIZE);
     hasher.update(publicKey, 0, KEY_SIZE);
     hasher.update(message, 0, message.length);
     hasher.doFinal(h, 0);
@@ -100,11 +100,42 @@ class Ed25519 {
   }
 
   static bool verify(Uint8List publicKey, Uint8List data, Uint8List signature) {
-    if (!validateEncodedSPart(signature.sublist(HALF_SIGNATURE_SIZE))) {
+    // reject non-canonical signature
+    if (!isCanonical(signature.sublist(HALF_SIGNATURE_SIZE))) {
       return false;
     }
 
-    return false;
+    // reject weak (filled with zeros) public key
+    if (ArrayUtils.isZero(publicKey)) {
+      return false;
+    }
+
+    final List<Int64List> q = [gf(), gf(), gf(), gf()];
+
+    if (0 != TweetNacl.TweetNaclFast.unpackneg(q, publicKey)) {
+      return false;
+    }
+
+    final Uint8List h = new Uint8List(HASH_SIZE);
+
+    final SHA3DigestNist hasher = new SHA3DigestNist(512);
+    hasher.reset();
+    hasher.update(signature.sublist(0, HALF_SIGNATURE_SIZE), 0, HALF_SIGNATURE_SIZE);
+    hasher.update(publicKey, 0, KEY_SIZE);
+    hasher.update(data, 0, data.length);
+    hasher.doFinal(h, 0);
+
+    final List<Int64List> p = [gf(), gf(), gf(), gf()];
+    TweetNacl.TweetNaclFast.reduce(h);
+    TweetNacl.TweetNaclFast.scalarmult(p, q, h, 0);
+
+    final Uint8List t = new Uint8List(SIGNATURE_SIZE);
+    TweetNacl.TweetNaclFast.scalarbase(q, signature.sublist(HALF_SIGNATURE_SIZE), 0);
+    TweetNacl.TweetNaclFast.add(p, q);
+    TweetNacl.TweetNaclFast.pack(t, p);
+
+    int result = TweetNacl.TweetNaclFast.crypto_verify_32(signature, t);
+    return result == 0;
   }
 
   /// Creates random bytes with the given size
