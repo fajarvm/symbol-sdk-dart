@@ -1,6 +1,5 @@
 library nem2_sdk_dart.core.crypto.ed25519;
 
-
 import 'dart:typed_data' show ByteBuffer, Int64List, Uint8List;
 
 import 'crypto_exception.dart';
@@ -81,25 +80,31 @@ class Ed25519 {
     TweetNacl.TweetNaclFast.modL(signature.sublist(HALF_SIGNATURE_SIZE), 0, x);
 
     // validate S part of Signature
-    validateEncodedSPart(signature.sublist(HALF_SIGNATURE_SIZE));
+    if (!validateEncodedSPart(signature.sublist(HALF_SIGNATURE_SIZE))) {
+      throw new CryptoException('The S part of the signature is invalid');
+    }
 
     return signature;
   }
 
-  static void validateEncodedSPart(Uint8List s) {
-    if (ArrayUtils.isZero(s)) {
-      return;
-    }
+  static bool validateEncodedSPart(Uint8List s) {
+    return ArrayUtils.isZero(s) || isCanonical(s);
+  }
 
+  static bool isCanonical(Uint8List input) {
     final Uint8List copy = new Uint8List(SIGNATURE_SIZE);
-    ArrayUtils.copy(copy, s, numElementsToCopy: HALF_SIGNATURE_SIZE);
+    ArrayUtils.copy(copy, input, numElementsToCopy: HALF_SIGNATURE_SIZE);
 
     TweetNacl.TweetNaclFast.reduce(copy);
-    if (ArrayUtils.deepEqual(s, copy, numElementsToCompare: HALF_SIGNATURE_SIZE)) {
-      return;
+    return ArrayUtils.deepEqual(input, copy, numElementsToCompare: HALF_SIGNATURE_SIZE);
+  }
+
+  static bool verify(Uint8List publicKey, Uint8List data, Uint8List signature) {
+    if (!validateEncodedSPart(signature.sublist(HALF_SIGNATURE_SIZE))) {
+      return false;
     }
 
-    throw new CryptoException('The S part of the signature is invalid');
+    return false;
   }
 
   /// Creates random bytes with the given size
