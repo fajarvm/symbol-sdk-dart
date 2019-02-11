@@ -47,7 +47,7 @@ class Ed25519 {
 
     final Uint8List r = new Uint8List(HASH_SIZE); // seeded hash
     hasher.reset();
-    hasher.update(d, 32, HALF_HASH_SIZE);
+    hasher.update(d.sublist(HALF_HASH_SIZE), 0, HALF_HASH_SIZE);
     hasher.update(message, 0, message.length);
     hasher.doFinal(r, 0);
 
@@ -77,7 +77,7 @@ class Ed25519 {
       }
     }
 
-    TweetNacl.TweetNaclFast.modL(signature.sublist(HALF_SIGNATURE_SIZE), 0, x);
+    TweetNacl.TweetNaclFast.modL(signature, 32, x);
 
     // validate S part of Signature
     if (!validateEncodedSPart(signature.sublist(HALF_SIGNATURE_SIZE))) {

@@ -117,8 +117,7 @@ main() {
       final bool isVerified = KeyPair.verify(keyPair.publicKey, payload, signature);
 
       // Assert
-      // TODO: Fix unit test! Currently failing.
-      // expect(isVerified, true);
+       expect(isVerified, true);
     });
 
     test('returns false if signature has been modified', () {
@@ -223,8 +222,7 @@ main() {
           KeyPair.verify(keyPair.privateKey, payload, nonCanonicalSignature);
 
       // Assert
-      // TODO: Fix unit test. Currently failing
-      // expect(isCanonicalVerified, equals(true));
+      expect(isCanonicalVerified, equals(true));
       expect(isNonCanonicalVerified, equals(false));
     });
   });
