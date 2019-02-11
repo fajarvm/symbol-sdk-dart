@@ -288,6 +288,71 @@ main() {
       }
     });
   });
+
+  // ---------------------------
+  // ---- Derive Shared Key ----
+  // ---------------------------
+  group('derived shared key', () {
+    final int SALT_SIZE = 32;
+
+    test('fails if salt has the wrong size', () {
+      // Prepare: create a salt that is too long
+      final KeyPair keyPair = Ed25519.createRandomKeyPair();
+      final Uint8List publicKey = Ed25519.createRandomPublicKey();
+      final Uint8List salt = Ed25519.getRandomBytes(SALT_SIZE + 1);
+
+      // Assert
+      expect(
+          () => KeyPair.deriveSharedKey(keyPair, publicKey, salt),
+          throwsA(predicate((e) =>
+              e is ArgumentError && e.message == 'Salt has unexpected size: ${salt.length}')));
+    });
+
+    test('derives same shared key for both partners', () {
+      // Prepare:
+      final KeyPair keyPair1 = Ed25519.createRandomKeyPair();
+      final KeyPair keyPair2 = Ed25519.createRandomKeyPair();
+      final Uint8List salt = Ed25519.getRandomBytes(SALT_SIZE);
+
+      final Uint8List sharedKey1 = KeyPair.deriveSharedKey(keyPair1, keyPair2.publicKey, salt);
+      final Uint8List sharedKey2 = KeyPair.deriveSharedKey(keyPair2, keyPair1.publicKey, salt);
+
+      // Assert
+      expect(ArrayUtils.deepEqual(sharedKey1, sharedKey2), equals(true));
+    });
+
+    test('derives different shared key for different partners', () {
+      // Prepare:
+      final KeyPair keyPair = Ed25519.createRandomKeyPair();
+      final Uint8List publicKey1 = Ed25519.createRandomPublicKey();
+      final Uint8List publicKey2 = Ed25519.createRandomPublicKey();
+      final Uint8List salt = Ed25519.getRandomBytes(SALT_SIZE);
+
+      final Uint8List sharedKey1 = KeyPair.deriveSharedKey(keyPair, publicKey1, salt);
+      final Uint8List sharedKey2 = KeyPair.deriveSharedKey(keyPair, publicKey2, salt);
+
+      // Assert
+      expect(ArrayUtils.deepEqual(sharedKey1, sharedKey2), equals(false));
+    });
+
+    test('can derive deterministic shared key from well known inputs', () {
+      // Prepare:
+      final String privateKeyString =
+          "8F545C2816788AB41D352F236D80DBBCBC34705B5F902EFF1F1D88327C7C1300";
+      final KeyPair keyPair = KeyPair.createFromPrivateKeyString(privateKeyString);
+      final Uint8List publicKey =
+          HexUtils.getBytes("BF684FB1A85A8C8091EE0442EDDB22E51683802AFA0C0E7C6FE3F3E3E87A8D72");
+      final Uint8List salt =
+          HexUtils.getBytes("422C39DF16AAE42A74A5597D6EE2D59CFB4EEB6B3F26D98425B9163A03DAA3B5");
+
+      final Uint8List sharedKey = KeyPair.deriveSharedKey(keyPair, publicKey, salt);
+      final String sharedKeyHexString = HexUtils.getString(sharedKey).toUpperCase();
+
+      // Assert
+      String expected = "FF9623D28FBC13B6F0E0659117FC7BE294DB3385C046055A6BAC39EDF198D50D";
+      expect(sharedKeyHexString, equals(expected));
+    });
+  });
 }
 
 void scalarAddGroupOrder(Uint8List scalar) {

@@ -60,7 +60,6 @@ class KeyPair {
 
   static Uint8List deriveSharedKey(
       final KeyPair keyPair, final Uint8List publicKey, final Uint8List salt) {
-    // TODO: implement
-    return null;
+    return Ed25519.deriveSharedKey(salt, keyPair.privateKey, publicKey);
   }
 }

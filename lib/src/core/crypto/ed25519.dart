@@ -87,18 +87,6 @@ class Ed25519 {
     return signature;
   }
 
-  static bool validateEncodedSPart(Uint8List s) {
-    return ArrayUtils.isZero(s) || isCanonical(s);
-  }
-
-  static bool isCanonical(Uint8List input) {
-    final Uint8List copy = new Uint8List(SIGNATURE_SIZE);
-    ArrayUtils.copy(copy, input, numElementsToCopy: HALF_SIGNATURE_SIZE);
-
-    TweetNacl.TweetNaclFast.reduce(copy);
-    return ArrayUtils.deepEqual(input, copy, numElementsToCompare: HALF_SIGNATURE_SIZE);
-  }
-
   static bool verify(Uint8List publicKey, Uint8List data, Uint8List signature) {
     // reject non-canonical signature
     if (!isCanonical(signature.sublist(HALF_SIGNATURE_SIZE))) {
@@ -136,6 +124,47 @@ class Ed25519 {
 
     int result = TweetNacl.TweetNaclFast.crypto_verify_32(signature, t);
     return result == 0;
+  }
+
+  static Uint8List deriveSharedKey(
+      final Uint8List salt, final Uint8List privateKey, final Uint8List publicKey) {
+    if (Ed25519.KEY_SIZE != salt.length) {
+      throw ArgumentError('Salt has unexpected size: ${salt.length}');
+    }
+
+    final Uint8List d = prepareForScalarMult(privateKey);
+
+    // sharedKey = pack(p = d (derived from sk) * q (derived from pk))
+    final List<Int64List> q = [gf(), gf(), gf(), gf()];
+    final List<Int64List> p = [gf(), gf(), gf(), gf()];
+    final Uint8List sharedKey = new Uint8List(KEY_SIZE);
+    TweetNacl.TweetNaclFast.unpackneg(q, publicKey);
+    TweetNacl.TweetNaclFast.scalarmult(p, q, d, 0);
+    TweetNacl.TweetNaclFast.pack(sharedKey, p);
+
+    // salt the shared key
+    for (int i = 0; i < KEY_SIZE; i++) {
+      sharedKey[i] ^= salt[i];
+    }
+
+    // return the hash of the result
+    final SHA3DigestNist hasher = new SHA3DigestNist(256);
+    Uint8List hash = hasher.process(sharedKey);
+    final ByteBuffer buffer = hash.buffer;
+    final Uint8List result = buffer.asUint8List(0, KEY_SIZE);
+    return result;
+  }
+
+  static bool validateEncodedSPart(Uint8List s) {
+    return ArrayUtils.isZero(s) || isCanonical(s);
+  }
+
+  static bool isCanonical(Uint8List input) {
+    final Uint8List copy = new Uint8List(SIGNATURE_SIZE);
+    ArrayUtils.copy(copy, input, numElementsToCopy: HALF_SIGNATURE_SIZE);
+
+    TweetNacl.TweetNaclFast.reduce(copy);
+    return ArrayUtils.deepEqual(input, copy, numElementsToCompare: HALF_SIGNATURE_SIZE);
   }
 
   /// Creates random bytes with the given size
