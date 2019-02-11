@@ -1,10 +1,10 @@
-library nem2_sdk_dart.test.core.crypto.sha3_hasher_test;
+library nem2_sdk_dart.test.core.crypto.sha3nist_test;
 
 import "dart:typed_data" show Uint8List;
 
 import "package:test/test.dart";
 
-import "package:nem2_sdk_dart/src/core/crypto.dart" show Sha3Hasher, SHA3DigestNist;
+import "package:nem2_sdk_dart/src/core/crypto.dart" show SHA3DigestNist;
 import "package:nem2_sdk_dart/src/core/utils.dart" show HexUtils;
 
 main() {
@@ -29,8 +29,6 @@ main() {
       '2F1A5F7159E34EA19CDDC70EBF9B81F1A66DB40615D7EAD3CC1F1B954D82A3AF'
     ];
 
-    final int length = 32; // SHA3-256
-
     test('SHA3 256 can hash test vectors', () {
       // sanity check
       expect(expectedOutput.length, equals(inputs.length));
@@ -40,7 +38,8 @@ main() {
         final Uint8List inputBuffer = HexUtils.getBytes(inputHex);
         final expectedHash = expectedOutput[i];
 
-        Uint8List hash = Sha3Hasher.hash(inputBuffer, length: length);
+        final SHA3DigestNist hasher = new SHA3DigestNist(256); // SHA3-256
+        Uint8List hash = hasher.process(inputBuffer);
 
         final String hashString = HexUtils.getString(hash).toUpperCase();
         expect(hashString, equals(expectedHash));
@@ -84,8 +83,6 @@ main() {
       'B087C90421AEBF87911647DE9D465CBDA166B672EC47CCD4054A7135A1EF885E7903B52C3F2C3FE722B1C169297A91B82428956A02C631A2240F12162C7BC726'
     ];
 
-    final int length = 64; // SHA3-512
-
     test('SHA3 512 can hash test vectors', () {
       // sanity check
       expect(expectedOutput.length, equals(inputs.length));
@@ -95,7 +92,8 @@ main() {
         final Uint8List inputBuffer = HexUtils.getBytes(inputHex);
         final expectedHash = expectedOutput[i];
 
-        Uint8List hash = Sha3Hasher.hash(inputBuffer, length: length);
+        final SHA3DigestNist hasher = new SHA3DigestNist(512); // SHA3-512
+        Uint8List hash = hasher.process(inputBuffer);
 
         final String hashString = HexUtils.getString(hash).toUpperCase();
         expect(hashString, equals(expectedHash));

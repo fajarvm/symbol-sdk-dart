@@ -16,7 +16,6 @@ import 'package:nem2_sdk_dart/src/core/utils.dart';
 /// implementations
 export 'crypto/ed25519.dart';
 export 'crypto/key_pair.dart';
-export 'crypto/sha3_hasher.dart';
 export 'crypto/sha3nist.dart';
 export 'crypto/tweetnacl.dart';
 //part 'crypto/signature.dart';
