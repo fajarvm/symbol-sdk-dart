@@ -16,7 +16,25 @@ main() {
     '27FC9998454848B987FAD89296558A34DEED4358D1517B953572F3E0AAA0A22D'
   ];
 
-  // KeyPair creation
+  final List<String> INPUT_DATA = [
+    '8ce03cd60514233b86789729102ea09e867fc6d964dea8c2018ef7d0a2e0e24bf7e348e917116690b9',
+    'e4a92208a6fc52282b620699191ee6fb9cf04daf48b48fd542c5e43daa9897763a199aaa4b6f10546109f47ac3564fade0',
+    '13ed795344c4448a3b256f23665336645a853c5c44dbff6db1b9224b5303b6447fbf8240a2249c55',
+    'a2704638434e9f7340f22d08019c4c8e3dbee0df8dd4454a1d70844de11694f4c8ca67fdcb08fed0cec9abb2112b5e5f89',
+    'd2488e854dbcdfdb2c9d16c8c0b2fdbc0abb6bac991bfe2b14d359a6bc99d66c00fd60d731ae06d0'
+  ];
+
+  final List<String> EXPECTED_SIGNATURES = [
+    'C9B1342EAB27E906567586803DA265CC15CCACA411E0AEF44508595ACBC47600D02527F2EED9AB3F28C856D27E30C3808AF7F22F5F243DE698182D373A9ADE03',
+    '0755E437ED4C8DD66F1EC29F581F6906AB1E98704ECA94B428A25937DF00EC64796F08E5FEF30C6F6C57E4A5FB4C811D617FA661EB6958D55DAE66DDED205501',
+    '15D6585A2A456E90E89E8774E9D12FE01A6ACFE09936EE41271AA1FBE0551264A9FF9329CB6FEE6AE034238C8A91522A6258361D48C5E70A41C1F1C51F55330D',
+    'F6FB0D8448FEC0605CF74CFFCC7B7AE8D31D403BCA26F7BD21CB4AC87B00769E9CC7465A601ED28CDF08920C73C583E69D621BA2E45266B86B5FCF8165CBE309',
+    'E88D8C32FE165D34B775F70657B96D8229FFA9C783E61198A6F3CCB92F487982D08F8B16AB9157E2EFC3B78F126088F585E26055741A9F25127AC13E883C9A05'
+  ];
+
+  // ---------------------------
+  // ---- KeyPair creation -----
+  // ---------------------------
   group('construction', () {
     test('can extract from private key test vectors', () {
       final List<String> EXPECTED_PUBLIC_KEYS = [
@@ -64,7 +82,9 @@ main() {
     });
   });
 
-  // Signing
+  // ---------------------------
+  // --------- Signing ---------
+  // ---------------------------
   group('sign', () {
     test('fills the signature', () {
       // Prepare
@@ -106,7 +126,9 @@ main() {
     });
   });
 
-  // Verify
+  // ---------------------------
+  // --------- Verify ----------
+  // ---------------------------
   group('verify', () {
     test('returns true for data signed with same key pair', () {
       // Prepare
@@ -117,7 +139,7 @@ main() {
       final bool isVerified = KeyPair.verify(keyPair.publicKey, payload, signature);
 
       // Assert
-       expect(isVerified, true);
+      expect(isVerified, true);
     });
 
     test('returns false for data signed with different a different key pair', () {
@@ -224,6 +246,46 @@ main() {
       // Assert
       expect(isCanonicalVerified, equals(true));
       expect(isNonCanonicalVerified, equals(false));
+    });
+  });
+
+  // ---------------------------
+  // ------ Test vectors -------
+  // ---------------------------
+  group('test vectors', () {
+    test('can sign test vectors', () {
+      // Sanity check
+      expect(TEST_PRIVATE_KEYS.length, equals(INPUT_DATA.length));
+      expect(TEST_PRIVATE_KEYS.length, equals(EXPECTED_SIGNATURES.length));
+
+      for (int i = 0; i < TEST_PRIVATE_KEYS.length; i++) {
+        // Prepare
+        final KeyPair keyPair = KeyPair.createFromPrivateKeyString(TEST_PRIVATE_KEYS[i]);
+        final Uint8List inputData = HexUtils.getBytes(INPUT_DATA[i]);
+        final Uint8List signature = KeyPair.sign(keyPair, inputData);
+
+        // Assert
+        String result = HexUtils.getString(signature).toUpperCase();
+        expect(result, equals(EXPECTED_SIGNATURES[i]));
+      }
+    });
+
+    test('can verify test vectors', () {
+      // Sanity check
+      expect(TEST_PRIVATE_KEYS.length, equals(INPUT_DATA.length));
+      expect(TEST_PRIVATE_KEYS.length, equals(EXPECTED_SIGNATURES.length));
+
+      for (int i = 0; i < TEST_PRIVATE_KEYS.length; i++) {
+        // Prepare
+        final KeyPair keyPair = KeyPair.createFromPrivateKeyString(TEST_PRIVATE_KEYS[i]);
+        final Uint8List inputData = HexUtils.getBytes(INPUT_DATA[i]);
+        final Uint8List signature = KeyPair.sign(keyPair, inputData);
+
+        bool isVerified = KeyPair.verify(keyPair.publicKey, inputData, signature);
+
+        // Assert
+        expect(isVerified, equals(true));
+      }
     });
   });
 }
