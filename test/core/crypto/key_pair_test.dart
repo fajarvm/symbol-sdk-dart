@@ -120,6 +120,18 @@ main() {
        expect(isVerified, true);
     });
 
+    test('returns false for data signed with different a different key pair', () {
+      final KeyPair keyPair1 = Ed25519.createRandomKeyPair();
+      final KeyPair keyPair2 = Ed25519.createRandomKeyPair();
+      final Uint8List payload = Ed25519.getRandomBytes(100);
+      final Uint8List signature = KeyPair.sign(keyPair1, payload);
+
+      final bool isVerified = KeyPair.verify(keyPair2.publicKey, payload, signature);
+
+      // Assert
+      expect(isVerified, equals(false));
+    });
+
     test('returns false if signature has been modified', () {
       final KeyPair keyPair = Ed25519.createRandomKeyPair();
       final Uint8List payload = Ed25519.getRandomBytes(100);
@@ -133,18 +145,6 @@ main() {
         // Assert
         expect(isVerified, equals(false));
       }
-    });
-
-    test('returns false for data signed with different a different key pair', () {
-      final KeyPair keyPair1 = Ed25519.createRandomKeyPair();
-      final KeyPair keyPair2 = Ed25519.createRandomKeyPair();
-      final Uint8List payload = Ed25519.getRandomBytes(100);
-      final Uint8List signature = KeyPair.sign(keyPair1, payload);
-
-      final bool isVerified = KeyPair.verify(keyPair2.publicKey, payload, signature);
-
-      // Assert
-      expect(isVerified, equals(false));
     });
 
     test('returns false if payload has been modified', () {
