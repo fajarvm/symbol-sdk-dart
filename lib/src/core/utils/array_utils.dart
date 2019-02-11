@@ -96,9 +96,9 @@ class ArrayUtils {
   /// are equal.  In other words, two arrays are equal if they contain the
   /// same elements in the same order.  Also, two array references are
   /// considered equal if both are null
-  static bool deepEqual(List<int> first, List<int> second, {int numElementsToCompare = 0}) {
+  static bool deepEqual(List<int> first, List<int> second, {final int numElementsToCompare = 0}) {
     // type comparison
-    if (first == second) {
+    if (first.hashCode == second.hashCode) {
       return true;
     }
     if (first == null || second == null) {
@@ -106,7 +106,14 @@ class ArrayUtils {
     }
 
     // length comparison
-    final int length = numElementsToCompare > 0 ? numElementsToCompare : first.length;
+    int length = numElementsToCompare;
+    if (numElementsToCompare == 0) {
+      if (first.length != second.length) {
+        return false;
+      }
+
+      length = first.length;
+    }
     if (length > first.length || length > second.length) {
       return false;
     }

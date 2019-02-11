@@ -106,7 +106,7 @@ class SHA3DigestNist extends BaseDigest implements Digest {
   }
 
   int doFinal(Uint8List out, int outOff) {
-    absorbBits(0x02, 02);
+    absorbBits(0x02, 2);
 
     _squeeze(out, outOff, _fixedOutputLength);
 

@@ -148,7 +148,7 @@ class Ed25519 {
     return getRandomBytes(KEY_SIZE);
   }
 
-  /// Creates a random ley pair
+  /// Creates a random key pair
   static KeyPair createRandomKeyPair() {
     return KeyPair.createFromPrivateKeyString(HexUtils.getString(getRandomBytes(32)));
   }
