@@ -1,7 +1,5 @@
 library nem2_sdk_dart.sdk.model;
 
-import 'dart:typed_data' show Uint8List;
-
 /// Account parts
 export 'model/account/account.dart';
 export 'model/account/address.dart';

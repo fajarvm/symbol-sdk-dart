@@ -1,11 +1,11 @@
 library nem2_sdk_dart.core.crypto.sha3_nist;
 
-import "dart:typed_data";
+import 'dart:typed_data';
 
-import "package:pointycastle/api.dart";
-import "package:pointycastle/src/impl/base_digest.dart";
-import "package:pointycastle/src/registry/registry.dart";
-import "package:pointycastle/src/ufixnum.dart";
+import 'package:pointycastle/api.dart';
+import 'package:pointycastle/src/impl/base_digest.dart';
+import 'package:pointycastle/src/registry/registry.dart';
+import 'package:pointycastle/src/ufixnum.dart';
 
 /// Implementation of SHA-3 digest conforms NIST specification.
 class SHA3DigestNist extends BaseDigest implements Digest {

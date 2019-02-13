@@ -1,10 +1,10 @@
 library nem2_sdk_dart.core.crypto.tweetnacl;
 
 import 'dart:typed_data';
-import "dart:convert";
-import "dart:math";
-import "dart:core";
-import "package:convert/convert.dart";
+import 'dart:convert';
+import 'dart:math';
+import 'dart:core';
+import 'package:convert/convert.dart';
 import 'package:fixnum/fixnum.dart';
 
 class NaclKeyPair {
@@ -21,29 +21,27 @@ class NaclKeyPair {
   Uint8List get secretKey => _secretKey;
 }
 
-/*
- *   Box algorithm, Public-key authenticated encryption
- * */
+/// Box algorithm, Public-key authenticated encryption
 class Box {
-  //Length of public key in bytes.
+  /// The length of public key in bytes.
   static final int publicKeyLength = 32;
 
-  //Length of secret key in bytes.
+  /// The length of secret key in bytes.
   static final int secretKeyLength = 32;
 
-  //Length of precomputed shared key in bytes.
+  /// The length of precomputed shared key in bytes.
   static final int sharedKeyLength = 32;
 
-  //Length of nonce in bytes.
+  /// The length of nonce in bytes.
   static final int nonceLength = 24;
 
-  //zero bytes in case box
+  /// Zero bytes in case box.
   static final int zerobytesLength = 32;
 
-  //zero bytes in case open box
+  /// Zero bytes in case open box.
   static final int boxzerobytesLength = 16;
 
-  //Length of overhead added to box compared to original message.
+  /// The length of overhead added to box compared to original message.
   static final int overheadLength = 16;
 
   int _nonce;
@@ -57,7 +55,7 @@ class Box {
   }
 
   Box.nonce(this._theirPublicKey, this._mySecretKey, this._nonce) {
-    // generate pre-computed shared key
+    // Generate pre-computed shared key
     before();
   }
 
@@ -72,7 +70,7 @@ class Box {
   }
 
   Uint8List _generateNonce() {
-    // generate nonce
+    // Generate nonce
     Int64 nonce = Int64(this._nonce);
 
     Uint8List n = Uint8List(nonceLength);
@@ -90,14 +88,12 @@ class Box {
     return n;
   }
 
-  /*
-   *   Encrypt and authenticates message using peer's public key,
-   *   our secret key, and the given nonce, which must be unique
-   *   for each distinct message for a key pair.
-   *
-   *   Returns an encrypted and authenticated message,
-   *   which is nacl.box.overheadLength longer than the original message.
-   * */
+  /// Encrypt and authenticates message using peer's public key,
+  /// our secret key, and the given nonce, which must be unique
+  /// for each distinct message for a key pair.
+  ///
+  /// Returns an encrypted and authenticated message,
+  /// which is nacl.box.overheadLength longer than the original message.
   Uint8List box(Uint8List message) {
     if (message == null) return null;
     return box_len(message, 0, message.length);
@@ -117,29 +113,25 @@ class Box {
     return after(message, moff, mlen);
   }
 
-  /*
-   *   Encrypt and authenticates message using peer's public key,
-   *   our secret key, and the given nonce, which must be unique
-   *   for each distinct message for a key pair.
-   *
-   *   Explicitly pass the nonce
-   *
-   *   Returns an encrypted and authenticated message,
-   *   which is nacl.box.overheadLength longer than the original message.
-   * */
+  /// Encrypt and authenticates message using peer's public key,
+  /// our secret key, and the given nonce, which must be unique
+  /// for each distinct message for a key pair.
+  ///
+  /// Explicitly pass the nonce
+  ///
+  /// Returns an encrypted and authenticated message,
+  /// which is nacl.box.overheadLength longer than the original message.
   Uint8List box_nonce(Uint8List message, Uint8List theNonce) {
     if (message == null) return null;
     return box_nonce_len(message, 0, message.length, theNonce);
   }
 
-  Uint8List box_nonce_off(
-      Uint8List message, final int moff, Uint8List theNonce) {
+  Uint8List box_nonce_off(Uint8List message, final int moff, Uint8List theNonce) {
     if (!(message != null && message.length > moff)) return null;
     return box_nonce_len(message, moff, message.length - moff, theNonce);
   }
 
-  Uint8List box_nonce_len(
-      Uint8List message, final int moff, final int mlen, Uint8List theNonce) {
+  Uint8List box_nonce_len(Uint8List message, final int moff, final int mlen, Uint8List theNonce) {
     if (!(message != null &&
         message.length >= (moff + mlen) &&
         theNonce != null &&
@@ -151,12 +143,10 @@ class Box {
     return after_len(message, moff, mlen, theNonce);
   }
 
-  /*
-   *   Authenticates and decrypts the given box with peer's public key,
-   *   our secret key, and the given nonce.
-   *
-   *   Returns the original message, or null if authentication fails.
-   * */
+  /// Authenticates and decrypts the given box with peer's public key,
+  /// our secret key, and the given nonce.
+  ///
+  /// Returns the original message, or null if authentication fails.
   Uint8List open(Uint8List box) {
     if (box == null) return null;
 
@@ -184,15 +174,12 @@ class Box {
     return open_after(box, boxoff, boxlen);
   }
 
-  /*
-   *   Authenticates and decrypts the given box with peer's public key,
-   *   our secret key, and the given nonce.
-   *   Explicit passing of nonce
-   *   Returns the original message, or null if authentication fails.
-   * */
+  /// Authenticates and decrypts the given box with peer's public key,
+  /// our secret key, and the given nonce.
+  /// Explicit passing of nonce
+  /// Returns the original message, or null if authentication fails.
   Uint8List open_nonce(Uint8List box, Uint8List theNonce) {
-    if (!(box != null && theNonce != null && theNonce.length == nonceLength))
-      return null;
+    if (!(box != null && theNonce != null && theNonce.length == nonceLength)) return null;
 
     // prepare shared key
     if (this._sharedKey == null) before();
@@ -200,12 +187,9 @@ class Box {
     return open_after_len(box, 0, box.length, theNonce);
   }
 
-  Uint8List open_nonce_off(
-      Uint8List box, final int boxoff, Uint8List theNonce) {
-    if (!(box != null &&
-        box.length > boxoff &&
-        theNonce != null &&
-        theNonce.length == nonceLength)) return null;
+  Uint8List open_nonce_off(Uint8List box, final int boxoff, Uint8List theNonce) {
+    if (!(box != null && box.length > boxoff && theNonce != null && theNonce.length == nonceLength))
+      return null;
 
     // prepare shared key
     if (this._sharedKey == null) before();
@@ -213,8 +197,7 @@ class Box {
     return open_after_len(box, boxoff, box.length - boxoff, theNonce);
   }
 
-  Uint8List open_nonce_len(
-      Uint8List box, final int boxoff, final int boxlen, Uint8List theNonce) {
+  Uint8List open_nonce_len(Uint8List box, final int boxoff, final int boxlen, Uint8List theNonce) {
     if (!(box != null &&
         box.length >= (boxoff + boxlen) &&
         theNonce != null &&
@@ -229,26 +212,20 @@ class Box {
   Uint8List before() {
     if (this._sharedKey == null) {
       this._sharedKey = Uint8List(sharedKeyLength);
-      TweetNaclFast.crypto_box_beforenm(
-          this._sharedKey, this._theirPublicKey, this._mySecretKey);
+      TweetNaclFast.crypto_box_beforenm(this._sharedKey, this._theirPublicKey, this._mySecretKey);
     }
 
     return this._sharedKey;
   }
 
-  /*
-   *   Same as nacl.box, but uses a shared key precomputed with nacl.box.before.
-   * */
+  /// Same as nacl.box, but uses a shared key precomputed with nacl.box.before.
   Uint8List after(Uint8List message, final int moff, final int mlen) {
     return after_len(message, moff, mlen, _generateNonce());
   }
 
-  /*
-   *   Same as nacl.box, but uses a shared key precomputed with nacl.box.before,
-   *   and passes a nonce explicitly.
-   * */
-  Uint8List after_len(
-      Uint8List message, final int moff, final int mlen, Uint8List theNonce) {
+  /// Same as nacl.box, but uses a shared key precomputed with nacl.box.before,
+  /// and passes a nonce explicitly.
+  Uint8List after_len(Uint8List message, final int moff, final int mlen, Uint8List theNonce) {
     // check message
     if (!(message != null &&
         message.length >= (moff + mlen) &&
@@ -263,9 +240,7 @@ class Box {
 
     for (int i = 0; i < mlen; i++) m[i + zerobytesLength] = message[i + moff];
 
-    if (0 !=
-        TweetNaclFast.crypto_box_afternm(c, m, m.length, theNonce, _sharedKey))
-      return null;
+    if (0 != TweetNaclFast.crypto_box_afternm(c, m, m.length, theNonce, _sharedKey)) return null;
 
     // wrap byte_buf_t on c offset@boxzerobytesLength
     ///return new byte_buf_t(c, boxzerobytesLength, c.length-boxzerobytesLength);
@@ -276,20 +251,15 @@ class Box {
     return ret;
   }
 
-  /*
-   *   Same as nacl.box.open,
-   *   but uses a shared key pre-computed with nacl.box.before.
-   * */
+  /// Same as nacl.box.open, but uses a shared key pre-computed with nacl.box.before.
   Uint8List open_after(Uint8List box, final int boxoff, final int boxlen) {
     return open_after_len(box, boxoff, boxlen, _generateNonce());
   }
 
-  Uint8List open_after_len(
-      Uint8List box, final int boxoff, final int boxlen, Uint8List theNonce) {
+  Uint8List open_after_len(Uint8List box, final int boxoff, final int boxlen, Uint8List theNonce) {
     // check message
-    if (!(box != null &&
-        box.length >= (boxoff + boxlen) &&
-        boxlen >= boxzerobytesLength)) return null;
+    if (!(box != null && box.length >= (boxoff + boxlen) && boxlen >= boxzerobytesLength))
+      return null;
 
     // cipher buffer
     Uint8List c = Uint8List(boxlen + boxzerobytesLength);
@@ -297,15 +267,13 @@ class Box {
     // message buffer
     Uint8List m = Uint8List(c.length);
 
-    for (int i = 0; i < boxlen; i++)
-      c[i + boxzerobytesLength] = box[i + boxoff];
+    for (int i = 0; i < boxlen; i++) c[i + boxzerobytesLength] = box[i + boxoff];
 
-    if (TweetNaclFast.crypto_box_open_afternm(
-            m, c, c.length, theNonce, _sharedKey) !=
-        0) return null;
+    if (TweetNaclFast.crypto_box_open_afternm(m, c, c.length, theNonce, _sharedKey) != 0)
+      return null;
 
     // wrap byte_buf_t on m offset@zerobytesLength
-    ///return new byte_buf_t(m, zerobytesLength, m.length-zerobytesLength);
+    // return new byte_buf_t(m, zerobytesLength, m.length-zerobytesLength);
     Uint8List ret = Uint8List(m.length - zerobytesLength);
 
     for (int i = 0; i < ret.length; i++) ret[i] = m[i + zerobytesLength];
@@ -313,10 +281,8 @@ class Box {
     return ret;
   }
 
-  /*
-   *   Generates a new random key pair for box and
-   *   returns it as an object with publicKey and secretKey members:
-   * */
+  /// Generates a new random key pair for box and
+  /// returns it as an object with publicKey and secretKey members:
   static NaclKeyPair keyPair() {
     NaclKeyPair kp = new NaclKeyPair(publicKeyLength, secretKeyLength);
 
@@ -337,9 +303,7 @@ class Box {
   }
 }
 
-/*
- *   Secret Box algorithm, secret key
- * */
+/// Secret Box algorithm, secret key
 class SecretBox {
   //Length of key in bytes.
   static final int keyLength = 32;
@@ -395,13 +359,11 @@ class SecretBox {
     return n;
   }
 
-  /*
-   *   Encrypt and authenticates message using the key and the nonce.
-   *   The nonce must be unique for each distinct message for this key.
-   *
-   *   Returns an encrypted and authenticated message,
-   *   which is nacl.secretbox.overheadLength longer than the original message.
-   * */
+  /// Encrypt and authenticates message using the key and the nonce.
+  /// The nonce must be unique for each distinct message for this key.
+  ///
+  /// Returns an encrypted and authenticated message,
+  /// which is nacl.secretbox.overheadLength longer than the original message.
   Uint8List box(Uint8List message) {
     if (message == null) return null;
     return box_len(message, 0, message.length);
@@ -415,8 +377,7 @@ class SecretBox {
   Uint8List box_len(Uint8List message, final int moff, final int mlen) {
     // check message
     if (!(message != null && message.length >= (moff + mlen))) return null;
-    return box_nonce_len(
-        message, moff, message.length - moff, _generateNonce());
+    return box_nonce_len(message, moff, message.length - moff, _generateNonce());
   }
 
   Uint8List box_nonce(Uint8List message, Uint8List theNonce) {
@@ -424,14 +385,12 @@ class SecretBox {
     return box_nonce_len(message, 0, message.length, theNonce);
   }
 
-  Uint8List box_nonce_off(
-      Uint8List message, final int moff, Uint8List theNonce) {
+  Uint8List box_nonce_off(Uint8List message, final int moff, Uint8List theNonce) {
     if (!(message != null && message.length > moff)) return null;
     return box_nonce_len(message, moff, message.length - moff, theNonce);
   }
 
-  Uint8List box_nonce_len(
-      Uint8List message, final int moff, final int mlen, Uint8List theNonce) {
+  Uint8List box_nonce_len(Uint8List message, final int moff, final int mlen, Uint8List theNonce) {
     // check message
     if (!(message != null &&
         message.length >= (moff + mlen) &&
@@ -446,8 +405,7 @@ class SecretBox {
 
     for (int i = 0; i < mlen; i++) m[i + zerobytesLength] = message[i + moff];
 
-    if (0 != TweetNaclFast.crypto_secretbox(c, m, m.length, theNonce, _key))
-      return null;
+    if (0 != TweetNaclFast.crypto_secretbox(c, m, m.length, theNonce, _key)) return null;
 
     // TBD optimizing ...
     // wrap byte_buf_t on c offset@boxzerobytesLength
@@ -459,13 +417,10 @@ class SecretBox {
     return ret;
   }
 
-  /*
-         * @description
-         *   Authenticates and decrypts the given secret box
-         *   using the key and the nonce.
-         *
-         *   Returns the original message, or null if authentication fails.
-         * */
+  /// Authenticates and decrypts the given secret box
+  /// using the key and the nonce.
+  ///
+  /// Returns the original message, or null if authentication fails.
   Uint8List open(Uint8List box) {
     if (box == null) return null;
     return open_len(box, 0, box.length);
@@ -478,9 +433,8 @@ class SecretBox {
 
   Uint8List open_len(Uint8List box, final int boxoff, final int boxlen) {
     // check message
-    if (!(box != null &&
-        box.length >= (boxoff + boxlen) &&
-        boxlen >= boxzerobytesLength)) return null;
+    if (!(box != null && box.length >= (boxoff + boxlen) && boxlen >= boxzerobytesLength))
+      return null;
     return open_nonce_len(box, boxoff, box.length - boxoff, _generateNonce());
   }
 
@@ -489,14 +443,12 @@ class SecretBox {
     return open_nonce_len(box, 0, box.length, theNonce);
   }
 
-  Uint8List open_nonce_off(
-      Uint8List box, final int boxoff, Uint8List theNonce) {
+  Uint8List open_nonce_off(Uint8List box, final int boxoff, Uint8List theNonce) {
     if (!(box != null && box.length > boxoff)) return null;
     return open_nonce_len(box, boxoff, box.length - boxoff, theNonce);
   }
 
-  Uint8List open_nonce_len(
-      Uint8List box, final int boxoff, final int boxlen, Uint8List theNonce) {
+  Uint8List open_nonce_len(Uint8List box, final int boxoff, final int boxlen, Uint8List theNonce) {
     // check message
     if (!(box != null &&
         box.length >= (boxoff + boxlen) &&
@@ -510,12 +462,9 @@ class SecretBox {
     // message buffer
     Uint8List m = Uint8List(c.length);
 
-    for (int i = 0; i < boxlen; i++)
-      c[i + boxzerobytesLength] = box[i + boxoff];
+    for (int i = 0; i < boxlen; i++) c[i + boxzerobytesLength] = box[i + boxoff];
 
-    if (0 !=
-        TweetNaclFast.crypto_secretbox_open(m, c, c.length, theNonce, _key))
-      return null;
+    if (0 != TweetNaclFast.crypto_secretbox_open(m, c, c.length, theNonce, _key)) return null;
 
     // wrap byte_buf_t on m offset@zerobytesLength
     ///return new byte_buf_t(m, zerobytesLength, m.length-zerobytesLength);
@@ -527,9 +476,7 @@ class SecretBox {
   }
 }
 
-/*
- *   Scalar multiplication, Implements curve25519.
- * */
+/// Scalar multiplication, Implements curve25519.
 class ScalarMult {
   //Length of scalar in bytes.
   static final int scalarLength = 32;
@@ -537,13 +484,10 @@ class ScalarMult {
   //Length of group element in bytes.
   static final int groupElementLength = 32;
 
-  /*
-   *   Multiplies an integer n by a group element p and
-   *   returns the resulting group element.
-   * */
+  /// Multiplies an integer n by a group element p and
+  /// returns the resulting group element.
   static Uint8List scalseMult(Uint8List n, Uint8List p) {
-    if (!(n.length == scalarLength && p.length == groupElementLength))
-      return null;
+    if (!(n.length == scalarLength && p.length == groupElementLength)) return null;
 
     Uint8List q = Uint8List(scalarLength);
 
@@ -552,10 +496,8 @@ class ScalarMult {
     return q;
   }
 
-  /*
-   *   Multiplies an integer n by a standard group element and
-   *   returns the resulting group element.
-   * */
+  /// Multiplies an integer n by a standard group element and
+  /// returns the resulting group element.
   static Uint8List scalseMult_base(Uint8List n) {
     if (!(n.length == scalarLength)) return null;
 
@@ -567,16 +509,12 @@ class ScalarMult {
   }
 }
 
-/*
- *   Hash algorithm, Implements SHA-512.
- * */
+/// Hash algorithm, Implements SHA-512.
 class Hash {
   //Length of hash in bytes.
   static final int hashLength = 64;
 
-  /*
-   *   Returns SHA-512 hash of the message.
-   * */
+  /// Returns SHA-512 hash of the message.
   static Uint8List sha512(Uint8List message) {
     if (!(message != null && message.length > 0)) return null;
 
@@ -592,9 +530,7 @@ class Hash {
   }
 }
 
-/*
- *   Signature algorithm, Implements ed25519.
- * */
+/// Signature algorithm, Implements ed25519.
 class Signature {
   //Length of signing public key in bytes.
   static final int publicKeyLength = 32;
@@ -613,9 +549,7 @@ class Signature {
 
   Signature(this._theirPublicKey, this._mySecretKey);
 
-  /*
-   *   Signs the message using the secret key and returns a signed message.
-   * */
+  /// Signs the message using the secret key and returns a signed message.
   Uint8List sign(Uint8List message) {
     if (message == null) return null;
 
@@ -640,10 +574,8 @@ class Signature {
     return sm;
   }
 
-  /*
-   *   Verifies the signed message and returns the message without signature.
-   *   Returns null if verification failed.
-   * */
+  /// Verifies the signed message and returns the message without signature.
+  /// Returns null if verification failed.
   Uint8List open(Uint8List signedMessage) {
     if (signedMessage == null) return null;
 
@@ -656,8 +588,7 @@ class Signature {
     return open_len(signedMessage, smoff, signedMessage.length - smoff);
   }
 
-  Uint8List open_len(
-      Uint8List signedMessage, final int smoff, final int smlen) {
+  Uint8List open_len(Uint8List signedMessage, final int smoff, final int smlen) {
     // check sm length
     if (!(signedMessage != null &&
         signedMessage.length >= (smoff + smlen) &&
@@ -666,21 +597,17 @@ class Signature {
     // temp buffer
     Uint8List tmp = Uint8List(smlen);
 
-    if (0 !=
-        TweetNaclFast.crypto_sign_open(
-            tmp, -1, signedMessage, smoff, smlen, _theirPublicKey)) return null;
+    if (0 != TweetNaclFast.crypto_sign_open(tmp, -1, signedMessage, smoff, smlen, _theirPublicKey))
+      return null;
 
     // message
     Uint8List msg = Uint8List(smlen - signatureLength);
-    for (int i = 0; i < msg.length; i++)
-      msg[i] = signedMessage[smoff + i + signatureLength];
+    for (int i = 0; i < msg.length; i++) msg[i] = signedMessage[smoff + i + signatureLength];
 
     return msg;
   }
 
-  /*
-   *   Signs the message using the secret key and returns a signature.
-   * */
+  /// Signs the message using the secret key and returns a signature.
   Uint8List detached(Uint8List message) {
     Uint8List signedMsg = this.sign(message);
     Uint8List sig = Uint8List(signatureLength);
@@ -688,26 +615,19 @@ class Signature {
     return sig;
   }
 
-  /*
-   *   Verifies the signature for the message and
-   *   returns true if verification succeeded or false if it failed.
-   * */
+  /// Verifies the signature for the message and
+  /// returns true if verification succeeded or false if it failed.
   bool detached_verify(Uint8List message, Uint8List signature) {
     if (signature.length != signatureLength) return false;
     if (_theirPublicKey.length != publicKeyLength) return false;
     Uint8List sm = Uint8List(signatureLength + message.length);
     Uint8List m = Uint8List(signatureLength + message.length);
     for (int i = 0; i < signatureLength; i++) sm[i] = signature[i];
-    for (int i = 0; i < message.length; i++)
-      sm[i + signatureLength] = message[i];
-    return (TweetNaclFast.crypto_sign_open(
-            m, -1, sm, 0, sm.length, _theirPublicKey) >=
-        0);
+    for (int i = 0; i < message.length; i++) sm[i + signatureLength] = message[i];
+    return (TweetNaclFast.crypto_sign_open(m, -1, sm, 0, sm.length, _theirPublicKey) >= 0);
   }
 
-  /*
-   *   Signs the message using the secret key and returns a signed message.
-   * */
+  /// Signs the message using the secret key and returns a signed message.
   static NaclKeyPair keyPair() {
     NaclKeyPair kp = new NaclKeyPair(publicKeyLength, secretKeyLength);
 
@@ -724,8 +644,7 @@ class Signature {
     for (int i = 0; i < kp.secretKey.length; i++) sk[i] = secretKey[i];
 
     // copy pk from sk
-    for (int i = 0; i < kp.publicKey.length; i++)
-      pk[i] = secretKey[32 + i]; // hard-copy
+    for (int i = 0; i < kp.publicKey.length; i++) pk[i] = secretKey[32 + i]; // hard-copy
 
     return kp;
   }
@@ -787,8 +706,8 @@ class TweetNaclFast {
       Int64List.fromList([0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]); //16
   static final Int64List _gf1 =
       Int64List.fromList([1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]); //16
-  static final Int64List _121665 = Int64List.fromList(
-      [0xDB41, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]); //16
+  static final Int64List _121665 =
+      Int64List.fromList([0xDB41, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]); //16
 
   static final Int64List _D = Int64List.fromList([
     0x78a3,
@@ -905,15 +824,13 @@ class TweetNaclFast {
     ///u >>= 8;
   }
 
-  static int _vn(
-      Uint8List x, final int xoff, Uint8List y, final int yoff, int n) {
+  static int _vn(Uint8List x, final int xoff, Uint8List y, final int yoff, int n) {
     int i, d = 0;
     for (i = 0; i < n; i++) d |= (x[i + xoff] ^ y[i + yoff]) & 0xff;
     return (1 & (Int32(d - 1).shiftRightUnsigned(8).toInt())) - 1;
   }
 
-  static int _crypto_verify_16(
-      Uint8List x, final int xoff, Uint8List y, final int yoff) {
+  static int _crypto_verify_16(Uint8List x, final int xoff, Uint8List y, final int yoff) {
     return _vn(x, xoff, y, yoff, 16);
   }
 
@@ -921,8 +838,7 @@ class TweetNaclFast {
     return _crypto_verify_16(x, 0, y, 0);
   }
 
-  static int _crypto_verify_32(
-      Uint8List x, final int xoff, Uint8List y, final int yoff) {
+  static int _crypto_verify_32(Uint8List x, final int xoff, Uint8List y, final int yoff) {
     return _vn(x, xoff, y, yoff, 32);
   }
 
@@ -930,72 +846,23 @@ class TweetNaclFast {
     return _crypto_verify_32(x, 0, y, 0);
   }
 
-  static void _core_salsa20(
-      Uint8List o, Uint8List p, Uint8List k, Uint8List c) {
-    int j0 = c[0] & 0xff |
-            (c[1] & 0xff) << 8 |
-            (c[2] & 0xff) << 16 |
-            (c[3] & 0xff) << 24,
-        j1 = k[0] & 0xff |
-            (k[1] & 0xff) << 8 |
-            (k[2] & 0xff) << 16 |
-            (k[3] & 0xff) << 24,
-        j2 = k[4] & 0xff |
-            (k[5] & 0xff) << 8 |
-            (k[6] & 0xff) << 16 |
-            (k[7] & 0xff) << 24,
-        j3 = k[8] & 0xff |
-            (k[9] & 0xff) << 8 |
-            (k[10] & 0xff) << 16 |
-            (k[11] & 0xff) << 24,
-        j4 = k[12] & 0xff |
-            (k[13] & 0xff) << 8 |
-            (k[14] & 0xff) << 16 |
-            (k[15] & 0xff) << 24,
-        j5 = c[4] & 0xff |
-            (c[5] & 0xff) << 8 |
-            (c[6] & 0xff) << 16 |
-            (c[7] & 0xff) << 24,
-        j6 = p[0] & 0xff |
-            (p[1] & 0xff) << 8 |
-            (p[2] & 0xff) << 16 |
-            (p[3] & 0xff) << 24,
-        j7 = p[4] & 0xff |
-            (p[5] & 0xff) << 8 |
-            (p[6] & 0xff) << 16 |
-            (p[7] & 0xff) << 24,
-        j8 = p[8] & 0xff |
-            (p[9] & 0xff) << 8 |
-            (p[10] & 0xff) << 16 |
-            (p[11] & 0xff) << 24,
-        j9 = p[12] & 0xff |
-            (p[13] & 0xff) << 8 |
-            (p[14] & 0xff) << 16 |
-            (p[15] & 0xff) << 24,
-        j10 = c[8] & 0xff |
-            (c[9] & 0xff) << 8 |
-            (c[10] & 0xff) << 16 |
-            (c[11] & 0xff) << 24,
-        j11 = k[16] & 0xff |
-            (k[17] & 0xff) << 8 |
-            (k[18] & 0xff) << 16 |
-            (k[19] & 0xff) << 24,
-        j12 = k[20] & 0xff |
-            (k[21] & 0xff) << 8 |
-            (k[22] & 0xff) << 16 |
-            (k[23] & 0xff) << 24,
-        j13 = k[24] & 0xff |
-            (k[25] & 0xff) << 8 |
-            (k[26] & 0xff) << 16 |
-            (k[27] & 0xff) << 24,
-        j14 = k[28] & 0xff |
-            (k[29] & 0xff) << 8 |
-            (k[30] & 0xff) << 16 |
-            (k[31] & 0xff) << 24,
-        j15 = c[12] & 0xff |
-            (c[13] & 0xff) << 8 |
-            (c[14] & 0xff) << 16 |
-            (c[15] & 0xff) << 24;
+  static void _core_salsa20(Uint8List o, Uint8List p, Uint8List k, Uint8List c) {
+    int j0 = c[0] & 0xff | (c[1] & 0xff) << 8 | (c[2] & 0xff) << 16 | (c[3] & 0xff) << 24,
+        j1 = k[0] & 0xff | (k[1] & 0xff) << 8 | (k[2] & 0xff) << 16 | (k[3] & 0xff) << 24,
+        j2 = k[4] & 0xff | (k[5] & 0xff) << 8 | (k[6] & 0xff) << 16 | (k[7] & 0xff) << 24,
+        j3 = k[8] & 0xff | (k[9] & 0xff) << 8 | (k[10] & 0xff) << 16 | (k[11] & 0xff) << 24,
+        j4 = k[12] & 0xff | (k[13] & 0xff) << 8 | (k[14] & 0xff) << 16 | (k[15] & 0xff) << 24,
+        j5 = c[4] & 0xff | (c[5] & 0xff) << 8 | (c[6] & 0xff) << 16 | (c[7] & 0xff) << 24,
+        j6 = p[0] & 0xff | (p[1] & 0xff) << 8 | (p[2] & 0xff) << 16 | (p[3] & 0xff) << 24,
+        j7 = p[4] & 0xff | (p[5] & 0xff) << 8 | (p[6] & 0xff) << 16 | (p[7] & 0xff) << 24,
+        j8 = p[8] & 0xff | (p[9] & 0xff) << 8 | (p[10] & 0xff) << 16 | (p[11] & 0xff) << 24,
+        j9 = p[12] & 0xff | (p[13] & 0xff) << 8 | (p[14] & 0xff) << 16 | (p[15] & 0xff) << 24,
+        j10 = c[8] & 0xff | (c[9] & 0xff) << 8 | (c[10] & 0xff) << 16 | (c[11] & 0xff) << 24,
+        j11 = k[16] & 0xff | (k[17] & 0xff) << 8 | (k[18] & 0xff) << 16 | (k[19] & 0xff) << 24,
+        j12 = k[20] & 0xff | (k[21] & 0xff) << 8 | (k[22] & 0xff) << 16 | (k[23] & 0xff) << 24,
+        j13 = k[24] & 0xff | (k[25] & 0xff) << 8 | (k[26] & 0xff) << 16 | (k[27] & 0xff) << 24,
+        j14 = k[28] & 0xff | (k[29] & 0xff) << 8 | (k[30] & 0xff) << 16 | (k[31] & 0xff) << 24,
+        j15 = c[12] & 0xff | (c[13] & 0xff) << 8 | (c[14] & 0xff) << 16 | (c[15] & 0xff) << 24;
 
     Int32 x0 = Int32(j0),
         x1 = Int32(j1),
@@ -1186,72 +1053,23 @@ class TweetNaclFast {
     o[63] = (x15.shiftRightUnsigned(24) & 0xff).toInt();
   }
 
-  static void _core_hsalsa20(
-      Uint8List o, Uint8List p, Uint8List k, Uint8List c) {
-    int j0 = c[0] & 0xff |
-            (c[1] & 0xff) << 8 |
-            (c[2] & 0xff) << 16 |
-            (c[3] & 0xff) << 24,
-        j1 = k[0] & 0xff |
-            (k[1] & 0xff) << 8 |
-            (k[2] & 0xff) << 16 |
-            (k[3] & 0xff) << 24,
-        j2 = k[4] & 0xff |
-            (k[5] & 0xff) << 8 |
-            (k[6] & 0xff) << 16 |
-            (k[7] & 0xff) << 24,
-        j3 = k[8] & 0xff |
-            (k[9] & 0xff) << 8 |
-            (k[10] & 0xff) << 16 |
-            (k[11] & 0xff) << 24,
-        j4 = k[12] & 0xff |
-            (k[13] & 0xff) << 8 |
-            (k[14] & 0xff) << 16 |
-            (k[15] & 0xff) << 24,
-        j5 = c[4] & 0xff |
-            (c[5] & 0xff) << 8 |
-            (c[6] & 0xff) << 16 |
-            (c[7] & 0xff) << 24,
-        j6 = p[0] & 0xff |
-            (p[1] & 0xff) << 8 |
-            (p[2] & 0xff) << 16 |
-            (p[3] & 0xff) << 24,
-        j7 = p[4] & 0xff |
-            (p[5] & 0xff) << 8 |
-            (p[6] & 0xff) << 16 |
-            (p[7] & 0xff) << 24,
-        j8 = p[8] & 0xff |
-            (p[9] & 0xff) << 8 |
-            (p[10] & 0xff) << 16 |
-            (p[11] & 0xff) << 24,
-        j9 = p[12] & 0xff |
-            (p[13] & 0xff) << 8 |
-            (p[14] & 0xff) << 16 |
-            (p[15] & 0xff) << 24,
-        j10 = c[8] & 0xff |
-            (c[9] & 0xff) << 8 |
-            (c[10] & 0xff) << 16 |
-            (c[11] & 0xff) << 24,
-        j11 = k[16] & 0xff |
-            (k[17] & 0xff) << 8 |
-            (k[18] & 0xff) << 16 |
-            (k[19] & 0xff) << 24,
-        j12 = k[20] & 0xff |
-            (k[21] & 0xff) << 8 |
-            (k[22] & 0xff) << 16 |
-            (k[23] & 0xff) << 24,
-        j13 = k[24] & 0xff |
-            (k[25] & 0xff) << 8 |
-            (k[26] & 0xff) << 16 |
-            (k[27] & 0xff) << 24,
-        j14 = k[28] & 0xff |
-            (k[29] & 0xff) << 8 |
-            (k[30] & 0xff) << 16 |
-            (k[31] & 0xff) << 24,
-        j15 = c[12] & 0xff |
-            (c[13] & 0xff) << 8 |
-            (c[14] & 0xff) << 16 |
-            (c[15] & 0xff) << 24;
+  static void _core_hsalsa20(Uint8List o, Uint8List p, Uint8List k, Uint8List c) {
+    int j0 = c[0] & 0xff | (c[1] & 0xff) << 8 | (c[2] & 0xff) << 16 | (c[3] & 0xff) << 24,
+        j1 = k[0] & 0xff | (k[1] & 0xff) << 8 | (k[2] & 0xff) << 16 | (k[3] & 0xff) << 24,
+        j2 = k[4] & 0xff | (k[5] & 0xff) << 8 | (k[6] & 0xff) << 16 | (k[7] & 0xff) << 24,
+        j3 = k[8] & 0xff | (k[9] & 0xff) << 8 | (k[10] & 0xff) << 16 | (k[11] & 0xff) << 24,
+        j4 = k[12] & 0xff | (k[13] & 0xff) << 8 | (k[14] & 0xff) << 16 | (k[15] & 0xff) << 24,
+        j5 = c[4] & 0xff | (c[5] & 0xff) << 8 | (c[6] & 0xff) << 16 | (c[7] & 0xff) << 24,
+        j6 = p[0] & 0xff | (p[1] & 0xff) << 8 | (p[2] & 0xff) << 16 | (p[3] & 0xff) << 24,
+        j7 = p[4] & 0xff | (p[5] & 0xff) << 8 | (p[6] & 0xff) << 16 | (p[7] & 0xff) << 24,
+        j8 = p[8] & 0xff | (p[9] & 0xff) << 8 | (p[10] & 0xff) << 16 | (p[11] & 0xff) << 24,
+        j9 = p[12] & 0xff | (p[13] & 0xff) << 8 | (p[14] & 0xff) << 16 | (p[15] & 0xff) << 24,
+        j10 = c[8] & 0xff | (c[9] & 0xff) << 8 | (c[10] & 0xff) << 16 | (c[11] & 0xff) << 24,
+        j11 = k[16] & 0xff | (k[17] & 0xff) << 8 | (k[18] & 0xff) << 16 | (k[19] & 0xff) << 24,
+        j12 = k[20] & 0xff | (k[21] & 0xff) << 8 | (k[22] & 0xff) << 16 | (k[23] & 0xff) << 24,
+        j13 = k[24] & 0xff | (k[25] & 0xff) << 8 | (k[26] & 0xff) << 16 | (k[27] & 0xff) << 24,
+        j14 = k[28] & 0xff | (k[29] & 0xff) << 8 | (k[30] & 0xff) << 16 | (k[31] & 0xff) << 24,
+        j15 = c[12] & 0xff | (c[13] & 0xff) << 8 | (c[14] & 0xff) << 16 | (c[15] & 0xff) << 24;
 
     Int32 x0 = Int32(j0),
         x1 = Int32(j1),
@@ -1386,42 +1204,24 @@ class TweetNaclFast {
     o[31] = (x9.shiftRightUnsigned(24) & 0xff).toInt();
   }
 
-  static int crypto_core_salsa20(
-      Uint8List out, Uint8List input, Uint8List k, Uint8List c) {
+  static int crypto_core_salsa20(Uint8List out, Uint8List input, Uint8List k, Uint8List c) {
     ///core(out,in,k,c,0);
     _core_salsa20(out, input, k, c);
     return 0;
   }
 
-  static int crypto_core_hsalsa20(
-      Uint8List out, Uint8List input, Uint8List k, Uint8List c) {
+  static int crypto_core_hsalsa20(Uint8List out, Uint8List input, Uint8List k, Uint8List c) {
     ///core(out,in,k,c,1);
     _core_hsalsa20(out, input, k, c);
     return 0;
   }
 
 // "expand 32-byte k"
-  static final Uint8List _sigma = Uint8List.fromList([
-    101,
-    120,
-    112,
-    97,
-    110,
-    100,
-    32,
-    51,
-    50,
-    45,
-    98,
-    121,
-    116,
-    101,
-    32,
-    107
-  ]);
+  static final Uint8List _sigma =
+      Uint8List.fromList([101, 120, 112, 97, 110, 100, 32, 51, 50, 45, 98, 121, 116, 101, 32, 107]);
 
-  static int _crypto_stream_salsa20_xor(Uint8List c, int cpos, Uint8List m,
-      int mpos, int b, Uint8List n, Uint8List k) {
+  static int _crypto_stream_salsa20_xor(
+      Uint8List c, int cpos, Uint8List m, int mpos, int b, Uint8List n, Uint8List k) {
     Uint8List z = Uint8List(16), x = Uint8List(64);
     int i;
     Int32 u;
@@ -1429,8 +1229,7 @@ class TweetNaclFast {
     for (i = 0; i < 8; i++) z[i] = n[i];
     while (b >= 64) {
       crypto_core_salsa20(x, z, k, _sigma);
-      for (i = 0; i < 64; i++)
-        c[cpos + i] = ((m[mpos + i] ^ x[i]) & 0xff).toInt();
+      for (i = 0; i < 64; i++) c[cpos + i] = ((m[mpos + i] ^ x[i]) & 0xff).toInt();
       u = Int32(1);
       for (i = 8; i < 16; i++) {
         u = u + (z[i] & 0xff) | 0;
@@ -1443,15 +1242,13 @@ class TweetNaclFast {
     }
     if (b > 0) {
       crypto_core_salsa20(x, z, k, _sigma);
-      for (i = 0; i < b; i++)
-        c[cpos + i] = ((m[mpos + i] ^ x[i]) & 0xff).toInt();
+      for (i = 0; i < b; i++) c[cpos + i] = ((m[mpos + i] ^ x[i]) & 0xff).toInt();
     }
 
     return 0;
   }
 
-  static int crypto_stream_salsa20(
-      Uint8List c, int cpos, int b, Uint8List n, Uint8List k) {
+  static int crypto_stream_salsa20(Uint8List c, int cpos, int b, Uint8List n, Uint8List k) {
     Uint8List z = Uint8List(16), x = Uint8List(64);
     int i;
     Int32 u;
@@ -1477,8 +1274,7 @@ class TweetNaclFast {
     return 0;
   }
 
-  static int crypto_stream(
-      Uint8List c, int cpos, int d, Uint8List n, Uint8List k) {
+  static int crypto_stream(Uint8List c, int cpos, int d, Uint8List n, Uint8List k) {
     Uint8List s = Uint8List(32);
     crypto_core_hsalsa20(s, n, k, _sigma);
     Uint8List sn = Uint8List(8);
@@ -1486,8 +1282,8 @@ class TweetNaclFast {
     return crypto_stream_salsa20(c, cpos, d, sn, s);
   }
 
-  static int crypto_stream_xor(Uint8List c, int cpos, Uint8List m, int mpos,
-      int d, Uint8List n, Uint8List k) {
+  static int crypto_stream_xor(
+      Uint8List c, int cpos, Uint8List m, int mpos, int d, Uint8List n, Uint8List k) {
     Uint8List s = Uint8List(32);
 
     crypto_core_hsalsa20(s, n, k, _sigma);
@@ -1496,8 +1292,8 @@ class TweetNaclFast {
     return _crypto_stream_salsa20_xor(c, cpos, m, mpos, d, sn, s);
   }
 
-  static int _crypto_onetimeauth(Uint8List out, final int outpos, Uint8List m,
-      final int mpos, int n, Uint8List k) {
+  static int _crypto_onetimeauth(
+      Uint8List out, final int outpos, Uint8List m, final int mpos, int n, Uint8List k) {
     poly1305 s = new poly1305(k);
     s.update(m, mpos, n);
     s.finish(out, outpos);
@@ -1508,15 +1304,14 @@ class TweetNaclFast {
     return _crypto_onetimeauth(out, 0, m, 0, n, k);
   }
 
-  static int _crypto_onetimeauth_verify(Uint8List h, final int hoff,
-      Uint8List m, final int moff, int /*long*/ n, Uint8List k) {
+  static int _crypto_onetimeauth_verify(
+      Uint8List h, final int hoff, Uint8List m, final int moff, int /*long*/ n, Uint8List k) {
     Uint8List x = Uint8List(16);
     _crypto_onetimeauth(x, 0, m, moff, n, k);
     return _crypto_verify_16(h, hoff, x, 0);
   }
 
-  int crypto_onetimeauth_verify_len(
-      Uint8List h, Uint8List m, int n, Uint8List k) {
+  int crypto_onetimeauth_verify_len(Uint8List h, Uint8List m, int n, Uint8List k) {
     return _crypto_onetimeauth_verify(h, 0, m, 0, n, k);
   }
 
@@ -1524,8 +1319,7 @@ class TweetNaclFast {
     return crypto_onetimeauth_verify_len(h, m, m != null ? m.length : 0, k);
   }
 
-  static int crypto_secretbox(
-      Uint8List c, Uint8List m, int d, Uint8List n, Uint8List k) {
+  static int crypto_secretbox(Uint8List c, Uint8List m, int d, Uint8List n, Uint8List k) {
     // int i;
     if (d < 32) return -1;
     crypto_stream_xor(c, 0, m, 0, d, n, k);
@@ -1535,8 +1329,7 @@ class TweetNaclFast {
     return 0;
   }
 
-  static int crypto_secretbox_open(
-      Uint8List m, Uint8List c, int d, Uint8List n, Uint8List k) {
+  static int crypto_secretbox_open(Uint8List m, Uint8List c, int d, Uint8List n, Uint8List k) {
     // int i;
     Uint8List x = Uint8List(32);
     if (d < 32) return -1;
@@ -1568,8 +1361,7 @@ class TweetNaclFast {
     _sel25519_off(p, 0, q, 0, b);
   }
 
-  static void _sel25519_off(
-      Int64List p, final int poff, Int64List q, final int qoff, int b) {
+  static void _sel25519_off(Int64List p, final int poff, Int64List q, final int qoff, int b) {
     int t, c = ~(b - 1);
     for (int i = 0; i < 16; i++) {
       t = c & (p[i + poff] ^ q[i + qoff]);
@@ -1606,8 +1398,7 @@ class TweetNaclFast {
     return _neq25519_off(a, 0, b, 0);
   }
 
-  static int _neq25519_off(
-      Int64List a, final int aoff, Int64List b, final int boff) {
+  static int _neq25519_off(Int64List a, final int aoff, Int64List b, final int boff) {
     Uint8List c = Uint8List(32), d = Uint8List(32);
     _pack25519(c, a, aoff);
     _pack25519(d, b, boff);
@@ -1626,8 +1417,7 @@ class TweetNaclFast {
 
   static void unpack25519(Int64List o, Uint8List n) {
     int i;
-    for (i = 0; i < 16; i++)
-      o[i] = (n[2 * i] & 0xff) + (((n[2 * i + 1] << 8) & 0xffff));
+    for (i = 0; i < 16; i++) o[i] = (n[2 * i] & 0xff) + (((n[2 * i + 1] << 8) & 0xffff));
     o[15] &= 0x7fff;
   }
 
@@ -1635,8 +1425,8 @@ class TweetNaclFast {
     _A_off(o, 0, a, 0, b, 0);
   }
 
-  static void _A_off(Int64List o, final int ooff, Int64List a, final int aoff,
-      Int64List b, final int boff) {
+  static void _A_off(
+      Int64List o, final int ooff, Int64List a, final int aoff, Int64List b, final int boff) {
     int i;
     for (i = 0; i < 16; i++) o[i + ooff] = a[i + aoff] + b[i + boff];
   }
@@ -1645,8 +1435,8 @@ class TweetNaclFast {
     _Z_off(o, 0, a, 0, b, 0);
   }
 
-  static void _Z_off(Int64List o, final int ooff, Int64List a, final int aoff,
-      Int64List b, final int boff) {
+  static void _Z_off(
+      Int64List o, final int ooff, Int64List a, final int aoff, Int64List b, final int boff) {
     int i;
     for (i = 0; i < 16; i++) o[i + ooff] = a[i + aoff] - b[i + boff];
   }
@@ -1655,8 +1445,8 @@ class TweetNaclFast {
     _M_off(o, 0, a, 0, b, 0);
   }
 
-  static void _M_off(Int64List o, final int ooff, Int64List a, final int aoff,
-      Int64List b, final int boff) {
+  static void _M_off(
+      Int64List o, final int ooff, Int64List a, final int aoff, Int64List b, final int boff) {
     int v,
         c,
         t0 = 0,
@@ -2127,8 +1917,7 @@ class TweetNaclFast {
     _M_off(o, ooff, a, aoff, a, aoff);
   }
 
-  static void _inv25519(
-      Int64List o, final int ooff, Int64List i, final int ioff) {
+  static void _inv25519(Int64List o, final int ooff, Int64List i, final int ioff) {
     Int64List c = Int64List(16);
     int a;
     for (a = 0; a < 16; a++) c[a] = i[a + ioff];
@@ -2173,10 +1962,7 @@ class TweetNaclFast {
     }
     a[0] = d[0] = 1;
     for (i = 254; i >= 0; --i) {
-      r = (Int32(z[Int32(i).shiftRightUnsigned(3).toInt()])
-                  .shiftRightUnsigned(i & 7))
-              .toInt() &
-          1;
+      r = (Int32(z[Int32(i).shiftRightUnsigned(3).toInt()]).shiftRightUnsigned(i & 7)).toInt() & 1;
       _sel25519(a, b, r);
       _sel25519(c, d, r);
       _A(e, a, c);
@@ -2251,8 +2037,7 @@ class TweetNaclFast {
     return crypto_secretbox_open(m, c, d, n, k);
   }
 
-  int crypto_box(Uint8List c, Uint8List m, int /*long*/ d, Uint8List n,
-      Uint8List y, Uint8List x) {
+  int crypto_box(Uint8List c, Uint8List m, int /*long*/ d, Uint8List n, Uint8List y, Uint8List x) {
     Uint8List k = Uint8List(32);
 
     ///L/og.d(TAG, "crypto_box start ...");
@@ -2261,8 +2046,8 @@ class TweetNaclFast {
     return crypto_box_afternm(c, m, d, n, k);
   }
 
-  int crypto_box_open(Uint8List m, Uint8List c, int /*long*/ d, Uint8List n,
-      Uint8List y, Uint8List x) {
+  int crypto_box_open(
+      Uint8List m, Uint8List c, int /*long*/ d, Uint8List n, Uint8List y, Uint8List x) {
     Uint8List k = Uint8List(32);
     crypto_box_beforenm(k, y, x);
     return crypto_box_open_afternm(m, c, d, n, k);
@@ -2612,12 +2397,10 @@ class TweetNaclFast {
             th = wh[(j + 14) % 16];
             tl = wl[(j + 14) % 16];
             h = ((th.shiftRightUnsigned(19)) | (tl << (32 - 19))) ^
-                ((tl.shiftRightUnsigned((61 - 32))) |
-                    (th << (32 - (61 - 32)))) ^
+                ((tl.shiftRightUnsigned((61 - 32))) | (th << (32 - (61 - 32)))) ^
                 (th.shiftRightUnsigned(6));
             l = ((tl.shiftRightUnsigned(19)) | (th << (32 - 19))) ^
-                ((th.shiftRightUnsigned((61 - 32))) |
-                    (tl << (32 - (61 - 32)))) ^
+                ((th.shiftRightUnsigned((61 - 32))) | (tl << (32 - (61 - 32)))) ^
                 ((tl.shiftRightUnsigned(6)) | (th << (32 - 6)));
 
             a += l & 0xffff;
@@ -2829,8 +2612,7 @@ class TweetNaclFast {
 
 // TBD 64bits of n
   ///int crypto_hash(Uint8List out, Uint8List m, long n)
-  static int crypto_hash_off(
-      Uint8List out, Uint8List m, final int moff, int n) {
+  static int crypto_hash_off(Uint8List out, Uint8List m, final int moff, int n) {
     List<Int32> hh = List<Int32>(8), hl = List<Int32>(8);
     Uint8List x = Uint8List(256);
     int i, b = n;
@@ -2950,8 +2732,7 @@ class TweetNaclFast {
     r[31] ^= _par25519_off(tx, 0) << 7;
   }
 
-  static void scalarmult(
-      List<Int64List> p, List<Int64List> q, Uint8List s, final int soff) {
+  static void scalarmult(List<Int64List> p, List<Int64List> q, Uint8List s, final int soff) {
     int i;
 
     _set25519(p[0], _gf0);
@@ -2960,9 +2741,7 @@ class TweetNaclFast {
     _set25519(p[3], _gf0);
 
     for (i = 255; i >= 0; --i) {
-      int b = ((Int32(s[(i / 8 + soff).toInt()]).shiftRightUnsigned(i & 7))
-              .toInt() &
-          1);
+      int b = ((Int32(s[(i / 8 + soff).toInt()]).shiftRightUnsigned(i & 7)).toInt() & 1);
 
       _cswap(p, q, b);
       add(q, p);
@@ -3088,8 +2867,8 @@ class TweetNaclFast {
 
 // TBD... 64bits of n
   ///int crypto_sign(Uint8List sm, long * smlen, Uint8List m, long n, Uint8List sk)
-  static int crypto_sign(Uint8List sm, int dummy /* *smlen not used*/,
-      Uint8List m, final int moff, int /*long*/ n, Uint8List sk) {
+  static int crypto_sign(Uint8List sm, int dummy /* *smlen not used*/, Uint8List m, final int moff,
+      int /*long*/ n, Uint8List sk) {
     Uint8List d = Uint8List(64), h = Uint8List(64), r = Uint8List(64);
 
     int i, j;
@@ -3127,8 +2906,7 @@ class TweetNaclFast {
     for (i = 0; i < 32; i++) x[i] = (r[i] & 0xff).toInt();
 
     for (i = 0; i < 32; i++)
-      for (j = 0; j < 32; j++)
-        x[i + j] += (h[i] & 0xff) * (d[j] & 0xff).toInt();
+      for (j = 0; j < 32; j++) x[i + j] += (h[i] & 0xff) * (d[j] & 0xff).toInt();
 
     modL(sm, 32, x);
 
@@ -3181,8 +2959,8 @@ class TweetNaclFast {
 
   /// TBD 64bits of mlen
   ///int crypto_sign_open(Uint8Listm,long *mlen,Uint8Listsm,long n,Uint8Listpk)
-  static int crypto_sign_open(Uint8List m, int dummy /* *mlen not used*/,
-      Uint8List sm, final int smoff, int /*long*/ n, Uint8List pk) {
+  static int crypto_sign_open(Uint8List m, int dummy /* *mlen not used*/, Uint8List sm,
+      final int smoff, int /*long*/ n, Uint8List pk) {
     int i;
     Uint8List t = Uint8List(32), h = Uint8List(64);
     List<Int64List> p = List<Int64List>(4);
@@ -3253,8 +3031,7 @@ class TweetNaclFast {
     }
     if (ret > 0) {
       rnd = Int64(jrandom.nextInt(1 << 32));
-      for (int i = len - ret; i < len; i++)
-        x[i] = (rnd.shiftRightUnsigned(8 * i).toInt());
+      for (int i = len - ret; i < len; i++) x[i] = (rnd.shiftRightUnsigned(8 * i).toInt());
     }
     return x;
   }
@@ -3276,10 +3053,8 @@ class TweetNaclFast {
   }
 }
 
-/*
- * Port of Andrew Moon's Poly1305-donna-16. Public domain.
- * https://github.com/floodyberry/poly1305-donna
- */
+/// Port of Andrew Moon's Poly1305-donna-16. Public domain.
+/// https://github.com/floodyberry/poly1305-donna
 class poly1305 {
   Uint8List _buffer;
   List<Int32> _r;
@@ -3629,22 +3404,14 @@ class poly1305 {
     for (i = 0; i < 10; i++) this._h[i] = (this._h[i] & mask) | g[i];
 
     this._h[0] = ((this._h[0]) | (this._h[1] << 13)) & 0xffff;
-    this._h[1] =
-        ((this._h[1].shiftRightUnsigned(3)) | (this._h[2] << 10)) & 0xffff;
-    this._h[2] =
-        ((this._h[2].shiftRightUnsigned(6)) | (this._h[3] << 7)) & 0xffff;
-    this._h[3] =
-        ((this._h[3].shiftRightUnsigned(9)) | (this._h[4] << 4)) & 0xffff;
-    this._h[4] = ((this._h[4].shiftRightUnsigned(12)) |
-            (this._h[5] << 1) |
-            (this._h[6] << 14)) &
-        0xffff;
-    this._h[5] =
-        ((this._h[6].shiftRightUnsigned(2)) | (this._h[7] << 11)) & 0xffff;
-    this._h[6] =
-        ((this._h[7].shiftRightUnsigned(5)) | (this._h[8] << 8)) & 0xffff;
-    this._h[7] =
-        ((this._h[8].shiftRightUnsigned(8)) | (this._h[9] << 5)) & 0xffff;
+    this._h[1] = ((this._h[1].shiftRightUnsigned(3)) | (this._h[2] << 10)) & 0xffff;
+    this._h[2] = ((this._h[2].shiftRightUnsigned(6)) | (this._h[3] << 7)) & 0xffff;
+    this._h[3] = ((this._h[3].shiftRightUnsigned(9)) | (this._h[4] << 4)) & 0xffff;
+    this._h[4] =
+        ((this._h[4].shiftRightUnsigned(12)) | (this._h[5] << 1) | (this._h[6] << 14)) & 0xffff;
+    this._h[5] = ((this._h[6].shiftRightUnsigned(2)) | (this._h[7] << 11)) & 0xffff;
+    this._h[6] = ((this._h[7].shiftRightUnsigned(5)) | (this._h[8] << 8)) & 0xffff;
+    this._h[7] = ((this._h[8].shiftRightUnsigned(8)) | (this._h[9] << 5)) & 0xffff;
 
     f = this._h[0] + this._pad[0];
     this._h[0] = f & 0xffff;
@@ -3696,8 +3463,7 @@ class poly1305 {
     }
 
     if (bytes != 0) {
-      for (i = 0; i < bytes; i++)
-        this._buffer[this._leftover + i] = m[mpos + i];
+      for (i = 0; i < bytes; i++) this._buffer[this._leftover + i] = m[mpos + i];
       this._leftover += bytes;
     }
 

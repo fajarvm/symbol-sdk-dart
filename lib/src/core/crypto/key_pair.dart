@@ -7,14 +7,13 @@ import 'package:nem2_sdk_dart/src/core/utils.dart' show HexUtils;
 import 'crypto_exception.dart';
 import 'ed25519.dart';
 
-/// Represents a key pair
+/// Represents a key pair.
 class KeyPair {
   final Uint8List _privateKey;
   final Uint8List _publicKey;
 
   KeyPair._(this._privateKey, this._publicKey);
 
-  /// Factory method to create a key pair
   factory KeyPair({Uint8List privateKey = null, Uint8List publicKey = null}) {
     if (privateKey == null) {
       throw new ArgumentError("privateKey byte cannot be null");
@@ -27,14 +26,16 @@ class KeyPair {
     return new KeyPair._(privateKey, publicKey);
   }
 
-  /// Gets the public key
+  /// Retrieves the public key of this key pair.
   Uint8List get publicKey => _publicKey;
 
-  /// Gets the private key
+  /// Retrieves the private key of this key pair.
   Uint8List get privateKey => _privateKey;
 
   /// Creates a key pair from a [hexEncodedPrivateKey] string. The public key is extracted from
-  /// the private key. When the private key has an invalid length, a [CryptoException] is thrown.
+  /// the private key.
+  ///
+  /// Throws a [CryptoException] when the private key has an invalid length.
   static KeyPair createFromPrivateKeyString(final String hexEncodedPrivateKey) {
     final Uint8List privateKeySeed = HexUtils.getBytes(hexEncodedPrivateKey);
     if (Ed25519.KEY_SIZE != privateKeySeed.length) {
@@ -47,12 +48,12 @@ class KeyPair {
     return new KeyPair(privateKey: privateKeySeed, publicKey: publicKey);
   }
 
-  /// Signs a [data] buffer with the given [keyPair]. Returns a signed data bytes ([Uint8List]).
+  /// Signs the [data] with the given [keyPair].
   static Uint8List sign(final KeyPair keyPair, final Uint8List data) {
     return Ed25519.sign(data, keyPair.publicKey, keyPair.privateKey);
   }
 
-  /// Verifies a signed [signature].
+  /// Verifies that the [signature] is signed using the [publicKey] and the [data].
   static bool verify(final Uint8List publicKey, final Uint8List data, final Uint8List signature) {
     return Ed25519.verify(publicKey, data, signature);
   }
@@ -65,12 +66,12 @@ class KeyPair {
     return Ed25519.deriveSharedKey(salt, keyPair.privateKey, publicKey);
   }
 
-  /// Creates a random public key
+  /// Creates a random public key.
   static Uint8List createRandomPublicKey() {
     return Ed25519.getRandomBytes(Ed25519.KEY_SIZE);
   }
 
-  /// Creates a random key pair
+  /// Creates a random key pair.
   static KeyPair createRandomKeyPair() {
     return KeyPair.createFromPrivateKeyString(
         HexUtils.getString(Ed25519.getRandomBytes(Ed25519.KEY_SIZE)));

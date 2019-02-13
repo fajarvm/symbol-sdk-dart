@@ -2,8 +2,9 @@ library nem2_sdk_dart.sdk.model.account.address;
 
 import 'dart:typed_data' show Uint8List;
 
-import 'package:nem2_sdk_dart/src/sdk/model/blockchain/network_type.dart';
 import 'package:nem2_sdk_dart/src/core/utils.dart' show Base32, HexUtils;
+
+import '../blockchain/network_type.dart';
 
 /// The address structure describes an address with its network.
 class Address {
@@ -29,8 +30,7 @@ class Address {
 
   factory Address({final String address = null, final int networkType = null}) {
     if (address == null || networkType == null) {
-      throw new ArgumentError(
-          'Address string and/or Network type must not be null');
+      throw new ArgumentError('Address string and/or Network type must not be null');
     }
 
     if (!NetworkType.isValidNetworkType(networkType)) {
@@ -79,16 +79,14 @@ class Address {
     return Base32.encode(decodedAddress);
   }
 
-  /// Converts a [publicKey] to decoded address bytes for a specific [networkType]
-  static Uint8List publicKeyToAddress(
-      final Uint8List publicKey, final NetworkType networkType) {
+  /// Converts a [publicKey] to decoded address bytes for a specific [networkType].
+  static Uint8List publicKeyToAddress(final Uint8List publicKey, final NetworkType networkType) {
     return null;
   }
 
-  /// Creates an [Address] from a given string of [rawAddress]
+  /// Creates an [Address] from a given string of [rawAddress].
   static Address createFromRawAddress(final String rawAddress) {
-    final String address =
-        rawAddress.trim().toUpperCase().replaceAll(REGEX_DASH, EMPTY_STRING);
+    final String address = rawAddress.trim().toUpperCase().replaceAll(REGEX_DASH, EMPTY_STRING);
 
     if (address.length != ADDRESS_ENCODED_SIZE) {
       throw new ArgumentError(
@@ -97,8 +95,7 @@ class Address {
 
     switch (address[0]) {
       case PREFIX_MIJIN_TEST:
-        return new Address(
-            address: address, networkType: NetworkType.MIJIN_TEST);
+        return new Address(address: address, networkType: NetworkType.MIJIN_TEST);
       case PREFIX_MIJIN:
         return new Address(address: address, networkType: NetworkType.MIJIN);
       case PREFIX_TEST_NET:
@@ -110,7 +107,7 @@ class Address {
     }
   }
 
-  /// Converts an [address] String into a more readable/pretty format
+  /// Converts an [address] String into a more readable/pretty format.
   ///
   /// Before: B3KUBHATFCPV7UZQLWAQ2EUR6SIHBSBEOEDDDF3
   /// After: SB3KUB-HATFCP-V7UZQL-WAQ2EU-R6SIHB-SBEOED-DDF3

@@ -8,7 +8,7 @@ import 'crypto_exception.dart';
 import 'sha3nist.dart';
 import 'tweetnacl.dart' as TweetNacl;
 
-/// This class provides various custom cryptographic operations
+/// This class provides various custom cryptographic operations.
 class Ed25519 {
   static const int KEY_SIZE = 32;
   static const int SIGNATURE_SIZE = 64;
@@ -16,7 +16,7 @@ class Ed25519 {
   static const int HASH_SIZE = 64;
   static const int HALF_HASH_SIZE = 32;
 
-  /// Extracts a public key bytes from the given [privateKeySeed] bytes
+  /// Extracts a public key from the given [privateKeySeed].
   static Uint8List extractPublicKey(final Uint8List privateKeySeed) {
     if (privateKeySeed == null) {
       throw new ArgumentError('privateKeySeed may not be null');
@@ -26,7 +26,7 @@ class Ed25519 {
     }
 
     final Uint8List d = prepareForScalarMult(privateKeySeed);
-    final List<Int64List> p = [gf(), gf(), gf(), gf()];
+    final List<Int64List> p = [_gf(), _gf(), _gf(), _gf()];
     final Uint8List pk = new Uint8List(KEY_SIZE);
     TweetNacl.TweetNaclFast.scalarbase(p, d, 0);
     TweetNacl.TweetNaclFast.pack(pk, p);
@@ -34,8 +34,7 @@ class Ed25519 {
     return pk;
   }
 
-  /// Cryptographically sign a [message] with the given [publicKey] and [secretKey].
-  /// Returns the bytes format ([Uint8List]) of the signed message.
+  /// Signs a [message] with the given [publicKey] and [secretKey].
   static Uint8List sign(Uint8List message, Uint8List publicKey, Uint8List secretKey) {
     final SHA3DigestNist hasher = new SHA3DigestNist(512);
     hasher.reset();
@@ -43,7 +42,7 @@ class Ed25519 {
     final Uint8List d = new Uint8List(HASH_SIZE); // private hash
     hasher.update(secretKey, 0, KEY_SIZE);
     hasher.doFinal(d, 0);
-    clamp(d);
+    _clamp(d);
 
     final Uint8List r = new Uint8List(HASH_SIZE); // seeded hash
     hasher.reset();
@@ -51,7 +50,7 @@ class Ed25519 {
     hasher.update(message, 0, message.length);
     hasher.doFinal(r, 0);
 
-    final List<Int64List> p = [gf(), gf(), gf(), gf()];
+    final List<Int64List> p = [_gf(), _gf(), _gf(), _gf()];
     final Uint8List signature = new Uint8List(SIGNATURE_SIZE);
 
     TweetNacl.TweetNaclFast.reduce(r);
@@ -80,17 +79,17 @@ class Ed25519 {
     TweetNacl.TweetNaclFast.modL(signature, 32, x);
 
     // validate S part of Signature
-    if (!validateEncodedSPart(signature.sublist(HALF_SIGNATURE_SIZE))) {
+    if (!_validateEncodedSPart(signature.sublist(HALF_SIGNATURE_SIZE))) {
       throw new CryptoException('The S part of the signature is invalid');
     }
 
     return signature;
   }
 
-  /// Verifies the [signature] signed with the [publicKey] and [data].
+  /// Verifies that the [signature] is signed with the [publicKey] and [data].
   static bool verify(Uint8List publicKey, Uint8List data, Uint8List signature) {
     // reject non-canonical signature
-    if (!isCanonical(signature.sublist(HALF_SIGNATURE_SIZE))) {
+    if (!_isCanonical(signature.sublist(HALF_SIGNATURE_SIZE))) {
       return false;
     }
 
@@ -99,7 +98,7 @@ class Ed25519 {
       return false;
     }
 
-    final List<Int64List> q = [gf(), gf(), gf(), gf()];
+    final List<Int64List> q = [_gf(), _gf(), _gf(), _gf()];
 
     if (0 != TweetNacl.TweetNaclFast.unpackneg(q, publicKey)) {
       return false;
@@ -114,7 +113,7 @@ class Ed25519 {
     hasher.update(data, 0, data.length);
     hasher.doFinal(h, 0);
 
-    final List<Int64List> p = [gf(), gf(), gf(), gf()];
+    final List<Int64List> p = [_gf(), _gf(), _gf(), _gf()];
     TweetNacl.TweetNaclFast.reduce(h);
     TweetNacl.TweetNaclFast.scalarmult(p, q, h, 0);
 
@@ -127,7 +126,7 @@ class Ed25519 {
     return result == 0;
   }
 
-  /// Derives a shared key using the [salt], [privateKey] and [publicKey]
+  /// Derives a shared key using the [salt], [privateKey] and [publicKey].
   static Uint8List deriveSharedKey(
       final Uint8List salt, final Uint8List privateKey, final Uint8List publicKey) {
     if (Ed25519.KEY_SIZE != salt.length) {
@@ -137,8 +136,8 @@ class Ed25519 {
     final Uint8List d = prepareForScalarMult(privateKey);
 
     // sharedKey = pack(p = d (derived from sk) * q (derived from pk))
-    final List<Int64List> q = [gf(), gf(), gf(), gf()];
-    final List<Int64List> p = [gf(), gf(), gf(), gf()];
+    final List<Int64List> q = [_gf(), _gf(), _gf(), _gf()];
+    final List<Int64List> p = [_gf(), _gf(), _gf(), _gf()];
     final Uint8List sharedKey = new Uint8List(KEY_SIZE);
     TweetNacl.TweetNaclFast.unpackneg(q, publicKey);
     TweetNacl.TweetNaclFast.scalarmult(p, q, d, 0);
@@ -157,40 +156,37 @@ class Ed25519 {
     return result;
   }
 
-  static bool validateEncodedSPart(Uint8List s) {
-    return ArrayUtils.isZero(s) || isCanonical(s);
-  }
-
-  static bool isCanonical(Uint8List input) {
-    final Uint8List copy = new Uint8List(SIGNATURE_SIZE);
-    ArrayUtils.copy(copy, input, numElementsToCopy: HALF_SIGNATURE_SIZE);
-
-    TweetNacl.TweetNaclFast.reduce(copy);
-    return ArrayUtils.deepEqual(input, copy, numElementsToCompare: HALF_SIGNATURE_SIZE);
-  }
-
-  /// Creates random bytes with the given size
+  /// Creates random bytes with the given size.
   static Uint8List getRandomBytes(int size) {
     return TweetNacl.TweetNaclFast.randombytes(size);
   }
 
-  /// Computes the hash of a [secretKey] using SHA3-512 (NIST) algorithm
+  /// Computes the hash of a [secretKey] using SHA3-512 (NIST) algorithm.
   static prepareForScalarMult(final Uint8List secretKey) {
     final SHA3DigestNist sha3digest = new SHA3DigestNist(512);
     Uint8List hash = sha3digest.process(secretKey);
     final ByteBuffer buffer = hash.buffer;
     final Uint8List d = buffer.asUint8List(0, HASH_SIZE);
-    clamp(d);
+    _clamp(d);
     return d;
   }
 
-  static void clamp(final Uint8List d) {
+  /// Wipes the value of given [byte].
+  static void wipe(Uint8List byte) {
+    for (int i = 0; i < byte.length; i++) {
+      byte[i] = 0;
+    }
+  }
+
+  // ------------------------------- private / protected functions ------------------------------ //
+
+  static void _clamp(final Uint8List d) {
     d[0] &= 248;
     d[31] &= 127;
     d[31] |= 64;
   }
 
-  static Int64List gf({final Int64List init = null}) {
+  static Int64List _gf({final Int64List init = null}) {
     final Int64List r = new Int64List(16);
     if (init != null) {
       for (int i = 0; i < init.length; i++) {
@@ -200,9 +196,15 @@ class Ed25519 {
     return r;
   }
 
-  static void wipe(Uint8List byte) {
-    for (int i = 0; i < byte.length; i++) {
-      byte[i] = 0;
-    }
+  static bool _isCanonical(Uint8List input) {
+    final Uint8List copy = new Uint8List(SIGNATURE_SIZE);
+    ArrayUtils.copy(copy, input, numElementsToCopy: HALF_SIGNATURE_SIZE);
+
+    TweetNacl.TweetNaclFast.reduce(copy);
+    return ArrayUtils.deepEqual(input, copy, numElementsToCompare: HALF_SIGNATURE_SIZE);
+  }
+
+  static bool _validateEncodedSPart(Uint8List s) {
+    return ArrayUtils.isZero(s) || _isCanonical(s);
   }
 }
