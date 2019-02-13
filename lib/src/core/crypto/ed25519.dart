@@ -172,29 +172,6 @@ class Ed25519 {
     return TweetNacl.TweetNaclFast.randombytes(size);
   }
 
-  /// Creates a random public key
-  static Uint8List createRandomPublicKey() {
-    return getRandomBytes(KEY_SIZE);
-  }
-
-  /// Creates a random key pair
-  static KeyPair createRandomKeyPair() {
-    return KeyPair.createFromPrivateKeyString(HexUtils.getString(getRandomBytes(32)));
-  }
-
-  /// Decodes two hex characters into a byte.
-  /// TODO: implement
-  static int toByte(final String char1, final String char2) {
-    // final int byte = tryParseByte(char1, char2);
-    return null;
-  }
-
-  /// Decodes two hex characters into a byte. Returns null.
-  /// TODO: implement
-  static int tryParseByte(final String char1, final String char2) {
-    return null;
-  }
-
   /// Computes the hash of a [secretKey] using SHA3-512 (NIST) algorithm
   static prepareForScalarMult(final Uint8List secretKey) {
     final SHA3DigestNist sha3digest = new SHA3DigestNist(512);

@@ -34,8 +34,7 @@ class KeyPair {
   Uint8List get privateKey => _privateKey;
 
   /// Creates a key pair from a [hexEncodedPrivateKey] string. The public key is extracted from
-  /// the private key. This method throws a [CryptoException] when an invalid length of the
-  /// private key string is found.
+  /// the private key. When the private key has an invalid length, a [CryptoException] is thrown.
   static KeyPair createFromPrivateKeyString(final String hexEncodedPrivateKey) {
     final Uint8List privateKeySeed = HexUtils.getBytes(hexEncodedPrivateKey);
     if (Ed25519.KEY_SIZE != privateKeySeed.length) {
@@ -58,8 +57,22 @@ class KeyPair {
     return Ed25519.verify(publicKey, data, signature);
   }
 
+  /// Creates a shared key given a [keyPair], an arbitrary [publicKey] and an agreed upon [salt].
+  /// This method returns a shared key. The shared key can be used for encrypted message passing
+  /// between the two parties.
   static Uint8List deriveSharedKey(
       final KeyPair keyPair, final Uint8List publicKey, final Uint8List salt) {
     return Ed25519.deriveSharedKey(salt, keyPair.privateKey, publicKey);
+  }
+
+  /// Creates a random public key
+  static Uint8List createRandomPublicKey() {
+    return Ed25519.getRandomBytes(Ed25519.KEY_SIZE);
+  }
+
+  /// Creates a random key pair
+  static KeyPair createRandomKeyPair() {
+    return KeyPair.createFromPrivateKeyString(
+        HexUtils.getString(Ed25519.getRandomBytes(Ed25519.KEY_SIZE)));
   }
 }
