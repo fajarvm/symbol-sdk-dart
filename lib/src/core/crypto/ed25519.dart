@@ -2,13 +2,11 @@ library nem2_sdk_dart.core.crypto.ed25519;
 
 import 'dart:typed_data' show ByteBuffer, Int64List, Uint8List;
 
+import 'package:nem2_sdk_dart/src/core/utils.dart' show ArrayUtils, HexUtils;
+
 import 'crypto_exception.dart';
-import 'key_pair.dart';
 import 'sha3nist.dart';
 import 'tweetnacl.dart' as TweetNacl;
-
-import '../utils/hex_utils.dart';
-import '../utils/array_utils.dart';
 
 /// This class provides various custom cryptographic operations
 class Ed25519 {
@@ -36,6 +34,8 @@ class Ed25519 {
     return pk;
   }
 
+  /// Cryptographically sign a [message] with the given [publicKey] and [secretKey].
+  /// Returns the bytes format ([Uint8List]) of the signed message.
   static Uint8List sign(Uint8List message, Uint8List publicKey, Uint8List secretKey) {
     final SHA3DigestNist hasher = new SHA3DigestNist(512);
     hasher.reset();
@@ -87,6 +87,7 @@ class Ed25519 {
     return signature;
   }
 
+  /// Verifies the [signature] signed with the [publicKey] and [data].
   static bool verify(Uint8List publicKey, Uint8List data, Uint8List signature) {
     // reject non-canonical signature
     if (!isCanonical(signature.sublist(HALF_SIGNATURE_SIZE))) {
@@ -126,6 +127,7 @@ class Ed25519 {
     return result == 0;
   }
 
+  /// Derives a shared key using the [salt], [privateKey] and [publicKey]
   static Uint8List deriveSharedKey(
       final Uint8List salt, final Uint8List privateKey, final Uint8List publicKey) {
     if (Ed25519.KEY_SIZE != salt.length) {

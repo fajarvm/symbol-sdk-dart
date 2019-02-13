@@ -3,8 +3,8 @@ library nem2_sdk_dart.core.crypto.key_pair;
 import 'dart:typed_data' show Uint8List;
 
 import 'package:nem2_sdk_dart/src/core/utils.dart' show HexUtils;
-import 'package:nem2_sdk_dart/src/core/crypto/crypto_exception.dart';
 
+import 'crypto_exception.dart';
 import 'ed25519.dart';
 
 /// Represents a key pair
@@ -47,12 +47,12 @@ class KeyPair {
     return new KeyPair(privateKey: privateKeySeed, publicKey: publicKey);
   }
 
-  /// Signs a data buffer with a key pair.
+  /// Signs a [data] buffer with the given [keyPair]. Returns a signed data bytes ([Uint8List]).
   static Uint8List sign(final KeyPair keyPair, final Uint8List data) {
     return Ed25519.sign(data, keyPair.publicKey, keyPair.privateKey);
   }
 
-  /// Verifies a signature.
+  /// Verifies a signed [signature].
   static bool verify(final Uint8List publicKey, final Uint8List data, final Uint8List signature) {
     return Ed25519.verify(publicKey, data, signature);
   }
