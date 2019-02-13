@@ -32,6 +32,17 @@ class HexUtils {
     return utf8.decode(encodedString.codeUnits);
   }
 
+  /// Determines whether or not an [input] string is a hex string.
+  static bool isHexString(final String input) {
+    if (0 != (input.length % 2)) {
+      return false;
+    }
+
+    for (int i = 0; i < input.length; i += 2) {
+      // TODO: check hext string char
+    }
+  }
+
   // -------------------- private / protected functions -------------------- //
 
   static List<int> _getBytesInternal(final String hexString) {
