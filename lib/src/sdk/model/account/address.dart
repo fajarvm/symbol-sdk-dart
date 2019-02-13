@@ -2,17 +2,20 @@ library nem2_sdk_dart.sdk.model.account.address;
 
 import 'dart:typed_data' show Uint8List;
 
-import 'package:nem2_sdk_dart/src/core/utils.dart' show Base32, HexUtils;
+import 'package:pointycastle/export.dart' show RIPEMD160Digest;
+
+import 'package:nem2_sdk_dart/src/core/crypto.dart' show Ed25519, SHA3DigestNist;
+import 'package:nem2_sdk_dart/src/core/utils.dart' show ArrayUtils, Base32, HexUtils;
 
 import '../blockchain/network_type.dart';
 
 /// The address structure describes an address with its network.
 class Address {
-  static const int RIPEMD_160 = 20;
+  static const int RIPEMD_160_SIZE = 20;
   static const int ADDRESS_DECODED_SIZE = 25;
   static const int ADDRESS_ENCODED_SIZE = 40;
   static const int KEY_SIZE = 32;
-  static const int CHECKSUM = 32;
+  static const int CHECKSUM_SIZE = 4;
 
   static const String PREFIX_MIJIN_TEST = 'S';
   static const String PREFIX_MIJIN = 'M';
@@ -69,9 +72,9 @@ class Address {
   }
 
   /// Converts a [decodedAddress] to an encoded address [String].
-  static String addressToString(decodedAddress) {
+  static String addressToString(final Uint8List decodedAddress) {
     final String hexStringAddress = HexUtils.getString(decodedAddress);
-    if (ADDRESS_ENCODED_SIZE != decodedAddress.length) {
+    if (ADDRESS_DECODED_SIZE != decodedAddress.length) {
       throw ArgumentError(
           "The Address ${hexStringAddress} does not represent a valid decoded address");
     }
@@ -79,9 +82,52 @@ class Address {
     return Base32.encode(decodedAddress);
   }
 
-  /// Converts a [publicKey] to decoded address bytes for a specific [networkType].
-  static Uint8List publicKeyToAddress(final Uint8List publicKey, final NetworkType networkType) {
-    return null;
+  /// Converts a [publicKey] to decoded address byte for a specific [networkType].
+  static Uint8List publicKeyToAddress(final Uint8List publicKey, final int networkType) {
+    // Step 1: create a SHA3-256 hash of the public key
+    final SHA3DigestNist sha3Digest = Ed25519.createSha3Hasher(length: Ed25519.KEY_SIZE);
+    Uint8List stepOne = new Uint8List(KEY_SIZE);
+    sha3Digest.update(publicKey, 0, KEY_SIZE);
+    sha3Digest.doFinal(stepOne, 0);
+
+    // Step 2: perform a RIPEMD160 on previous step
+    final RIPEMD160Digest rm160Digest = new RIPEMD160Digest();
+    Uint8List stepTwo = new Uint8List(RIPEMD_160_SIZE);
+    rm160Digest.update(stepOne, 0, KEY_SIZE);
+    rm160Digest.doFinal(stepTwo, 0);
+
+    // Step 3: prepend network type
+    Uint8List decodedAddress = new Uint8List(ADDRESS_DECODED_SIZE);
+    decodedAddress[0] = networkType;
+    ArrayUtils.copy(decodedAddress, stepTwo, numElementsToCopy: RIPEMD_160_SIZE, destOffset: 1);
+
+    // Step 4: perform SHA3-256 on previous step
+    Uint8List stepFour = new Uint8List(KEY_SIZE);
+    int rm160Length = RIPEMD_160_SIZE + 1;
+    sha3Digest.update(decodedAddress, 0, rm160Length);
+    sha3Digest.doFinal(stepFour, 0);
+
+    // Step 5: retrieve checksum
+    Uint8List stepFive = new Uint8List(CHECKSUM_SIZE);
+    ArrayUtils.copy(stepFive, stepFour, numElementsToCopy: CHECKSUM_SIZE);
+
+    // Step 6: append stepFive to result of stepThree
+    Uint8List stepSix = new Uint8List(ADDRESS_DECODED_SIZE);
+    ArrayUtils.copy(stepSix, decodedAddress, numElementsToCopy: rm160Length);
+    ArrayUtils.copy(stepSix, stepFive, numElementsToCopy: CHECKSUM_SIZE, destOffset: rm160Length);
+
+    // Step 7: return base 32 encoded address
+    // String base32EncodedAddress = Base32.encode(stepSix);
+
+    return stepSix;
+  }
+
+  /// Creates an [Address] from a given [publicKey] string for the given [networkType].
+  static Address createFromPublicKey(final String publicKey, final int networkType) {
+    final Uint8List publicKeyByte = HexUtils.getBytes(publicKey);
+    final Uint8List addressByte = publicKeyToAddress(publicKeyByte, networkType);
+    final String addressString = addressToString(addressByte);
+    return new Address(address: addressString, networkType: networkType);
   }
 
   /// Creates an [Address] from a given string of [rawAddress].

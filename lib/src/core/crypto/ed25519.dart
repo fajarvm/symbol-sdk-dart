@@ -36,7 +36,7 @@ class Ed25519 {
 
   /// Signs a [message] with the given [publicKey] and [secretKey].
   static Uint8List sign(Uint8List message, Uint8List publicKey, Uint8List secretKey) {
-    final SHA3DigestNist hasher = new SHA3DigestNist(512);
+    final SHA3DigestNist hasher = createSha3Hasher();
     hasher.reset();
 
     final Uint8List d = new Uint8List(HASH_SIZE); // private hash
@@ -106,7 +106,7 @@ class Ed25519 {
 
     final Uint8List h = new Uint8List(HASH_SIZE);
 
-    final SHA3DigestNist hasher = new SHA3DigestNist(512);
+    final SHA3DigestNist hasher = createSha3Hasher();
     hasher.reset();
     hasher.update(signature.sublist(0, HALF_SIGNATURE_SIZE), 0, HALF_SIGNATURE_SIZE);
     hasher.update(publicKey, 0, KEY_SIZE);
@@ -149,7 +149,7 @@ class Ed25519 {
     }
 
     // return the hash of the result
-    final SHA3DigestNist hasher = new SHA3DigestNist(256);
+    final SHA3DigestNist hasher = createSha3Hasher(length: KEY_SIZE);
     Uint8List hash = hasher.process(sharedKey);
     final ByteBuffer buffer = hash.buffer;
     final Uint8List result = buffer.asUint8List(0, KEY_SIZE);
@@ -163,7 +163,7 @@ class Ed25519 {
 
   /// Computes the hash of a [secretKey] using SHA3-512 (NIST) algorithm.
   static prepareForScalarMult(final Uint8List secretKey) {
-    final SHA3DigestNist sha3digest = new SHA3DigestNist(512);
+    final SHA3DigestNist sha3digest = createSha3Hasher();
     Uint8List hash = sha3digest.process(secretKey);
     final ByteBuffer buffer = hash.buffer;
     final Uint8List d = buffer.asUint8List(0, HASH_SIZE);
@@ -176,6 +176,14 @@ class Ed25519 {
     for (int i = 0; i < byte.length; i++) {
       byte[i] = 0;
     }
+  }
+
+  static SHA3DigestNist createSha3Hasher({final int length = 64}) {
+    if (length != 64 && length != 32) {
+      throw ArgumentError('Cannot create SHA3 hasher. Unexpected length: ${length}');
+    }
+
+    return 64 == length ? new SHA3DigestNist(512) : new SHA3DigestNist(256);
   }
 
   // ------------------------------- private / protected functions ------------------------------ //
