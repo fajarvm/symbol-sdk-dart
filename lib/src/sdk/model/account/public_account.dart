@@ -43,7 +43,7 @@ class PublicAccount {
     if (HASH512_LENGTH != (signature.length / 2)) {
       throw new ArgumentError('Signature length is incorrect');
     }
-    if (H!exUtils.isHexString(signature)) {
+    if (!HexUtils.isHexString(signature)) {
       throw new ArgumentError('Signature must be hexadecimal');
     }
 
