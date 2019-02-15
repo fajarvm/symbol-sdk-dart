@@ -46,29 +46,24 @@ class Address {
   /// Get the address in plain format.
   ///
   /// For example: SB3KUBHATFCPV7UZQLWAQ2EUR6SIHBSBEOEDDDF3.
-  String plain() {
-    return this._address;
-  }
+  String get plain => this._address;
 
   /// Get address in pretty format.
   ///
   /// For example: SB3KUB-HATFCP-V7UZQL-WAQ2EU-R6SIHB-SBEOED-DDF3.
-  String pretty() {
-    return prettify(this._address);
-  }
+  String get pretty => prettify(this._address);
 
-  int get networkType => _networkType;
+  /// Get the network type of this address.
+  int get networkType => this._networkType;
 
   @override
   bool operator ==(other) {
-    return other is Address &&
-        this.plain() == other.plain() &&
-        this.networkType == other.networkType;
+    return other is Address && this.plain == other.plain && this.networkType == other.networkType;
   }
 
   @override
   int get hashCode {
-    return this.plain().hashCode + this.networkType.hashCode;
+    return this.plain.hashCode + networkType.hashCode;
   }
 
   /// Converts a [decodedAddress] to an encoded address [String].

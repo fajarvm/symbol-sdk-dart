@@ -6,6 +6,7 @@ import 'package:nem2_sdk_dart/src/core/crypto.dart' show Ed25519, KeyPair, SHA3D
 import 'package:nem2_sdk_dart/src/core/utils.dart' show HexUtils;
 
 import 'address.dart';
+import 'public_account.dart';
 
 /// The account structure describes an account private key, public key, address and allows
 /// signing transactions.
@@ -33,6 +34,25 @@ class Account {
   /// Retrieves the address of this account.
   Address get address => this._address;
 
+  /// Retrieves the plain text address of this account.
+  String get plainAddress => this._address.plain;
+
+  /// Retrieves the public account of this account.
+  PublicAccount get publicAccount =>
+      PublicAccount.createFromPublicKey(publicKey, address.networkType);
+
+  @override
+  int get hashCode {
+    return this._keyPair.hashCode + this.address.hashCode;
+  }
+
+  @override
+  bool operator ==(final other) {
+    return other is Account &&
+        this.plainAddress == other.plainAddress &&
+        this.publicKey == other.publicKey;
+  }
+
   /// Creates an [Account] from a given [privateKey] for a specific [networkType].
   static Account createFromPrivateKey(final String privateKey, final int networkType) {
     final KeyPair keyPair = KeyPair.createFromPrivateKeyString(privateKey);
@@ -55,5 +75,13 @@ class Account {
         Address.createFromPublicKey(HexUtils.getString(keyPair.publicKey), networkType);
 
     return new Account(address: address, keyPair: keyPair);
+  }
+
+  /// Signs raw data.
+  String sign(final String rawData) {
+    final String hexString = HexUtils.utf8ToHex(rawData);
+    final Uint8List data = HexUtils.getBytes(hexString);
+    final Uint8List signedData = KeyPair.sign(this._keyPair, data);
+    return HexUtils.getString(signedData);
   }
 }

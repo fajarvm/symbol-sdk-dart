@@ -1,9 +1,9 @@
 library nem2_sdk_dart.sdk.model.account.public_account;
 
-
 import 'dart:typed_data' show Uint8List;
 
 import 'package:nem2_sdk_dart/src/core/utils.dart' show HexUtils;
+import 'package:nem2_sdk_dart/src/core/crypto.dart' show KeyPair;
 
 import 'address.dart';
 
@@ -25,6 +25,27 @@ class PublicAccount {
     return new PublicAccount._(address, publicKey);
   }
 
+  /// Retrieves the address of this public account.
+  Address get address => _address;
+
+  /// Retrieves the plain text address of this public account.
+  String get plainAddress => _address.plain;
+
+  /// Retrieves the public key of this public account.
+  String get publicKey => _publicKey;
+
+  @override
+  int get hashCode {
+    return (publicKey.hashCode + address.hashCode);
+  }
+
+  @override
+  bool operator ==(final other) {
+    return (other is PublicAccount) &&
+        publicKey == other.publicKey &&
+        plainAddress == other.plainAddress;
+  }
+
   /// Create a [PublicAccount] from a [publicKey] for the given [networkType].
   static PublicAccount createFromPublicKey(final String publicKey, final int networkType) {
     if (publicKey == null || (64 != publicKey.length && 66 != publicKey.length)) {
@@ -35,7 +56,7 @@ class PublicAccount {
     return new PublicAccount(address: address, publicKey: publicKey);
   }
 
-  /// Verifies a signature
+  /// Verifies a signature.
   bool verifySignature(final String data, final String signature) {
     if (signature == null) {
       throw new ArgumentError('Missing signature argument');
@@ -47,9 +68,11 @@ class PublicAccount {
       throw new ArgumentError('Signature must be hexadecimal');
     }
 
-    // TODO: COMPLETE
-    final Uint8List signatureByte = HexUtils.getBytes(signature);
+    final Uint8List sigByte = HexUtils.getBytes(signature);
+    final String utf8Hex = HexUtils.utf8ToHex(data);
+    final Uint8List dataByte = HexUtils.getBytes(utf8Hex);
+    final Uint8List pkByte = HexUtils.getBytes(_publicKey);
 
-    return false;
+    return KeyPair.verify(pkByte, dataByte, sigByte);
   }
 }

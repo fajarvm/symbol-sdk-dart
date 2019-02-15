@@ -32,6 +32,16 @@ class KeyPair {
   /// Retrieves the private key of this key pair.
   Uint8List get privateKey => _privateKey;
 
+  @override
+  int get hashCode {
+    return privateKey.hashCode + publicKey.hashCode;
+  }
+
+  @override
+  bool operator ==(other) {
+    return other is KeyPair && publicKey == other.publicKey && privateKey == other.privateKey;
+  }
+
   /// Creates a key pair from a [hexEncodedPrivateKey] string. The public key is extracted from
   /// the private key.
   ///

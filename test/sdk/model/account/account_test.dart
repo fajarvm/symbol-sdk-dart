@@ -3,7 +3,7 @@ library nem2_sdk_dart.test.sdk.model.account.account_test;
 import 'package:test/test.dart';
 
 import 'package:nem2_sdk_dart/src/core/crypto.dart' show CryptoException, Ed25519;
-import 'package:nem2_sdk_dart/src/sdk/model.dart' show Account, NetworkType;
+import 'package:nem2_sdk_dart/src/sdk/model.dart' show Account, NetworkType, PublicAccount;
 
 main() {
   const testAccount = {
@@ -12,14 +12,14 @@ main() {
     'publicKey': 'c2f93346e27ce6ad1a9f8f5e3066f8326593a406bdf357acb041e2f9ab402efe'
   };
 
-  group('Account', () {
+  group('Account creation', () {
     test('should be created from a private key', () {
       final Account account =
           Account.createFromPrivateKey(testAccount['privateKey'], NetworkType.MIJIN_TEST);
 
       expect(account.publicKey, equals(testAccount['publicKey']));
       expect(account.privateKey, equals(testAccount['privateKey']));
-      expect(account.address.plain(), equals(testAccount['address']));
+      expect(account.address.plain, equals(testAccount['address']));
     });
 
     test('should throw an exception when the private key is invalid', () {
@@ -37,17 +37,31 @@ main() {
 
       expect(account.publicKey, isNotNull);
       expect(account.privateKey, isNotNull);
-      expect(account.address.plain(), isNotNull);
+      expect(account.address.plain, isNotNull);
     });
   });
 
-//  group('signData', () {
-//    test('UTF-8', () {
-//      final Account account = Account.createFromPrivateKey(
-//          'AB860ED1FE7C91C02F79C02225DAC708D7BD13369877C1F59E678CC587658C47',
-//          NetworkType.MIJIN_TEST);
-//
-//      // TODO: complete
-//    });
-//  });
+  group('Account signing', () {
+    test('UTF-8', () {
+      final Account account = Account.createFromPrivateKey(
+          'AB860ED1FE7C91C02F79C02225DAC708D7BD13369877C1F59E678CC587658C47',
+          NetworkType.MIJIN_TEST);
+
+      final PublicAccount publicAccount = account.publicAccount;
+      final String signedData = account.sign('catapult rocks!');
+
+      expect(publicAccount.verifySignature('catapult rocks!', signedData), equals(true));
+    });
+
+    test('Hexadecimal', () {
+      final Account account = Account.createFromPrivateKey(
+          'AB860ED1FE7C91C02F79C02225DAC708D7BD13369877C1F59E678CC587658C47',
+          NetworkType.MIJIN_TEST);
+
+      final PublicAccount publicAccount = account.publicAccount;
+      final String signedData = account.sign('0xAA');
+
+      expect(publicAccount.verifySignature('0xAA', signedData), equals(true));
+    });
+  });
 }
