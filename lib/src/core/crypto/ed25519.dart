@@ -2,7 +2,7 @@ library nem2_sdk_dart.core.crypto.ed25519;
 
 import 'dart:typed_data' show ByteBuffer, Int64List, Uint8List;
 
-import 'package:nem2_sdk_dart/src/core/utils.dart' show ArrayUtils, HexUtils;
+import 'package:nem2_sdk_dart/src/core/utils.dart' show ArrayUtils;
 
 import 'crypto_exception.dart';
 import 'sha3nist.dart';

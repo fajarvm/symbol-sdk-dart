@@ -1,6 +1,7 @@
 library nem2_sdk_dart.core.utils.hex_utils;
 
 import 'dart:convert' show utf8;
+
 import 'package:convert/convert.dart' show hex;
 
 /// A utility class that provides functions for converting hex strings.

@@ -1,13 +1,11 @@
-/// This the sdk specification library for the NEM2 SDK Dart project.
+// This the sdk specification library for the NEM2 SDK Dart project.
 library nem2_sdk_dart.sdk;
 
-import 'package:nem2_sdk_dart/core.dart';
+// infrastructure
+// export 'package:nem2_sdk_dart/src/sdk/model/infrastructure.dart';
 
-/// infrastructure
-/// export 'package:nem2_sdk_dart/src/sdk/model/infrastructure.dart';
-
-/// model
+// model
 export 'package:nem2_sdk_dart/src/sdk/model.dart';
 
-/// transaction
-/// export 'package:nem2_sdk_dart/src/sdk/model/transaction.dart';
+// transaction
+// export 'package:nem2_sdk_dart/src/sdk/model/transaction.dart';

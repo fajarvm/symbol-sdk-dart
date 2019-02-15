@@ -3,7 +3,9 @@ library nem2_sdk_dart.core.utils.byte_utils;
 import 'dart:math' show pow;
 import 'dart:typed_data' show Uint8List;
 
-/// A collection of utility functions to manipulate bytes
+
+// TODO: DELETE ME? I think this class is obsolete..
+/// A collection of utility functions to manipulate bytes.
 class ByteUtils {
   static const int BITS = 256;
   static final BigInt BIG_INT_256 = BigInt.from(250);
@@ -101,7 +103,7 @@ class ByteUtils {
     return BigInt.from(data);
   }
 
-  /// Converts a byte array to a BigInt (unsigned)
+  /// Converts a byte array to a BigInt (unsigned).
   static BigInt toBigIntUnsigned(final List<int> bytes) {
     BigInt b = BigInt.zero;
     for (int i = 0; i < bytes.length; i++) {
@@ -111,23 +113,8 @@ class ByteUtils {
     return b;
   }
 
-//  static BigInt toBigInt(final List<int> bytes) {
-//    final bool isNegative = (bytes[0] & 0x80) != 0;
-//    BigInt b = BigInt.zero;
-//    for (int i = 0; i < bytes.length; i++) {
-////      b = b << 8;
-////      b += new BigInt.from((isNegative ? (bytes[i] ^ 0xff) : bytes[i]));
-//      b += (BigInt.one * new BigInt.from(bytes[i] & 0xFF)) << (i * 8); // NEM impl
-//    }
-//
-//    if (isNegative) {
-//      return (b + BigInt.one) * BIG_INT_NEGATIVE_ONE;
-//    }
-//
-//    return b;
-//  }
-
-  /// copied from package:dart-cryptoutils by stevenroose
+  // Copied from package:dart-cryptoutils by stevenroose.
+  /// Converts a big integer into a byte array
   static Uint8List bigIntToBytes(BigInt input) {
     String str;
     bool neg = false;
@@ -188,132 +175,4 @@ class ByteUtils {
     }
     return Uint8List.fromList(bytes);
   }
-
-//  static Uint8List bigIntToBytes(BigInt bigInt) {
-//    return encodeBigInt(bigInt);
-//    var orig = bigInt;
-//
-//    if (bigInt.bitLength == 0) {
-//      if (bigInt == BIG_INT_NEGATIVE_ONE)
-//        return BYTES_NEGATIVE_ONE;
-//      else
-//        return BYTES_ZERO;
-//    }
-//
-//    /// extra byte for padding
-//    int bytes = (bigInt.bitLength / 8).ceil() + 1;
-//    Uint8List result = new Uint8List(bytes);
-//
-//    bigInt = bigInt.abs();
-//    for (int i = 0, j = bytes - 1; i < (bytes); i++, --j) {
-//      var x = bigInt.remainder(BIG_INT_256).toInt();
-//      result[j] = x;
-//      bigInt = bigInt >> 8;
-//    }
-//
-//    if (orig.isNegative) {
-//      _calculateTwosComplement(result);
-//      if ((result[1] & 0x80) == 0x80) {
-//        /// The high order bit is a one. Padding needed
-//        return result.sublist(1);
-//      }
-//    } else {
-//      if ((result[1] & 0x80) != 0x80) {
-//        /// The high order bit is a 0. No padding needed
-//        return result.sublist(1);
-//      }
-//    }
-//    return result;
-//  }
-
-//  /// Calculates the Two's Complement
-//  static void _calculateTwosComplement(Uint8List result) {
-//    int _switch = 1;
-//    for (int j = result.length - 1; j >= 0; --j) {
-//      /// flips each bits
-//      result[j] ^= 0xFF;
-//
-//      if (result[j] == 255 && _switch == 1) {
-//        result[j] = 0;
-//        _switch = 1;
-//      } else {
-//        /// adds one, then reset the switch
-//        result[j] += _switch;
-//        _switch = 0;
-//      }
-//    }
-//    result[0] = result[0] | 0x80;
-//  }
-
-//  /// Converts a 2^8 bit representation to a BigInteger.
-//  static BigInt toBigIntFromBytes(final List<int> bytes) {
-//    BigInt b = BigInt.zero;
-//    for (int i = 0; i < bytes.length; i++) {
-//      // b += (BigInt.one * BigInt.from(bytes[i] & 0xff)) << (i * 8); // NEM's Java implementation
-//      b += new BigInt.from(bytes[bytes.length - i - 1]) << (i * 8);
-//    }
-//
-//    return b;
-//  }
-//
-//   /// Converts a BigInt to a little endian 32 byte representation.
-//  static Uint8List toByteArrayFromBigInt(final BigInt b) {
-//    if (b.compareTo(BigInt.one << 256) >= 0) {
-//      throw new UnsupportedError("only numbers < 2^256 are allowed");
-//    }
-//    final Uint8List bytes = new Uint8List(32);
-//    final Uint8List original = b.toByteArray();
-//
-//    /// Although b < 2^256, original can have length > 32 with some bytes set to 0.
-//    final int offset = original.length > 32 ? original.length - 32 : 0;
-//    for (int i = 0; i < original.length - offset; i++) {
-//      bytes[original.length - i - offset - 1] = original[i + offset];
-//    }
-//
-//    return bytes;
-//  }
-//
-//  /// ported from Java's BigInteger.toByteArray(); implementation
-//  ///
-//  ///  Returns a byte array containing the two's-complement
-//  ///  representation of this BigInteger.  The byte array will be in
-//  ///  <i>big-endian</i> byte-order: the most significant byte is in
-//  ///  the zeroth element.  The array will contain the minimum number
-//  ///  of bytes required to represent this BigInteger, including at
-//  ///  least one sign bit, which is {@code (ceil((this.bitLength() +
-//  ///  1)/8))}.
-//  static Uint8List originalBigIntToByteArray(final BigInt input) {
-//    final int byteLen = (input.bitLength / 8 + 1).round();
-//    final Uint8List byteArray = new Uint8List(byteLen);
-//
-//    for (int i=byteLen-1, bytesCopied=4, nextInt=0, intIndex=0; i >= 0; i--) {
-//      if (bytesCopied == 4) {
-//        nextInt = getIntOfBigInt(intIndex++);
-//        bytesCopied = 1;
-//      } else {
-//        nextInt = nextInt >> 8;
-//    bytesCopied++;
-//    }
-//    byteArray[i] = nextInt;
-//    }
-//    return byteArray;
-//  }
-//
-//   /// ported from Java's BigInteger.getInt(); implementation
-//   ///
-//   /// Returns the specified int of the little-endian two's complement
-//   /// representation (int 0 is the least significant).  The int number can
-//   /// be arbitrarily high (values are logically preceded by infinitely many
-//   /// sign ints).
-//  static int getIntOfBigInt(int n, BigInt bigInt) {
-//    if (n < 0)
-//      return 0;
-//    if (n >= bigInt.mag.length)
-//      return signInt();
-//
-//    int magInt = mag[mag.length-n-1];
-//
-//    return (signum >= 0 ? magInt :
-//    (n <= firstNonzeroIntNum() ? -magInt : ~magInt));
-//  }
 }

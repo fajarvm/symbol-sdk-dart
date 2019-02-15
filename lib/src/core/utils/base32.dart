@@ -2,9 +2,9 @@ library nem2_sdk_dart.core.utils.base32;
 
 import "dart:typed_data" show Uint8List;
 
-import '../utils/hex_utils.dart';
+import 'hex_utils.dart';
 
-/// A utility class that provides functions for converting base32 strings
+/// A utility class that provides functions for converting base32 strings.
 class Base32 {
   static const int DECODED_BLOCK_SIZE = 5;
   static const int ENCODED_BLOCK_SIZE = 8;

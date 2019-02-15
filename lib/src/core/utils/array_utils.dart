@@ -4,9 +4,9 @@ import 'dart:typed_data' show Uint8List;
 
 import 'byte_utils.dart';
 
-/// A collection of utility functions to manipulate arrays
+/// A collection of utility functions to manipulate arrays.
 class ArrayUtils {
-  /// Copies elements from the source array to a destination array
+  /// Copies elements from the source array to a destination array.
   static void copy(List<int> dest, List<int> source,
       {final int numElementsToCopy = 0, final int destOffset = 0, final int srcOffset = 0}) {
     final int length = numElementsToCopy == 0 ? dest.length : numElementsToCopy;
@@ -21,7 +21,7 @@ class ArrayUtils {
     return input.every((value) => (0 == value));
   }
 
-  /// Duplicates a given byte array
+  /// Duplicates a given byte array.
   static Uint8List duplicate(final Uint8List source) {
     final Uint8List copy = new Uint8List(source.length);
     for (var element in source.toList()) {
@@ -66,7 +66,7 @@ class ArrayUtils {
     return (h[i >> 3] >> (i & 7)) & 1;
   }
 
-  /// Creates a List of int with 0 as the default value instead of null
+  /// Creates a List of int with 0 as the default value instead of null.
   ///
   /// This is a workaround to the fact that all variables in DartVM are
   /// nullable, including the seemingly "primitive" types like int, bool, etc.
@@ -80,7 +80,7 @@ class ArrayUtils {
     return ByteUtils.bytesFromList(createInstantiatedListInt(size));
   }
 
-  /// Sets null values to 0
+  /// Sets null values to 0.
   static void replaceNullWithZero(List<int> values) {
     for (var value in values) {
       if (value == null) {
