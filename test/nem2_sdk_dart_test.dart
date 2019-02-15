@@ -1,16 +1,7 @@
-import 'package:nem2_sdk_dart/core.dart';
-import 'package:test/test.dart';
+import 'core/crypto_test.dart' as crypto_test;
+import 'core/utils_test.dart' as utils_test;
 
 void main() {
-//  group('A group of tests', () {
-//    Awesome awesome;
-//
-//    setUp(() {
-//      awesome = Awesome();
-//    });
-//
-//    test('First Test', () {
-//      expect(awesome.isAwesome, isTrue);
-//    });
-//  });
+  crypto_test.main();
+  utils_test.main();
 }
