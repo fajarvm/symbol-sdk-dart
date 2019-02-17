@@ -16,6 +16,7 @@ class Address {
   static const int ADDRESS_ENCODED_SIZE = 40;
   static const int KEY_SIZE = 32;
   static const int CHECKSUM_SIZE = 4;
+  static const int START_CHECKSUM_SIZE = 21; // ADDRESS_DECODED_SIZE - CHECKSUM_SIZE
 
   static const String PREFIX_MIJIN_TEST = 'S';
   static const String PREFIX_MIJIN = 'M';
@@ -66,7 +67,48 @@ class Address {
     return this.plain.hashCode + networkType.hashCode;
   }
 
-  /// Converts a [decodedAddress] to an encoded address [String].
+  /// Creates an [Address] from a given [publicKey] string for the given [networkType].
+  static Address fromPublicKey(final String publicKey, final int networkType) {
+    final Uint8List publicKeyByte = HexUtils.getBytes(publicKey);
+    final Uint8List addressByte = publicKeyToAddress(publicKeyByte, networkType);
+    final String addressString = addressToString(addressByte);
+    return new Address(address: addressString, networkType: networkType);
+  }
+
+  /// Creates an [Address] from a given string of [rawAddress].
+  static Address fromRawAddress(final String rawAddress) {
+    final String address = rawAddress.trim().toUpperCase().replaceAll(REGEX_DASH, EMPTY_STRING);
+
+    if (address.length != ADDRESS_ENCODED_SIZE) {
+      throw new ArgumentError(
+          'Address ${address} has to be ${ADDRESS_ENCODED_SIZE} characters long');
+    }
+
+    switch (address[0]) {
+      case PREFIX_MIJIN_TEST:
+        return new Address(address: address, networkType: NetworkType.MIJIN_TEST);
+      case PREFIX_MIJIN:
+        return new Address(address: address, networkType: NetworkType.MIJIN);
+      case PREFIX_TEST_NET:
+        return new Address(address: address, networkType: NetworkType.TEST_NET);
+      case PREFIX_MAIN_NET:
+        return new Address(address: address, networkType: NetworkType.MAIN_NET);
+      default:
+        throw new UnsupportedError('Address Network unsupported');
+    }
+  }
+
+  /// Converts an [encodedAddress] string to a decoded address.
+  static Uint8List stringToAddress(final String encodedAddress) {
+    if (ADDRESS_ENCODED_SIZE != encodedAddress.length) {
+      throw ArgumentError(
+          'The encoded address ${encodedAddress} does not represent a valid encoded address');
+    }
+
+    return Base32.decode(encodedAddress);
+  }
+
+  /// Converts a [decodedAddress] to an encoded address string.
   static String addressToString(final Uint8List decodedAddress) {
     final String hexStringAddress = HexUtils.getString(decodedAddress);
     if (ADDRESS_DECODED_SIZE != decodedAddress.length) {
@@ -115,37 +157,6 @@ class Address {
     // String base32EncodedAddress = Base32.encode(stepSix);
 
     return stepSix;
-  }
-
-  /// Creates an [Address] from a given [publicKey] string for the given [networkType].
-  static Address createFromPublicKey(final String publicKey, final int networkType) {
-    final Uint8List publicKeyByte = HexUtils.getBytes(publicKey);
-    final Uint8List addressByte = publicKeyToAddress(publicKeyByte, networkType);
-    final String addressString = addressToString(addressByte);
-    return new Address(address: addressString, networkType: networkType);
-  }
-
-  /// Creates an [Address] from a given string of [rawAddress].
-  static Address createFromRawAddress(final String rawAddress) {
-    final String address = rawAddress.trim().toUpperCase().replaceAll(REGEX_DASH, EMPTY_STRING);
-
-    if (address.length != ADDRESS_ENCODED_SIZE) {
-      throw new ArgumentError(
-          'Address ${address} has to be ${ADDRESS_ENCODED_SIZE} characters long');
-    }
-
-    switch (address[0]) {
-      case PREFIX_MIJIN_TEST:
-        return new Address(address: address, networkType: NetworkType.MIJIN_TEST);
-      case PREFIX_MIJIN:
-        return new Address(address: address, networkType: NetworkType.MIJIN);
-      case PREFIX_TEST_NET:
-        return new Address(address: address, networkType: NetworkType.TEST_NET);
-      case PREFIX_MAIN_NET:
-        return new Address(address: address, networkType: NetworkType.MAIN_NET);
-      default:
-        throw new UnsupportedError('Address Network unsupported');
-    }
   }
 
   /// Converts an [address] String into a more readable/pretty format.

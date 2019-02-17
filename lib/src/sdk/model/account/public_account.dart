@@ -52,7 +52,7 @@ class PublicAccount {
       throw new ArgumentError('Not a valid public key');
     }
 
-    final Address address = Address.createFromPublicKey(publicKey, networkType);
+    final Address address = Address.fromPublicKey(publicKey, networkType);
     return new PublicAccount(address: address, publicKey: publicKey);
   }
 

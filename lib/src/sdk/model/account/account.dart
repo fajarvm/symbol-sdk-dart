@@ -55,11 +55,11 @@ class Account {
 
   /// Creates an [Account] from a given [privateKey] for a specific [networkType].
   static Account createFromPrivateKey(final String privateKey, final int networkType) {
-    final KeyPair keyPair = KeyPair.createFromPrivateKeyString(privateKey);
+    final KeyPair keyPair = KeyPair.fromPrivateKey(privateKey);
     final Uint8List address = Address.publicKeyToAddress(keyPair.publicKey, networkType);
     final String rawAddress = Address.addressToString(address);
 
-    return new Account(address: Address.createFromRawAddress(rawAddress), keyPair: keyPair);
+    return new Account(address: Address.fromRawAddress(rawAddress), keyPair: keyPair);
   }
 
   /// Creates a new [Account] for the given [networkType].
@@ -70,18 +70,23 @@ class Account {
     sha3Digest.update(randomBytes, 0, Ed25519.KEY_SIZE);
     sha3Digest.doFinal(stepOne, 0);
 
-    final KeyPair keyPair = KeyPair.createFromPrivateKeyString(HexUtils.getString(stepOne));
+    final KeyPair keyPair = KeyPair.fromPrivateKey(HexUtils.getString(stepOne));
     final Address address =
-        Address.createFromPublicKey(HexUtils.getString(keyPair.publicKey), networkType);
+        Address.fromPublicKey(HexUtils.getString(keyPair.publicKey), networkType);
 
     return new Account(address: address, keyPair: keyPair);
   }
 
   /// Signs raw data.
-  String sign(final String rawData) {
+  String signData(final String rawData) {
     final String hexString = HexUtils.utf8ToHex(rawData);
     final Uint8List data = HexUtils.getBytes(hexString);
-    final Uint8List signedData = KeyPair.sign(this._keyPair, data);
+    final Uint8List signedData = KeyPair.signData(this._keyPair, data);
     return HexUtils.getString(signedData);
   }
+
+  /// Signs a [transaction]
+//  static SignedTransaction signTransaction(final Transaction transaction) {
+//    return null;
+//  }
 }

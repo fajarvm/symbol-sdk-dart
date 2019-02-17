@@ -52,7 +52,7 @@ main() {
         // Prepare
         String privateKeyHex = TEST_PRIVATE_KEYS[i];
         String expectedPublicKey = EXPECTED_PUBLIC_KEYS[i];
-        KeyPair keyPair = KeyPair.createFromPrivateKeyString(privateKeyHex);
+        KeyPair keyPair = KeyPair.fromPrivateKey(privateKeyHex);
 
         // Assert
         String actualPubKey = HexUtils.getString(keyPair.publicKey).toUpperCase();
@@ -72,7 +72,7 @@ main() {
       for (var invalidPrivateKey in INVALID_KEYS) {
         final Uint8List privateKeySeed = HexUtils.getBytes(invalidPrivateKey);
         expect(
-            () => KeyPair.createFromPrivateKeyString(invalidPrivateKey),
+            () => KeyPair.fromPrivateKey(invalidPrivateKey),
             throwsA(predicate((e) =>
                 e is CryptoException &&
                 e.message ==
@@ -88,10 +88,10 @@ main() {
   group('sign', () {
     test('fills the signature', () {
       // Prepare
-      KeyPair keyPair = KeyPair.createRandomKeyPair();
+      KeyPair keyPair = KeyPair.random();
       Uint8List payload = Ed25519.getRandomBytes(100);
 
-      Uint8List signature = KeyPair.sign(keyPair, payload);
+      Uint8List signature = KeyPair.signData(keyPair, payload);
 
       // Assert
       Uint8List emptySig = new Uint8List(Ed25519.SIGNATURE_SIZE);
@@ -101,12 +101,12 @@ main() {
     test('returns same signature for same data signed by same key pairs', () {
       // Prepare
       String privateKey = HexUtils.getString(Ed25519.getRandomBytes(Ed25519.KEY_SIZE));
-      KeyPair keyPair1 = KeyPair.createFromPrivateKeyString(privateKey);
-      KeyPair keyPair2 = KeyPair.createFromPrivateKeyString(privateKey);
+      KeyPair keyPair1 = KeyPair.fromPrivateKey(privateKey);
+      KeyPair keyPair2 = KeyPair.fromPrivateKey(privateKey);
       Uint8List payload = Ed25519.getRandomBytes(100);
 
-      Uint8List signature1 = KeyPair.sign(keyPair1, payload);
-      Uint8List signature2 = KeyPair.sign(keyPair2, payload);
+      Uint8List signature1 = KeyPair.signData(keyPair1, payload);
+      Uint8List signature2 = KeyPair.signData(keyPair2, payload);
 
       // Assert
       expect(ArrayUtils.deepEqual(signature1, signature2), true);
@@ -114,12 +114,12 @@ main() {
 
     test('returns different signature for data signed by different key pairs', () {
       // Prepare
-      KeyPair keyPair1 = KeyPair.createRandomKeyPair();
-      KeyPair keyPair2 = KeyPair.createRandomKeyPair();
+      KeyPair keyPair1 = KeyPair.random();
+      KeyPair keyPair2 = KeyPair.random();
       Uint8List payload = Ed25519.getRandomBytes(100);
 
-      Uint8List signature1 = KeyPair.sign(keyPair1, payload);
-      Uint8List signature2 = KeyPair.sign(keyPair2, payload);
+      Uint8List signature1 = KeyPair.signData(keyPair1, payload);
+      Uint8List signature2 = KeyPair.signData(keyPair2, payload);
 
       // Assert
       expect(ArrayUtils.deepEqual(signature1, signature2), false);
@@ -132,9 +132,9 @@ main() {
   group('verify', () {
     test('returns true for data signed with same key pair', () {
       // Prepare
-      final KeyPair keyPair = KeyPair.createRandomKeyPair();
+      final KeyPair keyPair = KeyPair.random();
       final Uint8List payload = Ed25519.getRandomBytes(100);
-      final Uint8List signature = KeyPair.sign(keyPair, payload);
+      final Uint8List signature = KeyPair.signData(keyPair, payload);
 
       final bool isVerified = KeyPair.verify(keyPair.publicKey, payload, signature);
 
@@ -143,10 +143,10 @@ main() {
     });
 
     test('returns false for data signed with different a different key pair', () {
-      final KeyPair keyPair1 = KeyPair.createRandomKeyPair();
-      final KeyPair keyPair2 = KeyPair.createRandomKeyPair();
+      final KeyPair keyPair1 = KeyPair.random();
+      final KeyPair keyPair2 = KeyPair.random();
       final Uint8List payload = Ed25519.getRandomBytes(100);
-      final Uint8List signature = KeyPair.sign(keyPair1, payload);
+      final Uint8List signature = KeyPair.signData(keyPair1, payload);
 
       final bool isVerified = KeyPair.verify(keyPair2.publicKey, payload, signature);
 
@@ -155,11 +155,11 @@ main() {
     });
 
     test('returns false if signature has been modified', () {
-      final KeyPair keyPair = KeyPair.createRandomKeyPair();
+      final KeyPair keyPair = KeyPair.random();
       final Uint8List payload = Ed25519.getRandomBytes(100);
 
       for (int i = 0; i < Ed25519.SIGNATURE_SIZE; i += 4) {
-        final Uint8List signature = KeyPair.sign(keyPair, payload);
+        final Uint8List signature = KeyPair.signData(keyPair, payload);
         signature[i] ^= 0xFF; // modify signature
 
         final bool isVerified = KeyPair.verify(keyPair.publicKey, payload, signature);
@@ -170,11 +170,11 @@ main() {
     });
 
     test('returns false if payload has been modified', () {
-      final KeyPair keyPair = KeyPair.createRandomKeyPair();
+      final KeyPair keyPair = KeyPair.random();
       final Uint8List payload = Ed25519.getRandomBytes(44);
 
       for (int i = 0; i < payload.length; i += 4) {
-        final Uint8List signature = KeyPair.sign(keyPair, payload);
+        final Uint8List signature = KeyPair.signData(keyPair, payload);
         payload[i] ^= 0xFF; // modify payload
 
         final bool isVerified = KeyPair.verify(keyPair.publicKey, payload, signature);
@@ -185,12 +185,12 @@ main() {
     });
 
     test('fails if public key is not on curve', () {
-      final KeyPair keyPair = KeyPair.createRandomKeyPair();
+      final KeyPair keyPair = KeyPair.random();
       keyPair.publicKey.fillRange(0, keyPair.publicKey.length, 0);
       keyPair.publicKey[keyPair.publicKey.length - 1] = 1;
 
       final Uint8List payload = Ed25519.getRandomBytes(100);
-      final Uint8List signature = KeyPair.sign(keyPair, payload);
+      final Uint8List signature = KeyPair.signData(keyPair, payload);
 
       final bool isVerified = KeyPair.verify(keyPair.publicKey, payload, signature);
 
@@ -199,9 +199,9 @@ main() {
     });
 
     test('fails if public key does not correspond to private key', () {
-      final KeyPair keyPair = KeyPair.createRandomKeyPair();
+      final KeyPair keyPair = KeyPair.random();
       final Uint8List payload = Ed25519.getRandomBytes(100);
-      final Uint8List signature = KeyPair.sign(keyPair, payload);
+      final Uint8List signature = KeyPair.signData(keyPair, payload);
 
       // Alter public key
       for (int i = 0; i < keyPair.publicKey.length; i++) {
@@ -215,11 +215,11 @@ main() {
     });
 
     test('rejects zero public key', () {
-      final KeyPair keyPair = KeyPair.createRandomKeyPair();
+      final KeyPair keyPair = KeyPair.random();
       keyPair.publicKey.fillRange(0, keyPair.publicKey.length, 0);
 
       final Uint8List payload = Ed25519.getRandomBytes(100);
-      final Uint8List signature = KeyPair.sign(keyPair, payload);
+      final Uint8List signature = KeyPair.signData(keyPair, payload);
 
       final bool isVerified = KeyPair.verify(keyPair.publicKey, payload, signature);
 
@@ -229,9 +229,9 @@ main() {
 
     test('cannot verify non canonical signature', () {
       // Prepare
-      final KeyPair keyPair = KeyPair.createRandomKeyPair();
+      final KeyPair keyPair = KeyPair.random();
       final Uint8List payload = new Uint8List.fromList([1, 2, 3, 4, 5, 6, 7, 8, 9, 0]);
-      final Uint8List canonicalSignature = KeyPair.sign(keyPair, payload);
+      final Uint8List canonicalSignature = KeyPair.signData(keyPair, payload);
 
       // this is signature with group order added to 'encodedS' part of signature
       final Uint8List nonCanonicalSignature = new Uint8List(canonicalSignature.length);
@@ -260,9 +260,9 @@ main() {
 
       for (int i = 0; i < TEST_PRIVATE_KEYS.length; i++) {
         // Prepare
-        final KeyPair keyPair = KeyPair.createFromPrivateKeyString(TEST_PRIVATE_KEYS[i]);
+        final KeyPair keyPair = KeyPair.fromPrivateKey(TEST_PRIVATE_KEYS[i]);
         final Uint8List inputData = HexUtils.getBytes(INPUT_DATA[i]);
-        final Uint8List signature = KeyPair.sign(keyPair, inputData);
+        final Uint8List signature = KeyPair.signData(keyPair, inputData);
 
         // Assert
         String result = HexUtils.getString(signature).toUpperCase();
@@ -277,9 +277,9 @@ main() {
 
       for (int i = 0; i < TEST_PRIVATE_KEYS.length; i++) {
         // Prepare
-        final KeyPair keyPair = KeyPair.createFromPrivateKeyString(TEST_PRIVATE_KEYS[i]);
+        final KeyPair keyPair = KeyPair.fromPrivateKey(TEST_PRIVATE_KEYS[i]);
         final Uint8List inputData = HexUtils.getBytes(INPUT_DATA[i]);
-        final Uint8List signature = KeyPair.sign(keyPair, inputData);
+        final Uint8List signature = KeyPair.signData(keyPair, inputData);
 
         bool isVerified = KeyPair.verify(keyPair.publicKey, inputData, signature);
 
@@ -297,8 +297,8 @@ main() {
 
     test('fails if salt has the wrong size', () {
       // Prepare: create a salt that is too long
-      final KeyPair keyPair = KeyPair.createRandomKeyPair();
-      final Uint8List publicKey = KeyPair.createRandomPublicKey();
+      final KeyPair keyPair = KeyPair.random();
+      final Uint8List publicKey = KeyPair.randomPublicKey();
       final Uint8List salt = Ed25519.getRandomBytes(SALT_SIZE + 1);
 
       // Assert
@@ -310,8 +310,8 @@ main() {
 
     test('derives same shared key for both partners', () {
       // Prepare:
-      final KeyPair keyPair1 = KeyPair.createRandomKeyPair();
-      final KeyPair keyPair2 = KeyPair.createRandomKeyPair();
+      final KeyPair keyPair1 = KeyPair.random();
+      final KeyPair keyPair2 = KeyPair.random();
       final Uint8List salt = Ed25519.getRandomBytes(SALT_SIZE);
 
       final Uint8List sharedKey1 = KeyPair.deriveSharedKey(keyPair1, keyPair2.publicKey, salt);
@@ -323,9 +323,9 @@ main() {
 
     test('derives different shared key for different partners', () {
       // Prepare:
-      final KeyPair keyPair = KeyPair.createRandomKeyPair();
-      final Uint8List publicKey1 = KeyPair.createRandomPublicKey();
-      final Uint8List publicKey2 = KeyPair.createRandomPublicKey();
+      final KeyPair keyPair = KeyPair.random();
+      final Uint8List publicKey1 = KeyPair.randomPublicKey();
+      final Uint8List publicKey2 = KeyPair.randomPublicKey();
       final Uint8List salt = Ed25519.getRandomBytes(SALT_SIZE);
 
       final Uint8List sharedKey1 = KeyPair.deriveSharedKey(keyPair, publicKey1, salt);
@@ -339,7 +339,7 @@ main() {
       // Prepare:
       final String privateKeyString =
           "8F545C2816788AB41D352F236D80DBBCBC34705B5F902EFF1F1D88327C7C1300";
-      final KeyPair keyPair = KeyPair.createFromPrivateKeyString(privateKeyString);
+      final KeyPair keyPair = KeyPair.fromPrivateKey(privateKeyString);
       final Uint8List publicKey =
           HexUtils.getBytes("BF684FB1A85A8C8091EE0442EDDB22E51683802AFA0C0E7C6FE3F3E3E87A8D72");
       final Uint8List salt =

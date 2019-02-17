@@ -46,7 +46,7 @@ class KeyPair {
   /// the private key.
   ///
   /// Throws a [CryptoException] when the private key has an invalid length.
-  static KeyPair createFromPrivateKeyString(final String hexEncodedPrivateKey) {
+  static KeyPair fromPrivateKey(final String hexEncodedPrivateKey) {
     final Uint8List privateKeySeed = HexUtils.getBytes(hexEncodedPrivateKey);
     if (Ed25519.KEY_SIZE != privateKeySeed.length) {
       throw new CryptoException(
@@ -58,9 +58,15 @@ class KeyPair {
     return new KeyPair(privateKey: privateKeySeed, publicKey: publicKey);
   }
 
-  /// Signs the [data] with the given [keyPair].
-  static Uint8List sign(final KeyPair keyPair, final Uint8List data) {
-    return Ed25519.sign(data, keyPair.publicKey, keyPair.privateKey);
+  /// Creates a random public key.
+  static Uint8List randomPublicKey() {
+    return Ed25519.getRandomBytes(Ed25519.KEY_SIZE);
+  }
+
+  /// Creates a random key pair.
+  static KeyPair random() {
+    return KeyPair.fromPrivateKey(
+        HexUtils.getString(Ed25519.getRandomBytes(Ed25519.KEY_SIZE)));
   }
 
   /// Verifies that the [signature] is signed using the [publicKey] and the [data].
@@ -76,14 +82,8 @@ class KeyPair {
     return Ed25519.deriveSharedKey(salt, keyPair.privateKey, publicKey);
   }
 
-  /// Creates a random public key.
-  static Uint8List createRandomPublicKey() {
-    return Ed25519.getRandomBytes(Ed25519.KEY_SIZE);
-  }
-
-  /// Creates a random key pair.
-  static KeyPair createRandomKeyPair() {
-    return KeyPair.createFromPrivateKeyString(
-        HexUtils.getString(Ed25519.getRandomBytes(Ed25519.KEY_SIZE)));
+  /// Signs the [data] with the given [keyPair].
+  static Uint8List signData(final KeyPair keyPair, final Uint8List data) {
+    return Ed25519.signData(data, keyPair.publicKey, keyPair.privateKey);
   }
 }

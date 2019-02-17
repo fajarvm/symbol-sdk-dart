@@ -48,7 +48,7 @@ main() {
           NetworkType.MIJIN_TEST);
 
       final PublicAccount publicAccount = account.publicAccount;
-      final String signedData = account.sign('catapult rocks!');
+      final String signedData = account.signData('catapult rocks!');
 
       expect(publicAccount.verifySignature('catapult rocks!', signedData), equals(true));
     });
@@ -59,7 +59,7 @@ main() {
           NetworkType.MIJIN_TEST);
 
       final PublicAccount publicAccount = account.publicAccount;
-      final String signedData = account.sign('0xAA');
+      final String signedData = account.signData('0xAA');
 
       expect(publicAccount.verifySignature('0xAA', signedData), equals(true));
     });

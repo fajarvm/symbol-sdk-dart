@@ -35,7 +35,7 @@ class Ed25519 {
   }
 
   /// Signs a [message] with the given [publicKey] and [secretKey].
-  static Uint8List sign(Uint8List message, Uint8List publicKey, Uint8List secretKey) {
+  static Uint8List signData(Uint8List message, Uint8List publicKey, Uint8List secretKey) {
     final SHA3DigestNist hasher = createSha3Hasher();
     hasher.reset();
 
