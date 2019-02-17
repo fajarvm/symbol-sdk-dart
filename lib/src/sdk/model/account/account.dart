@@ -39,7 +39,7 @@ class Account {
 
   /// Retrieves the public account of this account.
   PublicAccount get publicAccount =>
-      PublicAccount.createFromPublicKey(publicKey, address.networkType);
+      PublicAccount.fromPublicKey(publicKey, address.networkType);
 
   @override
   int get hashCode {
@@ -54,7 +54,7 @@ class Account {
   }
 
   /// Creates an [Account] from a given [privateKey] for a specific [networkType].
-  static Account createFromPrivateKey(final String privateKey, final int networkType) {
+  static Account fromPrivateKey(final String privateKey, final int networkType) {
     final KeyPair keyPair = KeyPair.fromPrivateKey(privateKey);
     final Uint8List address = Address.publicKeyToAddress(keyPair.publicKey, networkType);
     final String rawAddress = Address.addressToString(address);
@@ -63,7 +63,7 @@ class Account {
   }
 
   /// Creates a new [Account] for the given [networkType].
-  static Account generateNewAccount(final int networkType) {
+  static Account create(final int networkType) {
     final Uint8List randomBytes = Ed25519.getRandomBytes(Ed25519.KEY_SIZE);
     final Uint8List stepOne = new Uint8List(Ed25519.KEY_SIZE);
     final SHA3DigestNist sha3Digest = Ed25519.createSha3Hasher(length: 32);

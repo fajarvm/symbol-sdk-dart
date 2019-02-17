@@ -15,7 +15,7 @@ main() {
   group('Account creation', () {
     test('should be created from a private key', () {
       final Account account =
-          Account.createFromPrivateKey(testAccount['privateKey'], NetworkType.MIJIN_TEST);
+          Account.fromPrivateKey(testAccount['privateKey'], NetworkType.MIJIN_TEST);
 
       expect(account.publicKey, equals(testAccount['publicKey']));
       expect(account.privateKey, equals(testAccount['privateKey']));
@@ -24,7 +24,7 @@ main() {
 
     test('should throw an exception when the private key is invalid', () {
       expect(
-          () => Account.createFromPrivateKey('', NetworkType.MIJIN_TEST),
+          () => Account.fromPrivateKey('', NetworkType.MIJIN_TEST),
           throwsA(predicate((e) =>
               e is CryptoException &&
               e.message ==
@@ -33,7 +33,7 @@ main() {
     });
 
     test('should generate a new account', () {
-      final Account account = Account.generateNewAccount(NetworkType.MIJIN_TEST);
+      final Account account = Account.create(NetworkType.MIJIN_TEST);
 
       expect(account.publicKey, isNotNull);
       expect(account.privateKey, isNotNull);
@@ -43,7 +43,7 @@ main() {
 
   group('Account signing', () {
     test('UTF-8', () {
-      final Account account = Account.createFromPrivateKey(
+      final Account account = Account.fromPrivateKey(
           'AB860ED1FE7C91C02F79C02225DAC708D7BD13369877C1F59E678CC587658C47',
           NetworkType.MIJIN_TEST);
 
@@ -54,7 +54,7 @@ main() {
     });
 
     test('Hexadecimal', () {
-      final Account account = Account.createFromPrivateKey(
+      final Account account = Account.fromPrivateKey(
           'AB860ED1FE7C91C02F79C02225DAC708D7BD13369877C1F59E678CC587658C47',
           NetworkType.MIJIN_TEST);
 
