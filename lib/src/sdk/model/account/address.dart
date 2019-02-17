@@ -30,7 +30,7 @@ class Address {
   final int _networkType;
   final String _address;
 
-  Address._(this._address, this._networkType);
+  const Address._(this._address, this._networkType);
 
   factory Address({final String address = null, final int networkType = null}) {
     if (address == null || networkType == null) {

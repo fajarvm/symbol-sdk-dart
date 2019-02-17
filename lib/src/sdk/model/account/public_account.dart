@@ -14,7 +14,7 @@ class PublicAccount {
 
   final int HASH512_LENGTH = 64;
 
-  PublicAccount._(this._address, this._publicKey);
+  const PublicAccount._(this._address, this._publicKey);
 
   factory PublicAccount({final Address address = null, final String publicKey = null}) {
     if (address == null || publicKey == null) {

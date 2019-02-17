@@ -14,7 +14,7 @@ class Account {
   final KeyPair _keyPair;
   final Address _address;
 
-  Account._(this._address, this._keyPair);
+  const Account._(this._address, this._keyPair);
 
   factory Account({final Address address = null, final KeyPair keyPair = null}) {
     if (address == null || keyPair == null) {

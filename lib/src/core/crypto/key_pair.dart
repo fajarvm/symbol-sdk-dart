@@ -12,7 +12,7 @@ class KeyPair {
   final Uint8List _privateKey;
   final Uint8List _publicKey;
 
-  KeyPair._(this._privateKey, this._publicKey);
+  const KeyPair._(this._privateKey, this._publicKey);
 
   factory KeyPair({Uint8List privateKey = null, Uint8List publicKey = null}) {
     if (privateKey == null) {
