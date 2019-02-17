@@ -122,10 +122,10 @@ class Address {
   /// Converts a [publicKey] to decoded address byte for a specific [networkType].
   static Uint8List publicKeyToAddress(final Uint8List publicKey, final int networkType) {
     // Step 1: create a SHA3-256 hash of the public key
-    final SHA3DigestNist sha3Digest = Ed25519.createSha3Hasher(length: Ed25519.KEY_SIZE);
+    final SHA3DigestNist digest = Ed25519.createSha3Hasher(length: Ed25519.KEY_SIZE);
     Uint8List stepOne = new Uint8List(KEY_SIZE);
-    sha3Digest.update(publicKey, 0, KEY_SIZE);
-    sha3Digest.doFinal(stepOne, 0);
+    digest.update(publicKey, 0, KEY_SIZE);
+    digest.doFinal(stepOne, 0);
 
     // Step 2: perform a RIPEMD160 on previous step
     final RIPEMD160Digest rm160Digest = new RIPEMD160Digest();
@@ -141,8 +141,8 @@ class Address {
     // Step 4: perform SHA3-256 on previous step
     Uint8List stepFour = new Uint8List(KEY_SIZE);
     int rm160Length = RIPEMD_160_SIZE + 1;
-    sha3Digest.update(decodedAddress, 0, rm160Length);
-    sha3Digest.doFinal(stepFour, 0);
+    digest.update(decodedAddress, 0, rm160Length);
+    digest.doFinal(stepFour, 0);
 
     // Step 5: retrieve checksum
     Uint8List stepFive = new Uint8List(CHECKSUM_SIZE);
@@ -161,7 +161,7 @@ class Address {
 
   /// Converts an [address] String into a more readable/pretty format.
   ///
-  /// Before: B3KUBHATFCPV7UZQLWAQ2EUR6SIHBSBEOEDDDF3
+  /// Before: SB3KUBHATFCPV7UZQLWAQ2EUR6SIHBSBEOEDDDF3
   /// After: SB3KUB-HATFCP-V7UZQL-WAQ2EU-R6SIHB-SBEOED-DDF3
   static String prettify(final String address) {
     if (address.length != ADDRESS_ENCODED_SIZE) {
@@ -182,5 +182,27 @@ class Address {
     }
 
     return sb.toString();
+  }
+
+  /// Determines the validity of the given [decodedAddress].
+  static bool isValidAddress(final Uint8List decodedAddress) {
+    final SHA3DigestNist digest = Ed25519.createSha3Hasher(length: Ed25519.KEY_SIZE);
+    final Uint8List hash = digest.process(decodedAddress.sublist(0, START_CHECKSUM_SIZE));
+    final Uint8List checksum = hash.buffer.asUint8List(0, CHECKSUM_SIZE);
+    return ArrayUtils.deepEqual(checksum, decodedAddress.sublist(START_CHECKSUM_SIZE));
+  }
+
+  /// Determines the validity of an encoded address string.
+  static bool isValidEncodedAddress(final String encodedAddress) {
+    if (ADDRESS_ENCODED_SIZE != encodedAddress.length) {
+      return false;
+    }
+
+    try {
+      final Uint8List decoded = stringToAddress(encodedAddress);
+      return isValidAddress(decoded);
+    } catch (e) {
+      return false;
+    }
   }
 }
