@@ -338,18 +338,18 @@ main() {
     test('can derive deterministic shared key from well known inputs', () {
       // Prepare:
       final String privateKeyString =
-          "8F545C2816788AB41D352F236D80DBBCBC34705B5F902EFF1F1D88327C7C1300";
+          '8F545C2816788AB41D352F236D80DBBCBC34705B5F902EFF1F1D88327C7C1300';
       final KeyPair keyPair = KeyPair.fromPrivateKey(privateKeyString);
       final Uint8List publicKey =
-          HexUtils.getBytes("BF684FB1A85A8C8091EE0442EDDB22E51683802AFA0C0E7C6FE3F3E3E87A8D72");
+          HexUtils.getBytes('BF684FB1A85A8C8091EE0442EDDB22E51683802AFA0C0E7C6FE3F3E3E87A8D72');
       final Uint8List salt =
-          HexUtils.getBytes("422C39DF16AAE42A74A5597D6EE2D59CFB4EEB6B3F26D98425B9163A03DAA3B5");
+          HexUtils.getBytes('422C39DF16AAE42A74A5597D6EE2D59CFB4EEB6B3F26D98425B9163A03DAA3B5');
 
       final Uint8List sharedKey = KeyPair.deriveSharedKey(keyPair, publicKey, salt);
       final String sharedKeyHexString = HexUtils.getString(sharedKey).toUpperCase();
 
       // Assert
-      String expected = "FF9623D28FBC13B6F0E0659117FC7BE294DB3385C046055A6BAC39EDF198D50D";
+      String expected = 'FF9623D28FBC13B6F0E0659117FC7BE294DB3385C046055A6BAC39EDF198D50D';
       expect(sharedKeyHexString, equals(expected));
     });
   });

@@ -12,7 +12,7 @@ class PublicAccount {
   final Address _address;
   final String _publicKey;
 
-  final int HASH512_LENGTH = 64;
+  static const int HASH512_LENGTH = 64;
 
   const PublicAccount._(this._address, this._publicKey);
 

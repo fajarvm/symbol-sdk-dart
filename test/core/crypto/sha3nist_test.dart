@@ -1,11 +1,11 @@
 library nem2_sdk_dart.test.core.crypto.sha3nist_test;
 
-import "dart:typed_data" show Uint8List;
+import 'dart:typed_data' show Uint8List;
 
-import "package:test/test.dart";
+import 'package:test/test.dart';
 
-import "package:nem2_sdk_dart/src/core/crypto.dart" show SHA3DigestNist;
-import "package:nem2_sdk_dart/src/core/utils.dart" show HexUtils;
+import 'package:nem2_sdk_dart/src/core/crypto.dart' show SHA3DigestNist;
+import 'package:nem2_sdk_dart/src/core/utils.dart' show HexUtils;
 
 main() {
   const List<String> inputs = [
@@ -95,7 +95,7 @@ main() {
     });
   });
 
-  group("Test hasher (SHA3 512)", () {
+  group('Test hasher (SHA3 512)', () {
     // Test vectors are taken from:
     // https://github.com/gvanas/KeccakCodePackage/blob/master/TestVectors/ShortMsgKAT_SHA3-512.txt
     const List<String> expectedOutput = [

@@ -1,10 +1,10 @@
 library nem2_sdk_dart.test.core.utils.base32_test;
 
-import "dart:typed_data" show Uint8List;
+import 'dart:typed_data' show Uint8List;
 
-import "package:test/test.dart";
+import 'package:test/test.dart';
 
-import "package:nem2_sdk_dart/src/core/utils.dart" show Base32, HexUtils;
+import 'package:nem2_sdk_dart/src/core/utils.dart' show Base32, HexUtils;
 
 main() {
   const List<String> test_encoded = [
@@ -72,7 +72,7 @@ main() {
             throwsA(predicate((e) =>
                 e is ArgumentError &&
                 e.message ==
-                    "Decoded size must be multiple of ${Base32.DECODED_BLOCK_SIZE}")));
+                    'Decoded size must be multiple of ${Base32.DECODED_BLOCK_SIZE}')));
       }
     });
   });
@@ -110,7 +110,7 @@ main() {
             throwsA(predicate((e) =>
                 e is ArgumentError &&
                 e.message ==
-                    "Encoded size must be multiple of ${Base32.ENCODED_BLOCK_SIZE}")));
+                    'Encoded size must be multiple of ${Base32.ENCODED_BLOCK_SIZE}')));
       }
     });
 
@@ -126,7 +126,7 @@ main() {
             () => Base32.decode(input),
             throwsA(predicate((e) =>
                 e is ArgumentError &&
-                e.message.toString().contains("illegal base32 character"))));
+                e.message.toString().contains('illegal base32 character'))));
       }
     });
   });
