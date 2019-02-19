@@ -9,21 +9,32 @@ class StringUtils {
   /// Removes all whitespaces from a String.
   /// That includes leading, trailing and in-between characters in the String.
   static String removeAllWhitespaces(String input) {
-    return (input == null) ? EMPTY_STRING : input.replaceAll(WHITESPACE, '');
+    return (input == null || input.isEmpty) ? EMPTY_STRING : input.replaceAll(WHITESPACE, '');
+  }
+
+  /// Removes leading and trailing whitespaces.
+  static String trim(final String input) {
+    return trimLeft(trimRight(input));
   }
 
   /// Removes leading whitespaces.
-  static String trimLeft(String input) {
+  static String trimLeft(final String input) {
     return (input == null) ? EMPTY_STRING : input.trimLeft();
   }
 
   /// Removes trailing whitespaces.
-  static String trimRight(String input) {
+  static String trimRight(final String input) {
     return (input == null) ? EMPTY_STRING : input.trimRight();
   }
 
-  /// Parses a String to a int.
-  static int parseInt(String input) {
-    return (input == null) ? null : int.parse(input);
+  static bool isEmpty(final String input) {
+    final String trimmed = trim(input);
+    return trimmed == null || trimmed.isEmpty;
+  }
+
+  /// Parses a String to a int. Returns null
+  static int parseIntOrNull(final String input) {
+    final String cleanInput = removeAllWhitespaces(input);
+    return (cleanInput == null) ? null : int.parse(cleanInput);
   }
 }
