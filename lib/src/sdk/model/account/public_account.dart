@@ -2,8 +2,7 @@ library nem2_sdk_dart.sdk.model.account.public_account;
 
 import 'dart:typed_data' show Uint8List;
 
-import 'package:nem2_sdk_dart/src/core/utils.dart' show HexUtils;
-import 'package:nem2_sdk_dart/src/core/crypto.dart' show KeyPair;
+import 'package:nem2_sdk_dart/core.dart' show HexUtils, KeyPair;
 
 import 'address.dart';
 

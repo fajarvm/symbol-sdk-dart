@@ -1,26 +1,46 @@
 library nem2_sdk_dart.sdk.model.mosaic.mosaic_id;
 
+import 'package:fixnum/fixnum.dart' show Int64;
+
+import 'package:nem2_sdk_dart/core.dart' show IdGenerator, StringUtils;
+
+/// The mosaic id structure describes mosaic id
 class MosaicId {
-  final BigInt _id;
-  final String _fullName;
-  final String _mosaicName;
-  final String _hexId;
+  /// Mosaic integer id
+  final Int64 id;
 
-  const MosaicId._(this._id, this._fullName, this._mosaicName, this._hexId);
+  /// Mosaic full name with namespace name (Example: nem:xem)
+  final String fullName;
 
-  factory MosaicId(
-      {final BigInt id = null,
-      final String fullName = null,
-      final String mosaicName = null,
-      final String hexId = null}) {
-    if (id != null) {
-      return new MosaicId._(id, null, null, null);
+  const MosaicId._(this.id, this.fullName);
+
+  /// Create a MosaicId from integer [id] or a namespace-mosaic [fullName].
+  factory MosaicId({final Int64 id, final String fullName = null}) {
+    final String fullMosaicName = StringUtils.trim(fullName);
+    if (id == null && StringUtils.isEmpty(fullMosaicName)) {
+      throw new ArgumentError('Missing argument. Either Id or fullName is required.');
     }
 
-    return new MosaicId._(id, fullName, mosaicName, hexId);
+    if (StringUtils.isNotEmpty(fullMosaicName)) {
+      final Int64 mosaicId = IdGenerator.generateMosaicId(fullMosaicName);
+      return new MosaicId._(mosaicId, fullMosaicName);
+    }
+
+    return new MosaicId._(id, null);
   }
 
-  static MosaicId fromMosaicIdentifier(final String identifier) {
-    return new MosaicId(fullName: identifier);
+  @override
+  int get hashCode {
+    return this.id.hashCode + this.fullName.hashCode;
+  }
+
+  @override
+  bool operator ==(other) {
+    return other is MosaicId && this.id == other.id && this.fullName == other.fullName;
+  }
+
+  @override
+  String toString() {
+    return 'Id:${this.id},FullName:${this.fullName}';
   }
 }

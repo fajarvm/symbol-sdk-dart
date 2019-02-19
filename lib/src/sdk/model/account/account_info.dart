@@ -1,7 +1,5 @@
 library nem2_sdk_dart.sdk.model.account.account_info;
 
-import 'dart:typed_data' show Uint8List;
-
 import 'address.dart';
 
 import '../mosaic/mosaic.dart';

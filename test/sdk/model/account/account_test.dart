@@ -2,8 +2,8 @@ library nem2_sdk_dart.test.sdk.model.account.account_test;
 
 import 'package:test/test.dart';
 
-import 'package:nem2_sdk_dart/src/core/crypto.dart' show CryptoException, Ed25519;
-import 'package:nem2_sdk_dart/src/sdk/model.dart' show Account, NetworkType, PublicAccount;
+import 'package:nem2_sdk_dart/core.dart' show CryptoException, Ed25519;
+import 'package:nem2_sdk_dart/sdk.dart' show Account, NetworkType, PublicAccount;
 
 main() {
   const testAccount = {

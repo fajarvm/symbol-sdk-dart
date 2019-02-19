@@ -4,8 +4,7 @@ import 'package:fixnum/fixnum.dart' show Int64;
 
 import 'package:test/test.dart';
 
-import 'package:nem2_sdk_dart/src/core/crypto.dart' show CryptoException;
-import 'package:nem2_sdk_dart/src/core/utils.dart' show IdGenerator;
+import 'package:nem2_sdk_dart/core.dart' show CryptoException, IdGenerator;
 
 main() {
   final Int64 NEM_ID = Int64.parseHex('84B3552D375FFA4B');

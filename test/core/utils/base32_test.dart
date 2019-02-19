@@ -4,7 +4,7 @@ import 'dart:typed_data' show Uint8List;
 
 import 'package:test/test.dart';
 
-import 'package:nem2_sdk_dart/src/core/utils.dart' show Base32, HexUtils;
+import 'package:nem2_sdk_dart/core.dart' show Base32, HexUtils;
 
 main() {
   const List<String> test_encoded = [
@@ -71,8 +71,7 @@ main() {
             () => Base32.encode(input),
             throwsA(predicate((e) =>
                 e is ArgumentError &&
-                e.message ==
-                    'Decoded size must be multiple of ${Base32.DECODED_BLOCK_SIZE}')));
+                e.message == 'Decoded size must be multiple of ${Base32.DECODED_BLOCK_SIZE}')));
       }
     });
   });
@@ -88,14 +87,12 @@ main() {
       for (int i = 0; i < test_encoded.length; i++) {
         final Uint8List decoded = Base32.decode(test_encoded[i]);
 
-        expect(
-            HexUtils.getString(decoded), equals(test_decoded[i].toLowerCase()));
+        expect(HexUtils.getString(decoded), equals(test_decoded[i].toLowerCase()));
       }
     });
 
     test('accepts all vald characters', () {
-      final Uint8List decoded =
-          Base32.decode('ABCDEFGHIJKLMNOPQRSTUVWXYZ234567');
+      final Uint8List decoded = Base32.decode('ABCDEFGHIJKLMNOPQRSTUVWXYZ234567');
 
       expect(HexUtils.getString(decoded),
           equals('00443214C74254B635CF84653A56D7C675BE77DF'.toLowerCase()));
@@ -109,8 +106,7 @@ main() {
             () => Base32.decode(input),
             throwsA(predicate((e) =>
                 e is ArgumentError &&
-                e.message ==
-                    'Encoded size must be multiple of ${Base32.ENCODED_BLOCK_SIZE}')));
+                e.message == 'Encoded size must be multiple of ${Base32.ENCODED_BLOCK_SIZE}')));
       }
     });
 
@@ -125,8 +121,7 @@ main() {
         expect(
             () => Base32.decode(input),
             throwsA(predicate((e) =>
-                e is ArgumentError &&
-                e.message.toString().contains('illegal base32 character'))));
+                e is ArgumentError && e.message.toString().contains('illegal base32 character'))));
       }
     });
   });

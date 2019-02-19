@@ -4,8 +4,8 @@ import 'dart:typed_data' show Uint8List;
 
 import 'package:test/test.dart';
 
-import 'package:nem2_sdk_dart/src/core/crypto.dart' show CryptoException, Ed25519, KeyPair;
-import 'package:nem2_sdk_dart/src/core/utils.dart' show ArrayUtils, HexUtils;
+import 'package:nem2_sdk_dart/core.dart'
+    show ArrayUtils, HexUtils, CryptoException, Ed25519, KeyPair;
 
 main() {
   final List<String> TEST_PRIVATE_KEYS = [

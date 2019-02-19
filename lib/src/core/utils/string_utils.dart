@@ -1,6 +1,5 @@
 library nem2_sdk_dart.core.utils.string_utils;
 
-// TODO: DELETE ME? I think this class is obsolete. Dart core provides solid string util methods.
 /// A collection of utility functions to manipulate a String.
 class StringUtils {
   static const String EMPTY_STRING = '';

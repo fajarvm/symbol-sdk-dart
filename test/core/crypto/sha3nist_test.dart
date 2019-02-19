@@ -4,8 +4,7 @@ import 'dart:typed_data' show Uint8List;
 
 import 'package:test/test.dart';
 
-import 'package:nem2_sdk_dart/src/core/crypto.dart' show SHA3DigestNist;
-import 'package:nem2_sdk_dart/src/core/utils.dart' show HexUtils;
+import 'package:nem2_sdk_dart/core.dart' show HexUtils, SHA3DigestNist;
 
 main() {
   const List<String> inputs = [

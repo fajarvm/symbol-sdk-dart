@@ -2,7 +2,7 @@ library nem2_sdk_dart.test.sdk.model.account.public_account_test;
 
 import 'package:test/test.dart';
 
-import 'package:nem2_sdk_dart/src/sdk/model.dart' show NetworkType, PublicAccount;
+import 'package:nem2_sdk_dart/sdk.dart' show NetworkType, PublicAccount;
 
 main() {
   group('PublicAccount', () {

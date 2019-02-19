@@ -4,9 +4,8 @@ import 'dart:typed_data' show Uint8List;
 
 import 'package:test/test.dart';
 
-import 'package:nem2_sdk_dart/src/sdk/model.dart' show Address, NetworkType;
-import 'package:nem2_sdk_dart/src/core/crypto.dart' show KeyPair;
-import 'package:nem2_sdk_dart/src/core/utils.dart' show ArrayUtils, HexUtils;
+import 'package:nem2_sdk_dart/sdk.dart' show Address, NetworkType;
+import 'package:nem2_sdk_dart/core.dart' show ArrayUtils, HexUtils, KeyPair;
 
 main() {
   group('fromPublicKey', () {});

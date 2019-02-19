@@ -2,8 +2,7 @@ library nem2_sdk_dart.sdk.model.account.account;
 
 import 'dart:typed_data' show Uint8List;
 
-import 'package:nem2_sdk_dart/src/core/crypto.dart' show Ed25519, KeyPair, SHA3DigestNist;
-import 'package:nem2_sdk_dart/src/core/utils.dart' show HexUtils;
+import 'package:nem2_sdk_dart/core.dart' show Ed25519, HexUtils, KeyPair, SHA3DigestNist;
 
 import 'address.dart';
 import 'public_account.dart';
@@ -38,8 +37,7 @@ class Account {
   String get plainAddress => this._address.plain;
 
   /// Retrieves the public account of this account.
-  PublicAccount get publicAccount =>
-      PublicAccount.fromPublicKey(publicKey, address.networkType);
+  PublicAccount get publicAccount => PublicAccount.fromPublicKey(publicKey, address.networkType);
 
   @override
   int get hashCode {

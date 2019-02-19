@@ -4,8 +4,7 @@ import 'dart:typed_data' show Uint8List;
 
 import 'package:pointycastle/export.dart' show RIPEMD160Digest;
 
-import 'package:nem2_sdk_dart/src/core/crypto.dart' show Ed25519, SHA3DigestNist;
-import 'package:nem2_sdk_dart/src/core/utils.dart' show ArrayUtils, Base32, HexUtils;
+import 'package:nem2_sdk_dart/core.dart' show ArrayUtils, Base32, Ed25519, HexUtils, SHA3DigestNist;
 
 import '../blockchain/network_type.dart';
 
