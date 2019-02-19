@@ -1,7 +1,7 @@
 library nem2_sdk_dart.core.utils.id_generator;
 
-import 'dart:typed_data' show Uint8List;
 import 'dart:convert' show utf8;
+import 'dart:typed_data' show Uint8List;
 
 import 'package:fixnum/fixnum.dart' show Int64;
 
@@ -10,18 +10,18 @@ import 'package:nem2_sdk_dart/src/core/crypto.dart' show CryptoException, Ed2551
 import 'string_utils.dart';
 
 /// A utility class to generate Namespace and Mosaic IDs.
-///
-/// Developer note:
-/// For big numbers, choose either BigInt (Dart's native data type) or Int64 from fixnum package.
-/// Please refer to this Dart language documentation page for information regarding big numbers
-/// and their known issues.
-/// See: https://github.com/dart-lang/sdk/blob/master/docs/language/informal/int64.md
 class IdGenerator {
   static const String MOSAIC_SEPARATOR = ':';
   static const String PART_SEPARATOR = '.';
   static const int NAMESPACE_MAX_DEPTH = 3;
-  static final Int64 NAMESPACE_BASE_ID = Int64(0);
   static final RegExp NAME_PATTERN = new RegExp(r"^[a-z0-9][a-z0-9-_]*$");
+
+  // Developer note:
+  // For big numbers, choose either BigInt (Dart's native data type) or Int64 from fixnum package.
+  // Please refer to this Dart language documentation page for information regarding big numbers
+  // and their known issues.
+  // See: https://github.com/dart-lang/sdk/blob/master/docs/language/informal/int64.md
+  static final Int64 NAMESPACE_BASE_ID = Int64(0);
 
   /// Generates an Id based on [parentId] and [name]
   static Int64 generateId(final Int64 parentId, final String name) {
@@ -78,7 +78,7 @@ class IdGenerator {
     Int64 namespaceId = NAMESPACE_BASE_ID;
     List<Int64> paths = new List<Int64>();
     for (var part in parts) {
-      if (!NAME_PATTERN.hasMatch(part)) {
+      if (!_isValidNamePart(part)) {
         _throwInvalidFqn('invalid namespace part name [${part}]', namespaceFullName);
       }
 
@@ -110,8 +110,8 @@ class IdGenerator {
   }
 
   static String _extractMosaicName(final String fullName) {
-    String mosaicName = StringUtils.trim(fullName);
-    final int separatorIndex = mosaicName.lastIndexOf(MOSAIC_SEPARATOR);
+    final String cleanFullName = StringUtils.trim(fullName);
+    final int separatorIndex = cleanFullName.lastIndexOf(MOSAIC_SEPARATOR);
     if (0 > separatorIndex) {
       _throwInvalidFqn('missing mosaic', fullName);
     }
@@ -120,6 +120,16 @@ class IdGenerator {
       _throwInvalidFqn('empty mosaic part', fullName);
     }
 
-    return mosaicName.split(MOSAIC_SEPARATOR).last;
+    final String mosaicName = cleanFullName.split(MOSAIC_SEPARATOR).last;
+    if (!_isValidNamePart(mosaicName)) {
+      _throwInvalidFqn('invalid mosaic part name [${mosaicName}]', fullName);
+    }
+
+    return mosaicName;
+  }
+
+  static bool _isValidNamePart(final String name) {
+    final String cleanName = StringUtils.trim(name);
+    return StringUtils.isNotEmpty(cleanName) && NAME_PATTERN.hasMatch(cleanName);
   }
 }

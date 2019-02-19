@@ -27,9 +27,16 @@ class StringUtils {
     return (input == null) ? EMPTY_STRING : input.trimRight();
   }
 
+  /// Determines whether an [input] string is empty or not. Returns true if it's empty.
+  /// Unlike the built-in `String.isEmpty`, this method trims the input string first.
   static bool isEmpty(final String input) {
     final String trimmed = trim(input);
     return trimmed == null || trimmed.isEmpty;
+  }
+
+  /// Determines whether an [input] string is empty or not. Returns true if it's not empty.
+  static bool isNotEmpty(final String input) {
+    return !isEmpty(input);
   }
 
   /// Parses a String to a int. Returns null

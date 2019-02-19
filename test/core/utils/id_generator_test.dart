@@ -106,6 +106,26 @@ main() {
               e.message ==
                   'Fully qualified id is invalid due to too many namespace parts (a.b.c.d.e)')));
     });
+
+    test('Cannot generate invalid namespaces', () {
+      final List<String> invalidNames = [
+        '',
+        'alpha.bet@.zeta',
+        'a!pha.beta.zeta',
+        'alpha.beta.ze^a',
+        '.',
+        '.a',
+        'a..a',
+        'A'
+      ];
+
+      for (var name in invalidNames) {
+        expect(
+            () => IdGenerator.generateNamespacePath(name),
+            throwsA(predicate((e) =>
+                e is CryptoException && e.message.contains('Fully qualified id is invalid'))));
+      }
+    });
   });
 
   group('generateMosaicId', () {
@@ -133,7 +153,25 @@ main() {
               e is CryptoException &&
               e.message == 'Fully qualified id is invalid due to missing mosaic (xem)')));
     });
+
+    test('Cannot generate invalid mosaics', () {
+      final String namespace = 'foo:';
+      final List<String> invalidNames = [
+        'A',
+        'a..a',
+        '.',
+        '@lpha',
+        'a!pha',
+        'alph*',
+        'alp^a',
+      ];
+
+      for (var mosaicName in invalidNames) {
+        expect(
+            () => IdGenerator.generateMosaicId('${namespace}${mosaicName}'),
+            throwsA(predicate((e) =>
+                e is CryptoException && e.message.contains('Fully qualified id is invalid'))));
+      }
+    });
   });
 }
-
-void basicTests(BigIn) {}
