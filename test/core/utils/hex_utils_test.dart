@@ -87,20 +87,33 @@ main() {
     });
   });
 
-  group('UTF-8 to Hex', () {
+  group('utf8ToHex()', () {
     test('can convert UTF8 text to Hex', () {
-      String actual = HexUtils.utf8ToHex('test words |@#¢∞¬÷“”≠[]}{–');
-      String expected =
+      final String actual = HexUtils.utf8ToHex('test words |@#¢∞¬÷“”≠[]}{–');
+      final String expected =
           '7465737420776f726473207c4023c2a2e2889ec2acc3b7e2809ce2809de289a05b5d7d7be28093';
 
       expect(actual, equals(expected));
     });
 
     test('can convert UTF8 text with foreign characters to Hex', () {
-      String actual = HexUtils.utf8ToHex('先秦兩漢');
-      String expected = 'e58588e7a7a6e585a9e6bca2';
+      final String actual = HexUtils.utf8ToHex('先秦兩漢');
+      final String expected = 'e58588e7a7a6e585a9e6bca2';
 
       expect(actual, equals(expected));
+    });
+  });
+
+  group('bytesToHex()', () {
+    test('can convert byte array to hex', () {
+      final List<String> INPUTS = ['', '026ee415fc15', 'abcdef0123456789ABCDEF'];
+
+      for (var hexString in INPUTS) {
+        final Uint8List bytes = HexUtils.getBytes(hexString);
+        final String actual = HexUtils.bytesToHex(bytes);
+
+        expect(actual, equals(hexString.toLowerCase()));
+      }
     });
   });
 }

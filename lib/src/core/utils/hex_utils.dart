@@ -47,7 +47,7 @@ class HexUtils {
     return tryGetBytes(input) == null ? false : true;
   }
 
-  /// Converts UTF-8 string to hex string.
+  /// Converts a UTF-8 [input] string to hex string.
   static String utf8ToHex(final String input) {
     final StringBuffer sb = new StringBuffer();
     final String rawString = _rawStringToUtf8(input);
@@ -55,6 +55,15 @@ class HexUtils {
       sb.write(rawString.codeUnitAt(i).toRadixString(16));
     }
     return sb.toString();
+  }
+
+  /// Convert a byte array [bytes] into a hex string
+  static String bytesToHex(List<int> bytes) {
+    var result = new StringBuffer();
+    for (var part in bytes) {
+      result.write('${part < 16 ? '0' : ''}${part.toRadixString(16)}');
+    }
+    return result.toString();
   }
 
   // ------------------------------ private / protected functions ------------------------------ //

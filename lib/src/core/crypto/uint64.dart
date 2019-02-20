@@ -2,7 +2,7 @@ library nem2_sdk_dart.core.crypto.uint64;
 
 import 'dart:typed_data' show Uint8List;
 
-import 'package:nem2_sdk_dart/core.dart' show ArrayUtils, ByteUtils;
+import 'package:nem2_sdk_dart/core.dart' show ArrayUtils, HexUtils;
 
 /// Represents a 64-bit unsigned integer.
 ///
@@ -20,7 +20,7 @@ class Uint64 implements Comparable<Uint64> {
   static final BigInt MIN_VALUE = BigInt.zero;
 
   /// The maximum value of 64-bit unsigned integer.
-  static final BigInt MAX_VALUE = BigInt.from(MAX_VALUE_SIGNED) + BigInt.from(MAX_VALUE_SIGNED);
+  static final BigInt MAX_VALUE = BigInt.parse('FFFFFFFFFFFFFFFF', radix: 16);
 
   /// The internal storage of the value.
   final BigInt _value;
@@ -54,14 +54,12 @@ class Uint64 implements Comparable<Uint64> {
 
   /// Creates a [Uint64] from a uint8list [bytes] (64-bit).
   static Uint64 fromBytes(final Uint8List bytes) {
-    final BigInt value = ByteUtils.bytesToBigInt(bytes);
-    return fromBigInt(value);
+    return fromHex(HexUtils.bytesToHex(bytes));
   }
 
   /// Creates a [Uint64] from a [hexString].
   static Uint64 fromHex(final String hexString) {
-    final BigInt value = BigInt.parse(hexString, radix: 16);
-    return fromBigInt(value);
+    return fromBigInt(BigInt.parse(hexString, radix: 16));
   }
 
   @override
@@ -84,11 +82,15 @@ class Uint64 implements Comparable<Uint64> {
   }
 
   String toHexString() {
-    return this._value.toRadixString(16);
+    String hexString = this._value.toRadixString(16);
+    if (hexString.length != 16) {
+      return new List.filled(16 - hexString.length, '0').join() + hexString;
+    }
+    return hexString;
   }
 
   Uint8List toBytes() {
-    return ByteUtils.bigIntToByteArray(this._value);
+    return HexUtils.getBytes(toHexString());
   }
 
   static void _checkValue(final BigInt value) {
