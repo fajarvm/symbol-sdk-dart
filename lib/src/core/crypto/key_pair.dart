@@ -81,8 +81,7 @@ class KeyPair {
 
   /// Creates a random key pair.
   static KeyPair random() {
-    return KeyPair.fromPrivateKey(
-        HexUtils.getString(Ed25519.getRandomBytes(Ed25519.KEY_SIZE)));
+    return KeyPair.fromPrivateKey(HexUtils.getString(Ed25519.getRandomBytes(Ed25519.KEY_SIZE)));
   }
 
   /// Verifies that the [signature] is signed using the [publicKey] and the [data].

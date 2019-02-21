@@ -26,10 +26,13 @@ import 'public_account.dart';
 /// The account structure describes an account private key, public key, address and allows
 /// signing transactions.
 class Account {
+  /// The key pair of the account which contains a public key and a private key.
   final KeyPair _keyPair;
-  final Address _address;
 
-  const Account._(this._address, this._keyPair);
+  /// The account address.
+  final Address address;
+
+  const Account._(this.address, this._keyPair);
 
   factory Account({final Address address = null, final KeyPair keyPair = null}) {
     if (address == null || keyPair == null) {
@@ -46,11 +49,8 @@ class Account {
   /// Retrieves the private key of this account.
   String get privateKey => HexUtils.getString(this._keyPair.privateKey);
 
-  /// Retrieves the address of this account.
-  Address get address => this._address;
-
   /// Retrieves the plain text address of this account.
-  String get plainAddress => this._address.plain;
+  String get plainAddress => this.address.plain;
 
   /// Retrieves the public account of this account.
   PublicAccount get publicAccount => PublicAccount.fromPublicKey(publicKey, address.networkType);

@@ -24,8 +24,56 @@ import 'package:nem2_sdk_dart/sdk.dart' show Address, NetworkType;
 import 'package:nem2_sdk_dart/core.dart' show ArrayUtils, HexUtils, KeyPair;
 
 main() {
-  group('fromPublicKey', () {});
-  group('fromRawAddress', () {});
+  group('fromPublicKey', () {
+    test('can create from public key for the designated network type', () {
+      final String publicKey = 'c2f93346e27ce6ad1a9f8f5e3066f8326593a406bdf357acb041e2f9ab402efe';
+      final Address address1 = Address.fromPublicKey(publicKey, NetworkType.MIJIN);
+      expect(address1.plain, equals('MCTVW23D2MN5VE4AQ4TZIDZENGNOZXPRPR72DYSX'));
+      expect(address1.networkType, equals(NetworkType.MIJIN));
+
+      final Address address2 = Address.fromPublicKey(publicKey, NetworkType.MIJIN_TEST);
+      expect(address2.plain, equals('SCTVW23D2MN5VE4AQ4TZIDZENGNOZXPRPRLIKCF2'));
+      expect(address2.networkType, equals(NetworkType.MIJIN_TEST));
+
+      final Address address3 = Address.fromPublicKey(publicKey, NetworkType.MAIN_NET);
+      expect(address3.plain, equals('NCTVW23D2MN5VE4AQ4TZIDZENGNOZXPRPQUJ2ZML'));
+      expect(address3.networkType, equals(NetworkType.MAIN_NET));
+
+      final Address address4 = Address.fromPublicKey(publicKey, NetworkType.TEST_NET);
+      expect(address4.plain, equals('TCTVW23D2MN5VE4AQ4TZIDZENGNOZXPRPSDRSFRF'));
+      expect(address4.networkType, equals(NetworkType.TEST_NET));
+    });
+  });
+
+  group('fromRawAddress', () {
+    test('can create from raw address and also determines its network type', () {
+      final Address address1 = Address.fromRawAddress('MCTVW23D2MN5VE4AQ4TZIDZENGNOZXPRPR72DYSX');
+      expect(address1.plain, equals('MCTVW23D2MN5VE4AQ4TZIDZENGNOZXPRPR72DYSX'));
+      expect(address1.networkType, equals(NetworkType.MIJIN));
+
+      final Address address2 = Address.fromRawAddress('SCTVW23D2MN5VE4AQ4TZIDZENGNOZXPRPRLIKCF2');
+      expect(address2.plain, equals('SCTVW23D2MN5VE4AQ4TZIDZENGNOZXPRPRLIKCF2'));
+      expect(address2.networkType, equals(NetworkType.MIJIN_TEST));
+
+      final Address address3 = Address.fromRawAddress('NCTVW23D2MN5VE4AQ4TZIDZENGNOZXPRPQUJ2ZML');
+      expect(address3.plain, equals('NCTVW23D2MN5VE4AQ4TZIDZENGNOZXPRPQUJ2ZML'));
+      expect(address3.networkType, equals(NetworkType.MAIN_NET));
+
+      final Address address4 = Address.fromRawAddress('TCTVW23D2MN5VE4AQ4TZIDZENGNOZXPRPSDRSFRF');
+      expect(address4.plain, equals('TCTVW23D2MN5VE4AQ4TZIDZENGNOZXPRPSDRSFRF'));
+      expect(address4.networkType, equals(NetworkType.TEST_NET));
+    });
+  });
+
+  group('fromEncoded', () {
+    test('can create from encoded address string', () {
+      final String encodedString = '9050B9837EFAB4BBE8A4B9BB32D812F9885C00D8FC1650E142';
+      final Address address = Address.fromEncoded(encodedString);
+
+      expect(address.plain, equals('SBILTA367K2LX2FEXG5TFWAS7GEFYAGY7QLFBYKC'));
+    });
+  });
+
   group('stringToAddress', () {
     test('can create address from valid encoded address', () {
       final String encoded = 'NAR3W7B4BCOZSZMFIZRYB3N5YGOUSWIYJCJ6HDFG';
@@ -51,6 +99,7 @@ main() {
           'NC5J5?I2URIC4H3T3IMXQS25PWQWZIPEV6EV7LAS', 'illegal base32 character ?');
     });
   });
+
   group('addressToString', () {
     test('can create encoded address from address', () {
       final String decodedHex = '6823BB7C3C089D996585466380EDBDC19D4959184893E38CA6';
@@ -61,8 +110,9 @@ main() {
       expect(encoded, equals(expected));
     });
   });
+
   group('publicKeyToAddress', () {
-    test('can create address from a public key for a known network', () {
+    test('can create decoded address from a public key for a known network', () {
       final String expected = '6023BB7C3C089D996585466380EDBDC19D49591848B3727714';
       final Uint8List publicKey =
           HexUtils.getBytes('3485D98EFD7EB07ADAFCFD1A157D89DE2796A95E780813C0258AF3F5F84ED8CB');
@@ -74,7 +124,7 @@ main() {
       expect(HexUtils.getString(decoded).toUpperCase(), equals(expected));
     });
 
-    test('can create address from a public key for a custom network', () {
+    test('can create decoded address from a public key for a custom network', () {
       final String expected = '9823BB7C3C089D996585466380EDBDC19D495918484BF7E997';
       final Uint8List publicKey =
           HexUtils.getBytes('3485D98EFD7EB07ADAFCFD1A157D89DE2796A95E780813C0258AF3F5F84ED8CB');
@@ -86,7 +136,7 @@ main() {
       expect(HexUtils.getString(decoded).toUpperCase(), equals(expected));
     });
 
-    test('address calculation is deterministic', () {
+    test('decoded address calculation is deterministic', () {
       final Uint8List publicKey =
           HexUtils.getBytes('3485D98EFD7EB07ADAFCFD1A157D89DE2796A95E780813C0258AF3F5F84ED8CB');
 
@@ -97,7 +147,7 @@ main() {
       expect(ArrayUtils.deepEqual(decoded1, decoded2), equals(true));
     });
 
-    test('different public keys result in different addresses', () {
+    test('different public keys result in different decoded addresses', () {
       final Uint8List publicKey1 = KeyPair.randomPublicKey();
       final Uint8List publicKey2 = KeyPair.randomPublicKey();
 
@@ -109,7 +159,7 @@ main() {
       expect(ArrayUtils.deepEqual(decoded1, decoded2), equals(false));
     });
 
-    test('different newtork types result in different addresses', () {
+    test('different newtork types result in different decoded addresses', () {
       final Uint8List publicKey = KeyPair.randomPublicKey();
 
       final Uint8List decoded1 = Address.publicKeyToAddress(publicKey, NetworkType.MIJIN);
@@ -129,6 +179,7 @@ main() {
       expect(ArrayUtils.deepEqual(decoded3, decoded4), equals(false));
     });
   });
+
   group('prettify', () {
     test('can convert an address into a pretty format address', () {
       final String validHex = '6823BB7C3C089D996585466380EDBDC19D4959184893E38CA6';
@@ -140,6 +191,7 @@ main() {
       expect(Address.prettify(expected), equals('NAR3W7-B4BCOZ-SZMFIZ-RYB3N5-YGOUSW-IYJCJ6-HDFG'));
     });
   });
+
   group('isValidAddress', () {
     test('returns true for a valid address', () {
       final String validHex = '6823BB7C3C089D996585466380EDBDC19D4959184893E38CA6';
@@ -168,6 +220,7 @@ main() {
       expect(Address.isValidAddress(decoded), equals(false));
     });
   });
+
   group('isValidEncodedAddress', () {
     test('returns true for valid encoded address', () {
       final String encoded = 'NAR3W7B4BCOZSZMFIZRYB3N5YGOUSWIYJCJ6HDFG';

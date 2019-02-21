@@ -18,30 +18,51 @@ library nem2_sdk_dart.sdk.model.account.account_info;
 
 import 'address.dart';
 
+import 'package:nem2_sdk_dart/core.dart' show Uint64;
+
+import '../account/public_account.dart';
 import '../mosaic/mosaic.dart';
 
 /// The account info structure describes basic information for an account.
 class AccountInfo {
-  final Address _address;
-  final BigInt _addressHeight;
-  final String _publicKey;
-  final BigInt _publicKeyHeight;
-  final BigInt _importance;
-  final BigInt _importanceHeight;
-  final List<Mosaic> _mosaics;
+  /// The address of the account.
+  final Address address;
 
-  const AccountInfo._(this._address, this._addressHeight, this._publicKey, this._publicKeyHeight,
-      this._importance, this._importanceHeight, this._mosaics);
+  /// The block height when the address was published.
+  final Uint64 addressHeight;
+
+  /// The public key of the account.
+  final String publicKey;
+
+  /// the block height when the public key was first published.
+  final Uint64 publicKeyHeight;
+
+  /// The importance of the account.
+  final Uint64 importance;
+
+  /// The importance height of the account.
+  final Uint64 importanceHeight;
+
+  /// A collection of mosaics hold by the account.
+  final List<Mosaic> mosaics;
+
+  const AccountInfo._(this.address, this.addressHeight, this.publicKey, this.publicKeyHeight,
+      this.importance, this.importanceHeight, this.mosaics);
 
   factory AccountInfo(
       final Address address,
-      final BigInt addressHeight,
+      final Uint64 addressHeight,
       final String publicKey,
-      final BigInt publicKeyHeight,
-      final BigInt importance,
-      final BigInt importanceHeight,
+      final Uint64 publicKeyHeight,
+      final Uint64 importance,
+      final Uint64 importanceHeight,
       final List<Mosaic> mosaics) {
     return new AccountInfo._(
         address, addressHeight, publicKey, publicKeyHeight, importance, importanceHeight, mosaics);
+  }
+
+  /// Returns the public account of this account.
+  PublicAccount get publicAccount {
+    return PublicAccount.fromPublicKey(this.publicKey, this.address.networkType);
   }
 }

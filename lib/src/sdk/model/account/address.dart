@@ -91,6 +91,9 @@ class Address {
   }
 
   /// Creates an [Address] from a given string of [rawAddress].
+  ///
+  /// A raw address string looks like:
+  /// SB3KUBHATFCPV7UZQLWAQ2EUR6SIHBSBEOEDDDF3 or SB3KUB-HATFCP-V7UZQL-WAQ2EU-R6SIHB-SBEOED-DDF3
   static Address fromRawAddress(final String rawAddress) {
     final String address = rawAddress.trim().toUpperCase().replaceAll(REGEX_DASH, EMPTY_STRING);
 
@@ -113,7 +116,13 @@ class Address {
     }
   }
 
-  /// Converts an [encodedAddress] string to a decoded address.
+  /// Create an [Address] from the given [encoded] address.
+  static Address fromEncoded(final String encoded) {
+    final String rawAddress = addressToString(HexUtils.getBytes(encoded));
+    return Address.fromRawAddress(rawAddress);
+  }
+
+  /// Converts a `Base32` [encodedAddress] string to decoded address bytes.
   static Uint8List stringToAddress(final String encodedAddress) {
     if (ADDRESS_ENCODED_SIZE != encodedAddress.length) {
       throw ArgumentError(
@@ -123,7 +132,7 @@ class Address {
     return Base32.decode(encodedAddress);
   }
 
-  /// Converts a [decodedAddress] to an encoded address string.
+  /// Converts a [decodedAddress] bytes to a `Base32` encoded address string.
   static String addressToString(final Uint8List decodedAddress) {
     final String hexStringAddress = HexUtils.getString(decodedAddress);
     if (ADDRESS_DECODED_SIZE != decodedAddress.length) {
@@ -207,7 +216,7 @@ class Address {
     return ArrayUtils.deepEqual(checksum, decodedAddress.sublist(START_CHECKSUM_SIZE));
   }
 
-  /// Determines the validity of an encoded address string.
+  /// Determines the validity of the given [encodedAddress].
   static bool isValidEncodedAddress(final String encodedAddress) {
     if (ADDRESS_ENCODED_SIZE != encodedAddress.length) {
       return false;
