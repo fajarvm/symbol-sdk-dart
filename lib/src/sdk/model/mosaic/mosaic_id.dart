@@ -12,11 +12,14 @@ class MosaicId {
 
   const MosaicId._(this.id, this.fullName);
 
-  /// Create a MosaicId from 64-bit unsigned integer [id] or a namespace-mosaic [fullName].
-  factory MosaicId({final Uint64 id, final String fullName = null}) {
+  /// Create a MosaicId from a 64-bit unsigned integer [id] OR a [fullName] string of the
+  /// namespace-mosaic.
+  ///
+  /// The [fullName] argument will be used when both the [id] and the [fullName] are provided.
+  factory MosaicId({final Uint64 id = null, final String fullName = null}) {
     final String fullMosaicName = StringUtils.trim(fullName);
     if (id == null && StringUtils.isEmpty(fullMosaicName)) {
-      throw new ArgumentError('Missing argument. Either Id or fullName is required.');
+      throw new ArgumentError('Missing argument. Either id or fullName is required.');
     }
 
     if (StringUtils.isNotEmpty(fullMosaicName)) {
@@ -25,6 +28,40 @@ class MosaicId {
     }
 
     return new MosaicId._(id, null);
+  }
+
+  /// Creates a new [MosaicId] from an [id].
+  static MosaicId fromId(final Uint64 id) {
+    if (id == null || id.isZero()) {
+      throw new ArgumentError('The id must not be null or empty');
+    }
+
+    return new MosaicId(id: id);
+  }
+
+  /// Creates a new [MosaicId] from a [bigInt].
+  static MosaicId fromBigInt(final BigInt bigInt) {
+    if (bigInt == null) {
+      throw new ArgumentError('The bigInt must not be null');
+    }
+    return new MosaicId(id: Uint64.fromBigInt(bigInt));
+  }
+
+  /// Creates a new [MosaicId] from a [fullName].
+  static MosaicId fromFullName(final String fullName) {
+    if (StringUtils.isEmpty(fullName)) {
+      throw new ArgumentError('The fullName must not be null or empty');
+    }
+
+    return new MosaicId(fullName: fullName);
+  }
+
+  /// Creates a new [MosaicId] from a [hexString].
+  static MosaicId fromHex(final String hexString) {
+    if (StringUtils.isEmpty(hexString)) {
+      throw new ArgumentError('The hexString must not be null or empty');
+    }
+    return new MosaicId(id: Uint64.fromHex(hexString));
   }
 
   @override
@@ -39,6 +76,6 @@ class MosaicId {
 
   @override
   String toString() {
-    return 'Id:${this.id},FullName:${this.fullName}';
+    return 'Id:${this.id}, FullName:${this.fullName}';
   }
 }

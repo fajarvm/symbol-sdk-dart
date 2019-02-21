@@ -18,7 +18,7 @@ class PublicAccount {
   factory PublicAccount({final Address address = null, final String publicKey = null}) {
     if (address == null || publicKey == null) {
       throw new ArgumentError(
-          "A address and/or a publicKey must not be null to create a new PublicAccount.");
+          "An address and/or a publicKey must not be null to create a new PublicAccount.");
     }
 
     return new PublicAccount._(address, publicKey);

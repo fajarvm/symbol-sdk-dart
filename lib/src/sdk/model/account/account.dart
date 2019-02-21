@@ -18,7 +18,7 @@ class Account {
   factory Account({final Address address = null, final KeyPair keyPair = null}) {
     if (address == null || keyPair == null) {
       throw new ArgumentError(
-          "A address and/or a keyPair must not be null to create a new Account.");
+          "An address and/or a keyPair must not be null to create a new Account.");
     }
 
     return new Account._(address, keyPair);
