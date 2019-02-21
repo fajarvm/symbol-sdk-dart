@@ -5,7 +5,7 @@ import 'dart:typed_data' show Uint8List;
 
 import 'package:fixnum/fixnum.dart' show Int64;
 
-import 'package:nem2_sdk_dart/src/core/crypto.dart' show CryptoException, Ed25519, SHA3DigestNist;
+import 'package:nem2_sdk_dart/core.dart' show CryptoException, Ed25519, SHA3DigestNist, Uint64;
 
 import 'string_utils.dart';
 
@@ -16,44 +16,42 @@ class IdGenerator {
   static const int NAMESPACE_MAX_DEPTH = 3;
   static final RegExp NAME_PATTERN = new RegExp(r"^[a-z0-9][a-z0-9-_]*$");
 
-  // Developer note:
-  // For big numbers, choose either BigInt (Dart's native data type) or Int64 from fixnum package.
-  // Please refer to this Dart language documentation page for information regarding big numbers
-  // and their known issues.
-  // See: https://github.com/dart-lang/sdk/blob/master/docs/language/informal/int64.md
-  static final Int64 NAMESPACE_BASE_ID = Int64(0);
+  static final Uint64 NAMESPACE_BASE_ID = Uint64(0);
 
   /// Generates an Id based on [parentId] and [name]
-  static Int64 generateId(final Int64 parentId, final String name) {
-    final Uint8List parentIdBytes = Uint8List.fromList(parentId.toBytes());
+  static Uint64 generateId(final Uint64 parentId, final String name) {
+    final Uint8List parentIdBytes = parentId.toBytes();
     final Uint8List nameBytes = utf8.encode(name);
 
     final SHA3DigestNist digest = Ed25519.createSha3Hasher(length: Ed25519.KEY_SIZE);
     digest.update(parentIdBytes, 0, parentIdBytes.length);
     digest.update(nameBytes, 0, nameBytes.length);
-    final result = new Uint8List(32);
+    final Uint8List result = new Uint8List(32);
     digest.doFinal(result, 0);
 
-    return Int64.fromBytes(result);
+    final Int64 int64 = Int64.fromBytes(result);
+    final String hex = int64.toHexString();
+
+    return Uint64.fromHex(hex);
   }
 
   /// Generates a mosaicId from a [fullName]
-  static Int64 generateMosaicId(final String fullName) {
+  static Uint64 generateMosaicId(final String fullName) {
     if (StringUtils.isEmpty(fullName)) {
       _throwInvalidFqn('having zero length', fullName);
     }
 
     final String mosaicName = _extractMosaicName(fullName);
     final String namespaceName = _extractNamespaceName(fullName);
-    final Int64 namespaceId = generateNamespaceId(namespaceName);
+    final Uint64 namespaceId = generateNamespaceId(namespaceName);
 
     return generateId(namespaceId, mosaicName);
   }
 
   /// Generates a namespaceId from a [namespaceFullName]
-  static Int64 generateNamespaceId(final String namespaceFullName) {
+  static Uint64 generateNamespaceId(final String namespaceFullName) {
     try {
-      final List<Int64> namespacePath = generateNamespacePath(namespaceFullName);
+      final List<Uint64> namespacePath = generateNamespacePath(namespaceFullName);
       return namespacePath.last;
     } catch (e) {
       throw e;
@@ -61,7 +59,7 @@ class IdGenerator {
   }
 
   /// Generates a list of namespace paths from a unified [namespaceFullName]
-  static List<Int64> generateNamespacePath(final String namespaceFullName) {
+  static List<Uint64> generateNamespacePath(final String namespaceFullName) {
     final String cleanName = StringUtils.trim(namespaceFullName);
     if (0 >= cleanName.length) {
       _throwInvalidFqn('having zero length', namespaceFullName);
@@ -75,8 +73,8 @@ class IdGenerator {
       _throwInvalidFqn('too many namespace parts', namespaceFullName);
     }
 
-    Int64 namespaceId = NAMESPACE_BASE_ID;
-    List<Int64> paths = new List<Int64>();
+    Uint64 namespaceId = NAMESPACE_BASE_ID;
+    List<Uint64> paths = new List<Uint64>();
     for (var part in parts) {
       if (!_isValidNamePart(part)) {
         _throwInvalidFqn('invalid namespace part name [${part}]', namespaceFullName);

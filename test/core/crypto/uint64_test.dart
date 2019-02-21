@@ -2,9 +2,11 @@ library nem2_sdk_dart.test.core.crypto.uint64_test;
 
 import 'dart:typed_data' show Uint8List;
 
+import 'package:fixnum/fixnum.dart' show Int64;
+
 import 'package:test/test.dart';
 
-import 'package:nem2_sdk_dart/core.dart' show ArrayUtils, Uint64, HexUtils;
+import 'package:nem2_sdk_dart/core.dart' show ArrayUtils, Uint64;
 
 main() {
   final List<String> HEX_TEST_CASES = [
@@ -13,7 +15,9 @@ main() {
     '0000000012345678',
     '0000ABCD12345678',
     '1234567890ABCDEF',
-    'FFFFFFFFFFFFFFFF' // 18446744073709551615 = the max value of uint64
+    'FFFFFFFFFFFFFFFF', // 18446744073709551615 = the max value of uint64
+    '84B3552D375FFA4B', // 9562080086528621131 = NEM namespaceId in Uint64
+    'D525AD41D95FCF29', // 15358872602548358953 = XEM mosaicId in Uint64
   ];
 
   group('Uint64', () {
@@ -65,7 +69,8 @@ main() {
 
     test('Can create from bytes', () {
       for (var hexString in HEX_TEST_CASES) {
-        final Uint8List bytes = HexUtils.getBytes(hexString);
+        final Int64 int64 = Int64.parseHex(hexString);
+        final Uint8List bytes = Uint8List.fromList(int64.toBytes());
         final Uint64 actual = Uint64.fromBytes(bytes);
 
         expect(actual.toHexString(), equals(hexString.toLowerCase()));
@@ -110,7 +115,8 @@ main() {
 
     test('toString', () {
       final String hexString = '000000000000A1B2';
-      final Uint8List bytes = HexUtils.getBytes(hexString);
+      final Int64 int64 = Int64.parseHex(hexString);
+      final Uint8List bytes = Uint8List.fromList(int64.toBytes());
       final Uint64 result1 = Uint64.fromBytes(bytes);
       final Uint64 result2 = Uint64.fromHex(hexString);
       final Uint64 result3 = Uint64.fromBigInt(BigInt.zero);
@@ -122,7 +128,8 @@ main() {
 
     test('toBytes', () {
       final String hexString = '000000000000A1B2';
-      final Uint8List expected = HexUtils.getBytes(hexString);
+      final Int64 int64 = Int64.parseHex(hexString);
+      final Uint8List expected = Uint8List.fromList(int64.toBytes());
       final Uint64 uint64 = Uint64.fromHex(hexString);
       final Uint8List actual = uint64.toBytes();
 
