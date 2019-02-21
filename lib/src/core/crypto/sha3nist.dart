@@ -1,3 +1,22 @@
+//
+// Copyright (c) 2019 Fajar van Megen
+//
+// Licensed under the Apache License, Version 2.0 (the "License");
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License at
+//
+//     http://www.apache.org/licenses/LICENSE-2.0
+//
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and
+// limitations under the License.
+//
+
+// Copyright (c) 2013-present, the authors of the Pointy Castle project
+// This library is dually licensed under LGPL 3 and MPL 2.0.
+
 library nem2_sdk_dart.core.crypto.sha3_nist;
 
 import 'dart:typed_data';
@@ -8,6 +27,10 @@ import 'package:pointycastle/src/registry/registry.dart';
 import 'package:pointycastle/src/ufixnum.dart';
 
 /// Implementation of SHA-3 digest conforms NIST specification.
+///
+/// Changes in comparison to the SHA3Digest implementation from Pointy Castle:
+/// * Changed algorithm name prefix to 'SHA-3-NIST' to avoid name ambiguity.
+/// * Added a custom bits absorption upon finalizing a message digest.
 class SHA3DigestNist extends BaseDigest implements Digest {
   static final RegExp _NAME_REGEX = new RegExp(r"^SHA-3-NIST\/([0-9]+)$");
 
