@@ -14,70 +14,70 @@
 // limitations under the License.
 //
 
-library nem2_sdk_dart.sdk.model.mosaic.mosaic_id;
+library nem2_sdk_dart.sdk.model.namespace.namespace_id;
 
 import 'package:nem2_sdk_dart/core.dart' show IdGenerator, StringUtils, Uint64;
 
-/// The mosaic id structure describes mosaic id
-class MosaicId {
-  /// Mosaic 64-bit unsigned integer id
+/// The namespace id structure describes namespace id
+class NamespaceId {
+  /// Namespace 64-bit unsigned integer id
   final Uint64 id;
 
-  /// Mosaic full name with namespace name (Example: nem:xem)
+  /// Namespace full name (Examples: `nem`, or `universe.milky_way.planet_earth`).
   final String fullName;
 
-  const MosaicId._(this.id, this.fullName);
+  const NamespaceId._(this.id, this.fullName);
 
-  /// Create a [MosaicId] from a 64-bit unsigned integer [id] OR a namespace-mosaic [fullName].
+  /// Create a [NamespaceId] from a 64-bit unsigned integer [id] OR a namespace [fullName].
   ///
   /// When both the [id] and the [fullName] are provided, a new [id] will be generated from the
   /// provided [fullName] and the provided [id] will be ignored.
-  factory MosaicId({final Uint64 id = null, final String fullName = null}) {
-    final String fullMosaicName = StringUtils.trim(fullName);
-    if (id == null && StringUtils.isEmpty(fullMosaicName)) {
+  factory NamespaceId({final Uint64 id = null, final String fullName = null}) {
+    final String fullNamespaceName = StringUtils.trim(fullName);
+    if (id == null && StringUtils.isEmpty(fullNamespaceName)) {
       throw new ArgumentError('Missing argument. Either id or fullName is required.');
     }
 
-    if (StringUtils.isNotEmpty(fullMosaicName)) {
-      final Uint64 mosaicId = IdGenerator.generateMosaicId(fullMosaicName);
-      return new MosaicId._(mosaicId, fullMosaicName);
+    if (StringUtils.isNotEmpty(fullNamespaceName)) {
+      final Uint64 namespaceId = IdGenerator.generateNamespaceId(fullNamespaceName);
+      return new NamespaceId._(namespaceId, fullNamespaceName);
     }
 
-    return new MosaicId._(id, null);
+    return new NamespaceId._(id, null);
   }
 
-  /// Creates a new [MosaicId] from an [id].
-  static MosaicId fromId(final Uint64 id) {
+  /// Creates a new [NamespaceId] from an [id].
+  static NamespaceId fromId(final Uint64 id) {
     if (id == null || id.isZero()) {
       throw new ArgumentError('The id must not be null or empty');
     }
 
-    return new MosaicId(id: id);
+    return new NamespaceId(id: id);
   }
 
-  /// Creates a new [MosaicId] from a [bigInt].
-  static MosaicId fromBigInt(final BigInt bigInt) {
+  /// Creates a new [NamespaceId] from a [bigInt].
+  static NamespaceId fromBigInt(final BigInt bigInt) {
     if (bigInt == null) {
       throw new ArgumentError('The bigInt must not be null');
     }
-    return new MosaicId(id: Uint64.fromBigInt(bigInt));
+    return new NamespaceId(id: Uint64.fromBigInt(bigInt));
   }
 
-  /// Creates a new [MosaicId] from a [fullName].
-  static MosaicId fromFullName(final String fullName) {
+  /// Creates a new [NamespaceId] from a [fullName].
+  static NamespaceId fromFullName(final String fullName) {
     if (StringUtils.isEmpty(fullName)) {
       throw new ArgumentError('The fullName must not be null or empty');
     }
 
-    return new MosaicId(fullName: fullName);
+    return new NamespaceId(fullName: fullName);
   }
 
-  /// Creates a new [MosaicId] from a [hexString].
-  static MosaicId fromHex(final String hexString) {
+  /// Creates a new [NamespaceId] from a [hexString].
+  static NamespaceId fromHex(final String hexString) {
     if (StringUtils.isEmpty(hexString)) {
       throw new ArgumentError('The hexString must not be null or empty');
     }
-    return new MosaicId(id: Uint64.fromHex(hexString));
+    return new NamespaceId(id: Uint64.fromHex(hexString));
   }
 
   @override
@@ -87,11 +87,11 @@ class MosaicId {
 
   @override
   bool operator ==(other) {
-    return other is MosaicId && this.id == other.id && this.fullName == other.fullName;
+    return other is NamespaceId && this.id == other.id && this.fullName == other.fullName;
   }
 
   @override
   String toString() {
-    return 'MosaicId(id:${this.id}, fullName:${this.fullName})';
+    return 'NamespaceId(id:${this.id}, fullName:${this.fullName})';
   }
 }

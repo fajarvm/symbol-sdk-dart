@@ -28,3 +28,8 @@ export 'model/blockchain/network_type.dart';
 // Mosaic parts
 export 'model/mosaic/mosaic.dart';
 export 'model/mosaic/mosaic_id.dart';
+export 'model/mosaic/mosaic_info.dart';
+export 'model/mosaic/mosaic_properties.dart';
+
+// Namespace parts
+export 'model/namespace/namespace_id.dart';

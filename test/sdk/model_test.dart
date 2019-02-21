@@ -19,6 +19,9 @@ import 'model/account/address_test.dart' as address_test;
 import 'model/account/public_account_test.dart' as public_account_test;
 import 'model/mosaic/mosaic_test.dart' as mosaic_test;
 import 'model/mosaic/mosaic_id_test.dart' as mosaic_id_test;
+import 'model/mosaic/mosaic_info_test.dart' as mosaic_info_test;
+import 'model/mosaic/mosaic_properties_test.dart' as mosaic_properties_test;
+import 'model/namespace/namespace_id_test.dart' as namespace_id_test;
 
 main() {
   account_test.main();
@@ -26,4 +29,7 @@ main() {
   public_account_test.main();
   mosaic_test.main();
   mosaic_id_test.main();
+  mosaic_info_test.main();
+  mosaic_properties_test.main();
+  namespace_id_test.main();
 }
