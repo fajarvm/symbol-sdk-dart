@@ -4,6 +4,7 @@ dart:
 dart_task:
   # Dart VM
   - test: --platform vm
+  - dartanalyzer: true
   # Chrome browser
   # - test: --platform chrome
   # Chrome with Dart VM. Use either this or Chrome, not both.
@@ -20,11 +21,11 @@ dart_task:
   #
   # Dart Analyzer
   # Warnings are fatal, but we only analyze the lib/ directory.
-   - dartanalyzer: --fatal-warnings lib
+  # - dartanalyzer: --fatal-warnings lib
   #
   # XVFB (Virtual Framebuffer X Server for X)
   # On Linux, the test runner uses XVFB by default so that it can use browsers like Chrome that require a display.
   # However, this may interfere with certain applications, so you can turn it off by setting xvfb: false either at
   # the top level or for a particular task.
   # - test: --exclude-tags no-xvfb
-   xvfb: false
+  # xvfb: false
