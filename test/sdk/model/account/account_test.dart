@@ -19,7 +19,7 @@ library nem2_sdk_dart.test.sdk.model.account.account_test;
 import 'package:test/test.dart';
 
 import 'package:nem2_sdk_dart/core.dart' show CryptoException, Ed25519;
-import 'package:nem2_sdk_dart/sdk.dart' show Account, NetworkType, PublicAccount;
+import 'package:nem2_sdk_dart/sdk.dart' show Account, NetworkType;
 
 void main() {
   const testAccount = {
@@ -30,8 +30,7 @@ void main() {
 
   group('Account creation', () {
     test('should be created from a private key', () {
-      final Account account =
-          Account.fromPrivateKey(testAccount['privateKey'], NetworkType.MIJIN_TEST);
+      final account = Account.fromPrivateKey(testAccount['privateKey'], NetworkType.MIJIN_TEST);
 
       expect(account.publicKey, equals(testAccount['publicKey']));
       expect(account.privateKey, equals(testAccount['privateKey']));
@@ -49,7 +48,7 @@ void main() {
     });
 
     test('should generate a new account', () {
-      final Account account = Account.create(NetworkType.MIJIN_TEST);
+      final account = Account.create(NetworkType.MIJIN_TEST);
 
       expect(account.publicKey, isNotNull);
       expect(account.privateKey, isNotNull);
@@ -59,25 +58,25 @@ void main() {
 
   group('Account signing', () {
     test('UTF-8', () {
-      final Account account = Account.fromPrivateKey(
+      final account = Account.fromPrivateKey(
           'AB860ED1FE7C91C02F79C02225DAC708D7BD13369877C1F59E678CC587658C47',
           NetworkType.MIJIN_TEST);
 
-      final PublicAccount publicAccount = account.publicAccount;
-      final String signedData = account.signData('catapult rocks!');
+      final publicAccount = account.publicAccount;
+      final signedData = account.signData('catapult rocks!');
 
-      expect(publicAccount.verifySignature('catapult rocks!', signedData), equals(true));
+      expect(publicAccount.verifySignature('catapult rocks!', signedData), isTrue);
     });
 
     test('Hexadecimal', () {
-      final Account account = Account.fromPrivateKey(
+      final account = Account.fromPrivateKey(
           'AB860ED1FE7C91C02F79C02225DAC708D7BD13369877C1F59E678CC587658C47',
           NetworkType.MIJIN_TEST);
 
-      final PublicAccount publicAccount = account.publicAccount;
-      final String signedData = account.signData('0xAA');
+      final publicAccount = account.publicAccount;
+      final signedData = account.signData('0xAA');
 
-      expect(publicAccount.verifySignature('0xAA', signedData), equals(true));
+      expect(publicAccount.verifySignature('0xAA', signedData), isTrue);
     });
   });
 }

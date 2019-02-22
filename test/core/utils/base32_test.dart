@@ -63,7 +63,7 @@ void main() {
 
       final String encodedString = Base32.encode(data);
 
-      const String expected = ''
+      const expected = ''
           'AAAQEAYEAUDAOCAJBIFQYDIOB4IBCEQTCQKRMFYY'
           'DENBWHA5DYPSAIJCEMSCKJRHFAUSUKZMFUXC6MBR'
           'GIZTINJWG44DSOR3HQ6T4P2AIFBEGRCFIZDUQSKK'

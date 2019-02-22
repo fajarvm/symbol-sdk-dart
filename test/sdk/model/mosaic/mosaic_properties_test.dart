@@ -29,11 +29,11 @@ void main() {
           transferable: false,
           levyMutable: true,
           divisibility: 5,
-          duration: new Uint64(1000));
+          duration: Uint64(1000));
 
-      expect(properties.supplyMutable, equals(true));
-      expect(properties.transferable, equals(false));
-      expect(properties.levyMutable, equals(true));
+      expect(properties.supplyMutable, isTrue);
+      expect(properties.transferable, isFalse);
+      expect(properties.levyMutable, isTrue);
       expect(properties.divisibility, equals(5));
       expect(properties.duration.value.toInt(), equals(1000));
     });
@@ -41,11 +41,11 @@ void main() {
 
   group('Create MosaicProperties via helper method', () {
     test('Can create via static method create()', () {
-      final MosaicProperties properties = MosaicProperties.create(new Uint64(3000));
+      final MosaicProperties properties = MosaicProperties.create(Uint64(3000));
 
-      expect(properties.supplyMutable, equals(false));
-      expect(properties.transferable, equals(true));
-      expect(properties.levyMutable, equals(false));
+      expect(properties.supplyMutable, isFalse);
+      expect(properties.transferable, isTrue);
+      expect(properties.levyMutable, isFalse);
       expect(properties.divisibility, equals(0));
       expect(properties.duration.value.toInt(), equals(3000));
     });

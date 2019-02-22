@@ -26,20 +26,20 @@ import 'package:nem2_sdk_dart/core.dart' show ArrayUtils, HexUtils, KeyPair;
 void main() {
   group('fromPublicKey', () {
     test('can create from public key for the designated network type', () {
-      const String publicKey = 'c2f93346e27ce6ad1a9f8f5e3066f8326593a406bdf357acb041e2f9ab402efe';
-      final Address address1 = Address.fromPublicKey(publicKey, NetworkType.MIJIN);
+      const publicKey = 'c2f93346e27ce6ad1a9f8f5e3066f8326593a406bdf357acb041e2f9ab402efe';
+      final address1 = Address.fromPublicKey(publicKey, NetworkType.MIJIN);
       expect(address1.plain, equals('MCTVW23D2MN5VE4AQ4TZIDZENGNOZXPRPR72DYSX'));
       expect(address1.networkType, equals(NetworkType.MIJIN));
 
-      final Address address2 = Address.fromPublicKey(publicKey, NetworkType.MIJIN_TEST);
+      final address2 = Address.fromPublicKey(publicKey, NetworkType.MIJIN_TEST);
       expect(address2.plain, equals('SCTVW23D2MN5VE4AQ4TZIDZENGNOZXPRPRLIKCF2'));
       expect(address2.networkType, equals(NetworkType.MIJIN_TEST));
 
-      final Address address3 = Address.fromPublicKey(publicKey, NetworkType.MAIN_NET);
+      final address3 = Address.fromPublicKey(publicKey, NetworkType.MAIN_NET);
       expect(address3.plain, equals('NCTVW23D2MN5VE4AQ4TZIDZENGNOZXPRPQUJ2ZML'));
       expect(address3.networkType, equals(NetworkType.MAIN_NET));
 
-      final Address address4 = Address.fromPublicKey(publicKey, NetworkType.TEST_NET);
+      final address4 = Address.fromPublicKey(publicKey, NetworkType.TEST_NET);
       expect(address4.plain, equals('TCTVW23D2MN5VE4AQ4TZIDZENGNOZXPRPSDRSFRF'));
       expect(address4.networkType, equals(NetworkType.TEST_NET));
     });
@@ -47,19 +47,19 @@ void main() {
 
   group('fromRawAddress', () {
     test('can create from raw address and also determines its network type', () {
-      final Address address1 = Address.fromRawAddress('MCTVW23D2MN5VE4AQ4TZIDZENGNOZXPRPR72DYSX');
+      final address1 = Address.fromRawAddress('MCTVW23D2MN5VE4AQ4TZIDZENGNOZXPRPR72DYSX');
       expect(address1.plain, equals('MCTVW23D2MN5VE4AQ4TZIDZENGNOZXPRPR72DYSX'));
       expect(address1.networkType, equals(NetworkType.MIJIN));
 
-      final Address address2 = Address.fromRawAddress('SCTVW23D2MN5VE4AQ4TZIDZENGNOZXPRPRLIKCF2');
+      final address2 = Address.fromRawAddress('SCTVW23D2MN5VE4AQ4TZIDZENGNOZXPRPRLIKCF2');
       expect(address2.plain, equals('SCTVW23D2MN5VE4AQ4TZIDZENGNOZXPRPRLIKCF2'));
       expect(address2.networkType, equals(NetworkType.MIJIN_TEST));
 
-      final Address address3 = Address.fromRawAddress('NCTVW23D2MN5VE4AQ4TZIDZENGNOZXPRPQUJ2ZML');
+      final address3 = Address.fromRawAddress('NCTVW23D2MN5VE4AQ4TZIDZENGNOZXPRPQUJ2ZML');
       expect(address3.plain, equals('NCTVW23D2MN5VE4AQ4TZIDZENGNOZXPRPQUJ2ZML'));
       expect(address3.networkType, equals(NetworkType.MAIN_NET));
 
-      final Address address4 = Address.fromRawAddress('TCTVW23D2MN5VE4AQ4TZIDZENGNOZXPRPSDRSFRF');
+      final address4 = Address.fromRawAddress('TCTVW23D2MN5VE4AQ4TZIDZENGNOZXPRPSDRSFRF');
       expect(address4.plain, equals('TCTVW23D2MN5VE4AQ4TZIDZENGNOZXPRPSDRSFRF'));
       expect(address4.networkType, equals(NetworkType.TEST_NET));
     });
@@ -67,8 +67,8 @@ void main() {
 
   group('fromEncoded', () {
     test('can create from encoded address string', () {
-      const String encodedString = '9050B9837EFAB4BBE8A4B9BB32D812F9885C00D8FC1650E142';
-      final Address address = Address.fromEncoded(encodedString);
+      const encodedString = '9050B9837EFAB4BBE8A4B9BB32D812F9885C00D8FC1650E142';
+      final address = Address.fromEncoded(encodedString);
 
       expect(address.plain, equals('SBILTA367K2LX2FEXG5TFWAS7GEFYAGY7QLFBYKC'));
     });
@@ -76,12 +76,12 @@ void main() {
 
   group('stringToAddress', () {
     test('can create address from valid encoded address', () {
-      const String encoded = 'NAR3W7B4BCOZSZMFIZRYB3N5YGOUSWIYJCJ6HDFG';
-      const String expectedHex = '6823BB7C3C089D996585466380EDBDC19D4959184893E38CA6';
+      const encoded = 'NAR3W7B4BCOZSZMFIZRYB3N5YGOUSWIYJCJ6HDFG';
+      const expectedHex = '6823BB7C3C089D996585466380EDBDC19D4959184893E38CA6';
 
-      final Uint8List decoded = Address.stringToAddress(encoded);
+      final decoded = Address.stringToAddress(encoded);
 
-      expect(Address.isValidAddress(decoded), equals(true));
+      expect(Address.isValidAddress(decoded), isTrue);
       expect(HexUtils.getString(decoded).toUpperCase(), equals(expectedHex));
     });
 
@@ -102,10 +102,10 @@ void main() {
 
   group('addressToString', () {
     test('can create encoded address from address', () {
-      const String decodedHex = '6823BB7C3C089D996585466380EDBDC19D4959184893E38CA6';
-      const String expected = 'NAR3W7B4BCOZSZMFIZRYB3N5YGOUSWIYJCJ6HDFG';
+      const decodedHex = '6823BB7C3C089D996585466380EDBDC19D4959184893E38CA6';
+      const expected = 'NAR3W7B4BCOZSZMFIZRYB3N5YGOUSWIYJCJ6HDFG';
 
-      final String encoded = Address.addressToString(HexUtils.getBytes(decodedHex));
+      final encoded = Address.addressToString(HexUtils.getBytes(decodedHex));
 
       expect(encoded, equals(expected));
     });
@@ -113,80 +113,80 @@ void main() {
 
   group('publicKeyToAddress', () {
     test('can create decoded address from a public key for a known network', () {
-      const String expected = '6023BB7C3C089D996585466380EDBDC19D49591848B3727714';
-      final Uint8List publicKey =
+      const expected = '6023BB7C3C089D996585466380EDBDC19D49591848B3727714';
+      final publicKey =
           HexUtils.getBytes('3485D98EFD7EB07ADAFCFD1A157D89DE2796A95E780813C0258AF3F5F84ED8CB');
 
-      final Uint8List decoded = Address.publicKeyToAddress(publicKey, NetworkType.MIJIN);
+      final decoded = Address.publicKeyToAddress(publicKey, NetworkType.MIJIN);
 
       expect(decoded[0], equals(NetworkType.MIJIN));
-      expect(Address.isValidAddress(decoded), equals(true));
+      expect(Address.isValidAddress(decoded), isTrue);
       expect(HexUtils.getString(decoded).toUpperCase(), equals(expected));
     });
 
     test('can create decoded address from a public key for a custom network', () {
-      const String expected = '9823BB7C3C089D996585466380EDBDC19D495918484BF7E997';
-      final Uint8List publicKey =
+      const expected = '9823BB7C3C089D996585466380EDBDC19D495918484BF7E997';
+      final publicKey =
           HexUtils.getBytes('3485D98EFD7EB07ADAFCFD1A157D89DE2796A95E780813C0258AF3F5F84ED8CB');
 
-      final Uint8List decoded = Address.publicKeyToAddress(publicKey, NetworkType.TEST_NET);
+      final decoded = Address.publicKeyToAddress(publicKey, NetworkType.TEST_NET);
 
       expect(decoded[0], equals(NetworkType.TEST_NET));
-      expect(Address.isValidAddress(decoded), equals(true));
+      expect(Address.isValidAddress(decoded), isTrue);
       expect(HexUtils.getString(decoded).toUpperCase(), equals(expected));
     });
 
     test('decoded address calculation is deterministic', () {
-      final Uint8List publicKey =
+      final publicKey =
           HexUtils.getBytes('3485D98EFD7EB07ADAFCFD1A157D89DE2796A95E780813C0258AF3F5F84ED8CB');
 
-      final Uint8List decoded1 = Address.publicKeyToAddress(publicKey, NetworkType.MIJIN);
-      final Uint8List decoded2 = Address.publicKeyToAddress(publicKey, NetworkType.MIJIN);
+      final decoded1 = Address.publicKeyToAddress(publicKey, NetworkType.MIJIN);
+      final decoded2 = Address.publicKeyToAddress(publicKey, NetworkType.MIJIN);
 
-      expect(Address.isValidAddress(decoded1), equals(true));
-      expect(ArrayUtils.deepEqual(decoded1, decoded2), equals(true));
+      expect(Address.isValidAddress(decoded1), isTrue);
+      expect(ArrayUtils.deepEqual(decoded1, decoded2), isTrue);
     });
 
     test('different public keys result in different decoded addresses', () {
-      final Uint8List publicKey1 = KeyPair.randomPublicKey();
-      final Uint8List publicKey2 = KeyPair.randomPublicKey();
+      final publicKey1 = KeyPair.randomPublicKey();
+      final publicKey2 = KeyPair.randomPublicKey();
 
-      final Uint8List decoded1 = Address.publicKeyToAddress(publicKey1, NetworkType.MIJIN);
-      final Uint8List decoded2 = Address.publicKeyToAddress(publicKey2, NetworkType.MIJIN);
+      final decoded1 = Address.publicKeyToAddress(publicKey1, NetworkType.MIJIN);
+      final decoded2 = Address.publicKeyToAddress(publicKey2, NetworkType.MIJIN);
 
-      expect(Address.isValidAddress(decoded1), equals(true));
-      expect(Address.isValidAddress(decoded2), equals(true));
-      expect(ArrayUtils.deepEqual(decoded1, decoded2), equals(false));
+      expect(Address.isValidAddress(decoded1), isTrue);
+      expect(Address.isValidAddress(decoded2), isTrue);
+      expect(ArrayUtils.deepEqual(decoded1, decoded2), isFalse);
     });
 
     test('different newtork types result in different decoded addresses', () {
-      final Uint8List publicKey = KeyPair.randomPublicKey();
+      final publicKey = KeyPair.randomPublicKey();
 
-      final Uint8List decoded1 = Address.publicKeyToAddress(publicKey, NetworkType.MIJIN);
-      final Uint8List decoded2 = Address.publicKeyToAddress(publicKey, NetworkType.MIJIN_TEST);
-      final Uint8List decoded3 = Address.publicKeyToAddress(publicKey, NetworkType.MAIN_NET);
-      final Uint8List decoded4 = Address.publicKeyToAddress(publicKey, NetworkType.TEST_NET);
+      final decoded1 = Address.publicKeyToAddress(publicKey, NetworkType.MIJIN);
+      final decoded2 = Address.publicKeyToAddress(publicKey, NetworkType.MIJIN_TEST);
+      final decoded3 = Address.publicKeyToAddress(publicKey, NetworkType.MAIN_NET);
+      final decoded4 = Address.publicKeyToAddress(publicKey, NetworkType.TEST_NET);
 
-      expect(Address.isValidAddress(decoded1), equals(true));
-      expect(Address.isValidAddress(decoded2), equals(true));
-      expect(Address.isValidAddress(decoded3), equals(true));
-      expect(Address.isValidAddress(decoded4), equals(true));
-      expect(ArrayUtils.deepEqual(decoded1, decoded2), equals(false));
-      expect(ArrayUtils.deepEqual(decoded1, decoded3), equals(false));
-      expect(ArrayUtils.deepEqual(decoded1, decoded4), equals(false));
-      expect(ArrayUtils.deepEqual(decoded2, decoded3), equals(false));
-      expect(ArrayUtils.deepEqual(decoded2, decoded4), equals(false));
-      expect(ArrayUtils.deepEqual(decoded3, decoded4), equals(false));
+      expect(Address.isValidAddress(decoded1), isTrue);
+      expect(Address.isValidAddress(decoded2), isTrue);
+      expect(Address.isValidAddress(decoded3), isTrue);
+      expect(Address.isValidAddress(decoded4), isTrue);
+      expect(ArrayUtils.deepEqual(decoded1, decoded2), isFalse);
+      expect(ArrayUtils.deepEqual(decoded1, decoded3), isFalse);
+      expect(ArrayUtils.deepEqual(decoded1, decoded4), isFalse);
+      expect(ArrayUtils.deepEqual(decoded2, decoded3), isFalse);
+      expect(ArrayUtils.deepEqual(decoded2, decoded4), isFalse);
+      expect(ArrayUtils.deepEqual(decoded3, decoded4), isFalse);
     });
   });
 
   group('prettify', () {
     test('can convert an address into a pretty format address', () {
-      const String validHex = '6823BB7C3C089D996585466380EDBDC19D4959184893E38CA6';
-      const String expected = 'NAR3W7B4BCOZSZMFIZRYB3N5YGOUSWIYJCJ6HDFG';
-      final Uint8List decoded = HexUtils.getBytes(validHex);
+      const validHex = '6823BB7C3C089D996585466380EDBDC19D4959184893E38CA6';
+      const expected = 'NAR3W7B4BCOZSZMFIZRYB3N5YGOUSWIYJCJ6HDFG';
+      final decoded = HexUtils.getBytes(validHex);
 
-      expect(Address.isValidAddress(decoded), equals(true));
+      expect(Address.isValidAddress(decoded), isTrue);
       expect(Address.addressToString(decoded), equals(expected));
       expect(Address.prettify(expected), equals('NAR3W7-B4BCOZ-SZMFIZ-RYB3N5-YGOUSW-IYJCJ6-HDFG'));
     });
@@ -194,59 +194,59 @@ void main() {
 
   group('isValidAddress', () {
     test('returns true for a valid address', () {
-      const String validHex = '6823BB7C3C089D996585466380EDBDC19D4959184893E38CA6';
-      final Uint8List decoded = HexUtils.getBytes(validHex);
+      const validHex = '6823BB7C3C089D996585466380EDBDC19D4959184893E38CA6';
+      final decoded = HexUtils.getBytes(validHex);
 
-      expect(Address.isValidAddress(decoded), equals(true));
+      expect(Address.isValidAddress(decoded), isTrue);
     });
 
     test('returns false for an address with invalid checksum', () {
-      const String validHex = '6823BB7C3C089D996585466380EDBDC19D4959184893E38CA6';
-      final Uint8List decoded = HexUtils.getBytes(validHex);
+      const validHex = '6823BB7C3C089D996585466380EDBDC19D4959184893E38CA6';
+      final decoded = HexUtils.getBytes(validHex);
 
       // manipulate the checksum to make it invalid
       decoded[Address.ADDRESS_DECODED_SIZE - 1] ^= 0xFF;
 
-      expect(Address.isValidAddress(decoded), equals(false));
+      expect(Address.isValidAddress(decoded), isFalse);
     });
 
     test('returns false for an address with invalid hash', () {
-      const String validHex = '6823BB7C3C089D996585466380EDBDC19D4959184893E38CA6';
-      final Uint8List decoded = HexUtils.getBytes(validHex);
+      const validHex = '6823BB7C3C089D996585466380EDBDC19D4959184893E38CA6';
+      final decoded = HexUtils.getBytes(validHex);
 
       // manipulate the ripemd160 hash to make it invalid
       decoded[5] ^= 0xFF;
 
-      expect(Address.isValidAddress(decoded), equals(false));
+      expect(Address.isValidAddress(decoded), isFalse);
     });
   });
 
   group('isValidEncodedAddress', () {
     test('returns true for valid encoded address', () {
-      const String encoded = 'NAR3W7B4BCOZSZMFIZRYB3N5YGOUSWIYJCJ6HDFG';
+      const encoded = 'NAR3W7B4BCOZSZMFIZRYB3N5YGOUSWIYJCJ6HDFG';
 
-      expect(Address.isValidEncodedAddress(encoded), equals(true));
+      expect(Address.isValidEncodedAddress(encoded), isTrue);
     });
 
     test('returns false for valid encoded address', () {
       // Change the last character to make this encoded address invalid
-      const String encoded = 'NAR3W7B4BCOZSZMFIZRYB3N5YGOUSWIYJCJ6HDFH';
+      const encoded = 'NAR3W7B4BCOZSZMFIZRYB3N5YGOUSWIYJCJ6HDFH';
 
-      expect(Address.isValidEncodedAddress(encoded), equals(false));
+      expect(Address.isValidEncodedAddress(encoded), isFalse);
     });
 
     test('returns false for an encoded address with invalid length', () {
-      const String encoded = 'NAR3W7B4BCOZSZMFIZRYB3N5YGOUSWIYJCJ6HDFGABC';
+      const encoded = 'NAR3W7B4BCOZSZMFIZRYB3N5YGOUSWIYJCJ6HDFGABC';
 
-      expect(Address.isValidEncodedAddress(encoded), equals(false));
+      expect(Address.isValidEncodedAddress(encoded), isFalse);
     });
 
     test('white spaces invalidates the encoded address', () {
-      const String encoded = 'NAR3W7B4BCOZSZMFIZRYB3N5YGOUSWIYJCJ6HDFGABC';
+      const encoded = 'NAR3W7B4BCOZSZMFIZRYB3N5YGOUSWIYJCJ6HDFGABC';
 
-      expect(Address.isValidEncodedAddress('  \t   $encoded'), equals(false));
-      expect(Address.isValidEncodedAddress('$encoded   \t   '), equals(false));
-      expect(Address.isValidEncodedAddress('   \t   $encoded   \t   '), equals(false));
+      expect(Address.isValidEncodedAddress('  \t   $encoded'), isFalse);
+      expect(Address.isValidEncodedAddress('$encoded   \t   '), isFalse);
+      expect(Address.isValidEncodedAddress('   \t   $encoded   \t   '), isFalse);
     });
   });
 }

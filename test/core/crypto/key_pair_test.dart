@@ -167,7 +167,7 @@ void main() {
       final bool isVerified = KeyPair.verify(keyPair2.publicKey, payload, signature);
 
       // Assert
-      expect(isVerified, equals(false));
+      expect(isVerified, isFalse);
     });
 
     test('returns false if signature has been modified', () {
@@ -181,7 +181,7 @@ void main() {
         final bool isVerified = KeyPair.verify(keyPair.publicKey, payload, signature);
 
         // Assert
-        expect(isVerified, equals(false));
+        expect(isVerified, isFalse);
       }
     });
 
@@ -196,7 +196,7 @@ void main() {
         final bool isVerified = KeyPair.verify(keyPair.publicKey, payload, signature);
 
         // Assert
-        expect(isVerified, equals(false));
+        expect(isVerified, isFalse);
       }
     });
 
@@ -211,7 +211,7 @@ void main() {
       final bool isVerified = KeyPair.verify(keyPair.publicKey, payload, signature);
 
       // Assert
-      expect(isVerified, equals(false));
+      expect(isVerified, isFalse);
     });
 
     test('fails if public key does not correspond to private key', () {
@@ -227,7 +227,7 @@ void main() {
       final bool isVerified = KeyPair.verify(keyPair.publicKey, payload, signature);
 
       // Assert
-      expect(isVerified, equals(false));
+      expect(isVerified, isFalse);
     });
 
     test('rejects zero public key', () {
@@ -240,7 +240,7 @@ void main() {
       final bool isVerified = KeyPair.verify(keyPair.publicKey, payload, signature);
 
       // Assert
-      expect(isVerified, equals(false));
+      expect(isVerified, isFalse);
     });
 
     test('cannot verify non canonical signature', () {
@@ -260,8 +260,8 @@ void main() {
           KeyPair.verify(keyPair.privateKey, payload, nonCanonicalSignature);
 
       // Assert
-      expect(isCanonicalVerified, equals(true));
-      expect(isNonCanonicalVerified, equals(false));
+      expect(isCanonicalVerified, isTrue);
+      expect(isNonCanonicalVerified, isFalse);
     });
   });
 
@@ -300,7 +300,7 @@ void main() {
         final bool isVerified = KeyPair.verify(keyPair.publicKey, inputData, signature);
 
         // Assert
-        expect(isVerified, equals(true));
+        expect(isVerified, isTrue);
       }
     });
   });
@@ -334,7 +334,7 @@ void main() {
       final Uint8List sharedKey2 = KeyPair.deriveSharedKey(keyPair2, keyPair1.publicKey, salt);
 
       // Assert
-      expect(ArrayUtils.deepEqual(sharedKey1, sharedKey2), equals(true));
+      expect(ArrayUtils.deepEqual(sharedKey1, sharedKey2), isTrue);
     });
 
     test('derives different shared key for different partners', () {
@@ -348,12 +348,12 @@ void main() {
       final Uint8List sharedKey2 = KeyPair.deriveSharedKey(keyPair, publicKey2, salt);
 
       // Assert
-      expect(ArrayUtils.deepEqual(sharedKey1, sharedKey2), equals(false));
+      expect(ArrayUtils.deepEqual(sharedKey1, sharedKey2), isFalse);
     });
 
     test('can derive deterministic shared key from well known inputs', () {
       // Prepare:
-      const String privateKeyString =
+      const privateKeyString =
           '8F545C2816788AB41D352F236D80DBBCBC34705B5F902EFF1F1D88327C7C1300';
       final KeyPair keyPair = KeyPair.fromPrivateKey(privateKeyString);
       final Uint8List publicKey =
@@ -365,7 +365,7 @@ void main() {
       final String sharedKeyHexString = HexUtils.getString(sharedKey).toUpperCase();
 
       // Assert
-      const String expected = 'FF9623D28FBC13B6F0E0659117FC7BE294DB3385C046055A6BAC39EDF198D50D';
+      const expected = 'FF9623D28FBC13B6F0E0659117FC7BE294DB3385C046055A6BAC39EDF198D50D';
       expect(sharedKeyHexString, equals(expected));
     });
   });

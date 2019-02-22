@@ -22,12 +22,12 @@ import 'package:nem2_sdk_dart/core.dart' show Uint64;
 import 'package:nem2_sdk_dart/sdk.dart' show MosaicId;
 
 void main() {
-  const String XEM_HEX_STRING = 'D525AD41D95FCF29'; // 15358872602548358953
-  final Uint64 XEM_ID = Uint64.fromHex(XEM_HEX_STRING);
+  const XEM_HEX_STRING = 'D525AD41D95FCF29'; // 15358872602548358953
+  final XEM_ID = Uint64.fromHex(XEM_HEX_STRING);
 
   group('Create MosaicId via constructor', () {
     test('Can create using Uint64 id', () {
-      final MosaicId mosaicId = new MosaicId(id: XEM_ID);
+      final mosaicId = MosaicId(id: XEM_ID);
 
       expect(mosaicId.id, equals(XEM_ID));
       expect(mosaicId.id.toHexString().toUpperCase(), equals(XEM_HEX_STRING));
@@ -35,7 +35,7 @@ void main() {
     });
 
     test('Can create using a full name string', () {
-      final MosaicId mosaicId = new MosaicId(fullName: 'nem:xem');
+      final mosaicId = MosaicId(fullName: 'nem:xem');
 
       expect(mosaicId.id, equals(XEM_ID));
       expect(mosaicId.id.toHexString().toUpperCase(), equals(XEM_HEX_STRING));
@@ -43,8 +43,8 @@ void main() {
     });
 
     test('Should have equal Ids', () {
-      final MosaicId mosaicId1 = new MosaicId(id: XEM_ID);
-      final MosaicId mosaicId2 = new MosaicId(id: XEM_ID);
+      final mosaicId1 = MosaicId(id: XEM_ID);
+      final mosaicId2 = MosaicId(id: XEM_ID);
 
       expect(mosaicId1, equals(mosaicId2));
       expect(mosaicId1.id, equals(mosaicId2.id));
@@ -53,7 +53,7 @@ void main() {
 
   group('Create MosaicId via helper methods', () {
     test('Can create from Uint64 id', () {
-      final MosaicId mosaicId = MosaicId.fromId(XEM_ID);
+      final mosaicId = MosaicId.fromId(XEM_ID);
 
       expect(mosaicId.id, equals(XEM_ID));
       expect(mosaicId.id.toHexString().toUpperCase(), equals(XEM_HEX_STRING));
@@ -61,7 +61,7 @@ void main() {
     });
 
     test('Can create from a big integer', () {
-      final MosaicId mosaicId = MosaicId.fromBigInt(XEM_ID.value);
+      final mosaicId = MosaicId.fromBigInt(XEM_ID.value);
 
       expect(mosaicId.id, equals(XEM_ID));
       expect(mosaicId.id.toHexString().toUpperCase(), equals(XEM_HEX_STRING));
@@ -69,7 +69,7 @@ void main() {
     });
 
     test('Can create from a full name string', () {
-      final MosaicId mosaicId = MosaicId.fromFullName('nem:xem');
+      final mosaicId = MosaicId.fromFullName('nem:xem');
 
       expect(mosaicId.id, equals(XEM_ID));
       expect(mosaicId.id.toHexString().toUpperCase(), equals(XEM_HEX_STRING));
@@ -77,7 +77,7 @@ void main() {
     });
 
     test('Can create from a hex string', () {
-      final MosaicId mosaicId = MosaicId.fromHex(XEM_HEX_STRING);
+      final mosaicId = MosaicId.fromHex(XEM_HEX_STRING);
 
       expect(mosaicId.id, equals(XEM_ID));
       expect(mosaicId.id.toHexString().toUpperCase(), equals(XEM_HEX_STRING));

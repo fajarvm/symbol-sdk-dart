@@ -22,14 +22,14 @@ import 'package:nem2_sdk_dart/core.dart' show Uint64;
 import 'package:nem2_sdk_dart/sdk.dart' show NamespaceId;
 
 void main() {
-  const String NEM_HEX_STRING = '84B3552D375FFA4B'; // 9562080086528621131
-  final Uint64 NEM_ID = Uint64.fromHex(NEM_HEX_STRING);
-  const String XEM_HEX_STRING = 'D525AD41D95FCF29'; // 15358872602548358953
-  final Uint64 XEM_ID = Uint64.fromHex(XEM_HEX_STRING);
+  const NEM_HEX_STRING = '84B3552D375FFA4B'; // 9562080086528621131
+  final NEM_ID = Uint64.fromHex(NEM_HEX_STRING);
+  const XEM_HEX_STRING = 'D525AD41D95FCF29'; // 15358872602548358953
+  final XEM_ID = Uint64.fromHex(XEM_HEX_STRING);
 
   group('Create NamespaceId via constructor', () {
     test('Can create using Uint64 id', () {
-      final NamespaceId namespaceId = new NamespaceId(id: NEM_ID);
+      final NamespaceId namespaceId = NamespaceId(id: NEM_ID);
 
       expect(namespaceId.id, equals(NEM_ID));
       expect(namespaceId.id.toHexString().toUpperCase(), equals(NEM_HEX_STRING));
@@ -37,7 +37,7 @@ void main() {
     });
 
     test('Can create using a full name string', () {
-      final NamespaceId namespaceId = new NamespaceId(fullName: 'nem.xem');
+      final NamespaceId namespaceId = NamespaceId(fullName: 'nem.xem');
 
       expect(namespaceId.id, equals(XEM_ID));
       expect(namespaceId.id.toHexString().toUpperCase(), equals(XEM_HEX_STRING));
@@ -45,8 +45,8 @@ void main() {
     });
 
     test('Should have equal Ids', () {
-      final NamespaceId namespaceId1 = new NamespaceId(id: NEM_ID);
-      final NamespaceId namespaceId2 = new NamespaceId(id: NEM_ID);
+      final NamespaceId namespaceId1 = NamespaceId(id: NEM_ID);
+      final NamespaceId namespaceId2 = NamespaceId(id: NEM_ID);
 
       expect(namespaceId1, equals(namespaceId2));
       expect(namespaceId1.id, equals(namespaceId2.id));

@@ -70,14 +70,14 @@ void main() {
 
   group('getString()', () {
     test('getString() can convert bytes to string', () {
-      final String actual = HexUtils.getString([0x4e, 0x45, 0x4d, 0x46, 0x54, 0x57]);
-      const String expectedOutput = '4e454d465457';
+      final actual = HexUtils.getString([0x4e, 0x45, 0x4d, 0x46, 0x54, 0x57]);
+      const expectedOutput = '4e454d465457';
       expect(actual, equals(expectedOutput));
     });
 
     test('getString() can convert bytes with leading zeros to string', () {
-      final String actual = HexUtils.getString([0x00, 0x00, 0x0d, 0x46, 0x54, 0x57]);
-      const String expectedOutput = '00000d465457';
+      final actual = HexUtils.getString([0x00, 0x00, 0x0d, 0x46, 0x54, 0x57]);
+      const expectedOutput = '00000d465457';
       expect(actual, equals(expectedOutput));
     });
   });
@@ -87,7 +87,7 @@ void main() {
       final List<String> INPUTS = ['', '026ee415fc15', 'abcdef0123456789ABCDEF'];
 
       for (var input in INPUTS) {
-        expect(HexUtils.isHexString(input), equals(true));
+        expect(HexUtils.isHexString(input), isTrue);
       }
     });
 
@@ -98,23 +98,23 @@ void main() {
       ];
 
       for (var input in INPUTS) {
-        expect(HexUtils.isHexString(input), equals(false));
+        expect(HexUtils.isHexString(input), isFalse);
       }
     });
   });
 
   group('utf8ToHex()', () {
     test('can convert UTF8 text to Hex', () {
-      final String actual = HexUtils.utf8ToHex('test words |@#¢∞¬÷“”≠[]}{–');
-      const String expected =
+      final actual = HexUtils.utf8ToHex('test words |@#¢∞¬÷“”≠[]}{–');
+      const expected =
           '7465737420776f726473207c4023c2a2e2889ec2acc3b7e2809ce2809de289a05b5d7d7be28093';
 
       expect(actual, equals(expected));
     });
 
     test('can convert UTF8 text with foreign characters to Hex', () {
-      final String actual = HexUtils.utf8ToHex('先秦兩漢');
-      const String expected = 'e58588e7a7a6e585a9e6bca2';
+      final actual = HexUtils.utf8ToHex('先秦兩漢');
+      const expected = 'e58588e7a7a6e585a9e6bca2';
 
       expect(actual, equals(expected));
     });
@@ -125,8 +125,8 @@ void main() {
       final List<String> INPUTS = ['', '026ee415fc15', 'abcdef0123456789ABCDEF'];
 
       for (var hexString in INPUTS) {
-        final Uint8List bytes = HexUtils.getBytes(hexString);
-        final String actual = HexUtils.bytesToHex(bytes);
+        final bytes = HexUtils.getBytes(hexString);
+        final actual = HexUtils.bytesToHex(bytes);
 
         expect(actual, equals(hexString.toLowerCase()));
       }

@@ -26,19 +26,19 @@ void main() {
   group('AccountInfo', () {
     test('Can create an AccountInfo', () {
       // Prepare
-      const String encodedAddress = '9050B9837EFAB4BBE8A4B9BB32D812F9885C00D8FC1650E142';
-      const String publicKey = '846B4439154579A5903B1459C9CF69CB8153F6D0110A7A0ED61DE29AE4810BF2';
-      final Address address = Address.fromEncoded(encodedAddress);
-      final Uint64 addressHeight = Uint64(12345);
-      final Uint64 importance = Uint64(9000);
-      final Uint64 importanceHeight = Uint64(50);
-      final Uint64 publicKeyHeight = Uint64(100);
+      const encodedAddress = '9050B9837EFAB4BBE8A4B9BB32D812F9885C00D8FC1650E142';
+      const publicKey = '846B4439154579A5903B1459C9CF69CB8153F6D0110A7A0ED61DE29AE4810BF2';
+      final address = Address.fromEncoded(encodedAddress);
+      final addressHeight = Uint64(12345);
+      final importance = Uint64(9000);
+      final importanceHeight = Uint64(50);
+      final publicKeyHeight = Uint64(100);
 
-      final Uint64 XEM_ID = Uint64.fromHex('D525AD41D95FCF29');
-      final List<Mosaic> mosaics = [new Mosaic(MosaicId.fromId(XEM_ID), Uint64(987654321))];
+      final XEM_ID = Uint64.fromHex('D525AD41D95FCF29');
+      final mosaics = <Mosaic>[Mosaic(MosaicId.fromId(XEM_ID), Uint64(987654321))];
 
       // Create
-      final AccountInfo accountInfo = new AccountInfo(address, addressHeight, publicKey,
+      final accountInfo = new AccountInfo(address, addressHeight, publicKey,
           publicKeyHeight, importance, importanceHeight, mosaics);
 
       // Assert

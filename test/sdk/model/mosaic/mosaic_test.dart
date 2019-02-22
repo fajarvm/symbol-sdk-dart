@@ -24,10 +24,10 @@ import 'package:nem2_sdk_dart/sdk.dart' show Mosaic, MosaicId;
 void main() {
   group('Mosaic', () {
     test('Can create mosaic object', () {
-      const String XEM_HEX_STRING = 'D525AD41D95FCF29';
-      final MosaicId mosaicId = MosaicId.fromHex(XEM_HEX_STRING);
-      final Uint64 amount = new Uint64(9999999999);
-      final Mosaic mosaic = new Mosaic(mosaicId, amount);
+      const XEM_HEX_STRING = 'D525AD41D95FCF29';
+      final mosaicId = MosaicId.fromHex(XEM_HEX_STRING);
+      final amount = Uint64(9999999999);
+      final Mosaic mosaic = Mosaic(mosaicId, amount);
 
       expect(mosaic.id, equals(mosaicId));
       expect(mosaic.amount, equals(amount));
