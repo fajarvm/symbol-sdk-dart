@@ -20,6 +20,9 @@ import 'package:nem2_sdk_dart/core.dart' show Uint64;
 
 /// Describes the properties a mosaic can have.
 class MosaicProperties {
+  static const MIN_DIVISIBILITY = 0;
+  static const MAX_DIVISIBILITY = 6;
+
   /// The mosaic supply mutability. When set to `true`, allows the supply to be changed at
   /// later point.
   ///
@@ -54,12 +57,18 @@ class MosaicProperties {
       this.supplyMutable, this.transferable, this.levyMutable, this.divisibility, this.duration);
 
   factory MosaicProperties(
-          {final bool supplyMutable = false,
-          final bool transferable = true,
-          final bool levyMutable = false,
-          final int divisibility = 0,
-          final Uint64 duration}) =>
-      MosaicProperties._(supplyMutable, transferable, levyMutable, divisibility, duration);
+      {final bool supplyMutable = false,
+      final bool transferable = true,
+      final bool levyMutable = false,
+      final int divisibility = 0,
+      final Uint64 duration}) {
+    if (MIN_DIVISIBILITY > divisibility || divisibility > MAX_DIVISIBILITY) {
+      throw new ArgumentError(
+          'The divisibility must be in the range of $MIN_DIVISIBILITY and $MAX_DIVISIBILITY');
+    }
+
+    return new MosaicProperties._(supplyMutable, transferable, levyMutable, divisibility, duration);
+  }
 
   /// Creates mosaic properties with the [duration]. Default values are set for other properties.
   static MosaicProperties create(Uint64 duration) => MosaicProperties(duration: duration);

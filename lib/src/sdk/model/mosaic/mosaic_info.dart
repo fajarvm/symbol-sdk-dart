@@ -53,8 +53,26 @@ class MosaicInfo {
   /// The properties of the mosaic.
   final MosaicProperties properties;
 
-  const MosaicInfo(this.active, this.index, this.metaId, this.namespaceId, this.mosaicId,
+  const MosaicInfo._(this.active, this.index, this.metaId, this.namespaceId, this.mosaicId,
       this.supply, this.height, this.owner, this.properties);
+
+  factory MosaicInfo(
+      final bool isActive,
+      final int index,
+      final String metaId,
+      final NamespaceId namespaceId,
+      final MosaicId mosaicId,
+      final Uint64 supply,
+      final Uint64 height,
+      final PublicAccount owner,
+      final MosaicProperties properties) {
+    if (0 > index) {
+      throw new ArgumentError('index must not be negative');
+    }
+
+    return new MosaicInfo._(
+        isActive, index, metaId, namespaceId, mosaicId, supply, height, owner, properties);
+  }
 
   /// Returns the mosaic divisibility
   int get divisibility => properties.divisibility;
