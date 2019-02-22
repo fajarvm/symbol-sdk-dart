@@ -57,41 +57,30 @@ class MosaicInfo {
       this.supply, this.height, this.owner, this.properties);
 
   factory MosaicInfo(
-      final bool isActive,
-      final int index,
-      final String metaId,
-      final NamespaceId namespaceId,
-      final MosaicId mosaicId,
-      final Uint64 supply,
-      final Uint64 height,
-      final PublicAccount owner,
-      final MosaicProperties properties) {
-    return new MosaicInfo._(
-        isActive, index, metaId, namespaceId, mosaicId, supply, height, owner, properties);
-  }
+          final bool isActive,
+          final int index,
+          final String metaId,
+          final NamespaceId namespaceId,
+          final MosaicId mosaicId,
+          final Uint64 supply,
+          final Uint64 height,
+          final PublicAccount owner,
+          final MosaicProperties properties) =>
+      MosaicInfo._(
+          isActive, index, metaId, namespaceId, mosaicId, supply, height, owner, properties);
 
   /// Returns the mosaic divisibility
-  int get divisibility {
-    return this.properties.divisibility;
-  }
+  int get divisibility => properties.divisibility;
 
   /// Returns the mosaic duration
-  Uint64 get duration {
-    return this.properties.duration;
-  }
+  Uint64 get duration => properties.duration;
 
   /// Returns the mosaic supply mutability
-  bool get isSupplyMutable {
-    return this.properties.supplyMutable;
-  }
+  bool get isSupplyMutable => properties.supplyMutable;
 
   /// Returns the mosaic transferability
-  bool get isTransferable {
-    return this.properties.transferable;
-  }
+  bool get isTransferable => properties.transferable;
 
   /// Returns the mosaic levy mutability
-  bool get isLevyMutable {
-    return this.properties.levyMutable;
-  }
+  bool get isLevyMutable => properties.levyMutable;
 }

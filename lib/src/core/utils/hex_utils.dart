@@ -22,7 +22,6 @@ import 'package:convert/convert.dart' show hex;
 
 /// A utility class that provides functions for converting hex strings.
 class HexUtils {
-  const HexUtils();
 
   /// Converts [hexString] to a byte array.
   static List<int> getBytes(final String hexString) {
@@ -75,7 +74,7 @@ class HexUtils {
 
   /// Convert a byte array [bytes] into a hex string
   static String bytesToHex(List<int> bytes) {
-    var result = new StringBuffer();
+    final StringBuffer result = new StringBuffer();
     for (var part in bytes) {
       result.write('${part < 16 ? '0' : ''}${part.toRadixString(16)}');
     }
@@ -86,7 +85,7 @@ class HexUtils {
 
   /// Converts a hex string into byte array. Also tries to correct malformed hex string.
   static List<int> _getBytesInternal(final String hexString) {
-    final String paddedHexString = 0 == hexString.length % 2 ? hexString : "0" + hexString;
+    final String paddedHexString = 0 == hexString.length % 2 ? hexString : '0$hexString';
     final List<int> encodedBytes = utf8.encode(paddedHexString);
     return hex.decode(String.fromCharCodes(encodedBytes));
   }

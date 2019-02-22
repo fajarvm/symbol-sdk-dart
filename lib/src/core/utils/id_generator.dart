@@ -30,7 +30,7 @@ class IdGenerator {
   static const String MOSAIC_SEPARATOR = ':';
   static const String PART_SEPARATOR = '.';
   static const int NAMESPACE_MAX_DEPTH = 3;
-  static final RegExp NAME_PATTERN = new RegExp(r"^[a-z0-9][a-z0-9-_]*$");
+  static final RegExp NAME_PATTERN = RegExp(r'^[a-z0-9][a-z0-9-_]*$');
 
   static final Uint64 NAMESPACE_BASE_ID = Uint64(0);
 
@@ -70,19 +70,19 @@ class IdGenerator {
       final List<Uint64> namespacePath = generateNamespacePath(namespaceFullName);
       return namespacePath.last;
     } catch (e) {
-      throw e;
+      rethrow;
     }
   }
 
   /// Generates a list of namespace paths from a unified [namespaceFullName]
   static List<Uint64> generateNamespacePath(final String namespaceFullName) {
     final String cleanName = StringUtils.trim(namespaceFullName);
-    if (0 >= cleanName.length) {
+    if (StringUtils.isEmpty(cleanName)) {
       _throwInvalidFqn('having zero length', namespaceFullName);
     }
 
     final List<String> parts = cleanName.split(PART_SEPARATOR);
-    if (parts.length <= 0) {
+    if (parts.isEmpty) {
       _throwInvalidFqn('too few namespace parts', namespaceFullName);
     }
     if (parts.length > NAMESPACE_MAX_DEPTH) {
@@ -90,10 +90,10 @@ class IdGenerator {
     }
 
     Uint64 namespaceId = NAMESPACE_BASE_ID;
-    List<Uint64> paths = new List<Uint64>();
+    final List<Uint64> paths = <Uint64>[];
     for (var part in parts) {
       if (!_isValidNamePart(part)) {
-        _throwInvalidFqn('invalid namespace part name [${part}]', namespaceFullName);
+        _throwInvalidFqn('invalid namespace part name [$part]', namespaceFullName);
       }
 
       namespaceId = generateId(namespaceId, part);
@@ -106,13 +106,13 @@ class IdGenerator {
   // ------------------------------ private / protected functions ------------------------------ //
 
   static void _throwInvalidFqn(final String reason, final String name) {
-    throw new CryptoException('Fully qualified id is invalid due to ${reason} (${name})');
+    throw new CryptoException('Fully qualified id is invalid due to $reason ($name)');
   }
 
   static String _extractNamespaceName(final String fullName) {
     String namespaceName = StringUtils.trim(fullName);
     if (namespaceName.contains(MOSAIC_SEPARATOR)) {
-      List<String> parts = namespaceName.split(MOSAIC_SEPARATOR);
+      final List<String> parts = namespaceName.split(MOSAIC_SEPARATOR);
       if (parts.length > 2) {
         _throwInvalidFqn('too many namespace parts', fullName);
       } else {
@@ -136,7 +136,7 @@ class IdGenerator {
 
     final String mosaicName = cleanFullName.split(MOSAIC_SEPARATOR).last;
     if (!_isValidNamePart(mosaicName)) {
-      _throwInvalidFqn('invalid mosaic part name [${mosaicName}]', fullName);
+      _throwInvalidFqn('invalid mosaic part name [$mosaicName]', fullName);
     }
 
     return mosaicName;

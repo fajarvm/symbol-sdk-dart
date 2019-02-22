@@ -32,7 +32,7 @@ class NamespaceId {
   ///
   /// When both the [id] and the [fullName] are provided, a new [id] will be generated from the
   /// provided [fullName] and the provided [id] will be ignored.
-  factory NamespaceId({final Uint64 id = null, final String fullName = null}) {
+  factory NamespaceId({final Uint64 id, final String fullName}) {
     final String fullNamespaceName = StringUtils.trim(fullName);
     if (id == null && StringUtils.isEmpty(fullNamespaceName)) {
       throw new ArgumentError('Missing argument. Either id or fullName is required.');
@@ -81,17 +81,11 @@ class NamespaceId {
   }
 
   @override
-  int get hashCode {
-    return this.id.hashCode + this.fullName.hashCode;
-  }
+  int get hashCode => id.hashCode + fullName.hashCode;
 
   @override
-  bool operator ==(other) {
-    return other is NamespaceId && this.id == other.id && this.fullName == other.fullName;
-  }
+  bool operator ==(other) => other is NamespaceId && id == other.id && fullName == other.fullName;
 
   @override
-  String toString() {
-    return 'NamespaceId(id:${this.id}, fullName:${this.fullName})';
-  }
+  String toString() => 'NamespaceId(id:$id, fullName:$fullName)';
 }

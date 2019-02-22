@@ -21,7 +21,7 @@ import 'package:test/test.dart';
 import 'package:nem2_sdk_dart/core.dart' show CryptoException, Ed25519;
 import 'package:nem2_sdk_dart/sdk.dart' show Account, NetworkType, PublicAccount;
 
-main() {
+void main() {
   const testAccount = {
     'address': 'SCTVW23D2MN5VE4AQ4TZIDZENGNOZXPRPRLIKCF2',
     'privateKey': '26b64cb10f005e5988a36744ca19e20d835ccc7c105aaa5f3b212da593180930',

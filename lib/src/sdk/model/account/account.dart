@@ -34,38 +34,33 @@ class Account {
 
   const Account._(this.address, this._keyPair);
 
-  factory Account({final Address address = null, final KeyPair keyPair = null}) {
+  factory Account({final Address address, final KeyPair keyPair}) {
     if (address == null || keyPair == null) {
       throw new ArgumentError(
-          "An address and/or a keyPair must not be null to create a new Account.");
+          'An address and/or a keyPair must not be null to create a new Account.');
     }
 
     return new Account._(address, keyPair);
   }
 
   /// Retrieves the public key of this account.
-  String get publicKey => HexUtils.getString(this._keyPair.publicKey);
+  String get publicKey => HexUtils.getString(_keyPair.publicKey);
 
   /// Retrieves the private key of this account.
-  String get privateKey => HexUtils.getString(this._keyPair.privateKey);
+  String get privateKey => HexUtils.getString(_keyPair.privateKey);
 
   /// Retrieves the plain text address of this account.
-  String get plainAddress => this.address.plain;
+  String get plainAddress => address.plain;
 
   /// Retrieves the public account of this account.
   PublicAccount get publicAccount => PublicAccount.fromPublicKey(publicKey, address.networkType);
 
   @override
-  int get hashCode {
-    return this._keyPair.hashCode + this.address.hashCode;
-  }
+  int get hashCode => _keyPair.hashCode + address.hashCode;
 
   @override
-  bool operator ==(final other) {
-    return other is Account &&
-        this.plainAddress == other.plainAddress &&
-        this.publicKey == other.publicKey;
-  }
+  bool operator ==(final other) =>
+      other is Account && plainAddress == other.plainAddress && publicKey == other.publicKey;
 
   /// Creates an [Account] from a given [privateKey] for a specific [networkType].
   static Account fromPrivateKey(final String privateKey, final int networkType) {
@@ -95,7 +90,7 @@ class Account {
   String signData(final String rawData) {
     final String hexString = HexUtils.utf8ToHex(rawData);
     final Uint8List data = HexUtils.getBytes(hexString);
-    final Uint8List signedData = KeyPair.signData(this._keyPair, data);
+    final Uint8List signedData = KeyPair.signData(_keyPair, data);
     return HexUtils.getString(signedData);
   }
 

@@ -30,13 +30,13 @@ class KeyPair {
 
   const KeyPair._(this._privateKey, this._publicKey);
 
-  factory KeyPair({Uint8List privateKey = null, Uint8List publicKey = null}) {
+  factory KeyPair({Uint8List privateKey, Uint8List publicKey}) {
     if (privateKey == null) {
-      throw new ArgumentError("privateKey byte cannot be null");
+      throw new ArgumentError('privateKey byte cannot be null');
     }
 
     if (privateKey.lengthInBytes != 32 && privateKey.lengthInBytes != 33) {
-      throw new ArgumentError("Invalid length for privateKey. Length: ${privateKey.lengthInBytes}");
+      throw new ArgumentError('Invalid length for privateKey. Length: ${privateKey.lengthInBytes}');
     }
 
     return new KeyPair._(privateKey, publicKey);
@@ -49,14 +49,11 @@ class KeyPair {
   Uint8List get privateKey => _privateKey;
 
   @override
-  int get hashCode {
-    return privateKey.hashCode + publicKey.hashCode;
-  }
+  int get hashCode => privateKey.hashCode + publicKey.hashCode;
 
   @override
-  bool operator ==(other) {
-    return other is KeyPair && publicKey == other.publicKey && privateKey == other.privateKey;
-  }
+  bool operator ==(other) =>
+      other is KeyPair && publicKey == other.publicKey && privateKey == other.privateKey;
 
   /// Creates a key pair from a [hexEncodedPrivateKey] string. The public key is extracted from
   /// the private key.
@@ -66,7 +63,7 @@ class KeyPair {
     final Uint8List privateKeySeed = HexUtils.getBytes(hexEncodedPrivateKey);
     if (Ed25519.KEY_SIZE != privateKeySeed.length) {
       throw new CryptoException(
-          "Private key has an unexpected size. Expected: ${Ed25519.KEY_SIZE}, Got: ${privateKeySeed.length}");
+          'Private key has an unexpected size. Expected: ${Ed25519.KEY_SIZE}, Got: ${privateKeySeed.length}');
     }
 
     final Uint8List publicKey = Ed25519.extractPublicKey(privateKeySeed);

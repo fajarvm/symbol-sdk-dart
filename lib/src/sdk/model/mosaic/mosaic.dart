@@ -16,9 +16,9 @@
 
 library nem2_sdk_dart.sdk.model.mosaic.mosaic;
 
-import 'mosaic_id.dart';
-
 import 'package:nem2_sdk_dart/core.dart' show Uint64;
+
+import 'mosaic_id.dart';
 
 /// A mosaic describes an instance of a mosaic definition.
 /// Mosaics can be transferred by means of a transfer transaction.

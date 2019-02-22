@@ -23,7 +23,7 @@ import 'package:test/test.dart';
 import 'package:nem2_sdk_dart/core.dart'
     show ArrayUtils, HexUtils, CryptoException, Ed25519, KeyPair;
 
-main() {
+void main() {
   final List<String> TEST_PRIVATE_KEYS = [
     '8D31B712AB28D49591EAF5066E9E967B44507FC19C3D54D742F7B3A255CFF4AB',
     '15923F9D2FFFB11D771818E1F7D7DDCD363913933264D58533CB3A5DD2DAA66A',
@@ -66,13 +66,13 @@ main() {
 
       for (int i = 0; i < TEST_PRIVATE_KEYS.length; i++) {
         // Prepare
-        String privateKeyHex = TEST_PRIVATE_KEYS[i];
-        String expectedPublicKey = EXPECTED_PUBLIC_KEYS[i];
-        KeyPair keyPair = KeyPair.fromPrivateKey(privateKeyHex);
+        final String privateKeyHex = TEST_PRIVATE_KEYS[i];
+        final String expectedPublicKey = EXPECTED_PUBLIC_KEYS[i];
+        final KeyPair keyPair = KeyPair.fromPrivateKey(privateKeyHex);
 
         // Assert
-        String actualPubKey = HexUtils.getString(keyPair.publicKey).toUpperCase();
-        String actualPrivateKey = HexUtils.getString(keyPair.privateKey).toUpperCase();
+        final String actualPubKey = HexUtils.getString(keyPair.publicKey).toUpperCase();
+        final String actualPrivateKey = HexUtils.getString(keyPair.privateKey).toUpperCase();
         expect(actualPubKey, equals(expectedPublicKey));
         expect(actualPrivateKey, equals(privateKeyHex));
       }
@@ -104,25 +104,25 @@ main() {
   group('sign', () {
     test('fills the signature', () {
       // Prepare
-      KeyPair keyPair = KeyPair.random();
-      Uint8List payload = Ed25519.getRandomBytes(100);
+      final KeyPair keyPair = KeyPair.random();
+      final Uint8List payload = Ed25519.getRandomBytes(100);
 
-      Uint8List signature = KeyPair.signData(keyPair, payload);
+      final Uint8List signature = KeyPair.signData(keyPair, payload);
 
       // Assert
-      Uint8List emptySig = new Uint8List(Ed25519.SIGNATURE_SIZE);
+      final Uint8List emptySig = new Uint8List(Ed25519.SIGNATURE_SIZE);
       expect(ArrayUtils.deepEqual(signature, emptySig), false);
     });
 
     test('returns same signature for same data signed by same key pairs', () {
       // Prepare
-      String privateKey = HexUtils.getString(Ed25519.getRandomBytes(Ed25519.KEY_SIZE));
-      KeyPair keyPair1 = KeyPair.fromPrivateKey(privateKey);
-      KeyPair keyPair2 = KeyPair.fromPrivateKey(privateKey);
-      Uint8List payload = Ed25519.getRandomBytes(100);
+      final String privateKey = HexUtils.getString(Ed25519.getRandomBytes(Ed25519.KEY_SIZE));
+      final KeyPair keyPair1 = KeyPair.fromPrivateKey(privateKey);
+      final KeyPair keyPair2 = KeyPair.fromPrivateKey(privateKey);
+      final Uint8List payload = Ed25519.getRandomBytes(100);
 
-      Uint8List signature1 = KeyPair.signData(keyPair1, payload);
-      Uint8List signature2 = KeyPair.signData(keyPair2, payload);
+      final Uint8List signature1 = KeyPair.signData(keyPair1, payload);
+      final Uint8List signature2 = KeyPair.signData(keyPair2, payload);
 
       // Assert
       expect(ArrayUtils.deepEqual(signature1, signature2), true);
@@ -130,12 +130,12 @@ main() {
 
     test('returns different signature for data signed by different key pairs', () {
       // Prepare
-      KeyPair keyPair1 = KeyPair.random();
-      KeyPair keyPair2 = KeyPair.random();
-      Uint8List payload = Ed25519.getRandomBytes(100);
+      final KeyPair keyPair1 = KeyPair.random();
+      final KeyPair keyPair2 = KeyPair.random();
+      final Uint8List payload = Ed25519.getRandomBytes(100);
 
-      Uint8List signature1 = KeyPair.signData(keyPair1, payload);
-      Uint8List signature2 = KeyPair.signData(keyPair2, payload);
+      final Uint8List signature1 = KeyPair.signData(keyPair1, payload);
+      final Uint8List signature2 = KeyPair.signData(keyPair2, payload);
 
       // Assert
       expect(ArrayUtils.deepEqual(signature1, signature2), false);
@@ -281,7 +281,7 @@ main() {
         final Uint8List signature = KeyPair.signData(keyPair, inputData);
 
         // Assert
-        String result = HexUtils.getString(signature).toUpperCase();
+        final String result = HexUtils.getString(signature).toUpperCase();
         expect(result, equals(EXPECTED_SIGNATURES[i]));
       }
     });
@@ -297,7 +297,7 @@ main() {
         final Uint8List inputData = HexUtils.getBytes(INPUT_DATA[i]);
         final Uint8List signature = KeyPair.signData(keyPair, inputData);
 
-        bool isVerified = KeyPair.verify(keyPair.publicKey, inputData, signature);
+        final bool isVerified = KeyPair.verify(keyPair.publicKey, inputData, signature);
 
         // Assert
         expect(isVerified, equals(true));
@@ -309,7 +309,7 @@ main() {
   // ---- Derive Shared Key ----
   // ---------------------------
   group('derived shared key', () {
-    final int SALT_SIZE = 32;
+    const int SALT_SIZE = 32;
 
     test('fails if salt has the wrong size', () {
       // Prepare: create a salt that is too long
@@ -353,7 +353,7 @@ main() {
 
     test('can derive deterministic shared key from well known inputs', () {
       // Prepare:
-      final String privateKeyString =
+      const String privateKeyString =
           '8F545C2816788AB41D352F236D80DBBCBC34705B5F902EFF1F1D88327C7C1300';
       final KeyPair keyPair = KeyPair.fromPrivateKey(privateKeyString);
       final Uint8List publicKey =
@@ -365,7 +365,7 @@ main() {
       final String sharedKeyHexString = HexUtils.getString(sharedKey).toUpperCase();
 
       // Assert
-      String expected = 'FF9623D28FBC13B6F0E0659117FC7BE294DB3385C046055A6BAC39EDF198D50D';
+      const String expected = 'FF9623D28FBC13B6F0E0659117FC7BE294DB3385C046055A6BAC39EDF198D50D';
       expect(sharedKeyHexString, equals(expected));
     });
   });

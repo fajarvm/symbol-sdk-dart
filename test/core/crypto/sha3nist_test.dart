@@ -22,7 +22,7 @@ import 'package:test/test.dart';
 
 import 'package:nem2_sdk_dart/core.dart' show HexUtils, SHA3DigestNist;
 
-main() {
+void main() {
   const List<String> inputs = [
     '',
     'CC',
@@ -54,7 +54,7 @@ main() {
         final expectedHash = expectedOutput[i];
 
         final SHA3DigestNist hasher = new SHA3DigestNist(256); // SHA3-256
-        Uint8List hash = hasher.process(inputBuffer);
+        final Uint8List hash = hasher.process(inputBuffer);
 
         final String hashString = HexUtils.getString(hash).toUpperCase();
         expect(hashString, equals(expectedHash));
@@ -74,12 +74,12 @@ main() {
         hasher.reset();
 
         // hash the input in two parts
-        Uint8List firstPart = inputBuffer.sublist(0, inputBuffer.length ~/ 2);
-        Uint8List secondPart = inputBuffer.sublist(inputBuffer.length ~/ 2);
+        final Uint8List firstPart = inputBuffer.sublist(0, inputBuffer.length ~/ 2);
+        final Uint8List secondPart = inputBuffer.sublist(inputBuffer.length ~/ 2);
         hasher.update(firstPart, 0, firstPart.length);
         hasher.update(secondPart, 0, secondPart.length);
 
-        Uint8List hash = new Uint8List(32);
+        final Uint8List hash = new Uint8List(32);
         hasher.doFinal(hash, 0);
 
         final String hashString = HexUtils.getString(hash).toUpperCase();
@@ -88,22 +88,22 @@ main() {
     });
 
     test('SHA3 256 can reuse after reset', () {
-      String inputHex = inputs[3];
-      String expectedHash = expectedOutput[3];
+      final String inputHex = inputs[3];
+      final String expectedHash = expectedOutput[3];
 
       final SHA3DigestNist hasher = new SHA3DigestNist(256); // SHA3-256
       hasher.reset();
-      Uint8List data = HexUtils.getBytes('ABCD');
+      final Uint8List data = HexUtils.getBytes('ABCD');
       hasher.update(data, 0, data.length);
 
       // reset
       hasher.reset();
 
       // update with test vector
-      Uint8List inputBytes = HexUtils.getBytes(inputHex);
+      final Uint8List inputBytes = HexUtils.getBytes(inputHex);
       hasher.update(inputBytes, 0, inputBytes.length);
 
-      Uint8List hash = new Uint8List(32);
+      final Uint8List hash = new Uint8List(32);
       hasher.doFinal(hash, 0);
 
       expect(HexUtils.getString(hash).toUpperCase(), equals(expectedHash));
@@ -132,7 +132,7 @@ main() {
         final expectedHash = expectedOutput[i];
 
         final SHA3DigestNist hasher = new SHA3DigestNist(512); // SHA3-512
-        Uint8List hash = hasher.process(inputBuffer);
+        final Uint8List hash = hasher.process(inputBuffer);
 
         final String hashString = HexUtils.getString(hash).toUpperCase();
         expect(hashString, equals(expectedHash));
@@ -152,12 +152,12 @@ main() {
         hasher.reset();
 
         // hash the input in two parts
-        Uint8List firstPart = inputBuffer.sublist(0, inputBuffer.length ~/ 2);
-        Uint8List secondPart = inputBuffer.sublist(inputBuffer.length ~/ 2);
+        final Uint8List firstPart = inputBuffer.sublist(0, inputBuffer.length ~/ 2);
+        final Uint8List secondPart = inputBuffer.sublist(inputBuffer.length ~/ 2);
         hasher.update(firstPart, 0, firstPart.length);
         hasher.update(secondPart, 0, secondPart.length);
 
-        Uint8List hash = new Uint8List(64);
+        final Uint8List hash = new Uint8List(64);
         hasher.doFinal(hash, 0);
 
         final String hashString = HexUtils.getString(hash).toUpperCase();
@@ -166,22 +166,22 @@ main() {
     });
 
     test('SHA3 512 can reuse after reset', () {
-      String inputHex = inputs[3];
-      String expectedHash = expectedOutput[3];
+      final String inputHex = inputs[3];
+      final String expectedHash = expectedOutput[3];
 
       final SHA3DigestNist hasher = new SHA3DigestNist(512); // SHA3-512
       hasher.reset();
-      Uint8List data = HexUtils.getBytes('ABCD');
+      final Uint8List data = HexUtils.getBytes('ABCD');
       hasher.update(data, 0, data.length);
 
       // reset
       hasher.reset();
 
       // update with test vector
-      Uint8List inputBytes = HexUtils.getBytes(inputHex);
+      final Uint8List inputBytes = HexUtils.getBytes(inputHex);
       hasher.update(inputBytes, 0, inputBytes.length);
 
-      Uint8List hash = new Uint8List(64);
+      final Uint8List hash = new Uint8List(64);
       hasher.doFinal(hash, 0);
 
       expect(HexUtils.getString(hash).toUpperCase(), equals(expectedHash));

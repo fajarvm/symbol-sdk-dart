@@ -24,7 +24,7 @@ import 'package:test/test.dart';
 
 import 'package:nem2_sdk_dart/core.dart' show ArrayUtils, Uint64;
 
-main() {
+void main() {
   final List<String> HEX_TEST_CASES = [
     '0000000000000000', // 0 = the min value of uint64
     '000000000000A1B2',
@@ -43,8 +43,8 @@ main() {
       expect(actual.value >= Uint64.MIN_VALUE, equals(true));
 
       // max value is 18446744073709551615
-      BigInt first = BigInt.from(Uint64.MAX_VALUE_SIGNED);
-      BigInt second = BigInt.from(Uint64.MAX_VALUE_SIGNED - 1); // exceeds min value
+      final BigInt first = BigInt.from(Uint64.MAX_VALUE_SIGNED);
+      final BigInt second = BigInt.from(Uint64.MAX_VALUE_SIGNED - 1); // exceeds min value
       actual = Uint64.fromBigInt(first + second);
       expect(actual.value < Uint64.MAX_VALUE, equals(true));
     });
@@ -55,8 +55,8 @@ main() {
           throwsA(predicate((e) => e is ArgumentError && e.message == 'Value must be above 0')));
 
       // max value is 18446744073709551615
-      BigInt first = BigInt.from(Uint64.MAX_VALUE_SIGNED);
-      BigInt second = BigInt.from(Uint64.MAX_VALUE_SIGNED + 1); // exceeds max value
+      final BigInt first = BigInt.from(Uint64.MAX_VALUE_SIGNED);
+      final BigInt second = BigInt.from(Uint64.MAX_VALUE_SIGNED + 1); // exceeds max value
       expect(() => Uint64.fromBigInt(first + second),
           throwsA(predicate((e) => e is ArgumentError && e.message == 'Value out of range')));
     });
@@ -130,7 +130,7 @@ main() {
     });
 
     test('toString', () {
-      final String hexString = '000000000000A1B2';
+      const String hexString = '000000000000A1B2';
       final Int64 int64 = Int64.parseHex(hexString);
       final Uint8List bytes = Uint8List.fromList(int64.toBytes());
       final Uint64 result1 = Uint64.fromBytes(bytes);
@@ -143,7 +143,7 @@ main() {
     });
 
     test('toBytes', () {
-      final String hexString = '000000000000A1B2';
+      const String hexString = '000000000000A1B2';
       final Int64 int64 = Int64.parseHex(hexString);
       final Uint8List expected = Uint8List.fromList(int64.toBytes());
       final Uint64 uint64 = Uint64.fromHex(hexString);

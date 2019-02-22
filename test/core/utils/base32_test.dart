@@ -22,7 +22,7 @@ import 'package:test/test.dart';
 
 import 'package:nem2_sdk_dart/core.dart' show Base32, HexUtils;
 
-main() {
+void main() {
   const List<String> test_encoded = [
     'NC5J5DI2URIC4H3T3IMXQS25PWQWZIPEV6EV7LAS',
     'NC5J5DI2URIC4H3T3IMXQS25PWQWZIPEV6EV7LAS',
@@ -63,17 +63,17 @@ main() {
 
       final String encodedString = Base32.encode(data);
 
-      const String expected = '' +
-          'AAAQEAYEAUDAOCAJBIFQYDIOB4IBCEQTCQKRMFYY' +
-          'DENBWHA5DYPSAIJCEMSCKJRHFAUSUKZMFUXC6MBR' +
-          'GIZTINJWG44DSOR3HQ6T4P2AIFBEGRCFIZDUQSKK' +
-          'JNGE2TSPKBIVEU2UKVLFOWCZLJNVYXK6L5QGCYTD' +
-          'MRSWMZ3INFVGW3DNNZXXA4LSON2HK5TXPB4XU634' +
-          'PV7H7AEBQKBYJBMGQ6EITCULRSGY5D4QSGJJHFEV' +
-          'S2LZRGM2TOOJ3HU7UCQ2FI5EUWTKPKFJVKV2ZLNO' +
-          'V6YLDMVTWS23NN5YXG5LXPF5X274BQOCYPCMLRWH' +
-          'ZDE4VS6MZXHM7UGR2LJ5JVOW27MNTWW33TO55X7A' +
-          '4HROHZHF43T6R2PK5PWO33XP6DY7F47U6X3PP6HZ' +
+      const String expected = ''
+          'AAAQEAYEAUDAOCAJBIFQYDIOB4IBCEQTCQKRMFYY'
+          'DENBWHA5DYPSAIJCEMSCKJRHFAUSUKZMFUXC6MBR'
+          'GIZTINJWG44DSOR3HQ6T4P2AIFBEGRCFIZDUQSKK'
+          'JNGE2TSPKBIVEU2UKVLFOWCZLJNVYXK6L5QGCYTD'
+          'MRSWMZ3INFVGW3DNNZXXA4LSON2HK5TXPB4XU634'
+          'PV7H7AEBQKBYJBMGQ6EITCULRSGY5D4QSGJJHFEV'
+          'S2LZRGM2TOOJ3HU7UCQ2FI5EUWTKPKFJVKV2ZLNO'
+          'V6YLDMVTWS23NN5YXG5LXPF5X274BQOCYPCMLRWH'
+          'ZDE4VS6MZXHM7UGR2LJ5JVOW27MNTWW33TO55X7A'
+          '4HROHZHF43T6R2PK5PWO33XP6DY7F47U6X3PP6HZ'
           '7L57Z7P674AACAQD';
 
       expect(encodedString, equals(expected));
@@ -116,7 +116,7 @@ main() {
 
     test('throws if input size is not a multiple of block size', () {
       for (int i = 1; 8 > i; ++i) {
-        String input = new List<String>.filled(i, 'A').join();
+        final String input = new List<String>.filled(i, 'A').join();
 
         expect(
             () => Base32.decode(input),

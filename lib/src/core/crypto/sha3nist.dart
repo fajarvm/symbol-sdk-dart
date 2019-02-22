@@ -32,14 +32,14 @@ import 'package:pointycastle/src/ufixnum.dart';
 /// * Changed algorithm name prefix to 'SHA-3-NIST' to avoid name ambiguity.
 /// * Added a custom bits absorption upon finalizing a message digest.
 class SHA3DigestNist extends BaseDigest implements Digest {
-  static final RegExp _NAME_REGEX = new RegExp(r"^SHA-3-NIST\/([0-9]+)$");
+  static final RegExp _NAME_REGEX = new RegExp(r'^SHA-3-NIST\/([0-9]+)$');
 
   /// Intended for internal use.
   static final FactoryConfig FACTORY_CONFIG = new DynamicFactoryConfig(
       Digest,
       _NAME_REGEX,
-      (_, final Match match) => () {
-            int bitLength = int.parse(match.group(1));
+      (_, final match) => () {
+            final int bitLength = int.parse(match.group(1));
             return new SHA3DigestNist(bitLength);
           });
 
@@ -112,22 +112,28 @@ class SHA3DigestNist extends BaseDigest implements Digest {
     _init(bitLength);
   }
 
-  String get algorithmName => "SHA-3-NIST/${_fixedOutputLength}";
+  @override
+  String get algorithmName => 'SHA-3-NIST/$_fixedOutputLength';
 
-  int get digestSize => (_fixedOutputLength ~/ 8);
+  @override
+  int get digestSize => _fixedOutputLength ~/ 8;
 
+  @override
   void reset() {
     _init(_fixedOutputLength);
   }
 
+  @override
   void updateByte(int inp) {
     _doUpdate(new Uint8List.fromList([inp]), 0, 8);
   }
 
+  @override
   void update(Uint8List inp, int inpOff, int len) {
     _doUpdate(inp, inpOff, len * 8);
   }
 
+  @override
   int doFinal(Uint8List out, int outOff) {
     absorbBits(0x02, 2);
 
@@ -140,15 +146,15 @@ class SHA3DigestNist extends BaseDigest implements Digest {
 
   void absorbBits(int data, int bits) {
     if (bits < 1 || bits > 7) {
-      throw new StateError("'bits' must be in the range 1 to 7");
+      throw new StateError('"bits" must be in the range 1 to 7');
     }
     if ((_bitsInQueue % 8) != 0) {
-      throw new StateError("attempt to absorb with odd length queue");
+      throw new StateError('attempt to absorb with odd length queue');
     }
     if (_squeezing) {
-      throw new StateError("attempt to absorb while squeezing");
+      throw new StateError('attempt to absorb while squeezing');
     }
-    int mask = (1 << bits) - 1;
+    final int mask = (1 << bits) - 1;
     _dataQueue[_bitsInQueue >> 3] = data & mask;
     _bitsInQueue += bits;
   }
@@ -176,7 +182,7 @@ class SHA3DigestNist extends BaseDigest implements Digest {
         break;
 
       default:
-        throw new ArgumentError("bitLength (${bitLength}) must be one of 224, 256, 384, or 512");
+        throw new ArgumentError('bitLength ($bitLength) must be one of 224, 256, 384, or 512');
     }
   }
 
@@ -190,7 +196,7 @@ class SHA3DigestNist extends BaseDigest implements Digest {
     } else {
       _absorb(data, off, databitlen - (databitlen % 8));
 
-      var lastByte = new Uint8List(1);
+      final Uint8List lastByte = new Uint8List(1);
 
       lastByte[0] = data[off + (databitlen ~/ 8)] >> (8 - (databitlen % 8));
       _absorb(lastByte, off, databitlen % 8);
@@ -199,10 +205,10 @@ class SHA3DigestNist extends BaseDigest implements Digest {
 
   void _initSponge(int rate, int capacity) {
     if ((rate + capacity) != 1600) {
-      throw new StateError("Value of (rate + capacity) is not 1600: ${rate + capacity}");
+      throw new StateError('Value of (rate + capacity) is not 1600: ${rate + capacity}');
     }
     if ((rate <= 0) || (rate >= 1600) || ((rate % 64) != 0)) {
-      throw new StateError("Invalid rate value: ${rate}");
+      throw new StateError('Invalid rate value: $rate');
     }
 
     _rate = rate;
@@ -225,11 +231,11 @@ class SHA3DigestNist extends BaseDigest implements Digest {
     int i, j, wholeBlocks;
 
     if ((_bitsInQueue % 8) != 0) {
-      throw new StateError("Attempt to absorb with odd length queue");
+      throw new StateError('Attempt to absorb with odd length queue');
     }
 
     if (_squeezing) {
-      throw new StateError("Attempt to absorb while squeezing");
+      throw new StateError('Attempt to absorb while squeezing');
     }
 
     i = 0;
@@ -240,7 +246,7 @@ class SHA3DigestNist extends BaseDigest implements Digest {
         for (j = 0; j < wholeBlocks; j++) {
           final chunk = new Uint8List(_rate ~/ 8);
 
-          final offset = (off + (i ~/ 8) + (j * chunk.length));
+          final offset = off + (i ~/ 8) + (j * chunk.length);
           chunk.setRange(0, chunk.length, data.sublist(offset));
 
           _keccakAbsorb(_state, chunk, chunk.length);
@@ -248,18 +254,18 @@ class SHA3DigestNist extends BaseDigest implements Digest {
 
         i += wholeBlocks * _rate;
       } else {
-        var partialBlock = (databitlen - i);
+        var partialBlock = databitlen - i;
 
         if ((partialBlock + _bitsInQueue) > _rate) {
-          partialBlock = (_rate - _bitsInQueue);
+          partialBlock = _rate - _bitsInQueue;
         }
 
-        final partialByte = (partialBlock % 8);
+        final partialByte = partialBlock % 8;
         partialBlock -= partialByte;
 
-        final start = (_bitsInQueue ~/ 8);
+        final start = _bitsInQueue ~/ 8;
         final end = start + (partialBlock ~/ 8);
-        final offset = (off + (i ~/ 8));
+        final offset = off + (i ~/ 8);
         _dataQueue.setRange(start, end, data.sublist(offset));
 
         _bitsInQueue += partialBlock;
@@ -268,8 +274,8 @@ class SHA3DigestNist extends BaseDigest implements Digest {
           _absorbQueue();
         }
         if (partialByte > 0) {
-          int mask = (1 << partialByte) - 1;
-          _dataQueue[_bitsInQueue ~/ 8] = (data[off + (i ~/ 8)] & mask);
+          final int mask = (1 << partialByte) - 1;
+          _dataQueue[_bitsInQueue ~/ 8] = data[off + (i ~/ 8)] & mask;
           _bitsInQueue += partialByte;
           i += partialByte;
         }
@@ -283,7 +289,7 @@ class SHA3DigestNist extends BaseDigest implements Digest {
       _absorbQueue();
       _clearDataQueueSection(0, _rate ~/ 8);
     } else {
-      _clearDataQueueSection(((_bitsInQueue + 7) ~/ 8), (_rate ~/ 8 - (_bitsInQueue + 7) ~/ 8));
+      _clearDataQueueSection((_bitsInQueue + 7) ~/ 8, _rate ~/ 8 - (_bitsInQueue + 7) ~/ 8);
       _dataQueue[_bitsInQueue ~/ 8] |= 1 << (_bitsInQueue % 8);
     }
     _dataQueue[(_rate - 1) ~/ 8] |= 1 << ((_rate - 1) % 8);
@@ -308,7 +314,7 @@ class SHA3DigestNist extends BaseDigest implements Digest {
     }
 
     if ((outputLength % 8) != 0) {
-      throw new StateError("Output length not a multiple of 8: ${outputLength}");
+      throw new StateError('Output length not a multiple of 8: $outputLength');
     }
 
     i = 0;
@@ -326,12 +332,12 @@ class SHA3DigestNist extends BaseDigest implements Digest {
       }
       partialBlock = _bitsAvailableForSqueezing;
       if (partialBlock > (outputLength - i)) {
-        partialBlock = (outputLength - i);
+        partialBlock = outputLength - i;
       }
 
-      var start = (offset + (i ~/ 8));
-      var end = start + (partialBlock ~/ 8);
-      var offset2 = (_rate - _bitsAvailableForSqueezing) ~/ 8;
+      final int start = offset + (i ~/ 8);
+      final int end = start + (partialBlock ~/ 8);
+      final int offset2 = (_rate - _bitsAvailableForSqueezing) ~/ 8;
       output.setRange(start, end, _dataQueue.sublist(offset2));
       _bitsAvailableForSqueezing -= partialBlock;
       i += partialBlock;

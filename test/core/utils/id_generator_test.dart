@@ -20,7 +20,7 @@ import 'package:test/test.dart';
 
 import 'package:nem2_sdk_dart/core.dart' show CryptoException, IdGenerator, Uint64;
 
-main() {
+void main() {
   final Uint64 NEM_ID = Uint64.fromHex('84B3552D375FFA4B'); // 9562080086528621131
   final Uint64 XEM_ID = Uint64.fromHex('D525AD41D95FCF29'); // 15358872602548358953
 
@@ -54,12 +54,12 @@ main() {
     });
 
     test('Can generate multilevel namespaces', () {
-      List<Uint64> ids = new List<Uint64>();
+      final List<Uint64> ids = <Uint64>[];
       ids.add(IdGenerator.generateId(IdGenerator.NAMESPACE_BASE_ID, 'foo'));
       ids.add(IdGenerator.generateId(ids[0], 'bar'));
       ids.add(IdGenerator.generateId(ids[1], 'baz'));
 
-      List<Uint64> namespaces = IdGenerator.generateNamespacePath('foo.bar.baz');
+      final List<Uint64> namespaces = IdGenerator.generateNamespacePath('foo.bar.baz');
 
       expect(ids.length, equals(namespaces.length));
       expect(ids[0].toHexString(), equals(namespaces[0].toHexString()));
@@ -68,14 +68,14 @@ main() {
     });
 
     test('Can generate multilevel namespaces with mosaic', () {
-      List<Uint64> namespaceIds = new List<Uint64>();
+      final List<Uint64> namespaceIds = <Uint64>[];
       namespaceIds.add(IdGenerator.generateId(IdGenerator.NAMESPACE_BASE_ID, 'foo'));
       namespaceIds.add(IdGenerator.generateId(namespaceIds[0], 'bar'));
       namespaceIds.add(IdGenerator.generateId(namespaceIds[1], 'baz'));
-      Uint64 mosaicId = IdGenerator.generateId(namespaceIds[2], 'xem');
+      final Uint64 mosaicId = IdGenerator.generateId(namespaceIds[2], 'xem');
 
-      List<Uint64> namespaceIdsGen = IdGenerator.generateNamespacePath('foo.bar.baz');
-      Uint64 mosaicIdGen = IdGenerator.generateMosaicId('foo.bar.baz:xem');
+      final List<Uint64> namespaceIdsGen = IdGenerator.generateNamespacePath('foo.bar.baz');
+      final Uint64 mosaicIdGen = IdGenerator.generateMosaicId('foo.bar.baz:xem');
 
       expect(namespaceIds, equals(namespaceIdsGen));
       expect(mosaicId, equals(mosaicIdGen));
@@ -143,16 +143,16 @@ main() {
 
   group('generateMosaicId', () {
     test('Can generate a correct well known mosaic', () {
-      Uint64 id1 = IdGenerator.generateMosaicId('nem:xem');
+      final Uint64 id1 = IdGenerator.generateMosaicId('nem:xem');
 
       expect(id1, equals(XEM_ID));
     });
 
     test('Mosaics with the same name from different namespaces are different', () {
-      Uint64 id1 = IdGenerator.generateMosaicId('nem:xem');
+      final Uint64 id1 = IdGenerator.generateMosaicId('nem:xem');
       // different namespaces
-      Uint64 id2 = IdGenerator.generateMosaicId('foo.bar:xem');
-      Uint64 id3 = IdGenerator.generateMosaicId('a.b.c:xem');
+      final Uint64 id2 = IdGenerator.generateMosaicId('foo.bar:xem');
+      final Uint64 id3 = IdGenerator.generateMosaicId('a.b.c:xem');
 
       expect(id1, equals(XEM_ID));
       expect(id2, isNot(equals(XEM_ID)));
@@ -168,7 +168,7 @@ main() {
     });
 
     test('Cannot generate invalid mosaics', () {
-      final String namespace = 'foo:';
+      const String namespace = 'foo:';
       final List<String> invalidNames = [
         'A',
         'a..a',
@@ -181,7 +181,7 @@ main() {
 
       for (var mosaicName in invalidNames) {
         expect(
-            () => IdGenerator.generateMosaicId('${namespace}${mosaicName}'),
+            () => IdGenerator.generateMosaicId('$namespace$mosaicName'),
             throwsA(predicate((e) =>
                 e is CryptoException && e.message.contains('Fully qualified id is invalid'))));
       }

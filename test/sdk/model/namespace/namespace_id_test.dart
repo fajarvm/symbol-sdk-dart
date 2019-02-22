@@ -21,10 +21,10 @@ import 'package:test/test.dart';
 import 'package:nem2_sdk_dart/core.dart' show Uint64;
 import 'package:nem2_sdk_dart/sdk.dart' show NamespaceId;
 
-main() {
-  final String NEM_HEX_STRING = '84B3552D375FFA4B'; // 9562080086528621131
+void main() {
+  const String NEM_HEX_STRING = '84B3552D375FFA4B'; // 9562080086528621131
   final Uint64 NEM_ID = Uint64.fromHex(NEM_HEX_STRING);
-  final String XEM_HEX_STRING = 'D525AD41D95FCF29'; // 15358872602548358953
+  const String XEM_HEX_STRING = 'D525AD41D95FCF29'; // 15358872602548358953
   final Uint64 XEM_ID = Uint64.fromHex(XEM_HEX_STRING);
 
   group('Create NamespaceId via constructor', () {

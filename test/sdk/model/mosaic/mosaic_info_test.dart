@@ -38,19 +38,19 @@ import 'package:nem2_sdk_dart/core.dart' show Uint64;
 import 'package:nem2_sdk_dart/sdk.dart'
     show MosaicId, MosaicInfo, MosaicProperties, NamespaceId, NetworkType, PublicAccount;
 
-main() {
+void main() {
   group('Create MosaicInfo via constructor', () {
-    final String publicKey = 'b4f12e7c9f6946091e2cb8b6d3a12b50d17ccbbf646386ea27ce2946a7423dcf';
-    final String NEM_HEX_STRING = '84B3552D375FFA4B'; // 9562080086528621131
+    const String publicKey = 'b4f12e7c9f6946091e2cb8b6d3a12b50d17ccbbf646386ea27ce2946a7423dcf';
+    const String NEM_HEX_STRING = '84B3552D375FFA4B'; // 9562080086528621131
     final Uint64 NEM_ID = Uint64.fromHex(NEM_HEX_STRING);
-    final String XEM_HEX_STRING = 'D525AD41D95FCF29'; // 15358872602548358953
+    const String XEM_HEX_STRING = 'D525AD41D95FCF29'; // 15358872602548358953
     final Uint64 XEM_ID = Uint64.fromHex(XEM_HEX_STRING);
 
     test('Can create via constructor', () {
       // Mosaic info parameters and properties
-      final bool isActive = true;
-      final int index = 0;
-      final String metaId = '59FDA0733F17CF0001772CBC';
+      const bool isActive = true;
+      const int index = 0;
+      const String metaId = '59FDA0733F17CF0001772CBC';
       final NamespaceId namespaceId = new NamespaceId(id: NEM_ID);
       final MosaicId mosaicId = new MosaicId(id: XEM_ID);
       final Uint64 supply = new Uint64(9999999999);

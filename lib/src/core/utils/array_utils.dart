@@ -29,9 +29,7 @@ class ArrayUtils {
 
   /// Determines whether or not an array is zero-filled.
   /// Returns true if all elements of the array is zero-filled, false otherwise.
-  static bool isZero(List<int> input) {
-    return input.every((value) => (0 == value));
-  }
+  static bool isZero(List<int> input) => input.every((value) => 0 == value);
 
   /// Returns true if two specified arrays of bytes are equal to one another.
   ///

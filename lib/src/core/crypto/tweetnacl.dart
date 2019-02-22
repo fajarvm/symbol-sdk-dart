@@ -24,10 +24,11 @@
 
 library nem2_sdk_dart.core.crypto.tweetnacl;
 
-import 'dart:typed_data';
 import 'dart:convert';
-import 'dart:math';
 import 'dart:core';
+import 'dart:math';
+import 'dart:typed_data';
+
 import 'package:convert/convert.dart';
 import 'package:fixnum/fixnum.dart';
 
@@ -48,25 +49,25 @@ class NaclKeyPair {
 /// Box algorithm, Public-key authenticated encryption
 class Box {
   /// The length of public key in bytes.
-  static final int publicKeyLength = 32;
+  static const int publicKeyLength = 32;
 
   /// The length of secret key in bytes.
-  static final int secretKeyLength = 32;
+  static const int secretKeyLength = 32;
 
   /// The length of precomputed shared key in bytes.
-  static final int sharedKeyLength = 32;
+  static const int sharedKeyLength = 32;
 
   /// The length of nonce in bytes.
-  static final int nonceLength = 24;
+  static const int nonceLength = 24;
 
   /// Zero bytes in case box.
-  static final int zerobytesLength = 32;
+  static const int zerobytesLength = 32;
 
   /// Zero bytes in case open box.
-  static final int boxzerobytesLength = 16;
+  static const int boxzerobytesLength = 16;
 
   /// The length of overhead added to box compared to original message.
-  static final int overheadLength = 16;
+  static const int overheadLength = 16;
 
   int _nonce;
 
@@ -95,9 +96,9 @@ class Box {
 
   Uint8List _generateNonce() {
     // Generate nonce
-    Int64 nonce = Int64(this._nonce);
+    final Int64 nonce = Int64(this._nonce);
 
-    Uint8List n = Uint8List(nonceLength);
+    final Uint8List n = Uint8List(nonceLength);
     for (int i = 0; i < nonceLength; i += 8) {
       n[i + 0] = nonce.shiftRightUnsigned(0).toInt();
       n[i + 1] = nonce.shiftRightUnsigned(8).toInt();
@@ -257,10 +258,10 @@ class Box {
         theNonce.length == nonceLength)) return null;
 
     // message buffer
-    Uint8List m = Uint8List(mlen + zerobytesLength);
+    final Uint8List m = Uint8List(mlen + zerobytesLength);
 
     // cipher buffer
-    Uint8List c = Uint8List(m.length);
+    final Uint8List c = Uint8List(m.length);
 
     for (int i = 0; i < mlen; i++) m[i + zerobytesLength] = message[i + moff];
 
@@ -268,7 +269,7 @@ class Box {
 
     // wrap byte_buf_t on c offset@boxzerobytesLength
     ///return new byte_buf_t(c, boxzerobytesLength, c.length-boxzerobytesLength);
-    Uint8List ret = Uint8List(c.length - boxzerobytesLength);
+    final Uint8List ret = Uint8List(c.length - boxzerobytesLength);
 
     for (int i = 0; i < ret.length; i++) ret[i] = c[i + boxzerobytesLength];
 
@@ -286,10 +287,10 @@ class Box {
       return null;
 
     // cipher buffer
-    Uint8List c = Uint8List(boxlen + boxzerobytesLength);
+    final Uint8List c = Uint8List(boxlen + boxzerobytesLength);
 
     // message buffer
-    Uint8List m = Uint8List(c.length);
+    final Uint8List m = Uint8List(c.length);
 
     for (int i = 0; i < boxlen; i++) c[i + boxzerobytesLength] = box[i + boxoff];
 
@@ -298,7 +299,7 @@ class Box {
 
     // wrap byte_buf_t on m offset@zerobytesLength
     // return new byte_buf_t(m, zerobytesLength, m.length-zerobytesLength);
-    Uint8List ret = Uint8List(m.length - zerobytesLength);
+    final Uint8List ret = Uint8List(m.length - zerobytesLength);
 
     for (int i = 0; i < ret.length; i++) ret[i] = m[i + zerobytesLength];
 
@@ -330,23 +331,23 @@ class Box {
 /// Secret Box algorithm, secret key
 class SecretBox {
   //Length of key in bytes.
-  static final int keyLength = 32;
+  static const int keyLength = 32;
 
   //Length of nonce in bytes.
-  static final int nonceLength = 24;
+  static const int nonceLength = 24;
 
   //Length of overhead added to secret box compared to original message.
-  static final int overheadLength = 16;
+  static const int overheadLength = 16;
 
   //zero bytes in case box
-  static final int zerobytesLength = 32;
+  static const int zerobytesLength = 32;
 
   //zero bytes in case open box
-  static final int boxzerobytesLength = 16;
+  static const int boxzerobytesLength = 16;
 
   int _nonce;
 
-  Uint8List _key;
+  final Uint8List _key;
 
   SecretBox(this._key) {
     _nonce = 68;
@@ -366,7 +367,7 @@ class SecretBox {
 
   Uint8List _generateNonce() {
     // generate nonce
-    Int64 nonce = Int64(this._nonce);
+    final Int64 nonce = Int64(this._nonce);
 
     Uint8List n = Uint8List(nonceLength);
     for (int i = 0; i < nonceLength; i += 8) {
@@ -503,10 +504,10 @@ class SecretBox {
 /// Scalar multiplication, Implements curve25519.
 class ScalarMult {
   //Length of scalar in bytes.
-  static final int scalarLength = 32;
+  static const int scalarLength = 32;
 
   //Length of group element in bytes.
-  static final int groupElementLength = 32;
+  static const int groupElementLength = 32;
 
   /// Multiplies an integer n by a group element p and
   /// returns the resulting group element.
@@ -536,11 +537,11 @@ class ScalarMult {
 /// Hash algorithm, Implements SHA-512.
 class Hash {
   //Length of hash in bytes.
-  static final int hashLength = 64;
+  static const int hashLength = 64;
 
   /// Returns SHA-512 hash of the message.
   static Uint8List sha512(Uint8List message) {
-    if (!(message != null && message.length > 0)) return null;
+    if (!(message != null && message.isNotEmpty)) return null;
 
     Uint8List out = Uint8List(hashLength);
 
@@ -557,16 +558,16 @@ class Hash {
 /// Signature algorithm, Implements ed25519.
 class Signature {
   //Length of signing public key in bytes.
-  static final int publicKeyLength = 32;
+  static const int publicKeyLength = 32;
 
   //Length of signing secret key in bytes.
-  static final int secretKeyLength = 64;
+  static const int secretKeyLength = 64;
 
   //Length of seed for nacl.sign.keyPair.fromSeed in bytes.
-  static final int seedLength = 32;
+  static const int seedLength = 32;
 
   //Length of signature in bytes.
-  static final int signatureLength = 64;
+  static const int signatureLength = 64;
 
   Uint8List _theirPublicKey;
   Uint8List _mySecretKey;
@@ -1078,7 +1079,7 @@ class TweetNaclFast {
   }
 
   static void _core_hsalsa20(Uint8List o, Uint8List p, Uint8List k, Uint8List c) {
-    int j0 = c[0] & 0xff | (c[1] & 0xff) << 8 | (c[2] & 0xff) << 16 | (c[3] & 0xff) << 24,
+    final int j0 = c[0] & 0xff | (c[1] & 0xff) << 8 | (c[2] & 0xff) << 16 | (c[3] & 0xff) << 24,
         j1 = k[0] & 0xff | (k[1] & 0xff) << 8 | (k[2] & 0xff) << 16 | (k[3] & 0xff) << 24,
         j2 = k[4] & 0xff | (k[5] & 0xff) << 8 | (k[6] & 0xff) << 16 | (k[7] & 0xff) << 24,
         j3 = k[8] & 0xff | (k[9] & 0xff) << 8 | (k[10] & 0xff) << 16 | (k[11] & 0xff) << 24,
@@ -1318,7 +1319,7 @@ class TweetNaclFast {
 
   static int _crypto_onetimeauth(
       Uint8List out, final int outpos, Uint8List m, final int mpos, int n, Uint8List k) {
-    poly1305 s = new poly1305(k);
+    Poly1305 s = new Poly1305(k);
     s.update(m, mpos, n);
     s.finish(out, outpos);
     return 0;
@@ -1967,10 +1968,10 @@ class TweetNaclFast {
   }
 
   static int crypto_scalarmult(Uint8List q, Uint8List n, Uint8List p) {
-    Uint8List z = Uint8List(32);
-    Int64List x = Int64List(80);
+    final Uint8List z = Uint8List(32);
+    final Int64List x = Int64List(80);
     int r, i;
-    Int64List a = Int64List(16),
+    final Int64List a = Int64List(16),
         b = Int64List(16),
         c = Int64List(16),
         d = Int64List(16),
@@ -2693,25 +2694,25 @@ class TweetNaclFast {
 // gf: long[16]
   ///private static void add(gf p[4],gf q[4])
   static void add(List<Int64List> p, List<Int64List> q) {
-    Int64List a = Int64List(16);
-    Int64List b = Int64List(16);
-    Int64List c = Int64List(16);
-    Int64List d = Int64List(16);
-    Int64List t = Int64List(16);
-    Int64List e = Int64List(16);
-    Int64List f = Int64List(16);
-    Int64List g = Int64List(16);
-    Int64List h = Int64List(16);
+    final Int64List a = Int64List(16);
+    final Int64List b = Int64List(16);
+    final Int64List c = Int64List(16);
+    final Int64List d = Int64List(16);
+    final Int64List t = Int64List(16);
+    final Int64List e = Int64List(16);
+    final Int64List f = Int64List(16);
+    final Int64List g = Int64List(16);
+    final Int64List h = Int64List(16);
 
-    Int64List p0 = p[0];
-    Int64List p1 = p[1];
-    Int64List p2 = p[2];
-    Int64List p3 = p[3];
+    final Int64List p0 = p[0];
+    final Int64List p1 = p[1];
+    final Int64List p2 = p[2];
+    final Int64List p3 = p[3];
 
-    Int64List q0 = q[0];
-    Int64List q1 = q[1];
-    Int64List q2 = q[2];
-    Int64List q3 = q[3];
+    final Int64List q0 = q[0];
+    final Int64List q1 = q[1];
+    final Int64List q2 = q[2];
+    final Int64List q3 = q[3];
 
     _Z_off(a, 0, p1, 0, p0, 0);
     _Z_off(t, 0, q1, 0, q0, 0);
@@ -2897,8 +2898,8 @@ class TweetNaclFast {
 
     int i, j;
 
-    Int64List x = Int64List(64);
-    List<Int64List> p = List<Int64List>(4);
+    final Int64List x = Int64List(64);
+    final List<Int64List> p = List<Int64List>(4);
 
     p[0] = Int64List(16);
     p[1] = Int64List(16);
@@ -2938,13 +2939,13 @@ class TweetNaclFast {
   }
 
   static int unpackneg(List<Int64List> r, Uint8List p) {
-    Int64List t = Int64List(16);
-    Int64List chk = Int64List(16);
-    Int64List num = Int64List(16);
-    Int64List den = Int64List(16);
-    Int64List den2 = Int64List(16);
-    Int64List den4 = Int64List(16);
-    Int64List den6 = Int64List(16);
+    final Int64List t = Int64List(16);
+    final Int64List chk = Int64List(16);
+    final Int64List num = Int64List(16);
+    final Int64List den = Int64List(16);
+    final Int64List den2 = Int64List(16);
+    final Int64List den4 = Int64List(16);
+    final Int64List den6 = Int64List(16);
 
     _set25519(r[2], _gf1);
     unpack25519(r[1], p);
@@ -2986,15 +2987,15 @@ class TweetNaclFast {
   static int crypto_sign_open(Uint8List m, int dummy /* *mlen not used*/, Uint8List sm,
       final int smoff, int /*long*/ n, Uint8List pk) {
     int i;
-    Uint8List t = Uint8List(32), h = Uint8List(64);
-    List<Int64List> p = List<Int64List>(4);
+    final Uint8List t = Uint8List(32), h = Uint8List(64);
+    final List<Int64List> p = List<Int64List>(4);
 
     p[0] = Int64List(16);
     p[1] = Int64List(16);
     p[2] = Int64List(16);
     p[3] = Int64List(16);
 
-    List<Int64List> q = List<Int64List>(4);
+    final List<Int64List> q = List<Int64List>(4);
     q[0] = Int64List(16);
     q[1] = Int64List(16);
     q[2] = Int64List(16);
@@ -3079,7 +3080,7 @@ class TweetNaclFast {
 
 /// Port of Andrew Moon's Poly1305-donna-16. Public domain.
 /// https://github.com/floodyberry/poly1305-donna
-class poly1305 {
+class Poly1305 {
   Uint8List _buffer;
   List<Int32> _r;
   List<Int32> _h;
@@ -3087,7 +3088,7 @@ class poly1305 {
   int _leftover;
   int _fin;
 
-  poly1305(Uint8List key) {
+  Poly1305(Uint8List key) {
     this._buffer = Uint8List(16);
     this._r = List<Int32>.filled(10, Int32(0));
     this._h = List<Int32>.filled(10, Int32(0));
@@ -3126,7 +3127,7 @@ class poly1305 {
     this._pad[7] = key[30] & 0xff | (key[31] & 0xff) << 8;
   }
 
-  poly1305 blocks(Uint8List m, int mpos, int bytes) {
+  Poly1305 blocks(Uint8List m, int mpos, int bytes) {
     int hibit = this._fin != 0 ? 0 : (1 << 11);
     Int32 t0, t1, t2, t3, t4, t5, t6, t7, c;
     Int32 d0, d1, d2, d3, d4, d5, d6, d7, d8, d9;
@@ -3142,7 +3143,7 @@ class poly1305 {
         h8 = this._h[8],
         h9 = this._h[9];
 
-    int r0 = this._r[0].toInt(),
+    final int r0 = this._r[0].toInt(),
         r1 = this._r[1].toInt(),
         r2 = this._r[2].toInt(),
         r3 = this._r[3].toInt(),
@@ -3369,7 +3370,7 @@ class poly1305 {
     return this;
   }
 
-  poly1305 finish(Uint8List mac, int macpos) {
+  Poly1305 finish(Uint8List mac, int macpos) {
     List<Int32> g = List<Int32>(10);
     int i;
     Int32 c, mask, f;
@@ -3464,7 +3465,7 @@ class poly1305 {
     return this;
   }
 
-  poly1305 update(Uint8List m, int mpos, int bytes) {
+  Poly1305 update(Uint8List m, int mpos, int bytes) {
     int i, want;
 
     if (this._leftover != 0) {

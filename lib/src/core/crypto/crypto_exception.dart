@@ -20,7 +20,8 @@ library nem2_sdk_dart.core.crypto.crypto_exception;
 class CryptoException implements Exception {
   String message;
 
-  CryptoException([this.message = ""]);
+  CryptoException([this.message = '']);
 
-  String toString() => "CryptoException: $message";
+  @override
+  String toString() => 'CryptoException: $message';
 }

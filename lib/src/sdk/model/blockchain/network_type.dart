@@ -30,11 +30,10 @@ class NetworkType {
   /// Mijin test net network.
   static const int MIJIN_TEST = 0x90;
 
-  static bool isValidNetworkType(int networkType) {
-    return networkType != null &&
-        (networkType == MIJIN_TEST ||
-            networkType == MIJIN ||
-            networkType == TEST_NET ||
-            networkType == MAIN_NET);
-  }
+  static bool isValidNetworkType(int networkType) =>
+      networkType != null &&
+      (networkType == MIJIN_TEST ||
+          networkType == MIJIN ||
+          networkType == TEST_NET ||
+          networkType == MAIN_NET);
 }

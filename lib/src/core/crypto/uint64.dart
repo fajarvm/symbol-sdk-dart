@@ -53,15 +53,13 @@ class Uint64 implements Comparable<Uint64> {
   BigInt get value => _value;
 
   @override
-  int get hashCode {
-    return this._value.hashCode;
-  }
+  int get hashCode => _value.hashCode;
 
   const Uint64._(this._value);
 
   factory Uint64([final int value = 0]) {
     if (MIN_VALUE_SIGNED > value) {
-      throw new ArgumentError('Value must be above ${MIN_VALUE}');
+      throw new ArgumentError('Value must be above $MIN_VALUE');
     }
 
     final BigInt bigValue = BigInt.from(value);
@@ -84,31 +82,24 @@ class Uint64 implements Comparable<Uint64> {
 
   /// Creates a [Uint64] from a [hexString].
   static Uint64 fromHex(final String hexString) {
-    return fromBigInt(BigInt.parse(hexString, radix: 16));
+    final BigInt bigInt = BigInt.parse(hexString, radix: 16);
+    return fromBigInt(bigInt);
   }
 
   @override
-  bool operator ==(other) {
-    return other is Uint64 && this._value == other.value;
-  }
+  bool operator ==(other) => other is Uint64 && _value == other.value;
 
   @override
-  int compareTo(Uint64 other) {
-    return this._value.compareTo(other.value);
-  }
+  int compareTo(Uint64 other) => _value.compareTo(other.value);
 
-  bool isZero() {
-    return BigInt.zero == this._value && ArrayUtils.isZero(toBytes());
-  }
+  bool isZero() => BigInt.zero == _value && ArrayUtils.isZero(toBytes());
 
   @override
-  String toString() {
-    return this._value.toString();
-  }
+  String toString() => _value.toString();
 
   /// Converts to hex string representation. Fills with leading 0 to reach 16 characters length.
   String toHexString() {
-    String hexString = this._value.toRadixString(16);
+    final String hexString = _value.toRadixString(16);
     if (hexString.length != 16) {
       return new List.filled(16 - hexString.length, '0').join() + hexString;
     }

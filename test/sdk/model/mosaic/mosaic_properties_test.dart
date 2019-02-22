@@ -21,7 +21,7 @@ import 'package:test/test.dart';
 import 'package:nem2_sdk_dart/core.dart' show Uint64;
 import 'package:nem2_sdk_dart/sdk.dart' show MosaicProperties;
 
-main() {
+void main() {
   group('Create MosaicProperties via constructor', () {
     test('Can create via constructor', () {
       final MosaicProperties properties = new MosaicProperties(

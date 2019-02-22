@@ -16,7 +16,7 @@
 
 library nem2_sdk_dart.core.utils.base32;
 
-import "dart:typed_data" show Uint8List;
+import 'dart:typed_data' show Uint8List;
 
 import 'hex_utils.dart';
 
@@ -27,7 +27,7 @@ class Base32 {
 
   static const ALPHABET = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ234567';
   // TODO: illegal characters are currently converted into 0xFF
-  static const DIGIT_LOOKUP_TABLE = const [
+  static const DIGIT_LOOKUP_TABLE = [
     /// '0', '1', '2', '3', '4', '5', '6', '7'
     0xFF, 0xFF, 0x1A, 0x1B, 0x1C, 0x1D, 0x1E, 0x1F,
 
@@ -66,14 +66,14 @@ class Base32 {
   static String encode(final List<int> bytesList) {
     if (0 != bytesList.length % DECODED_BLOCK_SIZE) {
       throw ArgumentError(
-          "Decoded size must be multiple of ${DECODED_BLOCK_SIZE}");
+          'Decoded size must be multiple of $DECODED_BLOCK_SIZE');
     }
 
     final Uint8List bytes = new Uint8List(bytesList.length);
     bytes.setRange(0, bytes.length, bytesList, 0);
     int i = 0, index = 0, digit = 0;
     int currByte, nextByte;
-    String base32 = '';
+    StringBuffer sb = new StringBuffer();
 
     while (i < bytes.length) {
       currByte = bytes[i];
@@ -91,17 +91,15 @@ class Base32 {
         digit |= nextByte >> (ENCODED_BLOCK_SIZE - index);
         i++;
       } else {
-        digit =
-            (currByte >> (ENCODED_BLOCK_SIZE - (index + DECODED_BLOCK_SIZE)) &
-                0x1F);
+        digit = currByte >> (ENCODED_BLOCK_SIZE - (index + DECODED_BLOCK_SIZE)) & 0x1F;
         index = (index + DECODED_BLOCK_SIZE) % ENCODED_BLOCK_SIZE;
         if (index == 0) {
           i++;
         }
       }
-      base32 = base32 + ALPHABET[digit];
+      sb.write(ALPHABET[digit]);
     }
-    return base32;
+    return sb.toString();
   }
 
   /// Converts a [hexString] to a [String] representation of the base32 bytes.
@@ -114,7 +112,7 @@ class Base32 {
   static Uint8List decode(final String base32Encoded) {
     if (0 != base32Encoded.length % ENCODED_BLOCK_SIZE) {
       throw ArgumentError(
-          "Encoded size must be multiple of ${ENCODED_BLOCK_SIZE}");
+          'Encoded size must be multiple of $ENCODED_BLOCK_SIZE');
     }
 
     int index = 0, lookup, offset = 0, digit;
@@ -129,13 +127,13 @@ class Base32 {
       lookup = base32Encoded.codeUnitAt(i) - '0'.codeUnitAt(0);
       if (lookup < 0 || lookup >= DIGIT_LOOKUP_TABLE.length) {
         throw ArgumentError(
-            "illegal base32 character ${base32Encoded[i]}");
+            'illegal base32 character ${base32Encoded[i]}');
       }
 
       digit = DIGIT_LOOKUP_TABLE[lookup];
       if (digit == 0xFF) {
         throw ArgumentError(
-            "illegal base32 character ${base32Encoded[i]}");
+            'illegal base32 character ${base32Encoded[i]}');
       }
 
       if (index <= 3) {
@@ -151,7 +149,7 @@ class Base32 {
         }
       } else {
         index = (index + DECODED_BLOCK_SIZE) % ENCODED_BLOCK_SIZE;
-        bytes[offset] |= (digit >> index);
+        bytes[offset] |= digit >> index;
         offset++;
 
         if (offset >= bytes.length) {

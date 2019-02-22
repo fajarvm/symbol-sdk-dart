@@ -54,17 +54,13 @@ class MosaicProperties {
       this.supplyMutable, this.transferable, this.levyMutable, this.divisibility, this.duration);
 
   factory MosaicProperties(
-      {final bool supplyMutable = false,
-      final bool transferable = true,
-      final bool levyMutable = false,
-      final int divisibility = 0,
-      final Uint64 duration}) {
-    return new MosaicProperties._(
-        supplyMutable, transferable, levyMutable, divisibility, duration);
-  }
+          {final bool supplyMutable = false,
+          final bool transferable = true,
+          final bool levyMutable = false,
+          final int divisibility = 0,
+          final Uint64 duration}) =>
+      MosaicProperties._(supplyMutable, transferable, levyMutable, divisibility, duration);
 
   /// Creates mosaic properties with the [duration]. Default values are set for other properties.
-  static MosaicProperties create(Uint64 duration) {
-    return MosaicProperties(duration: duration);
-  }
+  static MosaicProperties create(Uint64 duration) => MosaicProperties(duration: duration);
 }

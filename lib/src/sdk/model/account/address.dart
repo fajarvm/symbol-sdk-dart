@@ -47,7 +47,7 @@ class Address {
 
   const Address._(this._address, this._networkType);
 
-  factory Address({final String address = null, final int networkType = null}) {
+  factory Address({final String address, final int networkType}) {
     if (address == null || networkType == null) {
       throw new ArgumentError('Address string and/or Network type must not be null');
     }
@@ -62,25 +62,22 @@ class Address {
   /// Get the address in plain format.
   ///
   /// For example: SB3KUBHATFCPV7UZQLWAQ2EUR6SIHBSBEOEDDDF3.
-  String get plain => this._address;
+  String get plain => _address;
 
   /// Get address in pretty format.
   ///
   /// For example: SB3KUB-HATFCP-V7UZQL-WAQ2EU-R6SIHB-SBEOED-DDF3.
-  String get pretty => prettify(this._address);
+  String get pretty => prettify(_address);
 
   /// Get the network type of this address.
-  int get networkType => this._networkType;
+  int get networkType => _networkType;
 
   @override
-  bool operator ==(other) {
-    return other is Address && this.plain == other.plain && this.networkType == other.networkType;
-  }
+  bool operator ==(other) =>
+      other is Address && plain == other.plain && networkType == other.networkType;
 
   @override
-  int get hashCode {
-    return this.plain.hashCode + networkType.hashCode;
-  }
+  int get hashCode => plain.hashCode + networkType.hashCode;
 
   /// Creates an [Address] from a given [publicKey] string for the given [networkType].
   static Address fromPublicKey(final String publicKey, final int networkType) {
@@ -98,8 +95,7 @@ class Address {
     final String address = rawAddress.trim().toUpperCase().replaceAll(REGEX_DASH, EMPTY_STRING);
 
     if (address.length != ADDRESS_ENCODED_SIZE) {
-      throw new ArgumentError(
-          'Address ${address} has to be ${ADDRESS_ENCODED_SIZE} characters long');
+      throw new ArgumentError('Address $address has to be $ADDRESS_ENCODED_SIZE characters long');
     }
 
     switch (address[0]) {
@@ -126,7 +122,7 @@ class Address {
   static Uint8List stringToAddress(final String encodedAddress) {
     if (ADDRESS_ENCODED_SIZE != encodedAddress.length) {
       throw ArgumentError(
-          'The encoded address ${encodedAddress} does not represent a valid encoded address');
+          'The encoded address $encodedAddress does not represent a valid encoded address');
     }
 
     return Base32.decode(encodedAddress);
@@ -137,7 +133,7 @@ class Address {
     final String hexStringAddress = HexUtils.getString(decodedAddress);
     if (ADDRESS_DECODED_SIZE != decodedAddress.length) {
       throw ArgumentError(
-          "The Address ${hexStringAddress} does not represent a valid decoded address");
+          'The Address $hexStringAddress does not represent a valid decoded address');
     }
 
     return Base32.encode(decodedAddress);
@@ -147,33 +143,33 @@ class Address {
   static Uint8List publicKeyToAddress(final Uint8List publicKey, final int networkType) {
     // Step 1: create a SHA3-256 hash of the public key
     final SHA3DigestNist digest = Ed25519.createSha3Hasher(length: Ed25519.KEY_SIZE);
-    Uint8List stepOne = new Uint8List(KEY_SIZE);
+    final Uint8List stepOne = new Uint8List(KEY_SIZE);
     digest.update(publicKey, 0, KEY_SIZE);
     digest.doFinal(stepOne, 0);
 
     // Step 2: perform a RIPEMD160 on previous step
     final RIPEMD160Digest rm160Digest = new RIPEMD160Digest();
-    Uint8List stepTwo = new Uint8List(RIPEMD_160_SIZE);
+    final Uint8List stepTwo = new Uint8List(RIPEMD_160_SIZE);
     rm160Digest.update(stepOne, 0, KEY_SIZE);
     rm160Digest.doFinal(stepTwo, 0);
 
     // Step 3: prepend network type
-    Uint8List decodedAddress = new Uint8List(ADDRESS_DECODED_SIZE);
+    final Uint8List decodedAddress = new Uint8List(ADDRESS_DECODED_SIZE);
     decodedAddress[0] = networkType;
     ArrayUtils.copy(decodedAddress, stepTwo, numElementsToCopy: RIPEMD_160_SIZE, destOffset: 1);
 
     // Step 4: perform SHA3-256 on previous step
-    Uint8List stepFour = new Uint8List(KEY_SIZE);
-    int rm160Length = RIPEMD_160_SIZE + 1;
+    final Uint8List stepFour = new Uint8List(KEY_SIZE);
+    const int rm160Length = RIPEMD_160_SIZE + 1;
     digest.update(decodedAddress, 0, rm160Length);
     digest.doFinal(stepFour, 0);
 
     // Step 5: retrieve checksum
-    Uint8List stepFive = new Uint8List(CHECKSUM_SIZE);
+    final Uint8List stepFive = new Uint8List(CHECKSUM_SIZE);
     ArrayUtils.copy(stepFive, stepFour, numElementsToCopy: CHECKSUM_SIZE);
 
     // Step 6: append stepFive to result of stepThree
-    Uint8List stepSix = new Uint8List(ADDRESS_DECODED_SIZE);
+    final Uint8List stepSix = new Uint8List(ADDRESS_DECODED_SIZE);
     ArrayUtils.copy(stepSix, decodedAddress, numElementsToCopy: rm160Length);
     ArrayUtils.copy(stepSix, stepFive, numElementsToCopy: CHECKSUM_SIZE, destOffset: rm160Length);
 
@@ -189,8 +185,7 @@ class Address {
   /// After: SB3KUB-HATFCP-V7UZQL-WAQ2EU-R6SIHB-SBEOED-DDF3
   static String prettify(final String address) {
     if (address.length != ADDRESS_ENCODED_SIZE) {
-      throw new ArgumentError(
-          'Address ${address} has to be ${ADDRESS_ENCODED_SIZE} characters long');
+      throw new ArgumentError('Address $address has to be $ADDRESS_ENCODED_SIZE characters long');
     }
 
     final StringBuffer sb = new StringBuffer();
@@ -201,7 +196,7 @@ class Address {
       final String current = match.group(0);
       sb.write(current);
       if (current != last) {
-        sb.write("-");
+        sb.write('-');
       }
     }
 

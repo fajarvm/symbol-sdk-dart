@@ -31,10 +31,10 @@ class PublicAccount {
 
   const PublicAccount._(this._address, this._publicKey);
 
-  factory PublicAccount({final Address address = null, final String publicKey = null}) {
+  factory PublicAccount({final Address address, final String publicKey}) {
     if (address == null || publicKey == null) {
       throw new ArgumentError(
-          "An address and/or a publicKey must not be null to create a new PublicAccount.");
+          'An address and/or a publicKey must not be null to create a new PublicAccount.');
     }
 
     return new PublicAccount._(address, publicKey);
@@ -50,16 +50,11 @@ class PublicAccount {
   String get publicKey => _publicKey;
 
   @override
-  int get hashCode {
-    return (publicKey.hashCode + address.hashCode);
-  }
+  int get hashCode => publicKey.hashCode + address.hashCode;
 
   @override
-  bool operator ==(final other) {
-    return (other is PublicAccount) &&
-        publicKey == other.publicKey &&
-        plainAddress == other.plainAddress;
-  }
+  bool operator ==(final other) =>
+      other is PublicAccount && publicKey == other.publicKey && plainAddress == other.plainAddress;
 
   /// Create a [PublicAccount] from a [publicKey] for the given [networkType].
   static PublicAccount fromPublicKey(final String publicKey, final int networkType) {

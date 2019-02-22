@@ -22,12 +22,12 @@ import 'package:nem2_sdk_dart/core.dart' show Uint64;
 import 'package:nem2_sdk_dart/sdk.dart'
     show AccountInfo, Address, Mosaic, MosaicId, NetworkType, PublicAccount;
 
-main() {
+void main() {
   group('AccountInfo', () {
     test('Can create an AccountInfo', () {
       // Prepare
-      final String encodedAddress = '9050B9837EFAB4BBE8A4B9BB32D812F9885C00D8FC1650E142';
-      final String publicKey = '846B4439154579A5903B1459C9CF69CB8153F6D0110A7A0ED61DE29AE4810BF2';
+      const String encodedAddress = '9050B9837EFAB4BBE8A4B9BB32D812F9885C00D8FC1650E142';
+      const String publicKey = '846B4439154579A5903B1459C9CF69CB8153F6D0110A7A0ED61DE29AE4810BF2';
       final Address address = Address.fromEncoded(encodedAddress);
       final Uint64 addressHeight = Uint64(12345);
       final Uint64 importance = Uint64(9000);

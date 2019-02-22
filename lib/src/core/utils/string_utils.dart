@@ -23,24 +23,17 @@ class StringUtils {
 
   /// Removes all whitespaces from a String.
   /// That includes leading, trailing and in-between characters in the String.
-  static String removeAllWhitespaces(String input) {
-    return (input == null || input.isEmpty) ? EMPTY_STRING : input.replaceAll(WHITESPACE, '');
-  }
+  static String removeAllWhitespaces(String input) =>
+      (input == null || input.isEmpty) ? EMPTY_STRING : input.replaceAll(WHITESPACE, '');
 
   /// Removes leading and trailing whitespaces.
-  static String trim(final String input) {
-    return trimLeft(trimRight(input));
-  }
+  static String trim(final String input) => trimLeft(trimRight(input));
 
   /// Removes leading whitespaces.
-  static String trimLeft(final String input) {
-    return (input == null) ? EMPTY_STRING : input.trimLeft();
-  }
+  static String trimLeft(final String input) => (input == null) ? EMPTY_STRING : input.trimLeft();
 
   /// Removes trailing whitespaces.
-  static String trimRight(final String input) {
-    return (input == null) ? EMPTY_STRING : input.trimRight();
-  }
+  static String trimRight(final String input) => (input == null) ? EMPTY_STRING : input.trimRight();
 
   /// Determines whether an [input] string is empty or not. Returns true if it's empty.
   /// Unlike the built-in `String.isEmpty`, this method trims the input string first.
@@ -50,9 +43,7 @@ class StringUtils {
   }
 
   /// Determines whether an [input] string is empty or not. Returns true if it's not empty.
-  static bool isNotEmpty(final String input) {
-    return !isEmpty(input);
-  }
+  static bool isNotEmpty(final String input) => !isEmpty(input);
 
   /// Parses a String to a int. Returns null
   static int parseIntOrNull(final String input) {

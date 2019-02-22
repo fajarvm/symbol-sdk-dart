@@ -21,8 +21,8 @@ import 'package:test/test.dart';
 import 'package:nem2_sdk_dart/core.dart' show Uint64;
 import 'package:nem2_sdk_dart/sdk.dart' show MosaicId;
 
-main() {
-  final String XEM_HEX_STRING = 'D525AD41D95FCF29'; // 15358872602548358953
+void main() {
+  const String XEM_HEX_STRING = 'D525AD41D95FCF29'; // 15358872602548358953
   final Uint64 XEM_ID = Uint64.fromHex(XEM_HEX_STRING);
 
   group('Create MosaicId via constructor', () {

@@ -22,7 +22,7 @@ import 'package:test/test.dart';
 
 import 'package:nem2_sdk_dart/core.dart' show HexUtils;
 
-main() {
+void main() {
   group('getBytes()', () {
     test('getBytes() can convert valid string to byte array', () {
       final List<int> actual = HexUtils.getBytes('4e454d465457');
@@ -71,13 +71,13 @@ main() {
   group('getString()', () {
     test('getString() can convert bytes to string', () {
       final String actual = HexUtils.getString([0x4e, 0x45, 0x4d, 0x46, 0x54, 0x57]);
-      final String expectedOutput = '4e454d465457';
+      const String expectedOutput = '4e454d465457';
       expect(actual, equals(expectedOutput));
     });
 
     test('getString() can convert bytes with leading zeros to string', () {
       final String actual = HexUtils.getString([0x00, 0x00, 0x0d, 0x46, 0x54, 0x57]);
-      final String expectedOutput = '00000d465457';
+      const String expectedOutput = '00000d465457';
       expect(actual, equals(expectedOutput));
     });
   });
@@ -106,7 +106,7 @@ main() {
   group('utf8ToHex()', () {
     test('can convert UTF8 text to Hex', () {
       final String actual = HexUtils.utf8ToHex('test words |@#¢∞¬÷“”≠[]}{–');
-      final String expected =
+      const String expected =
           '7465737420776f726473207c4023c2a2e2889ec2acc3b7e2809ce2809de289a05b5d7d7be28093';
 
       expect(actual, equals(expected));
@@ -114,7 +114,7 @@ main() {
 
     test('can convert UTF8 text with foreign characters to Hex', () {
       final String actual = HexUtils.utf8ToHex('先秦兩漢');
-      final String expected = 'e58588e7a7a6e585a9e6bca2';
+      const String expected = 'e58588e7a7a6e585a9e6bca2';
 
       expect(actual, equals(expected));
     });
