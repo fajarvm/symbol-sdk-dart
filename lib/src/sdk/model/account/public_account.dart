@@ -81,7 +81,7 @@ class PublicAccount {
     final Uint8List sigByte = HexUtils.getBytes(signature);
     final String utf8Hex = HexUtils.utf8ToHex(data);
     final Uint8List dataByte = HexUtils.getBytes(utf8Hex);
-    final Uint8List pkByte = HexUtils.getBytes(_publicKey);
+    final Uint8List pkByte = HexUtils.getBytes(publicKey);
 
     return KeyPair.verify(pkByte, dataByte, sigByte);
   }

@@ -18,6 +18,14 @@ library nem2_sdk_dart.sdk.model.blockchain.network_type;
 
 /// This class is used to identify a network type
 class NetworkType {
+  static final NetworkType singleton = new NetworkType._();
+
+  NetworkType._();
+
+  factory NetworkType() {
+    return singleton;
+  }
+
   /// Main net network.
   static const int MAIN_NET = 0x68;
 

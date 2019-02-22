@@ -45,19 +45,8 @@ class AccountInfo {
   /// A collection of mosaics hold by the account.
   final List<Mosaic> mosaics;
 
-  const AccountInfo._(this.address, this.addressHeight, this.publicKey, this.publicKeyHeight,
+  const AccountInfo(this.address, this.addressHeight, this.publicKey, this.publicKeyHeight,
       this.importance, this.importanceHeight, this.mosaics);
-
-  factory AccountInfo(
-          final Address address,
-          final Uint64 addressHeight,
-          final String publicKey,
-          final Uint64 publicKeyHeight,
-          final Uint64 importance,
-          final Uint64 importanceHeight,
-          final List<Mosaic> mosaics) =>
-      AccountInfo._(address, addressHeight, publicKey, publicKeyHeight, importance,
-          importanceHeight, mosaics);
 
   /// Returns the public account of this account.
   PublicAccount get publicAccount => PublicAccount.fromPublicKey(publicKey, address.networkType);
