@@ -38,7 +38,7 @@ class ArrayUtils {
   /// are equal.  In other words, two arrays are equal if they contain the
   /// same elements in the same order.  Also, two array references are
   /// considered equal if both are null
-  static bool deepEqual(List<int> first, List<int> second, {final int numElementsToCompare = 0}) {
+  static bool deepEqual(List first, List second, {final int numElementsToCompare = 0}) {
     // type comparison
     if (first.hashCode == second.hashCode) {
       return true;
