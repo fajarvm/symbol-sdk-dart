@@ -14,7 +14,7 @@
 // limitations under the License.
 //
 
-library nem2_sdk_dart.test.core.utils.id_generator_test;
+library nem2_sdk_dart.test.sdk.model.transaction.id_generator_test;
 
 import 'package:test/test.dart';
 

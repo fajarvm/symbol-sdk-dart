@@ -14,7 +14,7 @@
 // limitations under the License.
 //
 
-library nem2_sdk_dart.core.utils.id_generator;
+library nem2_sdk_dart.sdk.model.transaction.id_generator;
 
 import 'dart:convert' show utf8;
 import 'dart:typed_data' show Uint8List;

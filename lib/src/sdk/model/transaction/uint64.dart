@@ -13,7 +13,8 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 //
-library nem2_sdk_dart.sdk.model.uint64;
+
+library nem2_sdk_dart.sdk.model.transaction.uint64;
 
 import 'dart:typed_data' show Uint8List;
 
