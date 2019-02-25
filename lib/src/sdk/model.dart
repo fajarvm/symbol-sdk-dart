@@ -46,5 +46,7 @@ export 'model/namespace/namespace_name.dart';
 export 'model/namespace/namespace_type.dart';
 
 // Transaction
+export 'model/transaction/deadline.dart';
+export 'model/transaction/hash_type.dart';
 export 'model/transaction/id_generator.dart';
 export 'model/transaction/uint64.dart';
