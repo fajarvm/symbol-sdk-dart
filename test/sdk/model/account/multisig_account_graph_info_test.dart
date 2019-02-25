@@ -18,11 +18,11 @@ library nem2_sdk_dart.test.sdk.model.account.multisig_account_graph_info_test;
 
 import 'package:test/test.dart';
 
+import 'package:nem2_sdk_dart/core.dart' show ArrayUtils;
 import 'package:nem2_sdk_dart/sdk.dart'
     show MultisigAccountGraphInfo, MultisigAccountInfo, NetworkType, PublicAccount;
-import 'package:nem2_sdk_dart/core.dart' show ArrayUtils;
 
-main() {
+void main() {
   group('MultisigAccountGraphInfo', () {
     test('Can create a multi-signature account graph info', () {
       // Test accounts

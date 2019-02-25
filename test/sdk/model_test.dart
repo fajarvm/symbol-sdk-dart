@@ -20,6 +20,10 @@ import 'model/account/address_test.dart' as address_test;
 import 'model/account/multisig_account_graph_info_test.dart' as multisig_account_graph_info_test;
 import 'model/account/multisig_account_info_test.dart' as multisig_account_info_test;
 import 'model/account/public_account_test.dart' as public_account_test;
+import 'model/blockchain/block_info_test.dart' as block_info_test;
+import 'model/blockchain/blockchain_score_test.dart' as blockchain_score_test;
+import 'model/blockchain/blockchain_storage_info_test.dart' as blockchain_storage_info_test;
+import 'model/blockchain/network_type_test.dart' as network_type_test;
 import 'model/mosaic/mosaic_id_test.dart' as mosaic_id_test;
 import 'model/mosaic/mosaic_info_test.dart' as mosaic_info_test;
 import 'model/mosaic/mosaic_properties_test.dart' as mosaic_properties_test;
@@ -27,15 +31,26 @@ import 'model/mosaic/mosaic_test.dart' as mosaic_test;
 import 'model/namespace/namespace_id_test.dart' as namespace_id_test;
 
 void main() {
+  // account
   account_test.main();
   account_info_test.main();
   address_test.main();
   multisig_account_graph_info_test.main();
   multisig_account_info_test.main();
   public_account_test.main();
+
+  // blockchain
+  block_info_test.main();
+  blockchain_score_test.main();
+  blockchain_storage_info_test.main();
+  network_type_test.main();
+
+  // mosaic
   mosaic_test.main();
   mosaic_id_test.main();
   mosaic_info_test.main();
   mosaic_properties_test.main();
+
+  // namespace
   namespace_id_test.main();
 }

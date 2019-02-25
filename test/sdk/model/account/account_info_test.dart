@@ -38,8 +38,8 @@ void main() {
       final mosaics = <Mosaic>[Mosaic(MosaicId.fromId(XEM_ID), Uint64(987654321))];
 
       // Create
-      final accountInfo = new AccountInfo(address, addressHeight, publicKey,
-          publicKeyHeight, importance, importanceHeight, mosaics);
+      final accountInfo = new AccountInfo(address, addressHeight, publicKey, publicKeyHeight,
+          importance, importanceHeight, mosaics);
 
       // Assert
       expect(accountInfo.address.plain, equals('SBILTA367K2LX2FEXG5TFWAS7GEFYAGY7QLFBYKC'));

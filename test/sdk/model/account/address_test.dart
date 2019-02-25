@@ -16,12 +16,10 @@
 
 library nem2_sdk_dart.test.sdk.model.account.address_test;
 
-import 'dart:typed_data' show Uint8List;
-
 import 'package:test/test.dart';
 
-import 'package:nem2_sdk_dart/sdk.dart' show Address, NetworkType;
 import 'package:nem2_sdk_dart/core.dart' show ArrayUtils, HexUtils, KeyPair;
+import 'package:nem2_sdk_dart/sdk.dart' show Address, NetworkType;
 
 void main() {
   group('fromPublicKey', () {

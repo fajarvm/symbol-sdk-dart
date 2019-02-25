@@ -18,6 +18,8 @@ library nem2_sdk_dart.sdk.model.blockchain.network_type;
 
 /// This class is used to identify a network type
 class NetworkType {
+  static const String UNKNOWN_NETWORK_TYPE = 'network type is unknown';
+
   static final NetworkType singleton = new NetworkType._();
 
   NetworkType._();
@@ -26,22 +28,38 @@ class NetworkType {
     return singleton;
   }
 
-  /// Main net network.
-  static const int MAIN_NET = 0x68;
+  /// Main net network identifier (104).
+  static const int MAIN_NET = 0x68; // 104
 
-  /// Test net network.
-  static const int TEST_NET = 0x98;
+  /// Test net network identifier (152).
+  static const int TEST_NET = 0x98; // 152
 
-  /// Mijin net network.
-  static const int MIJIN = 0x60;
+  /// Mijin net network identifier (96).
+  static const int MIJIN = 0x60; // 96
 
-  /// Mijin test net network.
-  static const int MIJIN_TEST = 0x90;
+  /// Mijin test net network identifier (144).
+  static const int MIJIN_TEST = 0x90; // 144
 
-  static bool isValidNetworkType(int networkType) =>
-      networkType != null &&
-      (networkType == MIJIN_TEST ||
-          networkType == MIJIN ||
-          networkType == TEST_NET ||
-          networkType == MAIN_NET);
+  static int getNetworkType(final int networkType) {
+    switch (networkType) {
+      case MAIN_NET:
+        return NetworkType.MAIN_NET;
+      case TEST_NET:
+        return NetworkType.TEST_NET;
+      case MIJIN:
+        return NetworkType.MIJIN;
+      case MIJIN_TEST:
+        return NetworkType.MIJIN_TEST;
+      default:
+        throw new ArgumentError(UNKNOWN_NETWORK_TYPE);
+    }
+  }
+
+  static bool isValidNetworkType(final int networkType) {
+    try {
+      return 0 < getNetworkType(networkType);
+    } catch (e) {
+      return false;
+    }
+  }
 }

@@ -25,6 +25,9 @@ export 'model/account/multisig_account_info.dart';
 export 'model/account/public_account.dart';
 
 // Blockchain parts
+export 'model/blockchain/block_info.dart';
+export 'model/blockchain/blockchain_score.dart';
+export 'model/blockchain/blockchain_storage_info.dart';
 export 'model/blockchain/network_type.dart';
 
 // Mosaic parts
