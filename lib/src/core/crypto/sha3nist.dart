@@ -17,7 +17,7 @@
 // Copyright (c) 2013-present, the authors of the Pointy Castle project
 // This library is dually licensed under LGPL 3 and MPL 2.0.
 
-library nem2_sdk_dart.core.crypto.sha3_nist;
+library nem2_sdk_dart.core.crypto.sha3nist;
 
 import 'dart:typed_data';
 

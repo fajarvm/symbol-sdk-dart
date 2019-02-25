@@ -14,6 +14,8 @@
 // limitations under the License.
 //
 
+library nem2_sdk_dart.sdk.model.blockchain.block_info;
+
 import 'package:nem2_sdk_dart/core.dart' show Uint64;
 
 import '../account/public_account.dart';
