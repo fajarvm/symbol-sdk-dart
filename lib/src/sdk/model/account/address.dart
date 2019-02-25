@@ -45,19 +45,8 @@ class Address {
   final int _networkType;
   final String _address;
 
+  // private constructor
   const Address._(this._address, this._networkType);
-
-  factory Address({final String address, final int networkType}) {
-    if (address == null || networkType == null) {
-      throw new ArgumentError('Address string and/or Network type must not be null');
-    }
-
-    if (!NetworkType.isValidNetworkType(networkType)) {
-      throw new ArgumentError('Network type unsupported');
-    }
-
-    return new Address._(address, networkType);
-  }
 
   /// Get the address in plain format.
   ///
@@ -81,10 +70,19 @@ class Address {
 
   /// Creates an [Address] from a given [publicKey] string for the given [networkType].
   static Address fromPublicKey(final String publicKey, final int networkType) {
+    if (networkType == null || !NetworkType.isValidNetworkType(networkType)) {
+      throw new ArgumentError('Network type unsupported');
+    }
+
     final Uint8List publicKeyByte = HexUtils.getBytes(publicKey);
     final Uint8List addressByte = publicKeyToAddress(publicKeyByte, networkType);
     final String addressString = addressToString(addressByte);
-    return new Address(address: addressString, networkType: networkType);
+
+    if (addressString == null) {
+      throw new ArgumentError('Address string must not be null');
+    }
+
+    return new Address._(addressString, networkType);
   }
 
   /// Creates an [Address] from a given string of [rawAddress].
@@ -100,13 +98,13 @@ class Address {
 
     switch (address[0]) {
       case PREFIX_MIJIN_TEST:
-        return new Address(address: address, networkType: NetworkType.MIJIN_TEST);
+        return new Address._(address, NetworkType.MIJIN_TEST);
       case PREFIX_MIJIN:
-        return new Address(address: address, networkType: NetworkType.MIJIN);
+        return new Address._(address, NetworkType.MIJIN);
       case PREFIX_TEST_NET:
-        return new Address(address: address, networkType: NetworkType.TEST_NET);
+        return new Address._(address, NetworkType.TEST_NET);
       case PREFIX_MAIN_NET:
-        return new Address(address: address, networkType: NetworkType.MAIN_NET);
+        return new Address._(address, NetworkType.MAIN_NET);
       default:
         throw new UnsupportedError('Address Network unsupported');
     }

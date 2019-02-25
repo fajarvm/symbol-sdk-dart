@@ -46,11 +46,8 @@ class XEM implements Mosaic {
 
   final Uint64 _amount;
 
-  XEM._(this._amount);
-
-  factory XEM(final Uint64 amount) {
-    return XEM._(amount);
-  }
+  // private constructor
+  const XEM._(this._amount);
 
   @override
   Uint64 get amount => this._amount;
@@ -60,11 +57,11 @@ class XEM implements Mosaic {
 
   /// Creates XEM with using XEM as unit.
   static XEM createRelative(final Uint64 amount) {
-    return new XEM(Uint64.fromBigInt(amount.value * BigInt.from(pow(10, XEM.DIVISIBILITY))));
+    return new XEM._(Uint64.fromBigInt(amount.value * BigInt.from(pow(10, XEM.DIVISIBILITY))));
   }
 
   /// Creates XEM with using micro XEM as unit. 1 XEM = 1000000 micro XEM.
   static XEM createAbsolute(final Uint64 microXemAmount) {
-    return new XEM(microXemAmount);
+    return new XEM._(microXemAmount);
   }
 }

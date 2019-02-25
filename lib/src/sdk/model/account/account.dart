@@ -32,16 +32,8 @@ class Account {
   /// The account address.
   final Address address;
 
+  // private constructor
   const Account._(this.address, this._keyPair);
-
-  factory Account({final Address address, final KeyPair keyPair}) {
-    if (address == null || keyPair == null) {
-      throw new ArgumentError(
-          'An address and/or a keyPair must not be null to create a new Account.');
-    }
-
-    return new Account._(address, keyPair);
-  }
 
   /// Retrieves the public key of this account.
   String get publicKey => HexUtils.getString(_keyPair.publicKey);
@@ -65,10 +57,11 @@ class Account {
   /// Creates an [Account] from a given [privateKey] for a specific [networkType].
   static Account fromPrivateKey(final String privateKey, final int networkType) {
     final KeyPair keyPair = KeyPair.fromPrivateKey(privateKey);
-    final Uint8List address = Address.publicKeyToAddress(keyPair.publicKey, networkType);
-    final String rawAddress = Address.addressToString(address);
+    final Uint8List addressByte = Address.publicKeyToAddress(keyPair.publicKey, networkType);
+    final String rawAddress = Address.addressToString(addressByte);
+    final Address address = Address.fromRawAddress(rawAddress);
 
-    return new Account(address: Address.fromRawAddress(rawAddress), keyPair: keyPair);
+    return new Account._(address, keyPair);
   }
 
   /// Creates a new [Account] for the given [networkType].
@@ -83,7 +76,7 @@ class Account {
     final Address address =
         Address.fromPublicKey(HexUtils.getString(keyPair.publicKey), networkType);
 
-    return new Account(address: address, keyPair: keyPair);
+    return new Account._(address, keyPair);
   }
 
   /// Signs raw data.
