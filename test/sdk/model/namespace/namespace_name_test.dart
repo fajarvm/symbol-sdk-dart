@@ -18,8 +18,7 @@ library nem2_sdk_dart.test.sdk.model.namespace.namespace_name_test;
 
 import 'package:test/test.dart';
 
-import 'package:nem2_sdk_dart/core.dart' show Uint64;
-import 'package:nem2_sdk_dart/sdk.dart' show NamespaceId, NamespaceName;
+import 'package:nem2_sdk_dart/sdk.dart' show NamespaceId, NamespaceName, Uint64;
 
 void main() {
   group('NamespaceName', () {

@@ -18,7 +18,8 @@ library nem2_sdk_dart.test.core.utils.id_generator_test;
 
 import 'package:test/test.dart';
 
-import 'package:nem2_sdk_dart/core.dart' show CryptoException, IdGenerator, Uint64;
+import 'package:nem2_sdk_dart/core.dart' show CryptoException;
+import 'package:nem2_sdk_dart/sdk.dart' show IdGenerator, Uint64;
 
 void main() {
   final NEM_ID = Uint64.fromHex('84B3552D375FFA4B'); // 9562080086528621131

@@ -14,7 +14,7 @@
 // limitations under the License.
 //
 
-library nem2_sdk_dart.test.core.crypto.uint64_test;
+library nem2_sdk_dart.test.sk.model.uint64_test;
 
 import 'dart:typed_data' show Uint8List;
 
@@ -22,7 +22,8 @@ import 'package:fixnum/fixnum.dart' show Int64;
 
 import 'package:test/test.dart';
 
-import 'package:nem2_sdk_dart/core.dart' show ArrayUtils, Uint64;
+import 'package:nem2_sdk_dart/core.dart' show ArrayUtils;
+import 'package:nem2_sdk_dart/sdk.dart' show Uint64;
 
 void main() {
   final List<String> HEX_TEST_CASES = [

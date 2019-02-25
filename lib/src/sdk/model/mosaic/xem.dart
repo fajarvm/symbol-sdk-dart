@@ -18,9 +18,8 @@ library nem2_sdk_dart.sdk.model.mosaic.xem;
 
 import 'dart:math' show pow;
 
-import 'package:nem2_sdk_dart/core.dart' show Uint64;
-
 import '../namespace/namespace_id.dart';
+import '../transaction/uint64.dart';
 
 import 'mosaic.dart';
 import 'mosaic_id.dart';

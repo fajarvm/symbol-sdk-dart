@@ -18,8 +18,7 @@ library nem2_sdk_dart.test.sdk.model.mosaic.mosaic_properties_test;
 
 import 'package:test/test.dart';
 
-import 'package:nem2_sdk_dart/core.dart' show Uint64;
-import 'package:nem2_sdk_dart/sdk.dart' show MosaicProperties;
+import 'package:nem2_sdk_dart/sdk.dart' show MosaicProperties, Uint64;
 
 void main() {
   group('Create MosaicProperties via constructor', () {

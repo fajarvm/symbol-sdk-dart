@@ -18,9 +18,8 @@ library nem2_sdk_dart.test.sdk.model.account.account_info_test;
 
 import 'package:test/test.dart';
 
-import 'package:nem2_sdk_dart/core.dart' show Uint64;
 import 'package:nem2_sdk_dart/sdk.dart'
-    show AccountInfo, Address, Mosaic, MosaicId, NetworkType, PublicAccount;
+    show AccountInfo, Address, Mosaic, MosaicId, NetworkType, PublicAccount, Uint64;
 
 void main() {
   group('AccountInfo', () {

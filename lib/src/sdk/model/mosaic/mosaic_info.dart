@@ -16,10 +16,9 @@
 
 library nem2_sdk_dart.sdk.model.mosaic.mosaic_info;
 
-import 'package:nem2_sdk_dart/core.dart' show Uint64;
-
 import '../account/public_account.dart';
 import '../namespace/namespace_id.dart';
+import '../transaction/uint64.dart';
 
 import 'mosaic_id.dart';
 import 'mosaic_properties.dart';

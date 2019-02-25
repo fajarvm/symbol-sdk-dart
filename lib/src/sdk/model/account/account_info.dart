@@ -16,10 +16,9 @@
 
 library nem2_sdk_dart.sdk.model.account.account_info;
 
-import 'package:nem2_sdk_dart/core.dart' show Uint64;
-
 import '../account/public_account.dart';
 import '../mosaic/mosaic.dart';
+import '../transaction/uint64.dart';
 import 'address.dart';
 
 /// The account info structure describes basic information for an account.

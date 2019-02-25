@@ -18,8 +18,7 @@ library nem2_sdk_dart.test.sdk.model.namespace.namespace_id_test;
 
 import 'package:test/test.dart';
 
-import 'package:nem2_sdk_dart/core.dart' show Uint64;
-import 'package:nem2_sdk_dart/sdk.dart' show NamespaceId;
+import 'package:nem2_sdk_dart/sdk.dart' show NamespaceId, Uint64;
 
 void main() {
   const NEM_HEX_STRING = '84B3552D375FFA4B'; // 9562080086528621131

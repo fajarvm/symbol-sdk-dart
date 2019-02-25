@@ -21,9 +21,9 @@ import 'dart:typed_data' show Uint8List;
 
 import 'package:fixnum/fixnum.dart' show Int64;
 
-import 'package:nem2_sdk_dart/core.dart' show CryptoException, Ed25519, SHA3DigestNist, Uint64;
+import 'package:nem2_sdk_dart/core.dart' show CryptoException, Ed25519, SHA3DigestNist, StringUtils;
 
-import 'string_utils.dart';
+import 'uint64.dart';
 
 /// A utility class to generate Namespace and Mosaic IDs.
 class IdGenerator {

@@ -24,5 +24,4 @@ export 'crypto/ed25519.dart';
 export 'crypto/key_pair.dart';
 export 'crypto/sha3nist.dart';
 export 'crypto/tweetnacl.dart';
-export 'crypto/uint64.dart';
 

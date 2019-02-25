@@ -18,8 +18,7 @@ library nem2_sdk_dart.test.sdk.model.mosaic.mosaic_id_test;
 
 import 'package:test/test.dart';
 
-import 'package:nem2_sdk_dart/core.dart' show Uint64;
-import 'package:nem2_sdk_dart/sdk.dart' show MosaicId;
+import 'package:nem2_sdk_dart/sdk.dart' show MosaicId, Uint64;
 
 void main() {
   const XEM_HEX_STRING = 'D525AD41D95FCF29'; // 15358872602548358953

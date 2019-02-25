@@ -18,8 +18,7 @@ library nem2_sdk_dart.test.sdk.model.blockchain.bloc_info_test;
 
 import 'package:test/test.dart';
 
-import 'package:nem2_sdk_dart/core.dart' show Uint64;
-import 'package:nem2_sdk_dart/sdk.dart' show BlockInfo, PublicAccount, NetworkType;
+import 'package:nem2_sdk_dart/sdk.dart' show BlockInfo, PublicAccount, NetworkType, Uint64;
 
 void main() {
   group('BlockInfo', () {

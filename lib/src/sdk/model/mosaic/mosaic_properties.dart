@@ -16,7 +16,7 @@
 
 library nem2_sdk_dart.sdk.model.mosaic.mosaic_properties;
 
-import 'package:nem2_sdk_dart/core.dart' show Uint64;
+import '../transaction/uint64.dart';
 
 /// Describes the properties a mosaic can have.
 class MosaicProperties {

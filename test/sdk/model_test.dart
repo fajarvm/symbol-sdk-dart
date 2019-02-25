@@ -35,6 +35,8 @@ import 'model/namespace/namespace_id_test.dart' as namespace_id_test;
 import 'model/namespace/namespace_info_test.dart' as namespace_info_test;
 import 'model/namespace/namespace_name_test.dart' as namespace_name_test;
 import 'model/namespace/namespace_type_test.dart' as namespace_type_test;
+import 'model/transaction/id_generator_test.dart' as id_generator_test;
+import 'model/transaction/uint64_test.dart' as uint64_test;
 
 void main() {
   // account
@@ -65,4 +67,8 @@ void main() {
   namespace_info_test.main();
   namespace_name_test.main();
   namespace_type_test.main();
+
+  // transaction
+  id_generator_test.main();
+  uint64_test.main();
 }

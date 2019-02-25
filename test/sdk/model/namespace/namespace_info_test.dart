@@ -18,9 +18,8 @@ library nem2_sdk_dart.test.sdk.model.namespace.namespace_info_test;
 
 import 'package:test/test.dart';
 
-import 'package:nem2_sdk_dart/core.dart' show Uint64;
 import 'package:nem2_sdk_dart/sdk.dart'
-    show NamespaceId, NamespaceInfo, NamespaceType, NetworkType, PublicAccount;
+    show NamespaceId, NamespaceInfo, NamespaceType, NetworkType, PublicAccount, Uint64;
 
 void main() {
   group('NamespaceInfo', () {

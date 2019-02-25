@@ -34,9 +34,8 @@ library nem2_sdk_dart.test.sdk.model.mosaic.mosaic_info_test;
 
 import 'package:test/test.dart';
 
-import 'package:nem2_sdk_dart/core.dart' show Uint64;
 import 'package:nem2_sdk_dart/sdk.dart'
-    show MosaicId, MosaicInfo, MosaicProperties, NamespaceId, NetworkType, PublicAccount;
+    show MosaicId, MosaicInfo, MosaicProperties, NamespaceId, NetworkType, PublicAccount, Uint64;
 
 void main() {
   group('Create MosaicInfo via constructor', () {

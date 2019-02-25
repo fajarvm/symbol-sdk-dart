@@ -16,9 +16,8 @@
 
 library nem2_sdk_dart.sdk.model.blockchain.block_info;
 
-import 'package:nem2_sdk_dart/core.dart' show Uint64;
-
 import '../account/public_account.dart';
+import '../transaction/uint64.dart';
 
 /// The block info structure describes basic information of a block.
 class BlockInfo {

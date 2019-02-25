@@ -16,7 +16,7 @@
 
 library nem2_sdk_dart.sdk.model;
 
-// Account parts
+// Account
 export 'model/account/account.dart';
 export 'model/account/account_info.dart';
 export 'model/account/address.dart';
@@ -24,13 +24,13 @@ export 'model/account/multisig_account_graph_info.dart';
 export 'model/account/multisig_account_info.dart';
 export 'model/account/public_account.dart';
 
-// Blockchain parts
+// Blockchain
 export 'model/blockchain/block_info.dart';
 export 'model/blockchain/blockchain_score.dart';
 export 'model/blockchain/blockchain_storage_info.dart';
 export 'model/blockchain/network_type.dart';
 
-// Mosaic parts
+// Mosaic
 export 'model/mosaic/mosaic.dart';
 export 'model/mosaic/mosaic_id.dart';
 export 'model/mosaic/mosaic_info.dart';
@@ -39,8 +39,12 @@ export 'model/mosaic/mosaic_properties.dart';
 export 'model/mosaic/mosaic_supply_type.dart';
 export 'model/mosaic/xem.dart';
 
-// Namespace parts
+// Namespace
 export 'model/namespace/namespace_id.dart';
 export 'model/namespace/namespace_info.dart';
 export 'model/namespace/namespace_name.dart';
 export 'model/namespace/namespace_type.dart';
+
+// Transaction
+export 'model/transaction/id_generator.dart';
+export 'model/transaction/uint64.dart';

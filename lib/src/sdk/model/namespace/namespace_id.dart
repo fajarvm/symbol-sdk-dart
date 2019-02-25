@@ -16,7 +16,10 @@
 
 library nem2_sdk_dart.sdk.model.namespace.namespace_id;
 
-import 'package:nem2_sdk_dart/core.dart' show IdGenerator, StringUtils, Uint64;
+import 'package:nem2_sdk_dart/core.dart' show StringUtils;
+
+import '../transaction/id_generator.dart';
+import '../transaction/uint64.dart';
 
 /// The namespace id structure describes namespace id
 class NamespaceId {

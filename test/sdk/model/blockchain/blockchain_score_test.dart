@@ -18,8 +18,7 @@ library nem2_sdk_dart.test.sdk.model.blockchain.blockchain_score_test;
 
 import 'package:test/test.dart';
 
-import 'package:nem2_sdk_dart/core.dart' show Uint64;
-import 'package:nem2_sdk_dart/sdk.dart' show BlockchainScore;
+import 'package:nem2_sdk_dart/sdk.dart' show BlockchainScore, Uint64;
 
 void main() {
   group('BlockchainScore', () {
