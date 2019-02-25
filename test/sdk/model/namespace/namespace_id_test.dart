@@ -47,9 +47,12 @@ void main() {
     test('Should have equal Ids', () {
       final NamespaceId namespaceId1 = NamespaceId(id: NEM_ID);
       final NamespaceId namespaceId2 = NamespaceId(id: NEM_ID);
+      final NamespaceId namespaceId3 = NamespaceId(fullName: 'nem');
 
       expect(namespaceId1, equals(namespaceId2));
       expect(namespaceId1.id, equals(namespaceId2.id));
+      expect(namespaceId1.id, equals(namespaceId3.id));
+      expect(namespaceId2.id, equals(namespaceId3.id));
     });
   });
 

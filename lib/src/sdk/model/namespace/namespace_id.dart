@@ -24,6 +24,8 @@ class NamespaceId {
   final Uint64 id;
 
   /// Namespace full name (Examples: `nem`, or `universe.milky_way.planet_earth`).
+  ///
+  /// The full name can be empty when the namespace id is created using only the [Uint64] id.
   final String fullName;
 
   const NamespaceId._(this.id, this.fullName);
@@ -81,10 +83,10 @@ class NamespaceId {
   }
 
   @override
-  int get hashCode => id.hashCode + fullName.hashCode;
+  int get hashCode => 'NamespaceId'.hashCode + id.hashCode;
 
   @override
-  bool operator ==(other) => other is NamespaceId && id == other.id && fullName == other.fullName;
+  bool operator ==(other) => other is NamespaceId && id == other.id;
 
   @override
   String toString() => 'NamespaceId(id:$id, fullName:$fullName)';

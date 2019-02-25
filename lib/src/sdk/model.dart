@@ -34,7 +34,13 @@ export 'model/blockchain/network_type.dart';
 export 'model/mosaic/mosaic.dart';
 export 'model/mosaic/mosaic_id.dart';
 export 'model/mosaic/mosaic_info.dart';
+export 'model/mosaic/mosaic_name.dart';
 export 'model/mosaic/mosaic_properties.dart';
+export 'model/mosaic/mosaic_supply_type.dart';
+export 'model/mosaic/xem.dart';
 
 // Namespace parts
 export 'model/namespace/namespace_id.dart';
+export 'model/namespace/namespace_info.dart';
+export 'model/namespace/namespace_name.dart';
+export 'model/namespace/namespace_type.dart';

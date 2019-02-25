@@ -23,7 +23,10 @@ import 'mosaic_id.dart';
 /// A mosaic describes an instance of a mosaic definition.
 /// Mosaics can be transferred by means of a transfer transaction.
 class Mosaic {
+  /// The mosaic id.
   final MosaicId id;
+
+  /// The mosaic amount.
   final Uint64 amount;
 
   const Mosaic._(this.id, this.amount);

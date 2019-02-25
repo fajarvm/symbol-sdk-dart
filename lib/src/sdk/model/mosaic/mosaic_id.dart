@@ -18,12 +18,14 @@ library nem2_sdk_dart.sdk.model.mosaic.mosaic_id;
 
 import 'package:nem2_sdk_dart/core.dart' show IdGenerator, StringUtils, Uint64;
 
-/// The mosaic id structure describes mosaic id
+/// The mosaic id structure describes mosaic id.
 class MosaicId {
-  /// Mosaic 64-bit unsigned integer id
+  /// Mosaic 64-bit unsigned integer id.
   final Uint64 id;
 
-  /// Mosaic full name with namespace name (Example: nem:xem)
+  /// Mosaic full name with namespace name (Example: nem:xem).
+  ///
+  /// The full name can be empty when the mosaic id is created using only the [Uint64] id.
   final String fullName;
 
   const MosaicId._(this.id, this.fullName);
@@ -81,10 +83,10 @@ class MosaicId {
   }
 
   @override
-  int get hashCode => id.hashCode + fullName.hashCode;
+  int get hashCode => 'MosaicId'.hashCode + id.hashCode;
 
   @override
-  bool operator ==(other) => other is MosaicId && id == other.id && fullName == other.fullName;
+  bool operator ==(other) => other is MosaicId && id == other.id;
 
   @override
   String toString() => 'MosaicId(id:$id, fullName:$fullName)';

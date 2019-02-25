@@ -45,9 +45,12 @@ void main() {
     test('Should have equal Ids', () {
       final mosaicId1 = MosaicId(id: XEM_ID);
       final mosaicId2 = MosaicId(id: XEM_ID);
+      final mosaicId3 = MosaicId(fullName: 'nem:xem');
 
       expect(mosaicId1, equals(mosaicId2));
       expect(mosaicId1.id, equals(mosaicId2.id));
+      expect(mosaicId1.id, equals(mosaicId3.id));
+      expect(mosaicId2.id, equals(mosaicId3.id));
     });
   });
 
