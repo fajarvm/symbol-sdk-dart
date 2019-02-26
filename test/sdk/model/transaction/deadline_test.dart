@@ -26,9 +26,6 @@ void main() {
       final deadline = Deadline.create();
       final now = DateTime.now();
 
-      expect(deadline.value.day, equals(now.day));
-      expect(deadline.value.month, equals(now.month));
-      expect(deadline.value.year, equals(now.year));
       expect(deadline.value.isAfter(now), isTrue);
       expect(deadline.value.isBefore(now), isFalse);
       // default deadline value is 2 hours from now
