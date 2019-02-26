@@ -120,6 +120,23 @@ void main() {
     });
   });
 
+  group('tryHexToUtf8()', () {
+    test('can convert hex to UTF8', () {
+      final actual = HexUtils.tryHexToUtf8(
+          '7465737420776f726473207c4023c2a2e2889ec2acc3b7e2809ce2809de289a05b5d7d7be28093');
+      const expected = 'test words |@#¢∞¬÷“”≠[]}{–';
+
+      expect(actual, equals(expected));
+    });
+
+    test('can convert hex to UTF8 text with foreign characters', () {
+      final actual = HexUtils.tryHexToUtf8('e58588e7a7a6e585a9e6bca2');
+      const expected = '先秦兩漢';
+
+      expect(actual, equals(expected));
+    });
+  });
+
   group('bytesToHex()', () {
     test('can convert byte array to hex', () {
       final List<String> INPUTS = ['', '026ee415fc15', 'abcdef0123456789ABCDEF'];
