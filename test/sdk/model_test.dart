@@ -38,6 +38,9 @@ import 'model/namespace/namespace_type_test.dart' as namespace_type_test;
 import 'model/transaction/deadline_test.dart' as deadline_test;
 import 'model/transaction/hash_type_test.dart' as hash_type_test;
 import 'model/transaction/id_generator_test.dart' as id_generator_test;
+import 'model/transaction/messages/message_type_test.dart' as message_type_test;
+import 'model/transaction/messages/plain_message_test.dart' as plain_message_test;
+import 'model/transaction/messages/secure_message_test.dart' as secure_message_test;
 import 'model/transaction/uint64_test.dart' as uint64_test;
 
 void main() {
@@ -75,4 +78,7 @@ void main() {
   hash_type_test.main();
   id_generator_test.main();
   uint64_test.main();
+  message_type_test.main();
+  plain_message_test.main();
+  secure_message_test.main();
 }

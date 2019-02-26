@@ -12,7 +12,8 @@ environment:
 dependencies:
   convert: ^2.1.1
   fixnum: ^0.10.9
-  pointycastle: ^1.0.0
+  pointycastle: ^1.0.1
+  encrypt: ^2.0.0
 
 dev_dependencies:
   test: ^1.5.1

@@ -49,4 +49,8 @@ export 'model/namespace/namespace_type.dart';
 export 'model/transaction/deadline.dart';
 export 'model/transaction/hash_type.dart';
 export 'model/transaction/id_generator.dart';
+export 'model/transaction/messages/message.dart'; // abstract class
+export 'model/transaction/messages/message_type.dart';
+export 'model/transaction/messages/plain_message.dart';
+export 'model/transaction/messages/secure_message.dart';
 export 'model/transaction/uint64.dart';
