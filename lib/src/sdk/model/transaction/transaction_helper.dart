@@ -22,17 +22,17 @@ import 'package:nem2_sdk_dart/core.dart' show Ed25519;
 
 /// A helper class for transactions.
 class TransactionHelper {
-  /// Create a SHA3-256 hash of the [input] bytes.
-  static Uint8List hash(final Uint8List input) {
-    final List<int> sign = input.skip(4).take(32).toList();
-    final List<int> key = input.skip(4 + 64).take(input.length - (4 + 64)).toList();
+  /// Create a SHA3-256 transaction hash of the [payload].
+  static Uint8List hash(final Uint8List payload) {
+    final List<int> sign = payload.skip(4).take(32).toList();
+    final List<int> key = payload.skip(4 + 64).take(payload.length - (4 + 64)).toList();
     final Uint8List signAndKey = Uint8List.fromList(sign + key);
 
     return Ed25519.createSha3Hasher(length: 32).process(signAndKey);
   }
 
-  /// Extracts the aggregate part from the [input] bytes.
-  static Uint8List extractAggregateBytes(final Uint8List input) {
+  /// Extracts the aggregate part from the [input].
+  static Uint8List extractAggregatePart(final Uint8List input) {
     final List<int> part1 = input.skip(4 + 64).take(32 + 2 + 2).toList();
     final List<int> part2 = input
         .skip(4 + 64 + 32 + 2 + 2 + 8 + 8)

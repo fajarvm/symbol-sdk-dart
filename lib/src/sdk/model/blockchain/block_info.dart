@@ -56,7 +56,7 @@ class BlockInfo {
   /// Each block has a unique height. Subsequent blocks differ in height by one.
   final Uint64 height;
 
-  /// The number of seconds elapsed since the creation of the nemesis blockchain.
+  /// The number of seconds elapsed since the creation of the nemesis block.
   final Uint64 timestamp;
 
   /// The Proof-of-Importance difficulty to harvest a block.

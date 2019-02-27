@@ -42,7 +42,7 @@ abstract class Transaction {
   /// The network type.
   final int networkType;
 
-  /// The transaction version.
+  /// The transaction format version.
   final int version;
 
   /// The transaction type.
@@ -123,7 +123,7 @@ abstract class Transaction {
   /// Takes a transaction and formats the bytes to be included in an aggregate transaction.
   Uint8List toAggregateTransactionBytes() {
     final Uint8List bodyBytes = generateBytes();
-    final Uint8List aggregateBytes = TransactionHelper.extractAggregateBytes(bodyBytes);
+    final Uint8List aggregateBytes = TransactionHelper.extractAggregatePart(bodyBytes);
     final Uint8List size = new Uint8List(aggregateBytes.length + 4);
     return new Uint8List.fromList(size.toList() + aggregateBytes.toList());
   }

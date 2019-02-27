@@ -28,16 +28,16 @@ class NetworkType {
     return singleton;
   }
 
-  /// Main net network identifier (104).
+  /// The public main net network identifier (104).
   static const int MAIN_NET = 0x68; // 104
 
-  /// Test net network identifier (152).
+  /// The public test network identifier (152).
   static const int TEST_NET = 0x98; // 152
 
-  /// Mijin net network identifier (96).
+  /// Mijin private network identifier (96).
   static const int MIJIN = 0x60; // 96
 
-  /// Mijin test net network identifier (144).
+  /// Mijin private test network identifier (144).
   static const int MIJIN_TEST = 0x90; // 144
 
   static int getNetworkType(final int networkType) {
