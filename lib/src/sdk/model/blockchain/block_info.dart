@@ -83,4 +83,24 @@ class BlockInfo {
       this.difficulty,
       this.previousBlockHash,
       this.blockTransactionHash);
+
+  @override
+  String toString() {
+    return 'BlockInfo{'
+        'hash= $hash, '
+        'generationHash= $generationHash, '
+        'totalFee= $totalFee, '
+        'numTransactions= $numTransactions, '
+        'signature= $signature, '
+        'signer= $signer, '
+        'networkType= $networkType, '
+        'version= $version, '
+        'type= $type, '
+        'height= $height, '
+        'timestamp= $timestamp, '
+        'difficulty= $difficulty, '
+        'previousBlockHash= $previousBlockHash, '
+        'blockTransactionHash= $blockTransactionHash'
+        '}';
+  }
 }

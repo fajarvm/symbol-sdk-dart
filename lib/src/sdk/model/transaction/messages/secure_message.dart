@@ -33,7 +33,9 @@ class SecureMessage extends Message {
   // private constructor
   SecureMessage._(Uint8List encryptedPayload) : super(MessageType.ENCRYPTED, encryptedPayload);
 
-// TODO: Enable? There is no check in place to see if the payload is actually encrypted or not.
+// Developer note:
+// If one to allow to create a SecureMessage object using this constructor, make sure to
+// put in place a check to see if the payload (in bytes) is actually encrypted or not.
 //  factory SecureMessage(final Uint8List encryptedPayload) {
 //    if (encryptedPayload == null) {
 //      throw new ArgumentError('The message payload must not be null');
