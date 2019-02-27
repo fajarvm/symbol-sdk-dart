@@ -41,6 +41,7 @@ import 'model/transaction/id_generator_test.dart' as id_generator_test;
 import 'model/transaction/messages/message_type_test.dart' as message_type_test;
 import 'model/transaction/messages/plain_message_test.dart' as plain_message_test;
 import 'model/transaction/messages/secure_message_test.dart' as secure_message_test;
+import 'model/transaction/signed_transaction_test.dart' as signed_transaction_test;
 import 'model/transaction/transaction_helper_test.dart' as transaction_helper_test;
 import 'model/transaction/transaction_info_test.dart' as transaction_info_test;
 import 'model/transaction/transaction_type_test.dart' as transaction_type_test;
@@ -83,6 +84,7 @@ void main() {
   message_type_test.main();
   plain_message_test.main();
   secure_message_test.main();
+  signed_transaction_test.main();
   transaction_helper_test.main();
   transaction_info_test.main();
   transaction_type_test.main();

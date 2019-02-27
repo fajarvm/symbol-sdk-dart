@@ -33,7 +33,7 @@ void main() {
           '0000009039404AFFA3D5BB337FE9FA21182210EE40CE08662CF93B770200010'
           '00029CF5FD941AD25D50010A5D4E8000000';
 
-      final hash = TransactionHelper.hash(HexUtils.getBytes(payloadString));
+      final hash = TransactionHelper.createTransactionHash(HexUtils.getBytes(payloadString));
 
       const expected = 'E7D31348244723DFDFF54A24BC48BA08623A3660F472EE231D8A93F9C082E360';
       expect(HexUtils.getString(hash), equals(expected.toLowerCase()));

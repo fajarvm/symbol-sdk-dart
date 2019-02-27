@@ -53,6 +53,7 @@ export 'model/transaction/messages/message.dart'; // abstract class
 export 'model/transaction/messages/message_type.dart';
 export 'model/transaction/messages/plain_message.dart';
 export 'model/transaction/messages/secure_message.dart';
+export 'model/transaction/signed_transaction.dart';
 export 'model/transaction/transaction.dart'; // abstract class
 export 'model/transaction/transaction_helper.dart';
 export 'model/transaction/transaction_info.dart';

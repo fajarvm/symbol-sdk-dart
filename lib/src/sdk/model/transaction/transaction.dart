@@ -21,7 +21,6 @@ import 'dart:typed_data' show Uint8List;
 import 'package:nem2_sdk_dart/core.dart' show HexUtils, StringUtils;
 
 import '../account/public_account.dart';
-import '../blockchain/network_type.dart';
 
 import 'deadline.dart';
 import 'transaction_helper.dart';
@@ -110,7 +109,7 @@ abstract class Transaction {
       throw new ArgumentError('transaction payload is not a valid jext string');
     }
 
-    return TransactionHelper.hash(HexUtils.getBytes(transactionPayloadHex));
+    return TransactionHelper.createTransactionHash(HexUtils.getBytes(transactionPayloadHex));
   }
 
   /// An abstract method to generate the transaction payload bytes.
