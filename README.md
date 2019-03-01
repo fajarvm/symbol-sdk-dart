@@ -1,42 +1,23 @@
 [comment]: # (Replace variables LANGUAGE_NAME, YEAR, LICENSE_NAME, CONTRIBUTORS, GITHUB_NICKNAME and complete Requirements and Installation sections)
 
-# nem2-sdk for Dart
+# NEM2 SDK for Dart
 
-nem2-sdk for Dart to interact with NEM2 (a.k.a Catapult).
+[![Runtime](https://img.shields.io/badge/dart-%3E%3D2.2-brightgreen.svg)][dart-version]
+[![Build Status](https://api.travis-ci.org/fajarvm/nem2-sdk-dart.svg?branch=dev)][travis-build]
+[![Coverage Status](https://coveralls.io/repos/github/fajarvm/nem2-sdk-dart/badge.svg?branch=dev)][coveralls-build]
+[![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)][apache-license]
+
+> :construction: :warning: :rotating_light: :warning: :construction:
+> 
+> !!! This SDK is currently a work in progress and should not be used for production !!!
+> 
+> :construction: :warning: :rotating_light: :warning: :construction:
+
+## About
+The nem2-sdk-dart is a Dart library for communicating with NEM2 (Catapult) [REST API][nemtech-api] server. It can be used for developers to develop an applications for [multiple platforms][dart-platforms]: mobile (both iOS) and Android, Web, or Command-line/Server-side.
 
 ## Requirements
-
-- Dart SDK v2.1.0 or above.
-- ...
-- ...
-- etc
-
-## Installation
-
-```$>```
-
-## Documentation and Getting Started
-
-Get started and learn more about nem2-sdk-dart, check the [official documentation][docs].
-
-Check SDK reference [here][sdk-ref]
-
-## nem2-sdk Releases
-
-The release notes for the nem2-sdk can be found [here](CHANGELOG.md).
-
-## Contributing
-
-This project is developed and maintained by <CONTRIBUTORS>. Contributions are welcome and appreciated. You can find [nem2-sdk on GitHub][self]; 
-Feel free to start an issue or create a pull request. Check [CONTRIBUTING](CONTRIBUTING.md) before start.
-
-## Getting help
-
-We use GitHub issues for tracking bugs and have limited bandwidth to address them.
-Please, use the following available resources to get help:
-
-- [nem2-cli documentation][docs]
-- If you found a bug, [open a new issue][issues]
+Dart SDK v2.2.0 or above.
 
 ## License
 
@@ -44,7 +25,18 @@ Copyright (c) 2019
 
 Licensed under the [Apache License 2.0](LICENSE)
 
+## Disclaimer
+
+THIS SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS, COPYRIGHT HOLDERS, REGENTS OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL CLAIM, DAMAGES OR OTHER LIABILITY (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN ACTION OF CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+
 [self]: https://github.com/fajarvm/nem2-sdk-dart
-[docs]: http://nemtech.github.io/getting-started/setup-workstation.html
 [issues]: https://github.com/fajarvm/nem2-sdk-dart/issues
-[sdk-ref]: http://nemtech.github.io/nem2-sdk-dart
+[sdk-ref]: http://fajarvm.github.io/nem2-sdk-dart
+
+[apache-license]: https://opensource.org/licenses/Apache-2.0
+[travis-build]: https://travis-ci.org/fajarvm/nem2-sdk-dart
+[coveralls-build]: https://coveralls.io/github/fajarvm/nem2-sdk-dart?branch=dev
+
+[dart-version]: https://api.dartlang.org/stable/2.2.0/index.html
+[dart-platforms]: https://www.dartlang.org/guides/platforms
+[nemtech-api]: https://nemtech.github.io/api.html
