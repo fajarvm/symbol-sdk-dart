@@ -50,11 +50,15 @@ class PublicAccount {
   String get publicKey => _publicKey;
 
   @override
-  int get hashCode => publicKey.hashCode + address.hashCode;
+  int get hashCode => publicKey.hashCode ^ address.hashCode;
 
   @override
   bool operator ==(final other) =>
-      other is PublicAccount && publicKey == other.publicKey && plainAddress == other.plainAddress;
+      identical(this, other) ||
+      other is PublicAccount &&
+          runtimeType == other.runtimeType &&
+          publicKey == other.publicKey &&
+          plainAddress == other.plainAddress;
 
   /// Create a [PublicAccount] from a [publicKey] for the given [networkType].
   static PublicAccount fromPublicKey(final String publicKey, final int networkType) {

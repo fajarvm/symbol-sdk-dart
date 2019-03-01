@@ -34,12 +34,18 @@ export 'model/blockchain/network_type.dart';
 export 'model/mosaic/mosaic.dart';
 export 'model/mosaic/mosaic_id.dart';
 export 'model/mosaic/mosaic_info.dart';
-export 'model/mosaic/mosaic_name.dart';
+export 'model/mosaic/mosaic_nonce.dart';
 export 'model/mosaic/mosaic_properties.dart';
 export 'model/mosaic/mosaic_supply_type.dart';
-export 'model/mosaic/xem.dart';
+export 'model/mosaic/network_currency_mosaic.dart';
+export 'model/mosaic/network_harvest_mosaic.dart';
 
 // Namespace
+export 'model/namespace/address_alias.dart';
+export 'model/namespace/alias.dart'; // interface (as an abstract class; Dart has no interfaces)
+export 'model/namespace/alias_type.dart';
+export 'model/namespace/empty_alias.dart';
+export 'model/namespace/mosaic_alias.dart';
 export 'model/namespace/namespace_id.dart';
 export 'model/namespace/namespace_info.dart';
 export 'model/namespace/namespace_name.dart';
@@ -58,4 +64,5 @@ export 'model/transaction/transaction.dart'; // abstract class
 export 'model/transaction/transaction_helper.dart';
 export 'model/transaction/transaction_info.dart';
 export 'model/transaction/transaction_type.dart';
+export 'model/transaction/transaction_version.dart';
 export 'model/transaction/uint64.dart';

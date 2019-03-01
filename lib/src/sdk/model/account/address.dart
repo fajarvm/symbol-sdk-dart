@@ -62,11 +62,15 @@ class Address {
   int get networkType => _networkType;
 
   @override
-  bool operator ==(other) =>
-      other is Address && plain == other.plain && networkType == other.networkType;
+  bool operator ==(final other) =>
+      identical(this, other) ||
+      other is Address &&
+          runtimeType == other.runtimeType &&
+          _networkType == other._networkType &&
+          _address == other._address;
 
   @override
-  int get hashCode => plain.hashCode + networkType.hashCode;
+  int get hashCode => _networkType.hashCode ^ _address.hashCode;
 
   /// Creates an [Address] from a given [publicKey] string for the given [networkType].
   static Address fromPublicKey(final String publicKey, final int networkType) {
@@ -88,7 +92,7 @@ class Address {
   /// Creates an [Address] from a given string of [rawAddress].
   ///
   /// A raw address string looks like:
-  /// SB3KUBHATFCPV7UZQLWAQ2EUR6SIHBSBEOEDDDF3 or SB3KUB-HATFCP-V7UZQL-WAQ2EU-R6SIHB-SBEOED-DDF3
+  /// SB3KUBHATFCPV7UZQLWAQ2EUR6SIHBSBEOEDDDF3 or SB3KUB-HATFCP-V7UZQL-WAQ2EU-R6SIHB-SBEOED-DDF3.
   static Address fromRawAddress(final String rawAddress) {
     final String address = rawAddress.trim().toUpperCase().replaceAll(REGEX_DASH, EMPTY_STRING);
 
@@ -140,7 +144,7 @@ class Address {
   /// Converts a [publicKey] to decoded address byte for a specific [networkType].
   static Uint8List publicKeyToAddress(final Uint8List publicKey, final int networkType) {
     // Step 1: create a SHA3-256 hash of the public key
-    final SHA3DigestNist digest = Ed25519.createSha3Hasher(length: Ed25519.KEY_SIZE);
+    final SHA3DigestNist digest = Ed25519.createSha3Digest(length: Ed25519.KEY_SIZE);
     final Uint8List stepOne = new Uint8List(KEY_SIZE);
     digest.update(publicKey, 0, KEY_SIZE);
     digest.doFinal(stepOne, 0);
@@ -203,7 +207,7 @@ class Address {
 
   /// Determines the validity of the given [decodedAddress].
   static bool isValidAddress(final Uint8List decodedAddress) {
-    final SHA3DigestNist digest = Ed25519.createSha3Hasher(length: Ed25519.KEY_SIZE);
+    final SHA3DigestNist digest = Ed25519.createSha3Digest(length: Ed25519.KEY_SIZE);
     final Uint8List hash = digest.process(decodedAddress.sublist(0, START_CHECKSUM_SIZE));
     final Uint8List checksum = hash.buffer.asUint8List(0, CHECKSUM_SIZE);
     return ArrayUtils.deepEqual(checksum, decodedAddress.sublist(START_CHECKSUM_SIZE));

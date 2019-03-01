@@ -21,7 +21,8 @@ import 'dart:typed_data' show Uint8List;
 
 import 'package:fixnum/fixnum.dart' show Int64;
 
-import 'package:nem2_sdk_dart/core.dart' show CryptoException, Ed25519, SHA3DigestNist, StringUtils;
+import 'package:nem2_sdk_dart/core.dart'
+    show CryptoException, Ed25519, HexUtils, SHA3DigestNist, StringUtils;
 
 import 'uint64.dart';
 
@@ -29,53 +30,62 @@ import 'uint64.dart';
 class IdGenerator {
   static const String MOSAIC_SEPARATOR = ':';
   static const String PART_SEPARATOR = '.';
+  static const int MOSAIC_NONCE_SIZE = 4;
   static const int NAMESPACE_MAX_DEPTH = 3;
   static final RegExp NAME_PATTERN = RegExp(r'^[a-z0-9][a-z0-9-_]*$');
 
   static final Uint64 NAMESPACE_BASE_ID = Uint64(0);
 
-  /// Generates an Id based on [parentId] and [name]
-  static Uint64 generateId(final Uint64 parentId, final String name) {
+  /// Generates a namespaceId from the given [parentId] and [name].
+  static Uint64 generateNamespaceId(final Uint64 parentId, final String name) {
     final Uint8List parentIdBytes = parentId.toBytes();
     final Uint8List nameBytes = utf8.encode(name);
 
-    final SHA3DigestNist digest = Ed25519.createSha3Hasher(length: Ed25519.KEY_SIZE);
-    digest.update(parentIdBytes, 0, parentIdBytes.length);
-    digest.update(nameBytes, 0, nameBytes.length);
-    final Uint8List result = new Uint8List(32);
-    digest.doFinal(result, 0);
+    final Uint8List hash = _createSha3Hash([parentIdBytes, nameBytes]);
 
-    final Int64 int64 = Int64.fromBytes(result);
-    final String hex = int64.toHexString();
+    // Convert to hex. Using Int64 to handle big numbers.
+    final Int64 int64 = Int64.fromBytes(hash);
+
+    Int64 result = int64 | 0x8000000000000000; // set the high bit of the hash
+    // result = result.shiftRightUnsigned(0);
+    final String hex = result.toHexString();
 
     return Uint64.fromHex(hex);
   }
 
-  /// Generates a mosaicId from a [fullName]
-  static Uint64 generateMosaicId(final String fullName) {
-    if (StringUtils.isEmpty(fullName)) {
-      _throwInvalidFqn('having zero length', fullName);
+  /// Generates a mosaicId from the given [nonce] and [ownerPublicId].
+  static Uint64 generateMosaicId(final Uint8List nonce, final String ownerPublicId) {
+    if (nonce == null || StringUtils.isEmpty(ownerPublicId)) {
+      throw new ArgumentError('The nonce and/or ownerPublicId must not be null or empty.');
     }
 
-    final String mosaicName = _extractMosaicName(fullName);
-    final String namespaceName = _extractNamespaceName(fullName);
-    final Uint64 namespaceId = generateNamespaceId(namespaceName);
+    if (!HexUtils.isHexString(ownerPublicId)) {
+      throw new ArgumentError('Invalid ownerPublicId hex string.');
+    }
 
-    return generateId(namespaceId, mosaicName);
+    final Uint8List ownerBytes = HexUtils.getBytes(ownerPublicId);
+    final Uint8List hash = _createSha3Hash([nonce, ownerBytes]);
+
+    // Convert to hex. Using Int64 to handle big numbers.
+    final Int64 int64 = Int64.fromBytes(hash);
+    final Int64 result = int64 & 0x7FFFFFFFFFFFFFFF; // clear the high bit of the hash
+    final String hex = result.toHexString();
+
+    return Uint64.fromHex(hex);
   }
 
-  /// Generates a namespaceId from a [namespaceFullName]
-  static Uint64 generateNamespaceId(final String namespaceFullName) {
+  /// Generates a namespaceId from a [namespaceFullName].
+  static Uint64 generateNamespacePath(final String namespaceFullName) {
     try {
-      final List<Uint64> namespacePath = generateNamespacePath(namespaceFullName);
+      final List<Uint64> namespacePath = generateNamespacePaths(namespaceFullName);
       return namespacePath.last;
     } catch (e) {
       rethrow;
     }
   }
 
-  /// Generates a list of namespace paths from a unified [namespaceFullName]
-  static List<Uint64> generateNamespacePath(final String namespaceFullName) {
+  /// Generates a list of namespace paths from a unified [namespaceFullName].
+  static List<Uint64> generateNamespacePaths(final String namespaceFullName) {
     final String cleanName = StringUtils.trim(namespaceFullName);
     if (StringUtils.isEmpty(cleanName)) {
       _throwInvalidFqn('having zero length', namespaceFullName);
@@ -96,11 +106,15 @@ class IdGenerator {
         _throwInvalidFqn('invalid namespace part name [$part]', namespaceFullName);
       }
 
-      namespaceId = generateId(namespaceId, part);
+      namespaceId = generateNamespaceId(namespaceId, part);
       paths.add(namespaceId);
     }
 
     return paths;
+  }
+
+  static Uint8List generateRandomMosaicNonce() {
+    return Ed25519.getRandomBytes(IdGenerator.MOSAIC_NONCE_SIZE);
   }
 
   // ------------------------------ private / protected functions ------------------------------ //
@@ -109,41 +123,24 @@ class IdGenerator {
     throw new CryptoException('Fully qualified id is invalid due to $reason ($name)');
   }
 
-  static String _extractNamespaceName(final String fullName) {
-    String namespaceName = StringUtils.trim(fullName);
-    if (namespaceName.contains(MOSAIC_SEPARATOR)) {
-      final List<String> parts = namespaceName.split(MOSAIC_SEPARATOR);
-      if (parts.length > 2) {
-        _throwInvalidFqn('too many namespace parts', fullName);
-      } else {
-        namespaceName = parts[0];
-      }
-    }
-
-    return namespaceName;
-  }
-
-  static String _extractMosaicName(final String fullName) {
-    final String cleanFullName = StringUtils.trim(fullName);
-    final int separatorIndex = cleanFullName.lastIndexOf(MOSAIC_SEPARATOR);
-    if (0 > separatorIndex) {
-      _throwInvalidFqn('missing mosaic', fullName);
-    }
-
-    if (0 == separatorIndex) {
-      _throwInvalidFqn('empty mosaic part', fullName);
-    }
-
-    final String mosaicName = cleanFullName.split(MOSAIC_SEPARATOR).last;
-    if (!_isValidNamePart(mosaicName)) {
-      _throwInvalidFqn('invalid mosaic part name [$mosaicName]', fullName);
-    }
-
-    return mosaicName;
-  }
-
   static bool _isValidNamePart(final String name) {
     final String cleanName = StringUtils.trim(name);
     return StringUtils.isNotEmpty(cleanName) && NAME_PATTERN.hasMatch(cleanName);
+  }
+
+  static Uint8List _createSha3Hash(final List<Uint8List> listOfBytes, [final int bitLength = 32]) {
+    // Create a sha3-256 digest
+    final SHA3DigestNist digest = Ed25519.createSha3Digest(length: bitLength);
+
+    // Add entries into digest
+    for (var entry in listOfBytes) {
+      digest.update(entry, 0, entry.length);
+    }
+
+    // Finalize
+    final Uint8List result = new Uint8List(bitLength);
+    digest.doFinal(result, 0);
+
+    return result;
   }
 }

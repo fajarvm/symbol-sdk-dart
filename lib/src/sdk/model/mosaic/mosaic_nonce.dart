@@ -14,22 +14,24 @@
 // limitations under the License.
 //
 
-library nem2_sdk_dart.sdk.model.mosaic.mosaic_name;
+library nem2_sdk_dart.sdk.model.mosaic.mosaic_nonce;
 
-import '../namespace/namespace_id.dart';
+import 'dart:typed_data' show Uint8List;
 
-import 'mosaic_id.dart';
+/// The mosaic nonce structure.
+class MosaicNonce {
+  static const int NONCE_SIZE = 4;
 
-/// The mosaic name info structure describes basic information of a mosaic and name.
-class MosaicName {
-  /// The mosaic id.
-  final MosaicId mosaicId;
+  /// The nonce.
+  final Uint8List nonce;
 
-  /// The namespace id.
-  final NamespaceId namespaceId;
+  MosaicNonce._(this.nonce);
 
-  /// The mosaic name.
-  final String name;
+  factory MosaicNonce(final Uint8List nonce) {
+    if (nonce == null || NONCE_SIZE != nonce.length) {
+      throw new ArgumentError('Invalid nonce size. The nonce should be $NONCE_SIZE bytes.');
+    }
 
-  const MosaicName(this.mosaicId, this.namespaceId, this.name);
+    return new MosaicNonce._(nonce);
+  }
 }

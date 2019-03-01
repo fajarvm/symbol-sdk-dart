@@ -18,7 +18,7 @@ library nem2_sdk_dart.sdk.model.mosaic.mosaic_id;
 
 import 'package:nem2_sdk_dart/core.dart' show StringUtils;
 
-import '../transaction/id_generator.dart';
+//import '../transaction/id_generator.dart';
 import '../transaction/uint64.dart';
 
 /// The mosaic id structure describes mosaic id.
@@ -26,29 +26,36 @@ class MosaicId {
   /// Mosaic 64-bit unsigned integer id.
   final Uint64 id;
 
-  /// Mosaic full name with namespace name (Example: nem:xem).
-  ///
-  /// The full name can be empty when the mosaic id is created using only the [Uint64] id.
-  final String fullName;
+// Deprecated. To be re-introduced after AliasTransaction implementation.
+//  /// Mosaic full name with namespace name (Example: nem:xem).
+//  ///
+//  /// The full name can be empty when the mosaic id is created using only the [Uint64] id.
+//  final String fullName;
+//
+//  const MosaicId._(this.id, this.fullName);
+//
+//   Deprecated. To be re-introduced after AliasTransaction implementation.
+//  /// Create a [MosaicId] from a 64-bit unsigned integer [id] OR a namespace-mosaic [fullName].
+//  ///
+//  /// When both the [id] and the [fullName] are provided, a new [id] will be generated from the
+//  /// provided [fullName] and the provided [id] will be ignored.
+//  factory MosaicId({final Uint64 id, final String fullName}) {
+//    final String fullMosaicName = StringUtils.trim(fullName);
+//    if (id == null && StringUtils.isEmpty(fullMosaicName)) {
+//      throw new ArgumentError('Missing argument. Either id or fullName is required.');
+//    }
+//
+//    if (StringUtils.isNotEmpty(fullMosaicName)) {
+//      final Uint64 mosaicId = IdGenerator.generateMosaicId(fullMosaicName);
+//      return new MosaicId._(mosaicId, fullMosaicName);
+//    }
+//    return new MosaicId._(id, null);
+//  }
 
-  const MosaicId._(this.id, this.fullName);
+  const MosaicId._(this.id);
 
-  /// Create a [MosaicId] from a 64-bit unsigned integer [id] OR a namespace-mosaic [fullName].
-  ///
-  /// When both the [id] and the [fullName] are provided, a new [id] will be generated from the
-  /// provided [fullName] and the provided [id] will be ignored.
-  factory MosaicId({final Uint64 id, final String fullName}) {
-    final String fullMosaicName = StringUtils.trim(fullName);
-    if (id == null && StringUtils.isEmpty(fullMosaicName)) {
-      throw new ArgumentError('Missing argument. Either id or fullName is required.');
-    }
-
-    if (StringUtils.isNotEmpty(fullMosaicName)) {
-      final Uint64 mosaicId = IdGenerator.generateMosaicId(fullMosaicName);
-      return new MosaicId._(mosaicId, fullMosaicName);
-    }
-
-    return new MosaicId._(id, null);
+  factory MosaicId({final Uint64 id}) {
+    return new MosaicId._(id);
   }
 
   /// Creates a new [MosaicId] from an [id].
@@ -68,14 +75,15 @@ class MosaicId {
     return new MosaicId(id: Uint64.fromBigInt(bigInt));
   }
 
-  /// Creates a new [MosaicId] from a [fullName].
-  static MosaicId fromFullName(final String fullName) {
-    if (StringUtils.isEmpty(fullName)) {
-      throw new ArgumentError('The fullName must not be null or empty');
-    }
-
-    return new MosaicId(fullName: fullName);
-  }
+// Deprecated. To be re-introduced after AliasTransaction implementation.
+//  /// Creates a new [MosaicId] from a [fullName].
+//  static MosaicId fromFullName(final String fullName) {
+//    if (StringUtils.isEmpty(fullName)) {
+//      throw new ArgumentError('The fullName must not be null or empty');
+//    }
+//
+//    return new MosaicId(fullName: fullName);
+//  }
 
   /// Creates a new [MosaicId] from a [hexString].
   static MosaicId fromHex(final String hexString) {
@@ -86,11 +94,13 @@ class MosaicId {
   }
 
   @override
-  int get hashCode => 'MosaicId'.hashCode + id.hashCode;
+  int get hashCode => 'MosaicId'.hashCode ^ id.hashCode;
 
   @override
-  bool operator ==(other) => other is MosaicId && id == other.id;
+  bool operator ==(final other) =>
+      identical(this, other) ||
+      other is MosaicId && runtimeType == other.runtimeType && id == other.id;
 
   @override
-  String toString() => 'MosaicId(id:$id, fullName:$fullName)';
+  String toString() => 'MosaicId(id:$id)';
 }

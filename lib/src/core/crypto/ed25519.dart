@@ -18,6 +18,8 @@ library nem2_sdk_dart.core.crypto.ed25519;
 
 import 'dart:typed_data' show ByteBuffer, Int64List, Uint8List;
 
+import 'package:pointycastle/export.dart' show RIPEMD160Digest, SHA256Digest, SHA3Digest;
+
 import 'package:nem2_sdk_dart/src/core/utils.dart' show ArrayUtils;
 
 import 'crypto_exception.dart';
@@ -52,7 +54,7 @@ class Ed25519 {
 
   /// Signs a [message] with the given [publicKey] and [secretKey].
   static Uint8List signData(Uint8List message, Uint8List publicKey, Uint8List secretKey) {
-    final SHA3DigestNist hasher = createSha3Hasher();
+    final SHA3DigestNist hasher = createSha3Digest();
     hasher.reset();
 
     final Uint8List d = new Uint8List(HASH_SIZE); // private hash
@@ -122,7 +124,7 @@ class Ed25519 {
 
     final Uint8List h = new Uint8List(HASH_SIZE);
 
-    final SHA3DigestNist hasher = createSha3Hasher();
+    final SHA3DigestNist hasher = createSha3Digest();
     hasher.reset();
     hasher.update(signature.sublist(0, HALF_SIGNATURE_SIZE), 0, HALF_SIGNATURE_SIZE);
     hasher.update(publicKey, 0, KEY_SIZE);
@@ -165,7 +167,7 @@ class Ed25519 {
     }
 
     // return the hash of the result
-    final SHA3DigestNist hasher = createSha3Hasher(length: KEY_SIZE);
+    final SHA3DigestNist hasher = createSha3Digest(length: KEY_SIZE);
     final Uint8List hash = hasher.process(sharedKey);
     final ByteBuffer buffer = hash.buffer;
     final Uint8List result = buffer.asUint8List(0, KEY_SIZE);
@@ -177,7 +179,7 @@ class Ed25519 {
 
   /// Computes the hash of a [secretKey] using SHA3-512 (NIST) algorithm.
   static Uint8List prepareForScalarMult(final Uint8List secretKey) {
-    final SHA3DigestNist sha3digest = createSha3Hasher();
+    final SHA3DigestNist sha3digest = createSha3Digest();
     final Uint8List hash = sha3digest.process(secretKey);
     final ByteBuffer buffer = hash.buffer;
     final Uint8List d = buffer.asUint8List(0, HASH_SIZE);
@@ -193,12 +195,37 @@ class Ed25519 {
   }
 
   /// Creates a SHA3 256/512 digest based on the given bit [length].
-  static SHA3DigestNist createSha3Hasher({final int length = 64}) {
+  ///
+  /// Providing bit length 32 returns the SHA3-256.
+  /// Providing bit length 64 returns the SHA3-512. (Default return value)
+  static SHA3DigestNist createSha3Digest({final int length = 64}) {
     if (length != 64 && length != 32) {
       throw ArgumentError('Cannot create SHA3 hasher. Unexpected length: $length');
     }
 
     return 64 == length ? new SHA3DigestNist(512) : new SHA3DigestNist(256);
+  }
+
+  /// Creates a Keccak 256/512 digest based on the given bit [length].
+  ///
+  /// Providing bit length 32 returns the Keccak-256.
+  /// Providing bit length 64 returns the Keccak-512. (Default return value)
+  static SHA3Digest createKeccakDigest({final int length = 64}) {
+    if (length != 64 && length != 32) {
+      throw ArgumentError('Cannot create Keccak hasher. Unexpected length: $length');
+    }
+
+    return 64 == length ? new SHA3Digest(512) : new SHA3Digest(256);
+  }
+
+  /// Creates a SHA-256 digest.
+  static SHA256Digest createSha256Digest() {
+    return new SHA256Digest();
+  }
+
+  /// Creates a RIPEMD-160 digest.
+  static RIPEMD160Digest createRipemd160Digest() {
+    return new RIPEMD160Digest();
   }
 
   // ------------------------------- private / protected functions ------------------------------ //

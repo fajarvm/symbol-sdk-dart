@@ -28,7 +28,7 @@ class TransactionHelper {
     final List<int> key = payload.skip(4 + 64).take(payload.length - (4 + 64)).toList();
     final Uint8List signingBytes = Uint8List.fromList(sign + key);
 
-    return Ed25519.createSha3Hasher(length: 32).process(signingBytes);
+    return Ed25519.createSha3Digest(length: 32).process(signingBytes);
   }
 
   /// Extracts the aggregate part from the [input].

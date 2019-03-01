@@ -14,20 +14,27 @@
 // limitations under the License.
 //
 
-library nem2_sdk_dart.test.sdk.model.blockchain.blockchain_storage_info_test;
+library nem2_sdk_dart.test.sdk.model.namespace.empty_alias_test;
 
 import 'package:test/test.dart';
 
-import 'package:nem2_sdk_dart/sdk.dart' show BlockchainStorageInfo;
+import 'package:nem2_sdk_dart/sdk.dart' show EmptyAlias, AliasType;
 
 void main() {
-  group('BlockchainStorageInfo', () {
-    test('Can create a BlockchainStorageInfo object', () {
-      const blockchainStorageInfo = BlockchainStorageInfo(1, 100, 10);
+  group('EmptyAlias', () {
+    test('Can create EmptyAlias object', () {
+      final alias = new EmptyAlias();
 
-      expect(blockchainStorageInfo.numAccounts, 10);
-      expect(blockchainStorageInfo.numBlocks, 1);
-      expect(blockchainStorageInfo.numTransactions, 100);
+      expect(alias.type, equals(AliasType.NONE));
+      expect(alias.address, isNull);
+      expect(alias.mosaicId, isNull);
+    });
+
+    test('Can compare adresses in EmptyAlias', () {
+      final alias1 = new EmptyAlias();
+      final alias2 = new EmptyAlias();
+
+      expect((alias1 == alias2), isTrue);
     });
   });
 }

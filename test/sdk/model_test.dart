@@ -26,11 +26,16 @@ import 'model/blockchain/blockchain_storage_info_test.dart' as blockchain_storag
 import 'model/blockchain/network_type_test.dart' as network_type_test;
 import 'model/mosaic/mosaic_id_test.dart' as mosaic_id_test;
 import 'model/mosaic/mosaic_info_test.dart' as mosaic_info_test;
-import 'model/mosaic/mosaic_name_test.dart' as mosaic_name_test;
+import 'model/mosaic/mosaic_nonce_test.dart' as mosaic_nonce_test;
 import 'model/mosaic/mosaic_properties_test.dart' as mosaic_properties_test;
 import 'model/mosaic/mosaic_supply_type_test.dart' as mosaic_supply_type_test;
 import 'model/mosaic/mosaic_test.dart' as mosaic_test;
-import 'model/mosaic/xem_test.dart' as xem_test;
+import 'model/mosaic/network_currency_mosaic_test.dart' as network_currency_mosaic_test;
+import 'model/mosaic/network_harvest_mosaic_test.dart' as network_harvest_mosaic_test;
+import 'model/namespace/address_alias_test.dart' as address_alias_test;
+import 'model/namespace/alias_type_test.dart' as alias_type_test;
+import 'model/namespace/empty_alias_test.dart' as empty_alias_test;
+import 'model/namespace/mosaic_alias_test.dart' as mosaic_alias_test;
 import 'model/namespace/namespace_id_test.dart' as namespace_id_test;
 import 'model/namespace/namespace_info_test.dart' as namespace_info_test;
 import 'model/namespace/namespace_name_test.dart' as namespace_name_test;
@@ -45,6 +50,7 @@ import 'model/transaction/signed_transaction_test.dart' as signed_transaction_te
 import 'model/transaction/transaction_helper_test.dart' as transaction_helper_test;
 import 'model/transaction/transaction_info_test.dart' as transaction_info_test;
 import 'model/transaction/transaction_type_test.dart' as transaction_type_test;
+import 'model/transaction/transaction_version_test.dart' as transaction_version_test;
 import 'model/transaction/uint64_test.dart' as uint64_test;
 
 void main() {
@@ -66,12 +72,17 @@ void main() {
   mosaic_test.main();
   mosaic_id_test.main();
   mosaic_info_test.main();
-  mosaic_name_test.main();
+  mosaic_nonce_test.main();
   mosaic_properties_test.main();
   mosaic_supply_type_test.main();
-  xem_test.main();
+  network_currency_mosaic_test.main();
+  network_harvest_mosaic_test.main();
 
   // namespace
+  address_alias_test.main();
+  alias_type_test.main();
+  empty_alias_test.main();
+  mosaic_alias_test.main();
   namespace_id_test.main();
   namespace_info_test.main();
   namespace_name_test.main();
@@ -88,5 +99,6 @@ void main() {
   transaction_helper_test.main();
   transaction_info_test.main();
   transaction_type_test.main();
+  transaction_version_test.main();
   uint64_test.main();
 }

@@ -16,7 +16,7 @@
 
 library nem2_sdk_dart.sdk.model.blockchain.network_type;
 
-/// This class is used to identify a network type
+/// This class is used to identify a network type.
 class NetworkType {
   static const String UNKNOWN_NETWORK_TYPE = 'network type is unknown';
 

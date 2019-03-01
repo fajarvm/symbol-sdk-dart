@@ -17,7 +17,6 @@
 library nem2_sdk_dart.sdk.model.mosaic.mosaic_info;
 
 import '../account/public_account.dart';
-import '../namespace/namespace_id.dart';
 import '../transaction/uint64.dart';
 
 import 'mosaic_id.dart';
@@ -34,11 +33,11 @@ class MosaicInfo {
   /// The meta ID.
   final String metaId;
 
-  /// The namespace ID the mosaic is attached to.
-  final NamespaceId namespaceId;
-
   /// The mosaic ID.
   final MosaicId mosaicId;
+
+  /// The mosaic nonce.
+  final Uint64 nonce;
 
   /// The total supply of the mosaic.
   final Uint64 supply;
@@ -52,15 +51,15 @@ class MosaicInfo {
   /// The properties of the mosaic.
   final MosaicProperties properties;
 
-  const MosaicInfo._(this.active, this.index, this.metaId, this.namespaceId, this.mosaicId,
-      this.supply, this.height, this.owner, this.properties);
+  const MosaicInfo._(this.active, this.index, this.metaId, this.mosaicId, this.nonce, this.supply,
+      this.height, this.owner, this.properties);
 
   factory MosaicInfo(
       final bool isActive,
       final int index,
       final String metaId,
-      final NamespaceId namespaceId,
       final MosaicId mosaicId,
+      final Uint64 nonce,
       final Uint64 supply,
       final Uint64 height,
       final PublicAccount owner,
@@ -70,7 +69,7 @@ class MosaicInfo {
     }
 
     return new MosaicInfo._(
-        isActive, index, metaId, namespaceId, mosaicId, supply, height, owner, properties);
+        isActive, index, metaId, mosaicId, nonce, supply, height, owner, properties);
   }
 
   /// Returns the mosaic divisibility

@@ -30,26 +30,27 @@ void main() {
 
       expect(mosaicId.id, equals(XEM_ID));
       expect(mosaicId.id.toHexString().toUpperCase(), equals(XEM_HEX_STRING));
-      expect(mosaicId.fullName, isNull);
+//      expect(mosaicId.fullName, isNull);
     });
 
-    test('Can create using a full name string', () {
-      final mosaicId = MosaicId(fullName: 'nem:xem');
-
-      expect(mosaicId.id, equals(XEM_ID));
-      expect(mosaicId.id.toHexString().toUpperCase(), equals(XEM_HEX_STRING));
-      expect(mosaicId.fullName, equals('nem:xem'));
-    });
+// Deprecated. To be re-introduced after AliasTransaction implementation.
+//    test('Can create using a full name string', () {
+//      final mosaicId = MosaicId(fullName: 'nem:xem');
+//
+//      expect(mosaicId.id, equals(XEM_ID));
+//      expect(mosaicId.id.toHexString().toUpperCase(), equals(XEM_HEX_STRING));
+//      expect(mosaicId.fullName, equals('nem:xem'));
+//    });
 
     test('Should have equal Ids', () {
       final mosaicId1 = MosaicId(id: XEM_ID);
       final mosaicId2 = MosaicId(id: XEM_ID);
-      final mosaicId3 = MosaicId(fullName: 'nem:xem');
+//      final mosaicId3 = MosaicId(fullName: 'nem:xem');
 
       expect(mosaicId1, equals(mosaicId2));
       expect(mosaicId1.id, equals(mosaicId2.id));
-      expect(mosaicId1.id, equals(mosaicId3.id));
-      expect(mosaicId2.id, equals(mosaicId3.id));
+//      expect(mosaicId1.id, equals(mosaicId3.id));
+//      expect(mosaicId2.id, equals(mosaicId3.id));
     });
   });
 
@@ -59,7 +60,7 @@ void main() {
 
       expect(mosaicId.id, equals(XEM_ID));
       expect(mosaicId.id.toHexString().toUpperCase(), equals(XEM_HEX_STRING));
-      expect(mosaicId.fullName, isNull);
+//      expect(mosaicId.fullName, isNull);
     });
 
     test('Can create from a big integer', () {
@@ -67,23 +68,24 @@ void main() {
 
       expect(mosaicId.id, equals(XEM_ID));
       expect(mosaicId.id.toHexString().toUpperCase(), equals(XEM_HEX_STRING));
-      expect(mosaicId.fullName, isNull);
+//      expect(mosaicId.fullName, isNull);
     });
 
-    test('Can create from a full name string', () {
-      final mosaicId = MosaicId.fromFullName('nem:xem');
-
-      expect(mosaicId.id, equals(XEM_ID));
-      expect(mosaicId.id.toHexString().toUpperCase(), equals(XEM_HEX_STRING));
-      expect(mosaicId.fullName, equals('nem:xem'));
-    });
+// Deprecated. To be re-introduced after AliasTransaction implementation.
+//    test('Can create from a full name string', () {
+//      final mosaicId = MosaicId.fromFullName('nem:xem');
+//
+//      expect(mosaicId.id, equals(XEM_ID));
+//      expect(mosaicId.id.toHexString().toUpperCase(), equals(XEM_HEX_STRING));
+//      expect(mosaicId.fullName, equals('nem:xem'));
+//    });
 
     test('Can create from a hex string', () {
       final mosaicId = MosaicId.fromHex(XEM_HEX_STRING);
 
       expect(mosaicId.id, equals(XEM_ID));
       expect(mosaicId.id.toHexString().toUpperCase(), equals(XEM_HEX_STRING));
-      expect(mosaicId.fullName, isNull);
+//      expect(mosaicId.fullName, isNull);
     });
   });
 }

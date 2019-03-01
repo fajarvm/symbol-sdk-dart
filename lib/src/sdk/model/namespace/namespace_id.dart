@@ -21,9 +21,9 @@ import 'package:nem2_sdk_dart/core.dart' show StringUtils;
 import '../transaction/id_generator.dart';
 import '../transaction/uint64.dart';
 
-/// The namespace id structure describes namespace id
+/// The namespace id structure describes namespace id.
 class NamespaceId {
-  /// Namespace 64-bit unsigned integer id
+  /// Namespace 64-bit unsigned integer id.
   final Uint64 id;
 
   /// Namespace full name (Examples: `nem`, or `universe.milky_way.planet_earth`).
@@ -44,7 +44,7 @@ class NamespaceId {
     }
 
     if (StringUtils.isNotEmpty(fullNamespaceName)) {
-      final Uint64 namespaceId = IdGenerator.generateNamespaceId(fullNamespaceName);
+      final Uint64 namespaceId = IdGenerator.generateNamespacePath(fullNamespaceName);
       return new NamespaceId._(namespaceId, fullNamespaceName);
     }
 
@@ -86,7 +86,7 @@ class NamespaceId {
   }
 
   @override
-  int get hashCode => 'NamespaceId'.hashCode + id.hashCode;
+  int get hashCode => 'NamespaceId'.hashCode ^ id.hashCode;
 
   @override
   bool operator ==(other) => other is NamespaceId && id == other.id;

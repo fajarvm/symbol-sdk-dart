@@ -19,7 +19,16 @@ library nem2_sdk_dart.test.sdk.model.namespace.namespace_info_test;
 import 'package:test/test.dart';
 
 import 'package:nem2_sdk_dart/sdk.dart'
-    show NamespaceId, NamespaceInfo, NamespaceType, NetworkType, PublicAccount, Uint64;
+    show
+        AliasType,
+        MosaicAlias,
+        MosaicId,
+        NamespaceId,
+        NamespaceInfo,
+        NamespaceType,
+        NetworkType,
+        PublicAccount,
+        Uint64;
 
 void main() {
   group('NamespaceInfo', () {
@@ -30,6 +39,8 @@ void main() {
       const metaId = '59FDA0733F17CF0001772CBC';
       const publicKey = 'b4f12e7c9f6946091e2cb8b6d3a12b50d17ccbbf646386ea27ce2946a7423dcf';
       final owner = PublicAccount.fromPublicKey(publicKey, NetworkType.MIJIN_TEST);
+      final mosaicId = MosaicId(id: Uint64.fromHex('D525AD41D95FCF29'));
+      final alias = new MosaicAlias(mosaicId);
 
       // sub namespaces
       final level1 = new NamespaceId(fullName: 'foo');
@@ -46,7 +57,8 @@ void main() {
           new NamespaceId(id: Uint64(0)),
           owner,
           Uint64(0),
-          Uint64(9999));
+          Uint64(9999),
+          alias);
 
       expect(namespaceInfo.active, isTrue);
       expect(namespaceInfo.index, 0);
@@ -60,6 +72,12 @@ void main() {
       expect(namespaceInfo.owner.publicKey, equals(publicKey));
       expect(namespaceInfo.startHeight, equals(Uint64(0)));
       expect(namespaceInfo.endHeight, equals(Uint64(9999)));
+      expect(namespaceInfo.alias, alias);
+      expect(namespaceInfo.alias.type, AliasType.MOSAIC);
+      expect(namespaceInfo.alias.mosaicId, mosaicId);
+      expect(namespaceInfo.isRoot(), isTrue);
+      expect(namespaceInfo.isSubnamespace(), isFalse);
+      expect(namespaceInfo.hasAlias(), isTrue);
     });
   });
 }

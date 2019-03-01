@@ -48,11 +48,15 @@ class Account {
   PublicAccount get publicAccount => PublicAccount.fromPublicKey(publicKey, address.networkType);
 
   @override
-  int get hashCode => _keyPair.hashCode + address.hashCode;
+  int get hashCode => _keyPair.hashCode ^ address.hashCode;
 
   @override
   bool operator ==(final other) =>
-      other is Account && plainAddress == other.plainAddress && publicKey == other.publicKey;
+      identical(this, other) ||
+      other is Account &&
+          runtimeType == other.runtimeType &&
+          _keyPair.publicKey == other._keyPair.publicKey &&
+          plainAddress == other.plainAddress;
 
   /// Creates an [Account] from a given [privateKey] for a specific [networkType].
   static Account fromPrivateKey(final String privateKey, final int networkType) {
@@ -68,7 +72,7 @@ class Account {
   static Account create(final int networkType) {
     final Uint8List randomBytes = Ed25519.getRandomBytes(Ed25519.KEY_SIZE);
     final Uint8List stepOne = new Uint8List(Ed25519.KEY_SIZE);
-    final SHA3DigestNist sha3Digest = Ed25519.createSha3Hasher(length: 32);
+    final SHA3DigestNist sha3Digest = Ed25519.createSha3Digest(length: 32);
     sha3Digest.update(randomBytes, 0, Ed25519.KEY_SIZE);
     sha3Digest.doFinal(stepOne, 0);
 

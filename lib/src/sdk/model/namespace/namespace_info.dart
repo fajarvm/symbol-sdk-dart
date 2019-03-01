@@ -19,6 +19,7 @@ library nem2_sdk_dart.sdk.model.namespace.namespace_info;
 import '../account/public_account.dart';
 import '../transaction/uint64.dart';
 
+import 'alias.dart';
 import 'namespace_id.dart';
 
 /// Contains information about a namespace
@@ -53,8 +54,11 @@ class NamespaceInfo {
   /// The height (in blocks) at which the ownership ends.
   final Uint64 endHeight;
 
+  /// The alias linked to a namespace.
+  final Alias alias;
+
   const NamespaceInfo._(this.active, this.index, this.metaId, this.type, this.depth, this.levels,
-      this.parentId, this.owner, this.startHeight, this.endHeight);
+      this.parentId, this.owner, this.startHeight, this.endHeight, this.alias);
 
   factory NamespaceInfo(
       final bool isActive,
@@ -66,7 +70,8 @@ class NamespaceInfo {
       final NamespaceId parentId,
       final PublicAccount owner,
       final Uint64 startHeight,
-      final Uint64 endHeight) {
+      final Uint64 endHeight,
+      final Alias alias) {
     if (0 > index) {
       throw new ArgumentError('index must not be negative');
     }
@@ -78,8 +83,8 @@ class NamespaceInfo {
       throw new ArgumentError('levels must not be empty');
     }
 
-    return NamespaceInfo._(
-        isActive, index, metaId, type, depth, levels, parentId, owner, startHeight, endHeight);
+    return NamespaceInfo._(isActive, index, metaId, type, depth, levels, parentId, owner,
+        startHeight, endHeight, alias);
   }
 
   /// Retrieves the namespace id.
@@ -93,6 +98,10 @@ class NamespaceInfo {
   /// Determines if this is a sub namespace.
   bool isSubnamespace() {
     return this.type == 1;
+  }
+
+  bool hasAlias() {
+    return this.alias != null && this.alias.type != 0;
   }
 
   /// Retrieves the parent namespace id.

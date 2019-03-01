@@ -22,25 +22,25 @@ class TransactionType {
   // Mosaic
   //
   /// Register a new mosaic.
-  static const int MOSAIC_DEFINITION = 0x414d;
+  static const int MOSAIC_DEFINITION = 0x414D;
 
   /// Change an existent mosaic supply.
-  static const int MOSAIC_SUPPLY_CHANGE = 0x424d;
+  static const int MOSAIC_SUPPLY_CHANGE = 0x424D;
 
   /// Change the levy of a mosaic.
-  static const int MOSAIC_LEVY_CHANGE = 0x434d;
+  static const int MOSAIC_LEVY_CHANGE = 0x434D;
 
   //
   // Namespace
   //
   /// Register a namespace.
-  static const int NAMESPACE_REGISTRATION = 0x414e;
+  static const int NAMESPACE_REGISTRATION = 0x414E;
 
   /// Attach a namespace name to an account.
-  static const int NAMESPACE_ATTACH_TO_ACCOUNT = 0x424e;
+  static const int NAMESPACE_ATTACH_TO_ACCOUNT = 0x424E;
 
   /// Attach a namespace name to a mosaic.
-  static const int NAMESPACE_ATTACH_TO_MOSAIC = 0x434e;
+  static const int NAMESPACE_ATTACH_TO_MOSAIC = 0x434E;
 
   //
   // Transfer
@@ -54,18 +54,27 @@ class TransactionType {
   /// Create or modify a multi-signature contract.
   static const int MULTISIG_MODIFY = 0x4155;
 
+  //
+  // Aggregate
+  //
   /// Send transactions in batches to different accounts.
   ///
   /// An aggregate transaction is complete when all the required participants have signed it.
-  static const int MULTISIG_AGGREGATE_COMPLETE = 0x4141;
+  static const int AGGREGATE_COMPLETE = 0x4141;
 
   /// Propose many transactions between different accounts.
   ///
   /// An aggregate transaction is bonded when it requires signatures from other participants.
-  static const int MULTISIG_AGGREGATE_BONDED = 0x4241;
+  static const int AGGREGATE_BONDED = 0x4241;
 
-  /// As deposit before announcing aggregate bonded transactions.
-  static const int MULTISIG_HASH_LOCK = 0x4148;
+  //
+  // Hash lock / Lock funds
+  //
+  /// Lock the funds to allow deposit before announcing aggregate bonded transactions.
+  ///
+  /// Announce a hash lock transaction before sending a signed aggregate bonded transaction.
+  /// This mechanism is required to prevent network spamming.
+  static const int HASH_LOCK = 0x4148;
 
   //
   // Account filters
@@ -83,16 +92,16 @@ class TransactionType {
   // Cross-chain swaps
   //
   /// The secret lock transaction type.
-  static const int SECRET_LOCK = 0x424C; // TODO: new id is 0x4152 according to nemtech
+  static const int SECRET_LOCK = 0x4152;
 
   /// The secret proof transaction type.
-  static const int SECRET_PROOF = 0x434C; // TODO: new id is 0x4252 according to nemtech
+  static const int SECRET_PROOF = 0x4252;
 
   //
   // Account link / Remote harvesting
   //
   /// Delegates the account importance to a proxy account to enable delegated harvesting.
-  static const int LOCK_FUND = 0x414C;
+  static const int ACCOUNT_LINK = 0x414C;
 
   static final TransactionType singleton = new TransactionType._();
 
@@ -126,14 +135,14 @@ class TransactionType {
         return TransactionType.TRANSFER;
       case MULTISIG_MODIFY:
         return TransactionType.MULTISIG_MODIFY;
-      case MULTISIG_AGGREGATE_BONDED:
-        return TransactionType.MULTISIG_AGGREGATE_BONDED;
-      case MULTISIG_AGGREGATE_COMPLETE:
-        return TransactionType.MULTISIG_AGGREGATE_COMPLETE;
-      case MULTISIG_HASH_LOCK:
-        return TransactionType.MULTISIG_HASH_LOCK;
-      case LOCK_FUND:
-        return TransactionType.LOCK_FUND;
+      case AGGREGATE_BONDED:
+        return TransactionType.AGGREGATE_BONDED;
+      case AGGREGATE_COMPLETE:
+        return TransactionType.AGGREGATE_COMPLETE;
+      case HASH_LOCK:
+        return TransactionType.HASH_LOCK;
+      case ACCOUNT_LINK:
+        return TransactionType.ACCOUNT_LINK;
       case SECRET_LOCK:
         return TransactionType.SECRET_LOCK;
       case SECRET_PROOF:

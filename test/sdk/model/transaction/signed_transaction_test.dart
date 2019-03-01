@@ -51,16 +51,16 @@ void main() {
           payload,
           '231AA7700DC158CFC85606E0E2AC80F409923C6F3A845577C7D8D7A51A99E883',
           signer,
-          TransactionType.MULTISIG_AGGREGATE_COMPLETE,
+          TransactionType.AGGREGATE_COMPLETE,
           NetworkType.MIJIN_TEST);
 
-      expect(signedTx.type, equals(TransactionType.MULTISIG_AGGREGATE_COMPLETE));
+      expect(signedTx.type, equals(TransactionType.AGGREGATE_COMPLETE));
     });
 
     test('Cannot create a signed transaction with an invalid hash', () {
       expect(
           () => new SignedTransaction(
-              '', null, signer, TransactionType.MULTISIG_AGGREGATE_BONDED, NetworkType.MIJIN_TEST),
+              '', null, signer, TransactionType.AGGREGATE_BONDED, NetworkType.MIJIN_TEST),
           throwsA(predicate((e) =>
               e is ArgumentError &&
               e.message == 'Invalid hash size. The hash must be 64 characters long.')));
@@ -68,7 +68,7 @@ void main() {
       const hash = '8498B38D89C1DC8A448EA5824938FF828926CD9F7747B1844B59B4B6807E878';
       expect(
           () => new SignedTransaction(
-              '', hash, signer, TransactionType.MULTISIG_AGGREGATE_BONDED, NetworkType.MIJIN_TEST),
+              '', hash, signer, TransactionType.AGGREGATE_BONDED, NetworkType.MIJIN_TEST),
           throwsA(predicate((e) =>
               e is ArgumentError &&
               e.message == 'Invalid hash size. The hash must be 64 characters long.')));

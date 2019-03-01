@@ -43,16 +43,20 @@ void main() {
 
       // Multi-signature
       expect(TransactionType.MULTISIG_MODIFY, 0x4155);
-      expect(TransactionType.MULTISIG_AGGREGATE_COMPLETE, 0x4141);
-      expect(TransactionType.MULTISIG_AGGREGATE_BONDED, 0x4241);
-      expect(TransactionType.MULTISIG_HASH_LOCK, 0x4148);
+
+      // Aggregate
+      expect(TransactionType.AGGREGATE_COMPLETE, 0x4141);
+      expect(TransactionType.AGGREGATE_BONDED, 0x4241);
+
+      // Hash lock / Lock funds
+      expect(TransactionType.HASH_LOCK, 0x4148);
 
       // Cross-chain swaps
-      expect(TransactionType.SECRET_LOCK, 0x424C);
-      expect(TransactionType.SECRET_PROOF, 0x434C);
+      expect(TransactionType.SECRET_LOCK, 0x4152);
+      expect(TransactionType.SECRET_PROOF, 0x4252);
 
       // Account link / remote harvesting
-      expect(TransactionType.LOCK_FUND, 0x414C);
+      expect(TransactionType.ACCOUNT_LINK, 0x414C);
     });
 
     test('Can retrieve a valid transaction types', () {
@@ -79,17 +83,21 @@ void main() {
 
       // Multi-signature
       expect(TransactionType.getTransactionType(0x4155), TransactionType.MULTISIG_MODIFY);
+
+      // Aggregate
       expect(
-          TransactionType.getTransactionType(0x4141), TransactionType.MULTISIG_AGGREGATE_COMPLETE);
-      expect(TransactionType.getTransactionType(0x4241), TransactionType.MULTISIG_AGGREGATE_BONDED);
-      expect(TransactionType.getTransactionType(0x4148), TransactionType.MULTISIG_HASH_LOCK);
+          TransactionType.getTransactionType(0x4141), TransactionType.AGGREGATE_COMPLETE);
+      expect(TransactionType.getTransactionType(0x4241), TransactionType.AGGREGATE_BONDED);
+
+      // Hash lock / Lock funds
+      expect(TransactionType.getTransactionType(0x4148), TransactionType.HASH_LOCK);
 
       // Cross-chain swaps
-      expect(TransactionType.getTransactionType(0x424C), TransactionType.SECRET_LOCK);
-      expect(TransactionType.getTransactionType(0x434C), TransactionType.SECRET_PROOF);
+      expect(TransactionType.getTransactionType(0x4152), TransactionType.SECRET_LOCK);
+      expect(TransactionType.getTransactionType(0x4252), TransactionType.SECRET_PROOF);
 
       // Account link / remote harvesting
-      expect(TransactionType.getTransactionType(0x414C), TransactionType.LOCK_FUND);
+      expect(TransactionType.getTransactionType(0x414C), TransactionType.ACCOUNT_LINK);
     });
 
     test('Trying to retrieve an invalid transaction type will throw an error', () {
