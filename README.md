@@ -9,12 +9,12 @@
 
 > :construction: :warning: :rotating_light: :warning: :construction:
 > 
-> !!! This SDK is currently a work in progress and should not be used for production !!!
+> This SDK is currently a work in progress and should not be used for production.
 > 
 > :construction: :warning: :rotating_light: :warning: :construction:
 
 ## About
-The nem2-sdk-dart is a Dart library for communicating with NEM2 (Catapult) [REST API][nemtech-api] server. It can be used for developers to develop an applications for [multiple platforms][dart-platforms]: mobile (both iOS) and Android, Web, or Command-line/Server-side.
+The nem2-sdk-dart is a Dart library for communicating with NEM2 (Catapult) [REST API][nemtech-api] server. It can be used to develop applications for [multiple platforms][dart-platforms]: Mobile with Flutter (both iOS and Android), Web, or Command-line/Server-side.
 
 ## Requirements
 Dart SDK v2.2.0 or above.
