@@ -14,10 +14,14 @@
 // limitations under the License.
 //
 
+import 'package:test/test.dart';
+
 import 'utils/base32_test.dart' as base32_test;
 import 'utils/hex_utils_test.dart' as hex_utils_test;
 
 void main() {
-  base32_test.main();
-  hex_utils_test.main();
+  group('Utils:', () {
+    base32_test.main();
+    hex_utils_test.main();
+  });
 }

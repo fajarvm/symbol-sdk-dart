@@ -14,10 +14,14 @@
 // limitations under the License.
 //
 
+import 'package:test/test.dart';
+
 import 'crypto/key_pair_test.dart' as keypair_test;
 import 'crypto/sha3nist_test.dart' as sha3nist_test;
 
 void main() {
-  keypair_test.main();
-  sha3nist_test.main();
+  group('Crypto:', () {
+    keypair_test.main();
+    sha3nist_test.main();
+  });
 }

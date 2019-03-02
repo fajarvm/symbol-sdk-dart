@@ -14,6 +14,8 @@
 // limitations under the License.
 //
 
+import 'package:test/test.dart';
+
 import 'model/account/account_info_test.dart' as account_info_test;
 import 'model/account/account_test.dart' as account_test;
 import 'model/account/address_test.dart' as address_test;
@@ -55,50 +57,60 @@ import 'model/transaction/uint64_test.dart' as uint64_test;
 
 void main() {
   // account
-  account_test.main();
-  account_info_test.main();
-  address_test.main();
-  multisig_account_graph_info_test.main();
-  multisig_account_info_test.main();
-  public_account_test.main();
+  group('Account:', () {
+    account_test.main();
+    account_info_test.main();
+    address_test.main();
+    multisig_account_graph_info_test.main();
+    multisig_account_info_test.main();
+    public_account_test.main();
+  });
 
   // blockchain
-  block_info_test.main();
-  blockchain_score_test.main();
-  blockchain_storage_info_test.main();
-  network_type_test.main();
+  group('Blockchain:', () {
+    block_info_test.main();
+    blockchain_score_test.main();
+    blockchain_storage_info_test.main();
+    network_type_test.main();
+  });
 
   // mosaic
-  mosaic_test.main();
-  mosaic_id_test.main();
-  mosaic_info_test.main();
-  mosaic_nonce_test.main();
-  mosaic_properties_test.main();
-  mosaic_supply_type_test.main();
-  network_currency_mosaic_test.main();
-  network_harvest_mosaic_test.main();
+  group('Mosaic:', () {
+    mosaic_test.main();
+    mosaic_id_test.main();
+    mosaic_info_test.main();
+    mosaic_nonce_test.main();
+    mosaic_properties_test.main();
+    mosaic_supply_type_test.main();
+    network_currency_mosaic_test.main();
+    network_harvest_mosaic_test.main();
+  });
 
   // namespace
-  address_alias_test.main();
-  alias_type_test.main();
-  empty_alias_test.main();
-  mosaic_alias_test.main();
-  namespace_id_test.main();
-  namespace_info_test.main();
-  namespace_name_test.main();
-  namespace_type_test.main();
+  group('Namespace:', () {
+    address_alias_test.main();
+    alias_type_test.main();
+    empty_alias_test.main();
+    mosaic_alias_test.main();
+    namespace_id_test.main();
+    namespace_info_test.main();
+    namespace_name_test.main();
+    namespace_type_test.main();
+  });
 
   // transaction
-  deadline_test.main();
-  hash_type_test.main();
-  id_generator_test.main();
-  message_type_test.main();
-  plain_message_test.main();
-  secure_message_test.main();
-  signed_transaction_test.main();
-  transaction_helper_test.main();
-  transaction_info_test.main();
-  transaction_type_test.main();
-  transaction_version_test.main();
-  uint64_test.main();
+  group('Transaction:', () {
+    deadline_test.main();
+    hash_type_test.main();
+    id_generator_test.main();
+    message_type_test.main();
+    plain_message_test.main();
+    secure_message_test.main();
+    signed_transaction_test.main();
+    transaction_helper_test.main();
+    transaction_info_test.main();
+    transaction_type_test.main();
+    transaction_version_test.main();
+    uint64_test.main();
+  });
 }

@@ -15,8 +15,8 @@ echo "Running dartanalyzer..."
 dartanalyzer $DARTANALYZER_FLAGS .
 
 # Run the tests.
-echo "Running tests..."
-pub run test --reporter expanded
+echo "Running all tests..."
+pub run test test/test_all.dart --reporter expanded
 
 # Gather coverage and upload to Coveralls.
 if [ "$COVERALLS_TOKEN" ] && [ "$TRAVIS_DART_VERSION" = "stable" ]; then
