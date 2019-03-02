@@ -20,5 +20,6 @@ dependencies:
 
 dev_dependencies:
   test: ^1.5.3
+  # Enable these when you're not using the global library
   # coveralls: ^5.1.0
   # coverage: ^0.12.4

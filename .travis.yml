@@ -8,10 +8,12 @@ install:
   - pub global activate coveralls
   - pub global activate coverage
 script: ./tool/travis.sh
-after_success:
-  - coveralls var/lcov.info
 env:
   - DARTANALYZER_FLAGS=--fatal-warnings
+
+# Uploading LCOV to Coveralls is handled inside travis.sh
+# after_success:
+#  - coveralls var/lcov.info
 
 # Disable dart tasks. We're using ./tool/travis.sh to perform tests.
 # dart_task:

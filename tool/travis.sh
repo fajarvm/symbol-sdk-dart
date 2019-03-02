@@ -19,7 +19,7 @@ echo "Running tests..."
 pub run test --reporter expanded
 
 # Gather coverage and upload to Coveralls.
-if [ "$COVERALLS_TOKEN" ] && [ "$TRAVIS_DART_VERSION" = "dev" ]; then
+if [ "$COVERALLS_TOKEN" ] && [ "$TRAVIS_DART_VERSION" = "stable" ]; then
   OBS_PORT=9292
   echo "Collecting coverage on port $OBS_PORT..."
 
@@ -44,4 +44,8 @@ if [ "$COVERALLS_TOKEN" ] && [ "$TRAVIS_DART_VERSION" = "dev" ]; then
     --out=var/lcov.info \
     --packages=.packages \
     --report-on=lib
+
+  # Upload to coveralls
+  echo "Upload LCOV report to Coveralls..."
+  coveralls ./var/lcov.info
 fi
