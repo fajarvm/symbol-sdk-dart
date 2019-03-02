@@ -1,19 +1,22 @@
 language: dart
 dart:
   - "2.2.0"
+notifications: {email: false}
 dart_task:
-  # Dart VM
-  - test: --platform vm
-  - dartanalyzer: true
+   - test: --platform vm # Dart VM
+   - dartanalyzer: true
+# after_success: pub run coveralls var/lcov.info # TODO: create LCOV test report
+
+
+  ################################
+  # Examples of some other tasks #
+  ################################
+  # dart_task:
   # Chrome browser
   # - test: --platform chrome
   # Chrome with Dart VM. Use either this or Chrome, not both.
   # - test: --platform dartium
   # install_dartium: true
-
-  ################################
-  # Examples of some other tasks #
-  ################################
   #
   # Dart Formatter
   # Checks for code formatting conforms dartfmt.
