@@ -1,34 +1,17 @@
 language: dart
 dart:
-  - "2.2.0"
+  - stable
 notifications: {email: false}
-dart_task:
-   - test: --platform vm # Dart VM
-   - dartanalyzer: true
-# after_success: pub run coveralls var/lcov.info # TODO: create LCOV test report
+install:
+  - pub global activate coveralls
+  - pub global activate coverage
+script: ./tool/travis.sh
+after_success:
+  - coveralls var/lcov.info
+env:
+  - DARTANALYZER_FLAGS=--fatal-warnings
 
-
-  ################################
-  # Examples of some other tasks #
-  ################################
-  # dart_task:
-  # Chrome browser
-  # - test: --platform chrome
-  # Chrome with Dart VM. Use either this or Chrome, not both.
-  # - test: --platform dartium
-  # install_dartium: true
-  #
-  # Dart Formatter
-  # Checks for code formatting conforms dartfmt.
-  # - dartfmt
-  #
-  # Dart Analyzer
-  # Warnings are fatal, but we only analyze the lib/ directory.
-  # - dartanalyzer: --fatal-warnings lib
-  #
-  # XVFB (Virtual Framebuffer X Server for X)
-  # On Linux, the test runner uses XVFB by default so that it can use browsers like Chrome that require a display.
-  # However, this may interfere with certain applications, so you can turn it off by setting xvfb: false either at
-  # the top level or for a particular task.
-  # - test: --exclude-tags no-xvfb
-  # xvfb: false
+# Disable dart tasks. We're using ./tool/travis.sh to perform tests.
+# dart_task:
+#   - test: --platform vm # Dart VM
+#   - dartanalyzer: true

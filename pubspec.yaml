@@ -20,4 +20,5 @@ dependencies:
 
 dev_dependencies:
   test: ^1.5.3
-  # coveralls: ^5.1.0 # TODO: upload LCOV report to Coveralls.io
+  # coveralls: ^5.1.0
+  # coverage: ^0.12.4
