@@ -16,11 +16,9 @@
 
 library nem2_sdk_dart.test.sdk.model.transaction.messages.secure_message_test;
 
-import 'dart:typed_data' show Uint8List;
-
 import 'package:test/test.dart';
 
-import 'package:nem2_sdk_dart/core.dart' show ArrayUtils, HexUtils;
+import 'package:nem2_sdk_dart/core.dart' show HexUtils;
 import 'package:nem2_sdk_dart/sdk.dart' show MessageType, SecureMessage;
 
 void main() {

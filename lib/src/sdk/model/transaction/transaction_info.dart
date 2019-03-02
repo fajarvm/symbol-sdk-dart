@@ -16,8 +16,6 @@
 
 library nem2_sdk_dart.sdk.model.transaction.transaction_info;
 
-import 'dart:typed_data' show Uint8List;
-
 import 'uint64.dart';
 
 /// The transaction information model included in all transactions.

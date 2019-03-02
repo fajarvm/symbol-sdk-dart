@@ -2,6 +2,8 @@ language: dart
 dart:
   - stable
 notifications: {email: false}
+before_install:
+  - chmod +x ./tool/travis.sh
 install:
   - pub global activate coveralls
   - pub global activate coverage

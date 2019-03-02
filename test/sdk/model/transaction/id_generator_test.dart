@@ -16,7 +16,7 @@
 
 library nem2_sdk_dart.test.sdk.model.transaction.id_generator_test;
 
-import 'dart:typed_data' show Uint8List, Uint32List;
+import 'dart:typed_data' show Uint8List;
 
 import 'package:test/test.dart';
 
