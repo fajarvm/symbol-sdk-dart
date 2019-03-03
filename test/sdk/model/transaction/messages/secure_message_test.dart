@@ -31,6 +31,11 @@ void main() {
     const ERROR_KEY = 'Sender private key and receiver public key are required to create an '
         'encrypted message payload';
 
+    test('Valid constants', () {
+      expect(SecureMessage.KEY_SIZE, 32);
+      expect(SecureMessage.BLOCK_SIZE, 16);
+    });
+
     test('Can create a secure message with an encrypted payload', () {
       final secureMessage = SecureMessage.create('Hello', senderPrivateKey, receiverPublicKey);
 

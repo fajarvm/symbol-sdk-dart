@@ -23,6 +23,11 @@ import 'package:nem2_sdk_dart/sdk.dart' show MessageType, PlainMessage;
 
 void main() {
   group('PlainMessage', () {
+    test('Valid constants', () {
+      expect(PlainMessage.EMPTY_MESSAGE.type, equals(MessageType.UNENCRYPTED));
+      expect(PlainMessage.EMPTY_MESSAGE.payload, equals(HexUtils.getBytes(HexUtils.utf8ToHex(''))));
+    });
+
     test('Can create a plain message with the message payload in plain text', () {
       // Empty string
       String message = '';

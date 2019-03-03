@@ -75,5 +75,12 @@ void main() {
       expect(mosaicInfo.divisibility, 0);
       expect(mosaicInfo.duration.value.toInt(), 9000);
     });
+
+    test('Cannot create with invalid index', () {
+      expect(
+          () => new MosaicInfo(true, -1, null, null, null, null, null, null, null),
+          throwsA(
+              predicate((e) => e is ArgumentError && e.message == 'index must not be negative')));
+    });
   });
 }

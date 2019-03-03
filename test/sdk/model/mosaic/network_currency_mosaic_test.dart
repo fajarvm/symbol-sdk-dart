@@ -48,6 +48,8 @@ void main() {
       expect(NetworkCurrencyMosaic.TRANSFERABLE, isTrue);
       expect(NetworkCurrencyMosaic.SUPPLY_MUTABLE, isFalse);
       expect(NetworkCurrencyMosaic.LEVY_MUTABLE, isFalse);
+      expect(NetworkCurrencyMosaic.OWNER_PUBLIC_KEY,
+          equals('B4F12E7C9F6946091E2CB8B6D3A12B50D17CCBBF646386EA27CE2946A7423DCF'));
     });
   });
 }

@@ -49,12 +49,12 @@ class HashType {
   /// For Bitcoin (BTC) compatibility.
   static const int SHA_256 = 3;
 
-  static final HashType singleton = new HashType._();
+  static final HashType _singleton = new HashType._();
 
   HashType._();
 
   factory HashType() {
-    return singleton;
+    return _singleton;
   }
 
   static int getHashType(final int hashType) {

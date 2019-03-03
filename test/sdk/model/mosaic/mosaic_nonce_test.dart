@@ -24,6 +24,10 @@ import 'package:nem2_sdk_dart/sdk.dart' show MosaicNonce;
 
 void main() {
   group('MosaicNonce', () {
+    test('Valid constants', () {
+      expect(MosaicNonce.NONCE_SIZE, 4);
+    });
+
     test('Can create a MosaicNonce object', () {
       final mosaicNonce = new MosaicNonce(Uint8List(MosaicNonce.NONCE_SIZE));
       expect(mosaicNonce.nonce, isNotNull);

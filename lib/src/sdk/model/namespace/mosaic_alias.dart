@@ -41,7 +41,7 @@ class MosaicAlias implements Alias {
   int get type => AliasType.MOSAIC;
 
   @override
-  bool operator ==(other) =>
+  bool operator ==(final other) =>
       identical(this, other) ||
       other is MosaicAlias &&
           runtimeType == other.runtimeType &&

@@ -32,5 +32,12 @@ void main() {
       expect(mosaic.amount, equals(amount));
       expect(mosaic.amount.value.toInt(), equals(9999999999));
     });
+
+    test('Cannot create mosaic with invalid id', () {
+      expect(
+          () => new Mosaic(null, Uint64(9999999999)),
+          throwsA(
+              predicate((e) => e is ArgumentError && e.message == 'MosaicId must not be null')));
+    });
   });
 }

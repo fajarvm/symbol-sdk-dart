@@ -22,6 +22,13 @@ import 'package:nem2_sdk_dart/sdk.dart' show AliasType;
 
 void main() {
   group('AliasType', () {
+    test('creating a new instance returns a singleton', () {
+      final type1 = new AliasType();
+      final type2 = new AliasType();
+
+      expect(identical(type1, type2), isTrue);
+    });
+
     test('valid alias types', () {
       expect(AliasType.NONE, 0);
       expect(AliasType.MOSAIC, 1);

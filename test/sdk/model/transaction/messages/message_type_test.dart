@@ -22,6 +22,13 @@ import 'package:nem2_sdk_dart/sdk.dart' show MessageType;
 
 void main() {
   group('MessageType', () {
+    test('creating a new instance returns a singleton', () {
+      final type1 = new MessageType();
+      final type2 = new MessageType();
+
+      expect(identical(type1, type2), isTrue);
+    });
+
     test('valid message types', () {
       expect(MessageType.UNENCRYPTED, 0x00);
       expect(MessageType.ENCRYPTED, 0x01);

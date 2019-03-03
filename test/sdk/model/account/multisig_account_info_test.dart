@@ -46,6 +46,17 @@ void main() {
       expect(actual.cosignatories, equals(cosignatories));
       expect(actual.multisigAccounts, equals(multisigs));
     });
+
+    test('Cannot crete with invalid parameter values', () {
+      expect(
+          () => new MultisigAccountInfo(account, -1, 1, cosignatories, multisigs),
+          throwsA(predicate(
+              (e) => e is ArgumentError && e.message == 'minApproval must not be negative')));
+      expect(
+          () => new MultisigAccountInfo(account, 1, -1, cosignatories, multisigs),
+          throwsA(predicate(
+              (e) => e is ArgumentError && e.message == 'minRemoval must not be negative')));
+    });
   });
 
   group('isMultiSig()', () {

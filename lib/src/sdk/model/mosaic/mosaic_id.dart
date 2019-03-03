@@ -16,7 +16,7 @@
 
 library nem2_sdk_dart.sdk.model.mosaic.mosaic_id;
 
-import 'package:nem2_sdk_dart/core.dart' show StringUtils;
+import 'package:nem2_sdk_dart/core.dart' show HexUtils, StringUtils;
 
 //import '../transaction/id_generator.dart';
 import '../transaction/uint64.dart';
@@ -55,15 +55,15 @@ class MosaicId {
   const MosaicId._(this.id);
 
   factory MosaicId({final Uint64 id}) {
+    if (id == null) {
+      throw new ArgumentError('The id must not be null');
+    }
+
     return new MosaicId._(id);
   }
 
   /// Creates a new [MosaicId] from an [id].
   static MosaicId fromId(final Uint64 id) {
-    if (id == null || id.isZero()) {
-      throw new ArgumentError('The id must not be null or empty');
-    }
-
     return new MosaicId(id: id);
   }
 
@@ -90,6 +90,11 @@ class MosaicId {
     if (StringUtils.isEmpty(hexString)) {
       throw new ArgumentError('The hexString must not be null or empty');
     }
+
+    if (!HexUtils.isHexString(hexString)) {
+      throw new ArgumentError('invalid hex');
+    }
+
     return new MosaicId(id: Uint64.fromHex(hexString));
   }
 

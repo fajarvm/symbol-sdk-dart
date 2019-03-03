@@ -22,6 +22,12 @@ import 'package:nem2_sdk_dart/sdk.dart' show Deadline;
 
 void main() {
   group('Deadline', () {
+    test('Valid constants', () {
+      expect(Deadline.DEFAULT_DURATION, equals(new Duration(hours: 2)));
+      expect(Deadline.NEMESIS_BLOCK_DATETIME,
+          equals(new DateTime.fromMillisecondsSinceEpoch(1459468800000, isUtc: true)));
+    });
+
     test('Can create a deadline with default value', () {
       final deadline = Deadline.create();
       final now = DateTime.now();

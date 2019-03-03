@@ -16,11 +16,13 @@
 
 import 'package:test/test.dart';
 
+import 'crypto/crypto_exception_test.dart' as crypto_exception_test;
 import 'crypto/key_pair_test.dart' as keypair_test;
 import 'crypto/sha3nist_test.dart' as sha3nist_test;
 
 void main() {
   group('Crypto:', () {
+    crypto_exception_test.main();
     keypair_test.main();
     sha3nist_test.main();
   });

@@ -26,12 +26,12 @@ class NamespaceType {
 
   static const int SUB_NAMESPACE = 1;
 
-  static final NamespaceType singleton = new NamespaceType._();
+  static final NamespaceType _singleton = new NamespaceType._();
 
   NamespaceType._();
 
   factory NamespaceType() {
-    return singleton;
+    return _singleton;
   }
 
   static int getNamespaceType(final int namespaceType) {

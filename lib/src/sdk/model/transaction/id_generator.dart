@@ -28,7 +28,6 @@ import 'uint64.dart';
 
 /// A utility class to generate Namespace and Mosaic IDs.
 class IdGenerator {
-  static const String MOSAIC_SEPARATOR = ':';
   static const String PART_SEPARATOR = '.';
   static const int MOSAIC_NONCE_SIZE = 4;
   static const int NAMESPACE_MAX_DEPTH = 3;

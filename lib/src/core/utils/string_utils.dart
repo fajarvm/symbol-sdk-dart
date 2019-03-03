@@ -19,7 +19,7 @@ library nem2_sdk_dart.core.utils.string_utils;
 /// A collection of utility functions to manipulate a String.
 class StringUtils {
   static const String EMPTY_STRING = '';
-  static final RegExp WHITESPACE = new RegExp(r'\\s');
+  static final RegExp WHITESPACE = new RegExp(r'\s+\b|\b\s+');
 
   /// Removes all whitespaces from a String.
   /// That includes leading, trailing and in-between characters in the String.
@@ -27,7 +27,7 @@ class StringUtils {
       (input == null || input.isEmpty) ? EMPTY_STRING : input.replaceAll(WHITESPACE, '');
 
   /// Removes leading and trailing whitespaces.
-  static String trim(final String input) => trimLeft(trimRight(input));
+  static String trim(final String input) => (input == null) ? EMPTY_STRING : input.trim();
 
   /// Removes leading whitespaces.
   static String trimLeft(final String input) => (input == null) ? EMPTY_STRING : input.trimLeft();
@@ -48,6 +48,6 @@ class StringUtils {
   /// Parses a String to a int. Returns null
   static int parseIntOrNull(final String input) {
     final String cleanInput = removeAllWhitespaces(input);
-    return (cleanInput == null) ? null : int.parse(cleanInput);
+    return (cleanInput == null || cleanInput == EMPTY_STRING) ? null : int.parse(cleanInput);
   }
 }

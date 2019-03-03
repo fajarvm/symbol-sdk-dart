@@ -79,8 +79,8 @@ class NamespaceInfo {
       throw new ArgumentError('depth must not be negative');
     }
 
-    if (levels.isEmpty) {
-      throw new ArgumentError('levels must not be empty');
+    if (levels == null || levels.isEmpty) {
+      throw new ArgumentError('levels must not be null or empty');
     }
 
     return NamespaceInfo._(isActive, index, metaId, type, depth, levels, parentId, owner,

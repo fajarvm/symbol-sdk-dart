@@ -41,7 +41,7 @@ class AddressAlias implements Alias {
   int get type => AliasType.ADDRESS;
 
   @override
-  bool operator ==(other) =>
+  bool operator ==(final other) =>
       identical(this, other) ||
       other is AddressAlias &&
           runtimeType == other.runtimeType &&

@@ -25,6 +25,13 @@ import 'package:nem2_sdk_dart/sdk.dart' show HashType;
 
 void main() {
   group('HashType', () {
+    test('creating a new instance returns a singleton', () {
+      final type1 = new HashType();
+      final type2 = new HashType();
+
+      expect(identical(type1, type2), isTrue);
+    });
+
     test('valid hash types', () {
       expect(HashType.SHA3_256, 0);
       expect(HashType.KECCAK_256, 1);

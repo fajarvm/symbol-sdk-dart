@@ -16,7 +16,7 @@
 
 library nem2_sdk_dart.sdk.model.namespace.namespace_id;
 
-import 'package:nem2_sdk_dart/core.dart' show StringUtils;
+import 'package:nem2_sdk_dart/core.dart' show HexUtils, StringUtils;
 
 import '../transaction/id_generator.dart';
 import '../transaction/uint64.dart';
@@ -48,15 +48,15 @@ class NamespaceId {
       return new NamespaceId._(namespaceId, fullNamespaceName);
     }
 
+    if (id == null) {
+      throw new ArgumentError('The id must not be null or empty');
+    }
+
     return new NamespaceId._(id, null);
   }
 
   /// Creates a new [NamespaceId] from an [id].
   static NamespaceId fromId(final Uint64 id) {
-    if (id == null || id.isZero()) {
-      throw new ArgumentError('The id must not be null or empty');
-    }
-
     return new NamespaceId(id: id);
   }
 
@@ -82,6 +82,11 @@ class NamespaceId {
     if (StringUtils.isEmpty(hexString)) {
       throw new ArgumentError('The hexString must not be null or empty');
     }
+
+    if (!HexUtils.isHexString(hexString)) {
+      throw new ArgumentError('invalid hex');
+    }
+
     return new NamespaceId(id: Uint64.fromHex(hexString));
   }
 
@@ -89,7 +94,7 @@ class NamespaceId {
   int get hashCode => 'NamespaceId'.hashCode ^ id.hashCode;
 
   @override
-  bool operator ==(other) => other is NamespaceId && id == other.id;
+  bool operator ==(final other) => other is NamespaceId && id == other.id;
 
   @override
   String toString() => 'NamespaceId(id:$id, fullName:$fullName)';

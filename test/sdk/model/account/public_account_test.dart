@@ -18,17 +18,41 @@ library nem2_sdk_dart.test.sdk.model.account.public_account_test;
 
 import 'package:test/test.dart';
 
-import 'package:nem2_sdk_dart/sdk.dart' show NetworkType, PublicAccount;
+import 'package:nem2_sdk_dart/sdk.dart' show Address, NetworkType, PublicAccount;
 
 void main() {
   group('PublicAccount', () {
     const publicKey = 'b4f12e7c9f6946091e2cb8b6d3a12b50d17ccbbf646386ea27ce2946a7423dcf';
+
+    test('can create using constructor', () {
+      final address = Address.fromPublicKey(publicKey, NetworkType.MIJIN_TEST);
+      final publicAccount = new PublicAccount(address: address, publicKey: publicKey);
+
+      expect(publicAccount.address, equals(address));
+      expect(publicAccount.plainAddress, equals('SARNASAS2BIAB6LMFA3FPMGBPGIJGK6IJETM3ZSP'));
+      expect(publicAccount.hashCode, isNotNull);
+    });
 
     test('can create a public account from a public key', () {
       final publicAccount = PublicAccount.fromPublicKey(publicKey, NetworkType.MIJIN_TEST);
 
       expect(publicAccount.publicKey, equals(publicKey));
       expect(publicAccount.plainAddress, equals('SARNASAS2BIAB6LMFA3FPMGBPGIJGK6IJETM3ZSP'));
+    });
+
+    test('cannot create using invalid parameters', () {
+      expect(() => PublicAccount.fromPublicKey(null, NetworkType.MIJIN_TEST),
+          throwsA(predicate((e) => e is ArgumentError && e.message == 'Not a valid public key')));
+      expect(
+          () => PublicAccount.fromPublicKey(
+              'b4f12e7c9f6946091e2cb8b6d3a12b50d17ccbbf646386ea27ce2946a7423dc',
+              NetworkType.MIJIN_TEST),
+          throwsA(predicate((e) => e is ArgumentError && e.message == 'Not a valid public key')));
+      expect(
+          () => PublicAccount.fromPublicKey(
+              'b4f12e7c9f6946091e2cb8b6d3a12b50d17ccbbf646386ea27ce2946a7423dcff',
+              NetworkType.MIJIN_TEST),
+          throwsA(predicate((e) => e is ArgumentError && e.message == 'Not a valid public key')));
     });
   });
 

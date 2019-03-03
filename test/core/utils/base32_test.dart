@@ -50,8 +50,10 @@ void main() {
       for (int i = 0; i < test_decoded.length; i++) {
         final Uint8List input = HexUtils.getBytes(test_decoded[i]);
         final String encodedString = Base32.encode(input);
+        final String encodedHexString = Base32.encodeHexString(test_decoded[i]);
 
         expect(encodedString, equals(test_encoded[i]));
+        expect(encodedHexString, equals(test_encoded[i]));
       }
     });
 

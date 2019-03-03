@@ -75,9 +75,32 @@ void main() {
       expect(namespaceInfo.alias, alias);
       expect(namespaceInfo.alias.type, AliasType.MOSAIC);
       expect(namespaceInfo.alias.mosaicId, mosaicId);
+      expect(namespaceInfo.id, equals(level2));
       expect(namespaceInfo.isRoot(), isTrue);
       expect(namespaceInfo.isSubnamespace(), isFalse);
       expect(namespaceInfo.hasAlias(), isTrue);
+
+      expect(() => namespaceInfo.parentNamespaceId(),
+          throwsA(predicate((e) => e is ArgumentError && e.message == 'This is a root namespace')));
+    });
+
+    test('Cannot create with invalid index, depth or levels', () {
+      expect(
+          () => new NamespaceInfo(true, -1, '', 0, 1, null, null, null, null, null, null),
+          throwsA(
+              predicate((e) => e is ArgumentError && e.message == 'index must not be negative')));
+      expect(
+          () => new NamespaceInfo(true, 0, '', 0, -1, null, null, null, null, null, null),
+          throwsA(
+              predicate((e) => e is ArgumentError && e.message == 'depth must not be negative')));
+      expect(
+          () => new NamespaceInfo(true, 0, '', 0, 1, null, null, null, null, null, null),
+          throwsA(predicate(
+              (e) => e is ArgumentError && e.message == 'levels must not be null or empty')));
+      expect(
+          () => new NamespaceInfo(true, 0, '', 0, 1, [], null, null, null, null, null),
+          throwsA(predicate(
+              (e) => e is ArgumentError && e.message == 'levels must not be null or empty')));
     });
   });
 }

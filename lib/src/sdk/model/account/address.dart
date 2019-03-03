@@ -82,10 +82,6 @@ class Address {
     final Uint8List addressByte = publicKeyToAddress(publicKeyByte, networkType);
     final String addressString = addressToString(addressByte);
 
-    if (addressString == null) {
-      throw new ArgumentError('Address string must not be null');
-    }
-
     return new Address._(addressString, networkType);
   }
 
@@ -110,7 +106,7 @@ class Address {
       case PREFIX_MAIN_NET:
         return new Address._(address, NetworkType.MAIN_NET);
       default:
-        throw new UnsupportedError('Address Network unsupported');
+        throw new UnsupportedError('unknown address network type');
     }
   }
 

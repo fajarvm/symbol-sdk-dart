@@ -38,10 +38,15 @@ void main() {
   ];
 
   group('Uint64', () {
+    test('Valid constants', (){
+      expect(Uint64.MIN_VALUE_SIGNED, 0);
+    });
+
     test('Can create Uint64 with a value within the accpeted value range', () {
       // min value is 0
       Uint64 actual = Uint64();
       expect(actual.value >= Uint64.MIN_VALUE, isTrue);
+      expect(actual.hashCode, isNotNull);
 
       // max value is 18446744073709551615
       final BigInt first = BigInt.from(Uint64.MAX_VALUE_SIGNED);

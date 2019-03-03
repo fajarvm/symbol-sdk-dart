@@ -21,7 +21,7 @@ import 'package:test/test.dart';
 import 'package:nem2_sdk_dart/sdk.dart' show AliasType, MosaicAlias, MosaicId;
 
 void main() {
-  final MosaicId mosaicId = MosaicId.fromHex('DC67FBE1CAD29E3');
+  final MosaicId mosaicId = MosaicId.fromHex('85BBEA6CC462B244');
 
   group('MosaicAlias', () {
     test('Can create MosaicAlias object', () {
@@ -30,13 +30,14 @@ void main() {
       expect(alias.type, equals(AliasType.MOSAIC));
       expect(alias.mosaicId, equals(mosaicId));
       expect(alias.address, isNull);
+      expect(alias.hashCode, isNotNull);
     });
 
     test('Can compare adresses in AddressAlias', () {
       final alias1 = new MosaicAlias(mosaicId);
       final alias2 = new MosaicAlias(mosaicId);
 
-      final MosaicId mosaicId2 = MosaicId.fromHex('DC67FBE1CAD29E2');
+      final MosaicId mosaicId2 = MosaicId.fromHex('85BBEA6CC462B242');
       final alias3 = new MosaicAlias(mosaicId2);
 
       expect((alias1 == alias2), isTrue);

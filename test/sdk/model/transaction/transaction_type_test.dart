@@ -22,6 +22,13 @@ import 'package:nem2_sdk_dart/sdk.dart' show TransactionType;
 
 void main() {
   group('TransactionType', () {
+    test('creating a new instance returns a singleton', () {
+      final type1 = new TransactionType();
+      final type2 = new TransactionType();
+
+      expect(identical(type1, type2), isTrue);
+    });
+
     test('valid transaction types', () {
       // Account filters
       expect(TransactionType.ACCOUNT_FILTER_ADDRESS, 0x4150);

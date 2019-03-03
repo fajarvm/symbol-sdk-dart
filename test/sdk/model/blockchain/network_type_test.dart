@@ -22,6 +22,13 @@ import 'package:nem2_sdk_dart/sdk.dart' show NetworkType;
 
 void main() {
   group('NetworkType', () {
+    test('creating a new instance returns a singleton', () {
+      final type1 = new NetworkType();
+      final type2 = new NetworkType();
+
+      expect(identical(type1, type2), isTrue);
+    });
+
     test('valid network types', () {
       // Main net
       expect(NetworkType.MAIN_NET, 0x68);

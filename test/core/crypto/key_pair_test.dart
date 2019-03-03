@@ -96,6 +96,38 @@ void main() {
                     'Expected: ${Ed25519.KEY_SIZE}, Got: ${privateKeySeed.length}')));
       }
     });
+
+    test('can create the same keypair from private key', () {
+      final keyPair1 = KeyPair.fromPrivateKey(TEST_PRIVATE_KEYS[0]);
+      final keyPair2 = KeyPair.fromPrivateKey(TEST_PRIVATE_KEYS[0]);
+
+      expect(keyPair1.hashCode, isNotNull);
+      expect(keyPair2.hashCode, isNotNull);
+      expect(keyPair1.privateKey, equals(keyPair2.privateKey));
+      expect(keyPair1.publicKey, equals(keyPair2.publicKey));
+      expect(keyPair1 == keyPair2, isTrue);
+    });
+
+    test('cannot create with invalid arguments', () {
+      expect(
+          () => new KeyPair(),
+          throwsA(predicate(
+              (e) => e is ArgumentError && e.message == 'privateKey byte cannot be null')));
+
+      Uint8List pk = new Uint8List(31);
+      expect(
+          () => new KeyPair(privateKey: pk),
+          throwsA(predicate((e) =>
+              e is ArgumentError &&
+              e.message == 'Invalid length for privateKey. Length: ${pk.lengthInBytes}')));
+
+      pk = new Uint8List(34);
+      expect(
+          () => new KeyPair(privateKey: pk),
+          throwsA(predicate((e) =>
+              e is ArgumentError &&
+              e.message == 'Invalid length for privateKey. Length: ${pk.lengthInBytes}')));
+    });
   });
 
   // ---------------------------
@@ -353,8 +385,7 @@ void main() {
 
     test('can derive deterministic shared key from well known inputs', () {
       // Prepare:
-      const privateKeyString =
-          '8F545C2816788AB41D352F236D80DBBCBC34705B5F902EFF1F1D88327C7C1300';
+      const privateKeyString = '8F545C2816788AB41D352F236D80DBBCBC34705B5F902EFF1F1D88327C7C1300';
       final KeyPair keyPair = KeyPair.fromPrivateKey(privateKeyString);
       final Uint8List publicKey =
           HexUtils.getBytes('BF684FB1A85A8C8091EE0442EDDB22E51683802AFA0C0E7C6FE3F3E3E87A8D72');

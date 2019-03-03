@@ -85,6 +85,24 @@ void main() {
       expect(blockInfo.difficulty, equals(testBlock['block']['difficulty']));
       expect(blockInfo.previousBlockHash, equals(testBlock['block']['previousBlockHash']));
       expect(blockInfo.blockTransactionHash, equals(testBlock['block']['blockTransactionsHash']));
+      expect(
+          blockInfo.toString(),
+          equals('BlockInfo{'
+              'hash= ${blockInfo.hash}, '
+              'generationHash= ${blockInfo.generationHash}, '
+              'totalFee= ${blockInfo.totalFee}, '
+              'numTransactions= ${blockInfo.numTransactions}, '
+              'signature= ${blockInfo.signature}, '
+              'signer= ${blockInfo.signer}, '
+              'networkType= ${blockInfo.networkType}, '
+              'version= ${blockInfo.version}, '
+              'type= ${blockInfo.type}, '
+              'height= ${blockInfo.height}, '
+              'timestamp= ${blockInfo.timestamp}, '
+              'difficulty= ${blockInfo.difficulty}, '
+              'previousBlockHash= ${blockInfo.previousBlockHash}, '
+              'blockTransactionHash= ${blockInfo.blockTransactionHash}'
+              '}'));
     });
   });
 }

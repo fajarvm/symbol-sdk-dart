@@ -31,6 +31,8 @@ void main() {
       expect(mosaicId.id, equals(XEM_ID));
       expect(mosaicId.id.toHexString().toUpperCase(), equals(XEM_HEX_STRING));
 //      expect(mosaicId.fullName, isNull);
+      expect(mosaicId.hashCode, isNotNull);
+      expect(mosaicId.toString(), equals('MosaicId(id:${mosaicId.id})'));
     });
 
 // Deprecated. To be re-introduced after AliasTransaction implementation.
@@ -86,6 +88,29 @@ void main() {
       expect(mosaicId.id, equals(XEM_ID));
       expect(mosaicId.id.toHexString().toUpperCase(), equals(XEM_HEX_STRING));
 //      expect(mosaicId.fullName, isNull);
+    });
+  });
+
+  group('Cannot create with invalid inputs', () {
+    test('Invalid constructor parameter', () {
+      expect(
+          () => new MosaicId(id: null),
+          throwsA(predicate(
+              (e) => e is ArgumentError && e.message == 'The id must not be null')));
+      expect(
+          () => MosaicId.fromBigInt(null),
+          throwsA(predicate(
+              (e) => e is ArgumentError && e.message == 'The bigInt must not be null')));
+      expect(
+          () => MosaicId.fromHex(null),
+          throwsA(predicate((e) =>
+              e is ArgumentError && e.message == 'The hexString must not be null or empty')));
+      expect(
+          () => MosaicId.fromHex(''),
+          throwsA(predicate((e) =>
+              e is ArgumentError && e.message == 'The hexString must not be null or empty')));
+      expect(() => MosaicId.fromHex('12zz34'),
+          throwsA(predicate((e) => e is ArgumentError && e.message == 'invalid hex')));
     });
   });
 }

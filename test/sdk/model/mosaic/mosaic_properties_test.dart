@@ -21,7 +21,12 @@ import 'package:test/test.dart';
 import 'package:nem2_sdk_dart/sdk.dart' show MosaicProperties, Uint64;
 
 void main() {
-  group('Create MosaicProperties via constructor', () {
+  group('MosaicProperties', () {
+    test('Valid constants', () {
+      expect(MosaicProperties.MIN_DIVISIBILITY, 0);
+      expect(MosaicProperties.MAX_DIVISIBILITY, 6);
+    });
+
     test('Can create via constructor', () {
       final MosaicProperties properties = new MosaicProperties(
           supplyMutable: true,
@@ -36,9 +41,7 @@ void main() {
       expect(properties.divisibility, equals(5));
       expect(properties.duration.value.toInt(), equals(1000));
     });
-  });
 
-  group('Create MosaicProperties via helper method', () {
     test('Can create via static method create()', () {
       final MosaicProperties properties = MosaicProperties.create(Uint64(3000));
 
@@ -47,6 +50,32 @@ void main() {
       expect(properties.levyMutable, isFalse);
       expect(properties.divisibility, equals(0));
       expect(properties.duration.value.toInt(), equals(3000));
+    });
+
+    test('Cannot create with invalid divisibility', () {
+      expect(
+          () => new MosaicProperties(
+              supplyMutable: false,
+              transferable: false,
+              levyMutable: false,
+              divisibility: -1,
+              duration: Uint64(0)),
+          throwsA(predicate((e) =>
+              e is ArgumentError &&
+              e.message ==
+                  'The divisibility must be in the range of ${MosaicProperties.MIN_DIVISIBILITY} and ${MosaicProperties.MAX_DIVISIBILITY}')));
+
+      expect(
+          () => new MosaicProperties(
+              supplyMutable: false,
+              transferable: false,
+              levyMutable: false,
+              divisibility: 7,
+              duration: Uint64(0)),
+          throwsA(predicate((e) =>
+              e is ArgumentError &&
+              e.message ==
+                  'The divisibility must be in the range of ${MosaicProperties.MIN_DIVISIBILITY} and ${MosaicProperties.MAX_DIVISIBILITY}')));
     });
   });
 }

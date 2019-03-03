@@ -41,6 +41,10 @@ void main() {
       final Uint8List expectedOutput = Uint8List.fromList([0x00, 0x00, 0x0d, 0x46, 0x54, 0x57]);
       expect(actual, equals(expectedOutput));
     });
+
+    test('cannot convert invalid hex string', () {
+      expect(() => HexUtils.getBytes('1z1z'), throwsArgumentError);
+    });
   });
 
   group('tryGetBytes()', () {
@@ -134,6 +138,11 @@ void main() {
       const expected = '先秦兩漢';
 
       expect(actual, equals(expected));
+    });
+
+    test('invalid UTF8 input will return a string parsed from the char codes instead', () {
+      final actual = HexUtils.tryHexToUtf8('1234');
+      expect(actual, equals('\x124'));
     });
   });
 

@@ -23,23 +23,54 @@ import 'package:nem2_sdk_dart/sdk.dart' show Address, NetworkType;
 
 void main() {
   group('fromPublicKey', () {
+    test('valid constants', () {
+      expect(Address.RIPEMD_160_SIZE, 20);
+      expect(Address.ADDRESS_DECODED_SIZE, 25);
+      expect(Address.ADDRESS_ENCODED_SIZE, 40);
+      expect(Address.KEY_SIZE, 32);
+      expect(Address.CHECKSUM_SIZE, 4);
+      expect(Address.START_CHECKSUM_SIZE, 21);
+
+      expect(Address.PREFIX_MIJIN_TEST, equals('S'));
+      expect(Address.PREFIX_MIJIN, equals('M'));
+      expect(Address.PREFIX_TEST_NET, equals('T'));
+      expect(Address.PREFIX_MAIN_NET, equals('N'));
+      expect(Address.EMPTY_STRING, equals(''));
+
+      expect(Address.REGEX_DASH.hasMatch('-'), isTrue);
+      expect(Address.REGEX_PRETTY.hasMatch('ABCFDG-HIJKLMN'), isTrue);
+    });
+
     test('can create from public key for the designated network type', () {
       const publicKey = 'c2f93346e27ce6ad1a9f8f5e3066f8326593a406bdf357acb041e2f9ab402efe';
       final address1 = Address.fromPublicKey(publicKey, NetworkType.MIJIN);
       expect(address1.plain, equals('MCTVW23D2MN5VE4AQ4TZIDZENGNOZXPRPR72DYSX'));
+      expect(address1.pretty, equals('MCTVW2-3D2MN5-VE4AQ4-TZIDZE-NGNOZX-PRPR72-DYSX'));
       expect(address1.networkType, equals(NetworkType.MIJIN));
+      expect(address1.hashCode, isNotNull);
 
       final address2 = Address.fromPublicKey(publicKey, NetworkType.MIJIN_TEST);
       expect(address2.plain, equals('SCTVW23D2MN5VE4AQ4TZIDZENGNOZXPRPRLIKCF2'));
+      expect(address2.pretty, equals('SCTVW2-3D2MN5-VE4AQ4-TZIDZE-NGNOZX-PRPRLI-KCF2'));
       expect(address2.networkType, equals(NetworkType.MIJIN_TEST));
+      expect(address2.hashCode, isNotNull);
 
       final address3 = Address.fromPublicKey(publicKey, NetworkType.MAIN_NET);
       expect(address3.plain, equals('NCTVW23D2MN5VE4AQ4TZIDZENGNOZXPRPQUJ2ZML'));
+      expect(address3.pretty, equals('NCTVW2-3D2MN5-VE4AQ4-TZIDZE-NGNOZX-PRPQUJ-2ZML'));
       expect(address3.networkType, equals(NetworkType.MAIN_NET));
+      expect(address3.hashCode, isNotNull);
 
       final address4 = Address.fromPublicKey(publicKey, NetworkType.TEST_NET);
       expect(address4.plain, equals('TCTVW23D2MN5VE4AQ4TZIDZENGNOZXPRPSDRSFRF'));
+      expect(address4.pretty, equals('TCTVW2-3D2MN5-VE4AQ4-TZIDZE-NGNOZX-PRPSDR-SFRF'));
       expect(address4.networkType, equals(NetworkType.TEST_NET));
+      expect(address4.hashCode, isNotNull);
+    });
+
+    test('cannot create for an invalid network type', () {
+      expect(() => Address.fromPublicKey(null, -1),
+          throwsA(predicate((e) => e is ArgumentError && e.message == 'Network type unsupported')));
     });
   });
 
@@ -60,6 +91,20 @@ void main() {
       final address4 = Address.fromRawAddress('TCTVW23D2MN5VE4AQ4TZIDZENGNOZXPRPSDRSFRF');
       expect(address4.plain, equals('TCTVW23D2MN5VE4AQ4TZIDZENGNOZXPRPSDRSFRF'));
       expect(address4.networkType, equals(NetworkType.TEST_NET));
+    });
+
+    test('cannot create from an invalid raw address', () {
+      const address = 'TCTVW23D2MN5VE4AQ4TZIDZENGNOZXPRPSDRSFRFT';
+      expect(
+          () => Address.fromRawAddress(address),
+          throwsA(predicate((e) =>
+              e is ArgumentError &&
+              e.message ==
+                  'Address $address has to be ${Address.ADDRESS_ENCODED_SIZE} characters long')));
+      expect(
+          () => Address.fromRawAddress('ZCTVW23D2MN5VE4AQ4TZIDZENGNOZXPRPSDRSFRF'),
+          throwsA(predicate(
+              (e) => e is UnsupportedError && e.message == 'unknown address network type')));
     });
   });
 
@@ -106,6 +151,16 @@ void main() {
       final encoded = Address.addressToString(HexUtils.getBytes(decodedHex));
 
       expect(encoded, equals(expected));
+    });
+
+    test('cannot create from an invalid address', () {
+      const hexStringAddress = '1234';
+      expect(
+          () => Address.addressToString(HexUtils.getBytes(hexStringAddress)),
+          throwsA(predicate((e) =>
+              e is ArgumentError &&
+              e.message ==
+                  'The Address $hexStringAddress does not represent a valid decoded address')));
     });
   });
 
@@ -187,6 +242,16 @@ void main() {
       expect(Address.isValidAddress(decoded), isTrue);
       expect(Address.addressToString(decoded), equals(expected));
       expect(Address.prettify(expected), equals('NAR3W7-B4BCOZ-SZMFIZ-RYB3N5-YGOUSW-IYJCJ6-HDFG'));
+    });
+
+    test('cannot convert from an invalid address', () {
+      const address = 'NOT-A-VALID-ADDRESS';
+      expect(
+          () => Address.prettify(address),
+          throwsA(predicate((e) =>
+              e is ArgumentError &&
+              e.message ==
+                  'Address $address has to be ${Address.ADDRESS_ENCODED_SIZE} characters long')));
     });
   });
 

@@ -22,6 +22,13 @@ import 'package:nem2_sdk_dart/sdk.dart' show NamespaceType;
 
 void main() {
   group('NamespaceType', () {
+    test('creating a new instance returns a singleton', () {
+      final namespaceType1 = new NamespaceType();
+      final namespaceType2 = new NamespaceType();
+
+      expect(identical(namespaceType1, namespaceType2), isTrue);
+    });
+
     test('valid namespace types', () {
       expect(NamespaceType.ROOT_NAMESPACE, 0);
       expect(NamespaceType.SUB_NAMESPACE, 1);

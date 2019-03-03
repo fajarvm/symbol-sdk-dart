@@ -87,10 +87,10 @@ class Uint64 implements Comparable<Uint64> {
   }
 
   @override
-  bool operator ==(other) => other is Uint64 && _value == other.value;
+  bool operator ==(final other) => other is Uint64 && _value == other.value;
 
   @override
-  int compareTo(Uint64 other) => _value.compareTo(other.value);
+  int compareTo(final Uint64 other) => _value.compareTo(other.value);
 
   bool isZero() => BigInt.zero == _value && ArrayUtils.isZero(toBytes());
 

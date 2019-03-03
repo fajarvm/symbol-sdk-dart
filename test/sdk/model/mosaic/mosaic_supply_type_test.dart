@@ -22,6 +22,12 @@ import 'package:nem2_sdk_dart/sdk.dart' show MosaicSupplyType;
 
 void main() {
   group('MosaicSupplyType', () {
+    test('creating a new instance returns a singleton', () {
+      final type1 = new MosaicSupplyType();
+      final type2 = new MosaicSupplyType();
+
+      expect(identical(type1, type2), isTrue);
+    });
     test('valid mosaic supply types', () {
       expect(MosaicSupplyType.DECREASE, 0);
       expect(MosaicSupplyType.INCREASE, 1);

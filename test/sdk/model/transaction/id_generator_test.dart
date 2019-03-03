@@ -133,6 +133,13 @@ void main() {
   ];
 
   group('generateMosaicId', () {
+    test('Valid constants', () {
+      expect(IdGenerator.PART_SEPARATOR, equals('.'));
+      expect(IdGenerator.MOSAIC_NONCE_SIZE, 4);
+      expect(IdGenerator.NAMESPACE_MAX_DEPTH, 3);
+      expect(IdGenerator.NAMESPACE_BASE_ID, equals(Uint64(0)));
+    });
+
     test('Can generate correct well known mosaic', () {
       // Test vector
       final mosaicInfo = {

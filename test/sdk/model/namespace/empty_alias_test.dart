@@ -28,6 +28,7 @@ void main() {
       expect(alias.type, equals(AliasType.NONE));
       expect(alias.address, isNull);
       expect(alias.mosaicId, isNull);
+      expect(alias.hashCode, isNotNull);
     });
 
     test('Can compare adresses in EmptyAlias', () {

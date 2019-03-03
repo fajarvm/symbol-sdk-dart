@@ -28,12 +28,12 @@ class MosaicSupplyType {
   /// Mosaic with this type can increase in supply.
   static const int INCREASE = 1;
 
-  static final MosaicSupplyType singleton = new MosaicSupplyType._();
+  static final MosaicSupplyType _singleton = new MosaicSupplyType._();
 
   MosaicSupplyType._();
 
   factory MosaicSupplyType() {
-    return singleton;
+    return _singleton;
   }
 
   static int getMosaicSupplyType(final int mosaicSupplyType) {

@@ -18,7 +18,7 @@ library nem2_sdk_dart.core.crypto.key_pair;
 
 import 'dart:typed_data' show Uint8List;
 
-import 'package:nem2_sdk_dart/src/core/utils.dart' show HexUtils;
+import 'package:nem2_sdk_dart/src/core/utils.dart' show ArrayUtils, HexUtils;
 
 import 'crypto_exception.dart';
 import 'ed25519.dart';
@@ -49,11 +49,15 @@ class KeyPair {
   Uint8List get privateKey => _privateKey;
 
   @override
-  int get hashCode => privateKey.hashCode + publicKey.hashCode;
+  int get hashCode => _privateKey.hashCode ^ _publicKey.hashCode;
 
   @override
-  bool operator ==(other) =>
-      other is KeyPair && publicKey == other.publicKey && privateKey == other.privateKey;
+  bool operator ==(final other) =>
+      identical(this, other) ||
+      other is KeyPair &&
+          runtimeType == other.runtimeType &&
+          ArrayUtils.deepEqual(_privateKey, other.privateKey) &&
+          ArrayUtils.deepEqual(_publicKey, other.publicKey);
 
   /// Creates a key pair from a [hexEncodedPrivateKey] string. The public key is extracted from
   /// the private key.

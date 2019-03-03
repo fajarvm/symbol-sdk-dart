@@ -14,16 +14,26 @@
 // limitations under the License.
 //
 
+library nem2_sdk_dart.test.core.crypto.crypto_exception_test;
+
 import 'package:test/test.dart';
 
-import 'utils/base32_test.dart' as base32_test;
-import 'utils/hex_utils_test.dart' as hex_utils_test;
-import 'utils/string_utils_test.dart' as string_utils_test;
+import 'package:nem2_sdk_dart/core.dart' show CryptoException;
 
 void main() {
-  group('Utils:', () {
-    base32_test.main();
-    hex_utils_test.main();
-    string_utils_test.main();
+  group('CryptoException', () {
+    test('can create crypto exception', () {
+      // With an empty message
+      final exception1 = new CryptoException();
+
+      expect(exception1.message, equals(''));
+
+      // With a message
+      const message = 'this is a crypto exception';
+      final exception2 = new CryptoException(message);
+
+      expect(exception2.message, equals(message));
+      expect(exception2.toString(), equals('CryptoException: $message'));
+    });
   });
 }

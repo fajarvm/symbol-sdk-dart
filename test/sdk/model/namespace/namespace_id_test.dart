@@ -33,6 +33,9 @@ void main() {
       expect(namespaceId.id, equals(NEM_ID));
       expect(namespaceId.id.toHexString().toUpperCase(), equals(NEM_HEX_STRING));
       expect(namespaceId.fullName, isNull);
+      expect(namespaceId.hashCode, isNotNull);
+      expect(namespaceId.toString(),
+          equals('NamespaceId(id:${namespaceId.id}, fullName:${namespaceId.fullName})'));
     });
 
     test('Can create using a full name string', () {
@@ -86,6 +89,30 @@ void main() {
       expect(namespaceId.id, equals(NEM_ID));
       expect(namespaceId.id.toHexString().toUpperCase(), equals(NEM_HEX_STRING));
       expect(namespaceId.fullName, isNull);
+    });
+  });
+
+  group('Cannot create with invalid inputs', () {
+    test('Invalid constructor parameter', () {
+      expect(
+          () => new NamespaceId(id: null, fullName: null),
+          throwsA(predicate((e) =>
+              e is ArgumentError &&
+              e.message == 'Missing argument. Either id or fullName is required.')));
+      expect(
+          () => NamespaceId.fromBigInt(null),
+          throwsA(
+              predicate((e) => e is ArgumentError && e.message == 'The bigInt must not be null')));
+      expect(
+          () => NamespaceId.fromHex(null),
+          throwsA(predicate((e) =>
+              e is ArgumentError && e.message == 'The hexString must not be null or empty')));
+      expect(
+          () => NamespaceId.fromHex(''),
+          throwsA(predicate((e) =>
+              e is ArgumentError && e.message == 'The hexString must not be null or empty')));
+      expect(() => NamespaceId.fromHex('12zz34'),
+          throwsA(predicate((e) => e is ArgumentError && e.message == 'invalid hex')));
     });
   });
 }
