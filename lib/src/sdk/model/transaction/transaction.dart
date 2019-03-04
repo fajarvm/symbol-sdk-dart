@@ -18,25 +18,22 @@ library nem2_sdk_dart.sdk.model.transaction.transaction;
 
 import 'dart:typed_data' show Uint8List;
 
-import 'package:nem2_sdk_dart/core.dart' show HexUtils, StringUtils;
+import 'package:nem2_sdk_dart/core.dart' show HexUtils, KeyPair, StringUtils;
 
+import '../account/account.dart';
 import '../account/public_account.dart';
 
 import 'deadline.dart';
+import 'signed_transaction.dart';
 import 'transaction_helper.dart';
 import 'transaction_info.dart';
 import 'uint64.dart';
+import 'verifiable_transaction.dart';
 
 /// An abstract transaction class that serves as the base class of all NEM transactions.
 abstract class Transaction {
-  /// The transaction fee.
-  ///
-  /// The higher the fee, the higher the priority of the transaction. Transactions with high
-  /// priority get included in a block before transactions with lower priority.
-  final Uint64 fee;
-
-  /// The deadline for the transaction to be included before it expires.
-  final Deadline deadline;
+  /// The transaction type.
+  final int transactionType;
 
   /// The network type.
   final int networkType;
@@ -44,26 +41,29 @@ abstract class Transaction {
   /// The transaction format version.
   final int version;
 
-  /// The transaction type.
-  final int transactionType;
+  /// The deadline for the transaction to be included before it expires.
+  final Deadline deadline;
 
-  /// The public account of the transaction creator.
-  final PublicAccount signer;
+  /// The transaction fee.
+  ///
+  /// The higher the fee, the higher the priority of the transaction. Transactions with high
+  /// priority get included in a block before transactions with lower priority.
+  final Uint64 fee;
 
   /// The transaction signature.
   ///
   /// Aggregate transactions don't have a transaction signature.
   final String signature;
 
-  /// The meta information about the transaction.
+  /// The public account of the transaction creator.
+  final PublicAccount signer;
+
+  /// The meta data object contains additional information about the transaction.
   final TransactionInfo transactionInfo;
 
-  /// The transaction bytes.
-  final Uint8List bytes;
-
   // private constructor
-  Transaction._(this.fee, this.deadline, this.networkType, this.version, this.transactionType,
-      this.transactionInfo, this.signer, this.signature, this.bytes);
+  Transaction._(this.transactionType, this.networkType, this.version, this.deadline, this.fee,
+      this.signature, this.signer, this.transactionInfo);
 
   /// Returns `true` if this transaction is included in a block.
   bool isConfirmed() {
@@ -112,12 +112,12 @@ abstract class Transaction {
     return TransactionHelper.createTransactionHash(HexUtils.getBytes(transactionPayloadHex));
   }
 
-  /// An abstract method to generate the transaction payload bytes.
-  Uint8List generateBytes();
-
   /// An abstract method to convert an aggregate transaction to an inner transaction including
   /// the given transaction signer.
   Transaction toAggregate(final PublicAccount signer);
+
+  /// An abstract method to generate the transaction payload bytes.
+  Uint8List generateBytes();
 
   /// Takes a transaction and formats the bytes to be included in an aggregate transaction.
   Uint8List toAggregateTransactionBytes() {
@@ -127,8 +127,16 @@ abstract class Transaction {
     return new Uint8List.fromList(size.toList() + aggregateBytes.toList());
   }
 
-  // TODO: complete
   /// Serialize and sign transaction creating a new SignedTransaction.
-  // SignedTransaction signWith(final Account account) {
-  // }
+  SignedTransaction signWith(final Account account) {
+    final VerifiableTransaction tx = _buildTransaction();
+    final String txSigned = tx.signTransaction(KeyPair.fromPrivateKey(account.privateKey));
+    final String txHash = VerifiableTransaction.createTransactionHash(txSigned);
+
+    return new SignedTransaction(txSigned, txHash, account.publicKey, transactionType, networkType);
+  }
+
+  // ------------------------------ private / protected functions ------------------------------ //
+
+  VerifiableTransaction _buildTransaction();
 }

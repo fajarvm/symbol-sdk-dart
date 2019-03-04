@@ -43,6 +43,7 @@ export 'model/mosaic/network_harvest_mosaic.dart';
 // Namespace
 export 'model/namespace/address_alias.dart';
 export 'model/namespace/alias.dart'; // interface (as an abstract class; Dart has no interfaces)
+export 'model/namespace/alias_action_type.dart';
 export 'model/namespace/alias_type.dart';
 export 'model/namespace/empty_alias.dart';
 export 'model/namespace/mosaic_alias.dart';

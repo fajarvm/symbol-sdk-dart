@@ -14,14 +14,6 @@
 // limitations under the License.
 //
 
-// This the sdk specification library for the NEM2 SDK Dart project.
-library nem2_sdk_dart.sdk;
+library nem2_sdk_dart.sdk.schema;
 
-// infrastructure
-// export 'package:nem2_sdk_dart/src/sdk/model/infrastructure.dart';
-
-// model
-export 'package:nem2_sdk_dart/src/sdk/model.dart';
-
-// schema
-export 'package:nem2_sdk_dart/src/sdk/schema.dart';
+export 'schema/schema.dart';

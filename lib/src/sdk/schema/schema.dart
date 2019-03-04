@@ -14,14 +14,14 @@
 // limitations under the License.
 //
 
-// This the sdk specification library for the NEM2 SDK Dart project.
-library nem2_sdk_dart.sdk;
+library nem2_sdk_dart.sdk.model.schema.schema;
 
-// infrastructure
-// export 'package:nem2_sdk_dart/src/sdk/model/infrastructure.dart';
+import 'dart:typed_data' show Uint8List;
 
-// model
-export 'package:nem2_sdk_dart/src/sdk/model.dart';
-
-// schema
-export 'package:nem2_sdk_dart/src/sdk/schema.dart';
+class Schema {
+  /// Creates a catapult bytes buffer of the given flatbuffers [bytes].
+  Uint8List serialize(final Uint8List bytes) {
+    // TODO: complete
+    return null;
+  }
+}
