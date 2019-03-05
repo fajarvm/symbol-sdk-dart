@@ -18,7 +18,7 @@ library nem2_sdk_dart.sdk.model.transaction.verifiable_transaction;
 
 import 'dart:typed_data' show Uint8List;
 
-import 'package:nem2_sdk_dart/core.dart' show ArrayUtils, HexUtils, Ed25519, KeyPair;
+import 'package:nem2_sdk_dart/core.dart' show HexUtils, Ed25519, KeyPair;
 
 import '../../schema.dart' show Schema;
 
