@@ -14,7 +14,21 @@
 // limitations under the License.
 //
 
-library nem2_sdk_dart.sdk.schema;
+library nem2_sdk_dart.sdk.model.schema.schema_attribute;
 
-export 'schema/schema.dart';
-export 'schema/schema_attribute.dart';
+import 'dart:typed_data' show Uint8List;
+
+abstract class SchemaAttribute {
+  final String _name;
+
+  SchemaAttribute(this._name);
+
+  String get name => _name;
+
+  /// Serialize flatbuffer bytes at a certain position.
+  Uint8List serialize(final Uint8List buffer, final int position, [final int innerObjectPosition]) {
+    throw new UnsupportedError('Unimplemented method');
+  }
+
+  // TODO: Complete.
+}

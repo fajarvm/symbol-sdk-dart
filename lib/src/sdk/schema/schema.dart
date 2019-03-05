@@ -18,10 +18,28 @@ library nem2_sdk_dart.sdk.model.schema.schema;
 
 import 'dart:typed_data' show Uint8List;
 
+import 'schema_attribute.dart';
+
 class Schema {
+  final List<SchemaAttribute> _schemaDefinition;
+
+  Schema(this._schemaDefinition);
+
   /// Creates a catapult bytes buffer of the given flatbuffers [bytes].
   Uint8List serialize(final Uint8List bytes) {
-    // TODO: complete
-    return null;
+    Uint8List result;
+    for (int i = 0; i < _schemaDefinition.length; i++) {
+      Uint8List temp = _schemaDefinition[i].serialize(bytes, 4 + (i * 2));
+      result = concat(result, temp);
+    }
+    return result;
+  }
+
+  /// Concatenates two bytes together into a new bytes.
+  static Uint8List concat(final Uint8List first, final Uint8List second) {
+    final List<int> result = <int>[];
+    result.addAll(first.toList());
+    result.addAll(second.toList());
+    return Uint8List.fromList(result);
   }
 }

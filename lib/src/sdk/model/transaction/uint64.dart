@@ -23,6 +23,9 @@ import 'package:fixnum/fixnum.dart' show Int64;
 import 'package:nem2_sdk_dart/core.dart' show ArrayUtils;
 
 // Developer note:
+// When compiled to JavaScript (via dart2js), integers are therefore restricted to 53 significant
+// bits because all JavaScript numbers are double-precision floating point values.
+//
 // For big numbers, choose either BigInt (Dart's native data type) or Int64 from fixnum package.
 // Please refer to this Dart language documentation page for information regarding big numbers
 // and their known issues.

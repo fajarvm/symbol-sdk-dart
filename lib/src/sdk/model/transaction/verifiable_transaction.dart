@@ -18,33 +18,32 @@ library nem2_sdk_dart.sdk.model.transaction.verifiable_transaction;
 
 import 'dart:typed_data' show Uint8List;
 
-import 'package:nem2_sdk_dart/core.dart' show HexUtils, Ed25519, KeyPair;
+import 'package:nem2_sdk_dart/core.dart' show ArrayUtils, HexUtils, Ed25519, KeyPair;
 
 import '../../schema.dart' show Schema;
 
-/// Represents the VerifiableTransaction model object
+/// Represents the VerifiableTransaction model object.
 class VerifiableTransaction {
-  /// The bytes after flat-buffers
+  /// The bytes after flatbuffers.
   final Uint8List bytes;
 
-  /// Schema definition corresponding to flatbuffer Schema
+  /// Schema definition corresponding to flatbuffer Schema.
   final Schema schema;
 
   VerifiableTransaction(this.bytes, this.schema);
 
   /// Returns the catapult bytes buffer of this transaction bytes based on its [Schema] definition.
   Uint8List serialize() {
-    return schema.serialize(bytes);
+    return schema.serialize(Uint8List.fromList(bytes.toList()));
   }
 
   /// Creates a SHA3-256 transaction hash of the [payloadHex].
   ///
   /// Returns a hex string representation of the hash.
   static String createTransactionHash(final String payloadHex) {
-    final Uint8List payloadBytes = HexUtils.getBytes(payloadHex);
-    final List<int> signingPart = payloadBytes.skip(4).take(32).toList();
-    final List<int> keyPart =
-        payloadBytes.skip(4 + 64).take(payloadBytes.length - (4 + 64)).toList();
+    final Uint8List payload = HexUtils.getBytes(payloadHex);
+    final List<int> signingPart = payload.skip(4).take(32).toList();
+    final List<int> keyPart = payload.skip(4 + 64).take(payload.length - (4 + 64)).toList();
     final Uint8List signingBytes = Uint8List.fromList(signingPart + keyPart);
 
     final Uint8List hash = Ed25519.createSha3Digest(length: 32).process(signingBytes);
@@ -57,13 +56,12 @@ class VerifiableTransaction {
   ///
   /// Returns the signed transaction payload as a hex string.
   String signTransaction(final KeyPair keypair) {
-    final Uint8List byteBuffer = this.serialize();
-    final List<int> signingPart = byteBuffer.take(4 + 64 + 32).toList();
+    final Uint8List buffer = this.serialize();
+    final List<int> tx = buffer.skip(4).take(buffer.length - 4).toList();
     final KeyPair kp = KeyPair.fromPrivateKey(HexUtils.getString(keypair.privateKey));
-    final Uint8List signature = KeyPair.signData(kp, Uint8List.fromList(signingPart));
-    final List<int> txPart = byteBuffer.skip(4).take(byteBuffer.length - 4).toList();
-    final Uint8List payload =
-        Uint8List.fromList(txPart + signature.toList() + kp.publicKey.toList());
+    final Uint8List signing = Uint8List.fromList(buffer.take(4 + 64 + 32).toList());
+    final Uint8List signature = KeyPair.signData(kp, signing);
+    final Uint8List payload = Uint8List.fromList(tx + signature.toList() + kp.publicKey.toList());
 
     return HexUtils.getString(payload);
   }
