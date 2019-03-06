@@ -20,6 +20,7 @@ import 'core/crypto_test.dart' as crypto_test;
 import 'core/utils_test.dart' as utils_test;
 
 import 'sdk/model_test.dart' as model_test;
+import 'sdk/schema_test.dart' as schema_test;
 
 void main() {
   // core tests
@@ -31,5 +32,6 @@ void main() {
   // sdk tests
   group('SDK:', () {
     model_test.main();
+    schema_test.main();
   });
 }

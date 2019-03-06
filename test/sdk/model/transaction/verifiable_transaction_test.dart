@@ -14,16 +14,15 @@
 // limitations under the License.
 //
 
-library nem2_sdk_dart.test.sdk.model.transaction.transaction_helper_test;
+library nem2_sdk_dart.test.sdk.model.transaction.verifiable_transaction_test;
 
 import 'package:test/test.dart';
 
-import 'package:nem2_sdk_dart/core.dart' show HexUtils;
-import 'package:nem2_sdk_dart/sdk.dart' show TransactionHelper;
+import 'package:nem2_sdk_dart/sdk.dart' show VerifiableTransaction;
 
 void main() {
-  group('TransactionHelper', () {
-    test('Can hash a payload', () {
+  group('VerifiableTransaction', () {
+    test('can create a transaction hash', () {
       const payloadString = 'A6000000642AC34E5DD986B6CD3817F2CFAA5A5525447'
           'A010F1C08EE62109BCF515AE1F735484478216BEC3DD1B53FE3BCEBCDC3AC18'
           '2EDC323F860F2736EF4C868EDB0610CC07742437C205D9A0BC0434DC5B4879E'
@@ -31,10 +30,10 @@ void main() {
           '0000009039404AFFA3D5BB337FE9FA21182210EE40CE08662CF93B770200010'
           '00029CF5FD941AD25D50010A5D4E8000000';
 
-      final hash = TransactionHelper.createTransactionHash(HexUtils.getBytes(payloadString));
+      final hash = VerifiableTransaction.createTransactionHash(payloadString);
 
       const expected = 'E7D31348244723DFDFF54A24BC48BA08623A3660F472EE231D8A93F9C082E360';
-      expect(HexUtils.getString(hash), equals(expected.toLowerCase()));
+      expect(hash, equals(expected.toLowerCase()));
     });
   });
 }

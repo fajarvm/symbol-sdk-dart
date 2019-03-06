@@ -18,14 +18,13 @@ library nem2_sdk_dart.sdk.model.transaction.transaction;
 
 import 'dart:typed_data' show Uint8List;
 
-import 'package:nem2_sdk_dart/core.dart' show HexUtils, KeyPair, StringUtils;
+import 'package:nem2_sdk_dart/core.dart' show KeyPair;
 
 import '../account/account.dart';
 import '../account/public_account.dart';
 
 import 'deadline.dart';
 import 'signed_transaction.dart';
-import 'transaction_helper.dart';
 import 'transaction_info.dart';
 import 'uint64.dart';
 import 'verifiable_transaction.dart';
@@ -61,9 +60,8 @@ abstract class Transaction {
   /// The meta data object contains additional information about the transaction.
   final TransactionInfo transactionInfo;
 
-  // private constructor
-  Transaction._(this.transactionType, this.networkType, this.version, this.deadline, this.fee,
-      this.signature, this.signer, this.transactionInfo);
+  Transaction(this.transactionType, this.networkType, this.version, this.deadline, this.fee,
+      [this.signature, this.signer, this.transactionInfo]);
 
   /// Returns `true` if this transaction is included in a block.
   bool isConfirmed() {
@@ -95,21 +93,8 @@ abstract class Transaction {
   }
 
   /// Returns `true` if this transaction is not yet known to the network.
-  bool isNotPublished() {
+  bool isUnannounced() {
     return transactionInfo == null;
-  }
-
-  /// Generates the hash for a serialized transaction payload.
-  Uint8List createTransactionHash(final String transactionPayloadHex) {
-    if (StringUtils.isEmpty(transactionPayloadHex)) {
-      throw new ArgumentError('transaction payload must not be null or empty');
-    }
-
-    if (!HexUtils.isHexString(transactionPayloadHex)) {
-      throw new ArgumentError('transaction payload is not a valid jext string');
-    }
-
-    return TransactionHelper.createTransactionHash(HexUtils.getBytes(transactionPayloadHex));
   }
 
   /// An abstract method to convert an aggregate transaction to an inner transaction including
@@ -122,7 +107,7 @@ abstract class Transaction {
   /// Takes a transaction and formats the bytes to be included in an aggregate transaction.
   Uint8List toAggregateTransactionBytes() {
     final Uint8List bodyBytes = generateBytes();
-    final Uint8List aggregateBytes = TransactionHelper.extractAggregatePart(bodyBytes);
+    final Uint8List aggregateBytes = VerifiableTransaction.extractAggregatePart(bodyBytes);
     final Uint8List size = new Uint8List(aggregateBytes.length + 4);
     return new Uint8List.fromList(size.toList() + aggregateBytes.toList());
   }

@@ -35,6 +35,7 @@ import 'model/mosaic/mosaic_test.dart' as mosaic_test;
 import 'model/mosaic/network_currency_mosaic_test.dart' as network_currency_mosaic_test;
 import 'model/mosaic/network_harvest_mosaic_test.dart' as network_harvest_mosaic_test;
 import 'model/namespace/address_alias_test.dart' as address_alias_test;
+import 'model/namespace/alias_test.dart' as alias_test;
 import 'model/namespace/alias_type_test.dart' as alias_type_test;
 import 'model/namespace/empty_alias_test.dart' as empty_alias_test;
 import 'model/namespace/mosaic_alias_test.dart' as mosaic_alias_test;
@@ -49,11 +50,12 @@ import 'model/transaction/messages/message_type_test.dart' as message_type_test;
 import 'model/transaction/messages/plain_message_test.dart' as plain_message_test;
 import 'model/transaction/messages/secure_message_test.dart' as secure_message_test;
 import 'model/transaction/signed_transaction_test.dart' as signed_transaction_test;
-import 'model/transaction/transaction_helper_test.dart' as transaction_helper_test;
 import 'model/transaction/transaction_info_test.dart' as transaction_info_test;
+import 'model/transaction/transaction_test.dart' as transaction_test;
 import 'model/transaction/transaction_type_test.dart' as transaction_type_test;
 import 'model/transaction/transaction_version_test.dart' as transaction_version_test;
 import 'model/transaction/uint64_test.dart' as uint64_test;
+import 'model/transaction/verifiable_transaction_test.dart' as verifiable_transaction_test;
 
 void main() {
   // account
@@ -89,6 +91,7 @@ void main() {
   // namespace
   group('Namespace:', () {
     address_alias_test.main();
+    alias_test.main();
     alias_type_test.main();
     empty_alias_test.main();
     mosaic_alias_test.main();
@@ -107,10 +110,11 @@ void main() {
     plain_message_test.main();
     secure_message_test.main();
     signed_transaction_test.main();
-    transaction_helper_test.main();
     transaction_info_test.main();
+    transaction_test.main();
     transaction_type_test.main();
     transaction_version_test.main();
     uint64_test.main();
+    verifiable_transaction_test.main();
   });
 }

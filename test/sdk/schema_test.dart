@@ -14,6 +14,12 @@
 // limitations under the License.
 //
 
-class AccountDTO {
-  // TODO: complete
+import 'package:test/test.dart';
+
+import 'schema/schema_attribute_test.dart' as schema_attribute_test;
+
+void main() {
+  group('Schema:', () {
+    schema_attribute_test.main();
+  });
 }

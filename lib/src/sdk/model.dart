@@ -42,7 +42,7 @@ export 'model/mosaic/network_harvest_mosaic.dart';
 
 // Namespace
 export 'model/namespace/address_alias.dart';
-export 'model/namespace/alias.dart'; // interface (as an abstract class; Dart has no interfaces)
+export 'model/namespace/alias.dart'; // interface (as a class; Dart has no interfaces)
 export 'model/namespace/alias_action_type.dart';
 export 'model/namespace/alias_type.dart';
 export 'model/namespace/empty_alias.dart';
@@ -62,8 +62,8 @@ export 'model/transaction/messages/plain_message.dart';
 export 'model/transaction/messages/secure_message.dart';
 export 'model/transaction/signed_transaction.dart';
 export 'model/transaction/transaction.dart'; // abstract class
-export 'model/transaction/transaction_helper.dart';
 export 'model/transaction/transaction_info.dart';
 export 'model/transaction/transaction_type.dart';
 export 'model/transaction/transaction_version.dart';
 export 'model/transaction/uint64.dart';
+export 'model/transaction/verifiable_transaction.dart';
