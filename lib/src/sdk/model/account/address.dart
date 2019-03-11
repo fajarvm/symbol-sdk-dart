@@ -128,10 +128,10 @@ class Address {
 
   /// Converts a [decodedAddress] bytes to a `Base32` encoded address string.
   static String addressToString(final Uint8List decodedAddress) {
-    final String hexStringAddress = HexUtils.getString(decodedAddress);
+    final String hexAddress = HexUtils.getString(decodedAddress);
     if (ADDRESS_DECODED_SIZE != decodedAddress.length) {
       throw ArgumentError(
-          'The Address $hexStringAddress does not represent a valid decoded address');
+          'The Address $hexAddress does not represent a valid decoded address');
     }
 
     return Base32.encode(decodedAddress);

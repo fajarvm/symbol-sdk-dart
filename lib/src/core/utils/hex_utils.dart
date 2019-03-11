@@ -22,20 +22,20 @@ import 'package:convert/convert.dart' show hex;
 
 /// A utility class that provides functions for converting hex strings.
 class HexUtils {
-  /// Converts [hexString] to a byte array.
-  static List<int> getBytes(final String hexString) {
+  /// Converts [hex] to a byte array.
+  static List<int> getBytes(final String hex) {
     try {
-      return _getBytesInternal(hexString);
+      return _getBytesInternal(hex);
     } catch (e) {
       throw new ArgumentError(e);
     }
   }
 
-  /// Tries to convert [hexString] to a byte array.
+  /// Tries to convert [hex] to a byte array.
   /// The output will be null if the input is malformed.
-  static List<int> tryGetBytes(final String hexString) {
+  static List<int> tryGetBytes(final String hex) {
     try {
-      return _getBytesInternal(hexString);
+      return _getBytesInternal(hex);
     } catch (e) {
       return null;
     }

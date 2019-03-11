@@ -20,6 +20,9 @@ import 'dart:typed_data' show Uint8List;
 
 import 'package:nem2_sdk_dart/core.dart' show Ed25519, HexUtils, KeyPair, SHA3DigestNist;
 
+import '../transaction/signed_transaction.dart';
+import '../transaction/transaction.dart';
+
 import 'address.dart';
 import 'public_account.dart';
 
@@ -85,14 +88,14 @@ class Account {
 
   /// Signs raw data.
   String signData(final String rawData) {
-    final String hexString = HexUtils.utf8ToHex(rawData);
-    final Uint8List data = HexUtils.getBytes(hexString);
+    final String hex = HexUtils.utf8ToHex(rawData);
+    final Uint8List data = HexUtils.getBytes(hex);
     final Uint8List signedData = KeyPair.signData(_keyPair, data);
     return HexUtils.getString(signedData);
   }
 
-  /// Signs a [transaction]
-//  static SignedTransaction signTransaction(final Transaction transaction) {
-//    return null;
-//  }
+  /// Signs a [transaction].
+  SignedTransaction signTransaction(final Transaction transaction) {
+    return transaction.signWith(this);
+  }
 }

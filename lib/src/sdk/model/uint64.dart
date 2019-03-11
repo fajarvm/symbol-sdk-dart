@@ -83,9 +83,9 @@ class Uint64 implements Comparable<Uint64> {
     return fromHex(int64.toHexString());
   }
 
-  /// Creates a [Uint64] from a [hexString].
-  static Uint64 fromHex(final String hexString) {
-    final BigInt bigInt = BigInt.parse(hexString, radix: 16);
+  /// Creates a [Uint64] from a [hex].
+  static Uint64 fromHex(final String hex) {
+    final BigInt bigInt = BigInt.parse(hex, radix: 16);
     return fromBigInt(bigInt);
   }
 
@@ -102,17 +102,17 @@ class Uint64 implements Comparable<Uint64> {
 
   /// Converts to hex string representation. Fills with leading 0 to reach 16 characters length.
   String toHexString() {
-    final String hexString = _value.toRadixString(16);
-    if (hexString.length != 16) {
-      return new List.filled(16 - hexString.length, '0').join() + hexString;
+    final String hex = _value.toRadixString(16);
+    if (hex.length != 16) {
+      return new List.filled(16 - hex.length, '0').join() + hex;
     }
-    return hexString;
+    return hex;
   }
 
   /// Converts to 64-bit byte array.
   Uint8List toBytes() {
-    final String hexString = toHexString();
-    final Int64 int64 = Int64.parseHex(hexString);
+    final String hex = toHexString();
+    final Int64 int64 = Int64.parseHex(hex);
     return Uint8List.fromList(int64.toBytes());
   }
 

@@ -102,9 +102,9 @@ class Base32 {
     return sb.toString();
   }
 
-  /// Converts a [hexString] to a [String] representation of the base32 bytes.
-  static String encodeHexString(final String hexString) {
-    final Uint8List bytes = HexUtils.getBytes(hexString);
+  /// Converts a [hex] to a [String] representation of the base32 bytes.
+  static String encodeHexString(final String hex) {
+    final Uint8List bytes = HexUtils.getBytes(hex);
     return encode(bytes);
   }
 
