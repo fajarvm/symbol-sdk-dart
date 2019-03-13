@@ -31,7 +31,7 @@ void main() {
       final NamespaceId namespaceId = NamespaceId(id: NEM_ID);
 
       expect(namespaceId.id, equals(NEM_ID));
-      expect(namespaceId.id.toHexString().toUpperCase(), equals(NEM_HEX_STRING));
+      expect(namespaceId.id.toHex().toUpperCase(), equals(NEM_HEX_STRING));
       expect(namespaceId.fullName, isNull);
       expect(namespaceId.hashCode, isNotNull);
       expect(namespaceId.toString(),
@@ -42,7 +42,7 @@ void main() {
       final NamespaceId namespaceId = NamespaceId(fullName: 'nem.xem');
 
       expect(namespaceId.id, equals(XEM_ID));
-      expect(namespaceId.id.toHexString().toUpperCase(), equals(XEM_HEX_STRING));
+      expect(namespaceId.id.toHex().toUpperCase(), equals(XEM_HEX_STRING));
       expect(namespaceId.fullName, equals('nem.xem'));
     });
 
@@ -63,7 +63,7 @@ void main() {
       final NamespaceId namespaceId = NamespaceId.fromId(NEM_ID);
 
       expect(namespaceId.id, equals(NEM_ID));
-      expect(namespaceId.id.toHexString().toUpperCase(), equals(NEM_HEX_STRING));
+      expect(namespaceId.id.toHex().toUpperCase(), equals(NEM_HEX_STRING));
       expect(namespaceId.fullName, isNull);
     });
 
@@ -71,7 +71,7 @@ void main() {
       final NamespaceId namespaceId = NamespaceId.fromBigInt(NEM_ID.value);
 
       expect(namespaceId.id, equals(NEM_ID));
-      expect(namespaceId.id.toHexString().toUpperCase(), equals(NEM_HEX_STRING));
+      expect(namespaceId.id.toHex().toUpperCase(), equals(NEM_HEX_STRING));
       expect(namespaceId.fullName, isNull);
     });
 
@@ -79,7 +79,7 @@ void main() {
       final NamespaceId namespaceId = NamespaceId.fromFullName('nem.xem');
 
       expect(namespaceId.id, equals(XEM_ID));
-      expect(namespaceId.id.toHexString().toUpperCase(), equals(XEM_HEX_STRING));
+      expect(namespaceId.id.toHex().toUpperCase(), equals(XEM_HEX_STRING));
       expect(namespaceId.fullName, equals('nem.xem'));
     });
 
@@ -87,7 +87,7 @@ void main() {
       final NamespaceId namespaceId = NamespaceId.fromHex(NEM_HEX_STRING);
 
       expect(namespaceId.id, equals(NEM_ID));
-      expect(namespaceId.id.toHexString().toUpperCase(), equals(NEM_HEX_STRING));
+      expect(namespaceId.id.toHex().toUpperCase(), equals(NEM_HEX_STRING));
       expect(namespaceId.fullName, isNull);
     });
   });

@@ -28,6 +28,7 @@ import 'package:nem2_sdk_dart/core.dart' show HexUtils;
 class HashType {
   static const int _HASH_256_LENGTH = 64;
   static const int _RIPEMD_160_LENGTH = 40;
+  static const String _INVALID_HASH_TYPE = 'invalid hash type';
 
   /// SHA3-256 bit.
   ///
@@ -57,7 +58,7 @@ class HashType {
     return _singleton;
   }
 
-  static int getHashType(final int hashType) {
+  static int getType(final int hashType) {
     switch (hashType) {
       case SHA3_256:
         return HashType.SHA3_256;
@@ -68,12 +69,12 @@ class HashType {
       case SHA_256:
         return HashType.SHA_256;
       default:
-        throw new ArgumentError('invalid hash type');
+        throw new ArgumentError(_INVALID_HASH_TYPE);
     }
   }
 
   static bool validate(final String input, [final int hashType = HashType.SHA3_256]) {
-    if (HexUtils.isHexString(input)) {
+    if (HexUtils.isHex(input)) {
       switch (hashType) {
         case SHA3_256:
         case SHA_256:

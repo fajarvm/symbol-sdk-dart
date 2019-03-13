@@ -17,7 +17,7 @@
 library nem2_sdk_dart.sdk.model.namespace.namespace_info;
 
 import '../account/public_account.dart';
-import '../transaction/uint64.dart';
+import '../common/uint64.dart';
 
 import 'alias.dart';
 import 'namespace_id.dart';

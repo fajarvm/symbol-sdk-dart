@@ -36,17 +36,17 @@ void main() {
     });
 
     test('Can retrieve a valid alias types', () {
-      expect(AliasType.getAliasType(0), AliasType.NONE);
-      expect(AliasType.getAliasType(1), AliasType.MOSAIC);
-      expect(AliasType.getAliasType(2), AliasType.ADDRESS);
+      expect(AliasType.getType(0), AliasType.NONE);
+      expect(AliasType.getType(1), AliasType.MOSAIC);
+      expect(AliasType.getType(2), AliasType.ADDRESS);
     });
 
     test('Trying to retrieve an invalid alias type will throw an error', () {
-      expect(() => AliasType.getAliasType(null),
+      expect(() => AliasType.getType(null),
           throwsA(predicate((e) => e is ArgumentError && e.message == 'invalid alias type')));
-      expect(() => AliasType.getAliasType(-1),
+      expect(() => AliasType.getType(-1),
           throwsA(predicate((e) => e is ArgumentError && e.message == 'invalid alias type')));
-      expect(() => AliasType.getAliasType(3),
+      expect(() => AliasType.getType(3),
           throwsA(predicate((e) => e is ArgumentError && e.message == 'invalid alias type')));
     });
   });

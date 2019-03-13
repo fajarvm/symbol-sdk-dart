@@ -14,13 +14,13 @@
 // limitations under the License.
 //
 
-library nem2_sdk_dart.sdk.model.transaction.uint64;
+library nem2_sdk_dart.sdk.model.common.uint64;
 
 import 'dart:typed_data' show Uint8List;
 
 import 'package:fixnum/fixnum.dart' show Int64;
 
-import 'package:nem2_sdk_dart/core.dart' show ArrayUtils;
+import 'package:nem2_sdk_dart/core.dart' show ArrayUtils, StringUtils;
 
 // Developer note:
 // When compiled to JavaScript (via dart2js), integers are therefore restricted to 53 significant
@@ -101,20 +101,23 @@ class Uint64 implements Comparable<Uint64> {
   String toString() => _value.toString();
 
   /// Converts to hex string representation. Fills with leading 0 to reach 16 characters length.
-  String toHexString() {
+  String toHex() {
     final String hex = _value.toRadixString(16);
     if (hex.length != 16) {
-      return new List.filled(16 - hex.length, '0').join() + hex;
+      return StringUtils.padLeft(hex, 16, '0');
     }
     return hex;
   }
 
   /// Converts to 64-bit byte array.
   Uint8List toBytes() {
-    final String hex = toHexString();
+    final String hex = toHex();
     final Int64 int64 = Int64.parseHex(hex);
+
     return Uint8List.fromList(int64.toBytes());
   }
+
+  // ------------------------------ private / protected functions ------------------------------ //
 
   static void _checkValue(final BigInt value) {
     if (value < MIN_VALUE || value > MAX_VALUE) {

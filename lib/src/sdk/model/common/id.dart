@@ -14,17 +14,25 @@
 // limitations under the License.
 //
 
-library nem2_sdk_dart.sdk.model.blockchain.blockchain_score;
+library nem2_sdk_dart.sdk.model.common.id;
 
-import '../common/uint64.dart';
+import 'uint64.dart';
 
-/// The blockchain score structure describes blockchain difficulty.
-class BlockchainScore {
-  /// The low part of the blockchain score.
-  final Uint64 scoreLow;
+/// An abstract class identifier used to define mosaicId and namespaceId.
+abstract class Id {
+  /// 64-bit unsigned integer id.
+  final Uint64 id;
 
-  /// The high part of the blockchain score.
-  final Uint64 scoreHigh;
+  const Id(this.id);
 
-  const BlockchainScore(this.scoreLow, this.scoreHigh);
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) || other is Id && runtimeType == other.runtimeType && id == other.id;
+
+  @override
+  int get hashCode => 'Id'.hashCode ^ id.hashCode;
+
+  String toHex() {
+    return this.id.toHex();
+  }
 }

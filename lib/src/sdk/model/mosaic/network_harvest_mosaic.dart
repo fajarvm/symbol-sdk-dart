@@ -17,29 +17,20 @@
 library nem2_sdk_dart.sdk.model.mosaic.network_harvest_mosaic;
 
 import 'dart:math' show pow;
-import 'dart:typed_data' show Uint8List;
 
+import '../common/id.dart';
+import '../common/uint64.dart';
 import '../namespace/namespace_id.dart';
-import '../transaction/id_generator.dart';
-import '../transaction/uint64.dart';
 
 import 'mosaic.dart';
-import 'mosaic_id.dart';
 
 /// The NetworkHarvestMosaic mosaic.
 ///
 /// This mosaic represents the harvesting currency of the network. The mosaicId of this mosaic is
-/// aliased with the namespace name `harvest`.
-class NetworkHarvestMosaic implements Mosaic {
-  /// The public key of the owner of this mosaic.
-  static const String OWNER_PUBLIC_KEY =
-      'B4F12E7C9F6946091E2CB8B6D3A12B50D17CCBBF646386EA27CE2946A7423DCF';
-
+/// aliased with the namespace name `cat.harvest`.
+class NetworkHarvestMosaic extends Mosaic {
   /// The namespaceId of this mosaic.
-  static final NAMESPACE_ID = _createNamespaceId();
-
-  /// The mosaicId of this mosaic.
-  static final MOSAIC_ID = _createMosaicId();
+  static final Id NAMESPACE_ID = new NamespaceId(fullName: 'cat.harvest');
 
   /// Divisibility of 6.
   static const int DIVISIBILITY = 3;
@@ -59,13 +50,13 @@ class NetworkHarvestMosaic implements Mosaic {
   final Uint64 _amount;
 
   // private constructor
-  const NetworkHarvestMosaic._(this._amount);
+  NetworkHarvestMosaic._(this._amount) : super(NAMESPACE_ID, _amount);
 
   @override
   Uint64 get amount => this._amount;
 
   @override
-  MosaicId get id => NetworkHarvestMosaic.MOSAIC_ID;
+  Id get id => NetworkHarvestMosaic.NAMESPACE_ID;
 
   /// Creates NetworkHarvestMosaic with using NetworkHarvestMosaic as unit.
   static NetworkHarvestMosaic createRelative(final Uint64 amount) {
@@ -78,17 +69,5 @@ class NetworkHarvestMosaic implements Mosaic {
   /// 1 NetworkHarvestMosaic = 1000000 micro NetworkHarvestMosaic.
   static NetworkHarvestMosaic createAbsolute(final Uint64 microXemAmount) {
     return new NetworkHarvestMosaic._(microXemAmount);
-  }
-
-  // ------------------------------ private / protected functions ------------------------------ //
-
-  static MosaicId _createMosaicId() {
-    final Uint8List nonce = new Uint8List.fromList([0x1, 0x0, 0x0, 0x0]); // Little-endian nonce
-    final Uint64 id = IdGenerator.generateMosaicId(nonce, OWNER_PUBLIC_KEY);
-    return MosaicId(id: id);
-  }
-
-  static NamespaceId _createNamespaceId() {
-    return new NamespaceId(fullName: 'cat.harvest');
   }
 }

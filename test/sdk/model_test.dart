@@ -17,15 +17,23 @@
 import 'package:test/test.dart';
 
 import 'model/account/account_info_test.dart' as account_info_test;
+import 'model/account/account_properties_info_test.dart' as account_properties_info_test;
+import 'model/account/account_properties_test.dart' as account_properties_test;
+import 'model/account/account_property_test.dart' as account_property_test;
 import 'model/account/account_test.dart' as account_test;
 import 'model/account/address_test.dart' as address_test;
 import 'model/account/multisig_account_graph_info_test.dart' as multisig_account_graph_info_test;
 import 'model/account/multisig_account_info_test.dart' as multisig_account_info_test;
+import 'model/account/property_modification_type_test.dart' as property_modification_type_test;
+import 'model/account/property_type_test.dart' as property_type_test;
 import 'model/account/public_account_test.dart' as public_account_test;
 import 'model/blockchain/block_info_test.dart' as block_info_test;
 import 'model/blockchain/blockchain_score_test.dart' as blockchain_score_test;
 import 'model/blockchain/blockchain_storage_info_test.dart' as blockchain_storage_info_test;
 import 'model/blockchain/network_type_test.dart' as network_type_test;
+import 'model/common/id_generator_test.dart' as id_generator_test;
+import 'model/common/id_test.dart' as id_test;
+import 'model/common/uint64_test.dart' as uint64_test;
 import 'model/mosaic/mosaic_id_test.dart' as mosaic_id_test;
 import 'model/mosaic/mosaic_info_test.dart' as mosaic_info_test;
 import 'model/mosaic/mosaic_nonce_test.dart' as mosaic_nonce_test;
@@ -45,7 +53,6 @@ import 'model/namespace/namespace_name_test.dart' as namespace_name_test;
 import 'model/namespace/namespace_type_test.dart' as namespace_type_test;
 import 'model/transaction/deadline_test.dart' as deadline_test;
 import 'model/transaction/hash_type_test.dart' as hash_type_test;
-import 'model/transaction/id_generator_test.dart' as id_generator_test;
 import 'model/transaction/messages/message_type_test.dart' as message_type_test;
 import 'model/transaction/messages/plain_message_test.dart' as plain_message_test;
 import 'model/transaction/messages/secure_message_test.dart' as secure_message_test;
@@ -54,17 +61,21 @@ import 'model/transaction/transaction_info_test.dart' as transaction_info_test;
 import 'model/transaction/transaction_test.dart' as transaction_test;
 import 'model/transaction/transaction_type_test.dart' as transaction_type_test;
 import 'model/transaction/transaction_version_test.dart' as transaction_version_test;
-import 'model/transaction/uint64_test.dart' as uint64_test;
 import 'model/transaction/verifiable_transaction_test.dart' as verifiable_transaction_test;
 
 void main() {
   // account
   group('Account:', () {
-    account_test.main();
     account_info_test.main();
+    account_properties_info_test.main();
+    account_properties_test.main();
+    account_property_test.main();
+    account_test.main();
     address_test.main();
     multisig_account_graph_info_test.main();
     multisig_account_info_test.main();
+    property_modification_type_test.main();
+    property_type_test.main();
     public_account_test.main();
   });
 
@@ -74,6 +85,13 @@ void main() {
     blockchain_score_test.main();
     blockchain_storage_info_test.main();
     network_type_test.main();
+  });
+
+  // common
+  group('Common models:', () {
+    id_test.main();
+    id_generator_test.main();
+    uint64_test.main();
   });
 
   // mosaic
@@ -105,7 +123,6 @@ void main() {
   group('Transaction:', () {
     deadline_test.main();
     hash_type_test.main();
-    id_generator_test.main();
     message_type_test.main();
     plain_message_test.main();
     secure_message_test.main();
@@ -114,7 +131,6 @@ void main() {
     transaction_test.main();
     transaction_type_test.main();
     transaction_version_test.main();
-    uint64_test.main();
     verifiable_transaction_test.main();
   });
 }

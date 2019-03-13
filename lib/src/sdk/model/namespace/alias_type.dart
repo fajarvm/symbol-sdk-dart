@@ -23,6 +23,8 @@ library nem2_sdk_dart.sdk.model.namespace.alias_type;
 /// * 1: Mosaic id alias.
 /// * 2: Address alias.
 class AliasType {
+  static const String _INVALID_ALIAS_TYPE = 'invalid alias type';
+
   static const int NONE = 0;
 
   static const int MOSAIC = 1;
@@ -37,7 +39,7 @@ class AliasType {
     return _singleton;
   }
 
-  static int getAliasType(final int aliasType) {
+  static int getType(final int aliasType) {
     switch (aliasType) {
       case NONE:
         return AliasType.NONE;
@@ -46,7 +48,7 @@ class AliasType {
       case ADDRESS:
         return AliasType.ADDRESS;
       default:
-        throw new ArgumentError('invalid alias type');
+        throw new ArgumentError(_INVALID_ALIAS_TYPE);
     }
   }
 }

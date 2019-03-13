@@ -18,37 +18,33 @@ library nem2_sdk_dart.test.sdk.model.mosaic.network_harvest_mosaic_test;
 
 import 'package:test/test.dart';
 
-import 'package:nem2_sdk_dart/sdk.dart' show MosaicId, NamespaceId, Uint64, NetworkHarvestMosaic;
+import 'package:nem2_sdk_dart/sdk.dart' show NamespaceId, Uint64, NetworkHarvestMosaic;
 
 void main() {
   group('NetworkHarvestMosaic', () {
     test('Can create a NetworkHarvestMosaic object using createRelative()', () {
       final currency = NetworkHarvestMosaic.createRelative(Uint64(1000));
 
-      expect(currency.id.id.toHexString(), equals('26514e2a1ef33824'));
+      expect(currency.id.id.toHex(), equals('941299b2b7e1291c'));
       expect(currency.amount, equals(Uint64(1000 * 1000)));
     });
 
     test('Can create a NetworkHarvestMosaic object using createAbsolute', () {
       final currency = NetworkHarvestMosaic.createAbsolute(Uint64(1000));
 
-      expect(currency.id.id.toHexString(), equals('26514e2a1ef33824'));
+      expect(currency.id.id.toHex(), equals('941299b2b7e1291c'));
       expect(currency.amount, equals(Uint64(1000)));
     });
 
     test('Should have valid static ids', () {
       final namespaceU64 = Uint64.fromHex('941299b2b7e1291c');
       final namespaceId = new NamespaceId(id: namespaceU64);
-      final mosaicU64 = Uint64.fromHex('26514e2a1ef33824');
-      final mosaicId = new MosaicId(id: mosaicU64);
 
       expect(NetworkHarvestMosaic.NAMESPACE_ID, namespaceId);
-      expect(NetworkHarvestMosaic.MOSAIC_ID, mosaicId);
       expect(NetworkHarvestMosaic.DIVISIBILITY, 3);
       expect(NetworkHarvestMosaic.TRANSFERABLE, isTrue);
       expect(NetworkHarvestMosaic.SUPPLY_MUTABLE, isTrue);
       expect(NetworkHarvestMosaic.LEVY_MUTABLE, isFalse);
-      expect(NetworkHarvestMosaic.OWNER_PUBLIC_KEY, equals('B4F12E7C9F6946091E2CB8B6D3A12B50D17CCBBF646386EA27CE2946A7423DCF'));
     });
   });
 }

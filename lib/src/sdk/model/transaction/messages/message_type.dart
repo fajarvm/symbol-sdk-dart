@@ -22,6 +22,8 @@ library nem2_sdk_dart.sdk.model.transaction.messages.message_type;
 /// * 0: Plain text (Unencrypted).
 /// * 1: Secured text (Encrypted).
 class MessageType {
+  static const String _INVALID_MESSAGE_TYPE = 'invalid message type';
+
   /// Plain text or unencrypted.
   static const int UNENCRYPTED = 0x00;
 
@@ -36,14 +38,14 @@ class MessageType {
     return _singleton;
   }
 
-  static int getMessageType(final int messageType) {
+  static int getType(final int messageType) {
     switch (messageType) {
       case UNENCRYPTED:
         return MessageType.UNENCRYPTED;
       case ENCRYPTED:
         return MessageType.ENCRYPTED;
       default:
-        throw new ArgumentError('invalid message type');
+        throw new ArgumentError(_INVALID_MESSAGE_TYPE);
     }
   }
 }

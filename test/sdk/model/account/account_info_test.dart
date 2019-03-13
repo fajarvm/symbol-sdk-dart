@@ -23,7 +23,7 @@ import 'package:nem2_sdk_dart/sdk.dart'
 
 void main() {
   group('AccountInfo', () {
-    test('Can create an AccountInfo', () {
+    test('Can create an AccountInfo object', () {
       // Prepare
       const encodedAddress = '9050B9837EFAB4BBE8A4B9BB32D812F9885C00D8FC1650E142';
       const publicKey = '846B4439154579A5903B1459C9CF69CB8153F6D0110A7A0ED61DE29AE4810BF2';

@@ -14,7 +14,7 @@
 // limitations under the License.
 //
 
-library nem2_sdk_dart.sdk.model.transaction.id_generator;
+library nem2_sdk_dart.sdk.model.common.id_generator;
 
 import 'dart:convert' show utf8;
 import 'dart:typed_data' show Uint8List;
@@ -58,7 +58,7 @@ class IdGenerator {
       throw new ArgumentError('The nonce and/or ownerPublicId must not be null or empty.');
     }
 
-    if (!HexUtils.isHexString(ownerPublicId)) {
+    if (!HexUtils.isHex(ownerPublicId)) {
       throw new ArgumentError('Invalid ownerPublicId hex string.');
     }
 

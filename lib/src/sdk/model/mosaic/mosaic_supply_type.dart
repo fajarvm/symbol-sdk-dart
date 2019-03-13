@@ -22,6 +22,8 @@ library nem2_sdk_dart.sdk.model.mosaic.mosaic_supply_type;
 /// * 0: Increase in supply.
 /// * 1: Decrease in supply.
 class MosaicSupplyType {
+  static const String _INVALID_MOSAIC_SUPPLY_TYPE = 'invalid mosaic supply type';
+
   /// Mosaic with this type can decrease in supply.
   static const int DECREASE = 0;
 
@@ -36,14 +38,14 @@ class MosaicSupplyType {
     return _singleton;
   }
 
-  static int getMosaicSupplyType(final int mosaicSupplyType) {
+  static int getType(final int mosaicSupplyType) {
     switch (mosaicSupplyType) {
       case DECREASE:
         return MosaicSupplyType.DECREASE;
       case INCREASE:
         return MosaicSupplyType.INCREASE;
       default:
-        throw new ArgumentError('invalid mosaic supply type');
+        throw new ArgumentError(_INVALID_MOSAIC_SUPPLY_TYPE);
     }
   }
 }

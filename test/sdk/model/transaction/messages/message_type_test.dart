@@ -35,16 +35,16 @@ void main() {
     });
 
     test('Can retrieve valid message types', () {
-      expect(MessageType.getMessageType(0), MessageType.UNENCRYPTED);
-      expect(MessageType.getMessageType(1), MessageType.ENCRYPTED);
+      expect(MessageType.getType(0), MessageType.UNENCRYPTED);
+      expect(MessageType.getType(1), MessageType.ENCRYPTED);
     });
 
     test('Trying to retrieve an invalid message type will throw an error', () {
-      expect(() => MessageType.getMessageType(null),
+      expect(() => MessageType.getType(null),
           throwsA(predicate((e) => e is ArgumentError && e.message == 'invalid message type')));
-      expect(() => MessageType.getMessageType(-1),
+      expect(() => MessageType.getType(-1),
           throwsA(predicate((e) => e is ArgumentError && e.message == 'invalid message type')));
-      expect(() => MessageType.getMessageType(2),
+      expect(() => MessageType.getType(2),
           throwsA(predicate((e) => e is ArgumentError && e.message == 'invalid message type')));
     });
   });

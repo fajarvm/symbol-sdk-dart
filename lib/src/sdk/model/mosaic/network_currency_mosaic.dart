@@ -17,29 +17,20 @@
 library nem2_sdk_dart.sdk.model.mosaic.network_currency_mosaic;
 
 import 'dart:math' show pow;
-import 'dart:typed_data' show Uint8List;
 
+import '../common/id.dart';
+import '../common/uint64.dart';
 import '../namespace/namespace_id.dart';
-import '../transaction/id_generator.dart';
-import '../transaction/uint64.dart';
 
 import 'mosaic.dart';
-import 'mosaic_id.dart';
 
 /// The NetworkCurrencyMosaic mosaic.
 ///
 /// This mosaic represents the native currency of the network. The mosaicId of this mosaic is
-/// aliased with the namespace name `currency`.
-class NetworkCurrencyMosaic implements Mosaic {
-  /// The public key of the owner of this mosaic.
-  static const String OWNER_PUBLIC_KEY =
-      'B4F12E7C9F6946091E2CB8B6D3A12B50D17CCBBF646386EA27CE2946A7423DCF';
-
+/// aliased with the namespace name `cat.currency`.
+class NetworkCurrencyMosaic extends Mosaic {
   /// The namespaceId of this mosaic.
-  static final NAMESPACE_ID = _createNamespaceId();
-
-  /// The mosaicId of this mosaic.
-  static final MOSAIC_ID = _createMosaicId();
+  static final Id NAMESPACE_ID = new NamespaceId(fullName: 'cat.currency');
 
   /// Divisibility of 6.
   static const int DIVISIBILITY = 6;
@@ -59,13 +50,13 @@ class NetworkCurrencyMosaic implements Mosaic {
   final Uint64 _amount;
 
   // private constructor
-  const NetworkCurrencyMosaic._(this._amount);
+  NetworkCurrencyMosaic._(this._amount) : super(NAMESPACE_ID, _amount);
 
   @override
   Uint64 get amount => this._amount;
 
   @override
-  MosaicId get id => NetworkCurrencyMosaic.MOSAIC_ID;
+  Id get id => NetworkCurrencyMosaic.NAMESPACE_ID;
 
   /// Creates NetworkCurrencyMosaic with using NetworkCurrencyMosaic as unit.
   static NetworkCurrencyMosaic createRelative(final Uint64 amount) {
@@ -78,17 +69,5 @@ class NetworkCurrencyMosaic implements Mosaic {
   /// 1 NetworkCurrencyMosaic = 1000000 micro NetworkCurrencyMosaic.
   static NetworkCurrencyMosaic createAbsolute(final Uint64 microXemAmount) {
     return new NetworkCurrencyMosaic._(microXemAmount);
-  }
-
-  // ------------------------------ private / protected functions ------------------------------ //
-
-  static MosaicId _createMosaicId() {
-    final Uint8List nonce = new Uint8List.fromList([0x0, 0x0, 0x0, 0x0]); // Little-endian nonce
-    final Uint64 id = IdGenerator.generateMosaicId(nonce, OWNER_PUBLIC_KEY);
-    return MosaicId(id: id);
-  }
-
-  static NamespaceId _createNamespaceId() {
-    return new NamespaceId(fullName: 'cat.currency');
   }
 }

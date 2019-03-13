@@ -35,16 +35,16 @@ void main() {
     });
 
     test('Can retrieve a valid namespace types', () {
-      expect(NamespaceType.getNamespaceType(0), NamespaceType.ROOT_NAMESPACE);
-      expect(NamespaceType.getNamespaceType(1), NamespaceType.SUB_NAMESPACE);
+      expect(NamespaceType.getType(0), NamespaceType.ROOT_NAMESPACE);
+      expect(NamespaceType.getType(1), NamespaceType.SUB_NAMESPACE);
     });
 
     test('Trying to retrieve an invalid namespace type will throw an error', () {
-      expect(() => NamespaceType.getNamespaceType(null),
+      expect(() => NamespaceType.getType(null),
           throwsA(predicate((e) => e is ArgumentError && e.message == 'invalid namespace type')));
-      expect(() => NamespaceType.getNamespaceType(-1),
+      expect(() => NamespaceType.getType(-1),
           throwsA(predicate((e) => e is ArgumentError && e.message == 'invalid namespace type')));
-      expect(() => NamespaceType.getNamespaceType(2),
+      expect(() => NamespaceType.getType(2),
           throwsA(predicate((e) => e is ArgumentError && e.message == 'invalid namespace type')));
     });
   });

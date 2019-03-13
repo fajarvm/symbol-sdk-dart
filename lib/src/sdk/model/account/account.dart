@@ -98,4 +98,14 @@ class Account {
   SignedTransaction signTransaction(final Transaction transaction) {
     return transaction.signWith(this);
   }
+
+  /// Sign transaction with cosignatories creating a new SignedTransaction.
+  void signTransactionWithCosignatories() {
+    // TODO: implement
+  }
+
+  /// Sign aggregate signature transaction.
+  void signCosignatureTransaction() {
+    // TODO: implement
+  }
 }

@@ -59,5 +59,29 @@ void main() {
       expect(StringUtils.parseIntOrNull(null), equals(null));
       expect(StringUtils.parseIntOrNull('  100  '), equals(100));
     });
+
+    test('padLeft() can left pad a string', () {
+      // Pad with default pad character
+      String actual = StringUtils.padLeft('hello', 16);
+      expect(actual, equals('           hello'));
+      expect(actual.length, equals(16));
+
+      // Pad with custom pad character
+      actual = StringUtils.padLeft('12345', 16, '0');
+      expect(actual, equals('0000000000012345'));
+      expect(actual.length, equals(16));
+    });
+
+    test('padRight() can right pad a string', () {
+      // Pad with default pad character
+      String actual = StringUtils.padRight('hello', 16);
+      expect(actual, equals('hello           '));
+      expect(actual.length, equals(16));
+
+      // Pad with custom pad character
+      actual = StringUtils.padRight('12345', 16, '0');
+      expect(actual, equals('1234500000000000'));
+      expect(actual.length, equals(16));
+    });
   });
 }

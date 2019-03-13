@@ -18,6 +18,8 @@ library nem2_sdk_dart.sdk.model.mosaic.mosaic_nonce;
 
 import 'dart:typed_data' show Uint8List;
 
+import 'package:nem2_sdk_dart/core.dart' show Ed25519, HexUtils;
+
 /// The mosaic nonce structure.
 class MosaicNonce {
   static const int NONCE_SIZE = 4;
@@ -33,5 +35,24 @@ class MosaicNonce {
     }
 
     return new MosaicNonce._(nonce);
+  }
+
+  /// Creates a random MosaicNonce.
+  static MosaicNonce createRandom() {
+    return new MosaicNonce(Ed25519.getRandomBytes(4));
+  }
+
+  /// Creates a MosaicNonce from a [hex] string.
+  static MosaicNonce fromHex(final String hex) {
+    if (!HexUtils.isHex(hex)) {
+      throw new ArgumentError('invalid hex string');
+    }
+
+    return new MosaicNonce(HexUtils.getBytes(hex));
+  }
+
+  // for internal use
+  Uint8List toDTO() {
+    return this.nonce;
   }
 }

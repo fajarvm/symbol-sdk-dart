@@ -14,17 +14,18 @@
 // limitations under the License.
 //
 
-library nem2_sdk_dart.sdk.model.blockchain.blockchain_score;
+library nem2_sdk_dart.sdk.model.account.account_properties;
 
-import '../common/uint64.dart';
+import 'account_property.dart';
+import 'address.dart';
 
-/// The blockchain score structure describes blockchain difficulty.
-class BlockchainScore {
-  /// The low part of the blockchain score.
-  final Uint64 scoreLow;
+/// Account properties structure describes property information for an account.
+class AccountProperties {
+  /// Account address.
+  final Address address;
 
-  /// The high part of the blockchain score.
-  final Uint64 scoreHigh;
+  /// Account properties.
+  final List<AccountProperty> properties;
 
-  const BlockchainScore(this.scoreLow, this.scoreHigh);
+  AccountProperties(this.address, this.properties);
 }

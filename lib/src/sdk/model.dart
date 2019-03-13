@@ -19,9 +19,14 @@ library nem2_sdk_dart.sdk.model;
 // Account
 export 'model/account/account.dart';
 export 'model/account/account_info.dart';
+export 'model/account/account_properties.dart';
+export 'model/account/account_properties_info.dart';
+export 'model/account/account_property.dart';
 export 'model/account/address.dart';
 export 'model/account/multisig_account_graph_info.dart';
 export 'model/account/multisig_account_info.dart';
+export 'model/account/property_modification_type.dart';
+export 'model/account/property_type.dart';
 export 'model/account/public_account.dart';
 
 // Blockchain
@@ -29,6 +34,11 @@ export 'model/blockchain/block_info.dart';
 export 'model/blockchain/blockchain_score.dart';
 export 'model/blockchain/blockchain_storage_info.dart';
 export 'model/blockchain/network_type.dart';
+
+// Common models
+export 'model/common/id.dart';
+export 'model/common/id_generator.dart';
+export 'model/common/uint64.dart';
 
 // Mosaic
 export 'model/mosaic/mosaic.dart';
@@ -55,7 +65,6 @@ export 'model/namespace/namespace_type.dart';
 // Transaction
 export 'model/transaction/deadline.dart';
 export 'model/transaction/hash_type.dart';
-export 'model/transaction/id_generator.dart';
 export 'model/transaction/messages/message.dart'; // abstract class
 export 'model/transaction/messages/message_type.dart';
 export 'model/transaction/messages/plain_message.dart';
@@ -65,5 +74,4 @@ export 'model/transaction/transaction.dart'; // abstract class
 export 'model/transaction/transaction_info.dart';
 export 'model/transaction/transaction_type.dart';
 export 'model/transaction/transaction_version.dart';
-export 'model/transaction/uint64.dart';
 export 'model/transaction/verifiable_transaction.dart';

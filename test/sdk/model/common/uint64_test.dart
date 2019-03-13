@@ -14,7 +14,7 @@
 // limitations under the License.
 //
 
-library nem2_sdk_dart.test.sdk.model.transaction.uint64_test;
+library nem2_sdk_dart.test.sdk.model.uint64_test;
 
 import 'dart:typed_data' show Uint8List;
 
@@ -38,7 +38,7 @@ void main() {
   ];
 
   group('Uint64', () {
-    test('Valid constants', (){
+    test('Valid constants', () {
       expect(Uint64.MIN_VALUE_SIGNED, 0);
     });
 
@@ -85,7 +85,7 @@ void main() {
         final actual = Uint64.fromBigInt(bigInt);
 
         expect(actual.value, equals(bigInt));
-        expect(actual.toHexString(), equals(hexString.toLowerCase()));
+        expect(actual.toHex(), equals(hexString.toLowerCase()));
       }
     });
 
@@ -95,7 +95,7 @@ void main() {
         final Uint8List bytes = Uint8List.fromList(int64.toBytes());
         final actual = Uint64.fromBytes(bytes);
 
-        expect(actual.toHexString(), equals(hexString.toLowerCase()));
+        expect(actual.toHex(), equals(hexString.toLowerCase()));
       }
     });
 
@@ -103,7 +103,7 @@ void main() {
       for (var hexString in HEX_TEST_CASES) {
         final actual = Uint64.fromHex(hexString);
 
-        expect(actual.toHexString(), equals(hexString.toLowerCase()));
+        expect(actual.toHex(), equals(hexString.toLowerCase()));
       }
     });
 

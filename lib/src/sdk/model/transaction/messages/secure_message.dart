@@ -63,7 +63,7 @@ class SecureMessage extends Message {
     }
 
     Uint8List payload;
-    if (HexUtils.isHexString(message)) {
+    if (HexUtils.isHex(message)) {
       // Hex string message payload
       payload = HexUtils.getBytes(HexUtils.tryHexToUtf8(message));
     } else {

@@ -18,41 +18,17 @@ library nem2_sdk_dart.sdk.model.mosaic.mosaic_id;
 
 import 'package:nem2_sdk_dart/core.dart' show HexUtils, StringUtils;
 
-//import '../transaction/id_generator.dart';
-import '../transaction/uint64.dart';
+import '../account/public_account.dart';
+import '../common/id.dart';
+import '../common/id_generator.dart';
+import '../common/uint64.dart';
+
+import 'mosaic_nonce.dart';
 
 /// The mosaic id structure describes mosaic id.
-class MosaicId {
-  /// Mosaic 64-bit unsigned integer id.
-  final Uint64 id;
-
-// Deprecated. To be re-introduced after AliasTransaction implementation.
-//  /// Mosaic full name with namespace name (Example: nem:xem).
-//  ///
-//  /// The full name can be empty when the mosaic id is created using only the [Uint64] id.
-//  final String fullName;
-//
-//  const MosaicId._(this.id, this.fullName);
-//
-//   Deprecated. To be re-introduced after AliasTransaction implementation.
-//  /// Create a [MosaicId] from a 64-bit unsigned integer [id] OR a namespace-mosaic [fullName].
-//  ///
-//  /// When both the [id] and the [fullName] are provided, a new [id] will be generated from the
-//  /// provided [fullName] and the provided [id] will be ignored.
-//  factory MosaicId({final Uint64 id, final String fullName}) {
-//    final String fullMosaicName = StringUtils.trim(fullName);
-//    if (id == null && StringUtils.isEmpty(fullMosaicName)) {
-//      throw new ArgumentError('Missing argument. Either id or fullName is required.');
-//    }
-//
-//    if (StringUtils.isNotEmpty(fullMosaicName)) {
-//      final Uint64 mosaicId = IdGenerator.generateMosaicId(fullMosaicName);
-//      return new MosaicId._(mosaicId, fullMosaicName);
-//    }
-//    return new MosaicId._(id, null);
-//  }
-
-  const MosaicId._(this.id);
+class MosaicId extends Id {
+  // private constructor
+  const MosaicId._(id) : super(id);
 
   factory MosaicId({final Uint64 id}) {
     if (id == null) {
@@ -75,27 +51,23 @@ class MosaicId {
     return new MosaicId(id: Uint64.fromBigInt(bigInt));
   }
 
-// Deprecated. To be re-introduced after AliasTransaction implementation.
-//  /// Creates a new [MosaicId] from a [fullName].
-//  static MosaicId fromFullName(final String fullName) {
-//    if (StringUtils.isEmpty(fullName)) {
-//      throw new ArgumentError('The fullName must not be null or empty');
-//    }
-//
-//    return new MosaicId(fullName: fullName);
-//  }
-
-  /// Creates a new [MosaicId] from a [hexString].
-  static MosaicId fromHex(final String hexString) {
-    if (StringUtils.isEmpty(hexString)) {
+  /// Creates a new [MosaicId] from a [hex].
+  static MosaicId fromHex(final String hex) {
+    if (StringUtils.isEmpty(hex)) {
       throw new ArgumentError('The hexString must not be null or empty');
     }
 
-    if (!HexUtils.isHexString(hexString)) {
+    if (!HexUtils.isHex(hex)) {
       throw new ArgumentError('invalid hex');
     }
 
-    return new MosaicId(id: Uint64.fromHex(hexString));
+    return new MosaicId(id: Uint64.fromHex(hex));
+  }
+
+  /// Creates a new [MosaicId] from a given [mosaicNonce] and [owner]'s public account.
+  static MosaicId fromNonce(final MosaicNonce mosaicNonce, final PublicAccount owner) {
+    final Uint64 id = IdGenerator.generateMosaicId(mosaicNonce.nonce, owner.publicKey);
+    return new MosaicId(id: id);
   }
 
   @override

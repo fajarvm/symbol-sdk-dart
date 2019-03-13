@@ -14,7 +14,7 @@
 // limitations under the License.
 //
 
-library nem2_sdk_dart.test.sdk.model.transaction.id_generator_test;
+library nem2_sdk_dart.test.sdk.model.common.id_generator_test;
 
 import 'dart:typed_data' show Uint8List;
 
@@ -155,7 +155,7 @@ void main() {
 
       // Assert
       final expectedHex = mosaicInfo['expectedMosaicId'];
-      expect(mosaicId.toHexString().toUpperCase(), equals(expectedHex));
+      expect(mosaicId.toHex().toUpperCase(), equals(expectedHex));
 
       final idInt64 = Int64.fromInts(0x3AD842A8, 0xC0AFC518);
       final expectedId = Uint64.fromHex(idInt64.toHexString());
@@ -169,7 +169,7 @@ void main() {
         final mosaicId = IdGenerator.generateMosaicId(nonceBytes, testVector['publicKey']);
 
         final expectedHex = testVector['expectedMosaicId'];
-        expect(mosaicId.toHexString().toUpperCase(), equals(expectedHex));
+        expect(mosaicId.toHex().toUpperCase(), equals(expectedHex));
       }
     });
 
@@ -217,9 +217,9 @@ void main() {
       final namespaces = IdGenerator.generateNamespacePaths('foo.bar.baz');
 
       expect(ids.length, equals(namespaces.length));
-      expect(ids[0].toHexString(), equals(namespaces[0].toHexString()));
-      expect(ids[1].toHexString(), equals(namespaces[1].toHexString()));
-      expect(ids[2].toHexString(), equals(namespaces[2].toHexString()));
+      expect(ids[0].toHex(), equals(namespaces[0].toHex()));
+      expect(ids[1].toHex(), equals(namespaces[1].toHex()));
+      expect(ids[2].toHex(), equals(namespaces[2].toHex()));
     });
   });
 

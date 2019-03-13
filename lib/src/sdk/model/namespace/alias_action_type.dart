@@ -22,6 +22,8 @@ library nem2_sdk_dart.sdk.model.namespace.alias_action_type;
 /// * 0: Link an alias.
 /// * 1: Unlink an alias.
 class AliasActionType {
+  static const String _INVALID_ALIAS_ACTION_TYPE = 'invalid alias action type';
+
   static const int LINK = 0;
 
   static const int UNLINK = 1;
@@ -41,7 +43,7 @@ class AliasActionType {
       case UNLINK:
         return AliasActionType.UNLINK;
       default:
-        throw new ArgumentError('invalid alias action type');
+        throw new ArgumentError(_INVALID_ALIAS_ACTION_TYPE);
     }
   }
 }

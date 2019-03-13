@@ -14,23 +14,15 @@
 // limitations under the License.
 //
 
-library nem2_sdk_dart.test.sdk.model.mosaic.mosaic_test;
+library nem2_sdk_dart.sdk.model.account.account_property;
 
-import 'package:test/test.dart';
+/// Account property structure describes property information.
+class AccountProperty {
+  /// Account property type.
+  final int propertyType;
 
-import 'package:nem2_sdk_dart/sdk.dart' show Mosaic, MosaicId, Uint64;
+  /// Property values.
+  final List<Object> values;
 
-void main() {
-  group('Mosaic', () {
-    test('Can create mosaic object', () {
-      const XEM_HEX_STRING = 'D525AD41D95FCF29';
-      final mosaicId = MosaicId.fromHex(XEM_HEX_STRING);
-      final amount = Uint64(9999999999);
-      final Mosaic mosaic = Mosaic(mosaicId, amount);
-
-      expect(mosaic.id, equals(mosaicId));
-      expect(mosaic.amount, equals(amount));
-      expect(mosaic.amount.value.toInt(), equals(9999999999));
-    });
-  });
+  AccountProperty(this.propertyType, this.values);
 }

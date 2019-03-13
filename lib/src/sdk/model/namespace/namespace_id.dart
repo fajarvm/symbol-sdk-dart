@@ -18,20 +18,19 @@ library nem2_sdk_dart.sdk.model.namespace.namespace_id;
 
 import 'package:nem2_sdk_dart/core.dart' show HexUtils, StringUtils;
 
-import '../transaction/id_generator.dart';
-import '../transaction/uint64.dart';
+import '../common/id.dart';
+import '../common/id_generator.dart';
+import '../common/uint64.dart';
 
 /// The namespace id structure describes namespace id.
-class NamespaceId {
-  /// Namespace 64-bit unsigned integer id.
-  final Uint64 id;
-
+class NamespaceId extends Id {
   /// Namespace full name (Examples: `nem`, or `universe.milky_way.planet_earth`).
   ///
   /// The full name can be empty when the namespace id is created using only the [Uint64] id.
   final String fullName;
 
-  const NamespaceId._(this.id, this.fullName);
+  // private constructor
+  const NamespaceId._(id, this.fullName) : super(id);
 
   /// Create a [NamespaceId] from a 64-bit unsigned integer [id] OR a namespace [fullName].
   ///
@@ -77,17 +76,17 @@ class NamespaceId {
     return new NamespaceId(fullName: fullName);
   }
 
-  /// Creates a new [NamespaceId] from a [hexString].
-  static NamespaceId fromHex(final String hexString) {
-    if (StringUtils.isEmpty(hexString)) {
+  /// Creates a new [NamespaceId] from a [hex].
+  static NamespaceId fromHex(final String hex) {
+    if (StringUtils.isEmpty(hex)) {
       throw new ArgumentError('The hexString must not be null or empty');
     }
 
-    if (!HexUtils.isHexString(hexString)) {
+    if (!HexUtils.isHex(hex)) {
       throw new ArgumentError('invalid hex');
     }
 
-    return new NamespaceId(id: Uint64.fromHex(hexString));
+    return new NamespaceId(id: Uint64.fromHex(hex));
   }
 
   @override

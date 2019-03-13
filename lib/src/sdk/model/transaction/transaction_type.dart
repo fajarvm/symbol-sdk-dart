@@ -18,6 +18,8 @@ library nem2_sdk_dart.sdk.model.transaction.transaction_type;
 
 /// The available transaction types.
 class TransactionType {
+  static const String _INVALID_TRANSACTION_TYPE = 'invalid transaction type';
+
   //
   // Mosaic
   //
@@ -111,7 +113,7 @@ class TransactionType {
     return _singleton;
   }
 
-  static int getTransactionType(final int transactionType) {
+  static int getType(final int transactionType) {
     switch (transactionType) {
       case ACCOUNT_FILTER_ADDRESS:
         return TransactionType.ACCOUNT_FILTER_ADDRESS;
@@ -148,7 +150,7 @@ class TransactionType {
       case SECRET_PROOF:
         return TransactionType.SECRET_PROOF;
       default:
-        throw new ArgumentError('invalid transaction type');
+        throw new ArgumentError(_INVALID_TRANSACTION_TYPE);
     }
   }
 }

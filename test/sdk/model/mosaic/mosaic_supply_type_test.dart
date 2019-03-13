@@ -34,21 +34,21 @@ void main() {
     });
 
     test('Can retrieve a valid mosaic supply types', () {
-      expect(MosaicSupplyType.getMosaicSupplyType(0), MosaicSupplyType.DECREASE);
-      expect(MosaicSupplyType.getMosaicSupplyType(1), MosaicSupplyType.INCREASE);
+      expect(MosaicSupplyType.getType(0), MosaicSupplyType.DECREASE);
+      expect(MosaicSupplyType.getType(1), MosaicSupplyType.INCREASE);
     });
 
     test('Trying to retrieve an invalid supply type will throw an error', () {
       expect(
-          () => MosaicSupplyType.getMosaicSupplyType(null),
+          () => MosaicSupplyType.getType(null),
           throwsA(
               predicate((e) => e is ArgumentError && e.message == 'invalid mosaic supply type')));
       expect(
-          () => MosaicSupplyType.getMosaicSupplyType(-1),
+          () => MosaicSupplyType.getType(-1),
           throwsA(
               predicate((e) => e is ArgumentError && e.message == 'invalid mosaic supply type')));
       expect(
-          () => MosaicSupplyType.getMosaicSupplyType(2),
+          () => MosaicSupplyType.getType(2),
           throwsA(
               predicate((e) => e is ArgumentError && e.message == 'invalid mosaic supply type')));
     });

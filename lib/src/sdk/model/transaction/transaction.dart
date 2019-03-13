@@ -22,11 +22,11 @@ import 'package:nem2_sdk_dart/core.dart' show KeyPair;
 
 import '../account/account.dart';
 import '../account/public_account.dart';
+import '../common/uint64.dart';
 
 import 'deadline.dart';
 import 'signed_transaction.dart';
 import 'transaction_info.dart';
-import 'uint64.dart';
 import 'verifiable_transaction.dart';
 
 /// An abstract transaction class that serves as the base class of all NEM transactions.

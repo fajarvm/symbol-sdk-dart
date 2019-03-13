@@ -16,7 +16,7 @@
 
 library nem2_sdk_dart.sdk.model.transaction.transaction_info;
 
-import 'uint64.dart';
+import '../common/uint64.dart';
 
 /// The transaction information model included in all transactions.
 class TransactionInfo {
@@ -43,7 +43,7 @@ class TransactionInfo {
   final String aggregateId;
 
   // private constructor
-  TransactionInfo._(this.height, this.index, this.id, this.hash, this.merkleComponentHash,
+  const TransactionInfo._(this.height, this.index, this.id, this.hash, this.merkleComponentHash,
       this.aggregateHash, this.aggregateId);
 
   /// Creates transaction info object for aggregate transaction inner transaction.

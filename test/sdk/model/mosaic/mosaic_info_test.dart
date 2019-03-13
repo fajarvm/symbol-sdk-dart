@@ -45,30 +45,26 @@ void main() {
 
     test('Can create via constructor', () {
       // Mosaic info parameters and properties
-      const bool isActive = true;
-      const int index = 0;
       const metaId = '59FDA0733F17CF0001772CBC';
       final mosaicId = MosaicId(id: XEM_ID);
-      final nonce = Uint64(1);
       final supply = Uint64(9999999999);
       final height = Uint64(1);
       final owner = PublicAccount.fromPublicKey(publicKey, NetworkType.MIJIN_TEST);
+      const int revision = 1;
 
       final properties = MosaicProperties.create(Uint64(9000));
 
       // Create MosaicInfo
-      final MosaicInfo mosaicInfo = new MosaicInfo(
-          isActive, index, metaId, mosaicId, nonce, supply, height, owner, properties);
+      final MosaicInfo mosaicInfo =
+          new MosaicInfo(metaId, mosaicId, supply, height, owner, revision, properties);
 
       // Assert
-      expect(mosaicInfo.active, isTrue);
-      expect(mosaicInfo.index, 0);
       expect(mosaicInfo.metaId, equals(metaId));
       expect(mosaicInfo.mosaicId, equals(mosaicId));
-      expect(mosaicInfo.nonce.value.toInt(), 1);
       expect(mosaicInfo.supply.value.toInt(), 9999999999);
       expect(mosaicInfo.height.value.toInt(), 1);
       expect(mosaicInfo.owner.publicKey, equals(publicKey));
+      expect(mosaicInfo.revision, 1);
       expect(mosaicInfo.isSupplyMutable, isFalse);
       expect(mosaicInfo.isTransferable, isTrue);
       expect(mosaicInfo.isLevyMutable, isFalse);
@@ -76,11 +72,11 @@ void main() {
       expect(mosaicInfo.duration.value.toInt(), 9000);
     });
 
-    test('Cannot create with invalid index', () {
+    test('Cannot create with invalid revision', () {
       expect(
-          () => new MosaicInfo(true, -1, null, null, null, null, null, null, null),
-          throwsA(
-              predicate((e) => e is ArgumentError && e.message == 'index must not be negative')));
+          () => new MosaicInfo(null, null, null, null, null, -1, null),
+          throwsA(predicate(
+              (e) => e is ArgumentError && e.message == 'revision must not be negative')));
     });
   });
 }

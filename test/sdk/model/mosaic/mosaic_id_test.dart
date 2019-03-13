@@ -16,91 +16,79 @@
 
 library nem2_sdk_dart.test.sdk.model.mosaic.mosaic_id_test;
 
+import 'dart:typed_data' show Uint8List;
+
 import 'package:test/test.dart';
 
-import 'package:nem2_sdk_dart/sdk.dart' show MosaicId, Uint64;
+import 'package:nem2_sdk_dart/sdk.dart'
+    show MosaicId, MosaicNonce, NetworkType, PublicAccount, Uint64;
 
 void main() {
-  const XEM_HEX_STRING = 'D525AD41D95FCF29'; // 15358872602548358953
-  final XEM_ID = Uint64.fromHex(XEM_HEX_STRING);
+  const testPublicKey = 'b4f12e7c9f6946091e2cb8b6d3a12b50d17ccbbf646386ea27ce2946a7423dcf';
+  const testHex = '85BBEA6CC462B244'; // 15358872602548358953
+  final testId = Uint64.fromHex(testHex);
 
   group('Create MosaicId via constructor', () {
     test('Can create using Uint64 id', () {
-      final mosaicId = MosaicId(id: XEM_ID);
+      final mosaicId = MosaicId(id: testId);
 
-      expect(mosaicId.id, equals(XEM_ID));
-      expect(mosaicId.id.toHexString().toUpperCase(), equals(XEM_HEX_STRING));
-//      expect(mosaicId.fullName, isNull);
+      expect(mosaicId.id, equals(testId));
+      expect(mosaicId.id.toHex().toUpperCase(), equals(testHex));
       expect(mosaicId.hashCode, isNotNull);
       expect(mosaicId.toString(), equals('MosaicId(id:${mosaicId.id})'));
     });
 
-// Deprecated. To be re-introduced after AliasTransaction implementation.
-//    test('Can create using a full name string', () {
-//      final mosaicId = MosaicId(fullName: 'nem:xem');
-//
-//      expect(mosaicId.id, equals(XEM_ID));
-//      expect(mosaicId.id.toHexString().toUpperCase(), equals(XEM_HEX_STRING));
-//      expect(mosaicId.fullName, equals('nem:xem'));
-//    });
-
     test('Should have equal Ids', () {
-      final mosaicId1 = MosaicId(id: XEM_ID);
-      final mosaicId2 = MosaicId(id: XEM_ID);
-//      final mosaicId3 = MosaicId(fullName: 'nem:xem');
+      final mosaicId1 = MosaicId(id: testId);
+      final mosaicId2 = MosaicId(id: testId);
 
       expect(mosaicId1, equals(mosaicId2));
       expect(mosaicId1.id, equals(mosaicId2.id));
-//      expect(mosaicId1.id, equals(mosaicId3.id));
-//      expect(mosaicId2.id, equals(mosaicId3.id));
     });
   });
 
   group('Create MosaicId via helper methods', () {
-    test('Can create from Uint64 id', () {
-      final mosaicId = MosaicId.fromId(XEM_ID);
+    test('fromId()', () {
+      final mosaicId = MosaicId.fromId(testId);
 
-      expect(mosaicId.id, equals(XEM_ID));
-      expect(mosaicId.id.toHexString().toUpperCase(), equals(XEM_HEX_STRING));
-//      expect(mosaicId.fullName, isNull);
+      expect(mosaicId.id, equals(testId));
+      expect(mosaicId.id.toHex().toUpperCase(), equals(testHex));
     });
 
-    test('Can create from a big integer', () {
-      final mosaicId = MosaicId.fromBigInt(XEM_ID.value);
+    test('fromBigInt()', () {
+      final mosaicId = MosaicId.fromBigInt(testId.value);
 
-      expect(mosaicId.id, equals(XEM_ID));
-      expect(mosaicId.id.toHexString().toUpperCase(), equals(XEM_HEX_STRING));
-//      expect(mosaicId.fullName, isNull);
+      expect(mosaicId.id, equals(testId));
+      expect(mosaicId.id.toHex().toUpperCase(), equals(testHex));
     });
 
-// Deprecated. To be re-introduced after AliasTransaction implementation.
-//    test('Can create from a full name string', () {
-//      final mosaicId = MosaicId.fromFullName('nem:xem');
-//
-//      expect(mosaicId.id, equals(XEM_ID));
-//      expect(mosaicId.id.toHexString().toUpperCase(), equals(XEM_HEX_STRING));
-//      expect(mosaicId.fullName, equals('nem:xem'));
-//    });
+    test('fromHex()', () {
+      final mosaicId = MosaicId.fromHex(testHex);
 
-    test('Can create from a hex string', () {
-      final mosaicId = MosaicId.fromHex(XEM_HEX_STRING);
+      expect(mosaicId.id, equals(testId));
+      expect(mosaicId.id.toHex().toUpperCase(), equals(testHex));
+    });
 
-      expect(mosaicId.id, equals(XEM_ID));
-      expect(mosaicId.id.toHexString().toUpperCase(), equals(XEM_HEX_STRING));
-//      expect(mosaicId.fullName, isNull);
+    test('fromNonce()', () {
+      final bytes = Uint8List.fromList([0x0, 0x0, 0x0, 0x0]);
+      final nonce = new MosaicNonce(bytes);
+      final owner = PublicAccount.fromPublicKey(testPublicKey, NetworkType.MIJIN_TEST);
+      final mosaicId = MosaicId.fromNonce(nonce, owner);
+
+      final expected = Uint64.fromHex('0dc67fbe1cad29e3');
+      expect(mosaicId.id, equals(expected));
+      expect(mosaicId.id.toHex(), equals(expected.toHex()));
     });
   });
 
   group('Cannot create with invalid inputs', () {
     test('Invalid constructor parameter', () {
-      expect(
-          () => new MosaicId(id: null),
-          throwsA(predicate(
-              (e) => e is ArgumentError && e.message == 'The id must not be null')));
+      expect(() => new MosaicId(id: null),
+          throwsA(predicate((e) => e is ArgumentError && e.message == 'The id must not be null')));
       expect(
           () => MosaicId.fromBigInt(null),
-          throwsA(predicate(
-              (e) => e is ArgumentError && e.message == 'The bigInt must not be null')));
+          throwsA(
+              predicate((e) => e is ArgumentError && e.message == 'The bigInt must not be null')));
       expect(
           () => MosaicId.fromHex(null),
           throwsA(predicate((e) =>

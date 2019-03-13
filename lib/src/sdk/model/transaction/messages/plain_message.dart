@@ -43,7 +43,7 @@ class PlainMessage extends Message {
     }
 
     // Hex string message payload
-    if (HexUtils.isHexString(text)) {
+    if (HexUtils.isHex(text)) {
       return new PlainMessage._(HexUtils.getBytes(text));
     }
 

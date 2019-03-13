@@ -18,7 +18,7 @@ library nem2_sdk_dart.sdk.model.blockchain.network_type;
 
 /// This class is used to identify a network type.
 class NetworkType {
-  static const String UNKNOWN_NETWORK_TYPE = 'network type is unknown';
+  static const String _UNKNOWN_NETWORK_TYPE = 'network type is unknown';
 
   static final NetworkType _singleton = new NetworkType._();
 
@@ -40,7 +40,7 @@ class NetworkType {
   /// Mijin private test network identifier (144).
   static const int MIJIN_TEST = 0x90; // 144
 
-  static int getNetworkType(final int networkType) {
+  static int getType(final int networkType) {
     switch (networkType) {
       case MAIN_NET:
         return NetworkType.MAIN_NET;
@@ -51,13 +51,13 @@ class NetworkType {
       case MIJIN_TEST:
         return NetworkType.MIJIN_TEST;
       default:
-        throw new ArgumentError(UNKNOWN_NETWORK_TYPE);
+        throw new ArgumentError(_UNKNOWN_NETWORK_TYPE);
     }
   }
 
-  static bool isValidNetworkType(final int networkType) {
+  static bool isValid(final int networkType) {
     try {
-      return 0 < getNetworkType(networkType);
+      return 0 < getType(networkType);
     } catch (e) {
       return false;
     }

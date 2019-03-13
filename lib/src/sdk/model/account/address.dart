@@ -74,7 +74,7 @@ class Address {
 
   /// Creates an [Address] from a given [publicKey] string for the given [networkType].
   static Address fromPublicKey(final String publicKey, final int networkType) {
-    if (networkType == null || !NetworkType.isValidNetworkType(networkType)) {
+    if (networkType == null || !NetworkType.isValid(networkType)) {
       throw new ArgumentError('Network type unsupported');
     }
 

@@ -91,7 +91,7 @@ void main() {
       final List<String> INPUTS = ['', '026ee415fc15', 'abcdef0123456789ABCDEF'];
 
       for (var input in INPUTS) {
-        expect(HexUtils.isHexString(input), isTrue);
+        expect(HexUtils.isHex(input), isTrue);
       }
     });
 
@@ -102,7 +102,7 @@ void main() {
       ];
 
       for (var input in INPUTS) {
-        expect(HexUtils.isHexString(input), isFalse);
+        expect(HexUtils.isHex(input), isFalse);
       }
     });
   });

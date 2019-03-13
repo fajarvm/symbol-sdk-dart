@@ -17,27 +17,18 @@
 library nem2_sdk_dart.sdk.model.mosaic.mosaic_info;
 
 import '../account/public_account.dart';
-import '../transaction/uint64.dart';
+import '../common/uint64.dart';
 
 import 'mosaic_id.dart';
 import 'mosaic_properties.dart';
 
 /// Contains information about a mosaic.
 class MosaicInfo {
-  /// Determines if the mosaic is active or not.
-  final bool active;
-
-  /// The mosaic index.
-  final int index;
-
   /// The meta ID.
   final String metaId;
 
   /// The mosaic ID.
   final MosaicId mosaicId;
-
-  /// The mosaic nonce.
-  final Uint64 nonce;
 
   /// The total supply of the mosaic.
   final Uint64 supply;
@@ -48,28 +39,28 @@ class MosaicInfo {
   /// The account of the owner of this mosaic.
   final PublicAccount owner;
 
+  /// The mosaic revision.
+  final int revision;
+
   /// The properties of the mosaic.
   final MosaicProperties properties;
 
-  const MosaicInfo._(this.active, this.index, this.metaId, this.mosaicId, this.nonce, this.supply,
-      this.height, this.owner, this.properties);
+  const MosaicInfo._(this.metaId, this.mosaicId, this.supply, this.height, this.owner,
+      this.revision, this.properties);
 
   factory MosaicInfo(
-      final bool isActive,
-      final int index,
       final String metaId,
       final MosaicId mosaicId,
-      final Uint64 nonce,
       final Uint64 supply,
       final Uint64 height,
       final PublicAccount owner,
+      final int revision,
       final MosaicProperties properties) {
-    if (0 > index) {
-      throw new ArgumentError('index must not be negative');
+    if (0 > revision) {
+      throw new ArgumentError('revision must not be negative');
     }
 
-    return new MosaicInfo._(
-        isActive, index, metaId, mosaicId, nonce, supply, height, owner, properties);
+    return new MosaicInfo._(metaId, mosaicId, supply, height, owner, revision, properties);
   }
 
   /// Returns the mosaic divisibility

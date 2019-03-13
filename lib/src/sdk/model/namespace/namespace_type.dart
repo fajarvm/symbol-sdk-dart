@@ -22,6 +22,8 @@ library nem2_sdk_dart.sdk.model.namespace.namespace_type;
 /// * 0: Namespace.
 /// * 1: Sub namespace.
 class NamespaceType {
+  static const String _INVALID_NAMESPACE_TYPE = 'invalid namespace type';
+
   static const int ROOT_NAMESPACE = 0;
 
   static const int SUB_NAMESPACE = 1;
@@ -34,14 +36,14 @@ class NamespaceType {
     return _singleton;
   }
 
-  static int getNamespaceType(final int namespaceType) {
+  static int getType(final int namespaceType) {
     switch (namespaceType) {
       case ROOT_NAMESPACE:
         return NamespaceType.ROOT_NAMESPACE;
       case SUB_NAMESPACE:
         return NamespaceType.SUB_NAMESPACE;
       default:
-        throw new ArgumentError('invalid namespace type');
+        throw new ArgumentError(_INVALID_NAMESPACE_TYPE);
     }
   }
 }

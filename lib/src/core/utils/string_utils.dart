@@ -50,4 +50,24 @@ class StringUtils {
     final String cleanInput = removeAllWhitespaces(input);
     return (cleanInput == null || cleanInput == EMPTY_STRING) ? null : int.parse(cleanInput);
   }
+
+  /// Left pad an [input] string with a specified character until the specified length.
+  ///
+  /// Default character is spaces (' ').
+  static String padLeft(final String input, final int length, [final String padChar = ' ']) {
+    return '${_pad(input, length, padChar)}$input';
+  }
+
+  /// Right pad an [input] string with a specified character until the specified length.
+  ///
+  /// Default character is spaces (' ').
+  static String padRight(final String input, final int length, [final String padChar = ' ']) {
+    return '$input${_pad(input, length, padChar)}';
+  }
+
+  // ------------------------------ private / protected functions ------------------------------ //
+
+  static String _pad(final String input, final int length, [final String padChar = ' ']) {
+    return new List.filled(length - input.length, padChar).join();
+  }
 }

@@ -48,7 +48,7 @@ class HexUtils {
   }
 
   /// Determines whether or not an [input] string is a hex string.
-  static bool isHexString(final String input) {
+  static bool isHex(final String input) {
     if (0 != (input.length % 2)) {
       return false;
     }
