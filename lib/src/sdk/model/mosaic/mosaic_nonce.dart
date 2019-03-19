@@ -51,6 +51,11 @@ class MosaicNonce {
     return new MosaicNonce(HexUtils.getBytes(hex));
   }
 
+  /// Returns the hex string representative of the nonce bytes.
+  String toHex() {
+    return HexUtils.getString(nonce);
+  }
+
   // for internal use
   Uint8List toDTO() {
     return this.nonce;

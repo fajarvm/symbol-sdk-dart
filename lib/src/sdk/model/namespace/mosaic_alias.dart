@@ -50,4 +50,9 @@ class MosaicAlias implements Alias {
 
   @override
   int get hashCode => type.hashCode ^ _mosaicId.hashCode;
+
+  /// Get the hex string representative of the mosaicId.
+  String toHex() {
+    return mosaicId.toHex();
+  }
 }

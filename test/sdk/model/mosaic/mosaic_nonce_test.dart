@@ -34,6 +34,24 @@ void main() {
       expect(mosaicNonce.nonce.length, MosaicNonce.NONCE_SIZE);
     });
 
+    test('createRandom() can create a random MosaicNonce object', () {
+      final mosaicNonce = MosaicNonce.createRandom();
+      expect(mosaicNonce.nonce, isNotNull);
+      expect(mosaicNonce.nonce.length, MosaicNonce.NONCE_SIZE);
+    });
+
+    test('fromHex() can create a MosaicNonce object from a hex string', () {
+      final mosaicNonce = MosaicNonce.fromHex('00ffffff');
+      expect(mosaicNonce.nonce, isNotNull);
+      expect(mosaicNonce.nonce.length, MosaicNonce.NONCE_SIZE);
+      expect(mosaicNonce.toHex(), equals('00ffffff'));
+    });
+
+    test('Cannot create MosaicNonce with invalid hex string', () {
+      expect(() => MosaicNonce.fromHex('ABCDEFG'),
+          throwsA(predicate((e) => e is ArgumentError && e.message == 'invalid hex string')));
+    });
+
     test('Cannot create MosaicNonce with invalid size', () {
       expect(
           () => new MosaicNonce(null),

@@ -31,6 +31,7 @@ void main() {
       expect(alias.mosaicId, equals(mosaicId));
       expect(alias.address, isNull);
       expect(alias.hashCode, isNotNull);
+      expect(alias.toHex(), equals('85BBEA6CC462B244'));
     });
 
     test('Can compare adresses in AddressAlias', () {
