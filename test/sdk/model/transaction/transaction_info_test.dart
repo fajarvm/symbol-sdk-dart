@@ -64,7 +64,7 @@ void main() {
     });
 
     test('Can create a transaction info for aggregate inner transactions', () {
-      final transactionInfo = TransactionInfo.createAggregate(
+      final transactionInfo = TransactionInfo.createAggregateTransactionInfo(
           Uint64(121855),
           1,
           '5A3D23889CD1E800015929A9',

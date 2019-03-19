@@ -66,6 +66,30 @@ class VerifiableTransaction {
     return HexUtils.getString(payload);
   }
 
+  ///
+  void signCosignatoriesTransaction() {
+    // TODO: complete
+  }
+
+  /// Converts the transaction into AggregateTransaction compatible.
+  Uint8List toAggregateTransaction(String signerPublicKey) {
+    final Uint8List signer = HexUtils.getBytes(signerPublicKey);
+    final Uint8List buffer = this.serialize();
+    List<int> temp = buffer.skip(4 + 64 + 32).toList();
+    temp.insertAll(0, signer.toList());
+    temp.removeRange(32 + 2 + 2, 32 + 2 + 2 + 16);
+
+    final List<int> result = [
+      (temp.length + 4 & 0x000000ff),
+      (temp.length + 4 & 0x0000ff00) >> 8,
+      (temp.length + 4 & 0x00ff0000) >> 16,
+      (temp.length + 4 & 0xff000000) >> 24,
+    ];
+    result.addAll(temp);
+
+    return Uint8List.fromList(result);
+  }
+
   /// Extracts the aggregate part from the [input].
   static Uint8List extractAggregatePart(final Uint8List input) {
     final List<int> part1 = input.skip(4 + 64).take(32 + 2 + 2).toList();

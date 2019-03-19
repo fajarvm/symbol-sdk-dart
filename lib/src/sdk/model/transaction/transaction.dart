@@ -16,8 +16,6 @@
 
 library nem2_sdk_dart.sdk.model.transaction.transaction;
 
-import 'dart:typed_data' show Uint8List;
-
 import 'package:nem2_sdk_dart/core.dart' show KeyPair;
 
 import '../account/account.dart';
@@ -25,8 +23,10 @@ import '../account/public_account.dart';
 import '../common/uint64.dart';
 
 import 'deadline.dart';
+import 'inner_transaction.dart';
 import 'signed_transaction.dart';
 import 'transaction_info.dart';
+import 'transaction_type.dart';
 import 'verifiable_transaction.dart';
 
 /// An abstract transaction class that serves as the base class of all NEM transactions.
@@ -72,23 +72,21 @@ abstract class Transaction {
 
   /// Returns `true' if this transaction is pending to be included in a block.
   bool isUnconfirmed() {
-    if (transactionInfo == null) {
+    if (transactionInfo == null || transactionInfo.height == null) {
       return false;
     }
 
-    return transactionInfo.height != null &&
-        transactionInfo.height.value == BigInt.zero &&
+    return BigInt.zero == transactionInfo.height.value &&
         transactionInfo.hash == transactionInfo.merkleComponentHash;
   }
 
   /// Returns `true` if this transaction has missing signatures.
   bool hasMissingSignatures() {
-    if (transactionInfo == null) {
+    if (transactionInfo == null || transactionInfo.height == null) {
       return false;
     }
 
-    return transactionInfo.height != null &&
-        transactionInfo.height.value == BigInt.zero &&
+    return BigInt.zero == transactionInfo.height.value &&
         transactionInfo.hash != transactionInfo.merkleComponentHash;
   }
 
@@ -97,20 +95,23 @@ abstract class Transaction {
     return transactionInfo == null;
   }
 
-  /// An abstract method to convert an aggregate transaction to an inner transaction including
-  /// the given transaction signer.
-  Transaction toAggregate(final PublicAccount signer);
+  /// Converts an aggregate transaction to an inner transaction including transaction signer.
+  InnerTransaction toAggregate(final PublicAccount signer) {
+    _validateAggregatedTransaction();
 
-  /// An abstract method to generate the transaction payload bytes.
-  Uint8List generateBytes();
-
-  /// Takes a transaction and formats the bytes to be included in an aggregate transaction.
-  Uint8List toAggregateTransactionBytes() {
-    final Uint8List bodyBytes = generateBytes();
-    final Uint8List aggregateBytes = VerifiableTransaction.extractAggregatePart(bodyBytes);
-    final Uint8List size = new Uint8List(aggregateBytes.length + 4);
-    return new Uint8List.fromList(size.toList() + aggregateBytes.toList());
+    return new InnerTransaction(this, signer);
   }
+
+//  /// An abstract method to generate the transaction payload bytes.
+//  Uint8List generateBytes();
+//
+//  /// Takes a transaction and formats the bytes to be included in an aggregate transaction.
+//  Uint8List toAggregateTransactionBytes() {
+//    final Uint8List bodyBytes = generateBytes();
+//    final Uint8List aggregateBytes = VerifiableTransaction.extractAggregatePart(bodyBytes);
+//    final Uint8List size = new Uint8List(aggregateBytes.length + 4);
+//    return new Uint8List.fromList(size.toList() + aggregateBytes.toList());
+//  }
 
   /// Serialize and sign transaction creating a new SignedTransaction.
   SignedTransaction signWith(final Account account) {
@@ -123,5 +124,12 @@ abstract class Transaction {
 
   // ------------------------------ private / protected functions ------------------------------ //
 
+  // internal
   VerifiableTransaction _buildTransaction();
+
+  void _validateAggregatedTransaction() {
+    if (TransactionType.isAggregateType(transactionType)) {
+      throw new ArgumentError('Inner transaction cannot be an aggregated transaction.');
+    }
+  }
 }

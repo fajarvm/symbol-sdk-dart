@@ -47,7 +47,7 @@ class TransactionInfo {
       this.aggregateHash, this.aggregateId);
 
   /// Creates transaction info object for aggregate transaction inner transaction.
-  static TransactionInfo createAggregate(final Uint64 height, final int index, final String id,
+  static TransactionInfo createAggregateTransactionInfo(final Uint64 height, final int index, final String id,
       final String aggregateHash, final String aggregateId) {
     return TransactionInfo._(height, index, id, null, null, aggregateHash, aggregateId);
   }

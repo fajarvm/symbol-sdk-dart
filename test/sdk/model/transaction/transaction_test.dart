@@ -16,13 +16,17 @@
 
 library nem2_sdk_dart.test.sdk.model.transaction.transaction_test;
 
-import 'dart:typed_data';
-
-import 'package:nem2_sdk_dart/src/sdk/model/account/public_account.dart';
-import 'package:test/test.dart';
-
 import 'package:nem2_sdk_dart/sdk.dart'
-    show Deadline, NetworkType, Transaction, TransactionInfo, TransactionType, Uint64;
+    show
+        Deadline,
+        InnerTransaction,
+        NetworkType,
+        PublicAccount,
+        Transaction,
+        TransactionInfo,
+        TransactionType,
+        Uint64;
+import 'package:test/test.dart';
 
 void main() {
   group('Transaction', () {
@@ -87,12 +91,7 @@ class MockTransaction extends Transaction {
             transactionInfo);
 
   @override
-  Uint8List generateBytes() {
-    return null;
-  }
-
-  @override
-  Transaction toAggregate(PublicAccount signer) {
+  InnerTransaction toAggregate(PublicAccount signer) {
     return null;
   }
 }

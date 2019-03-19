@@ -70,8 +70,7 @@ void main() {
       // Account filters
       expect(TransactionType.getType(0x4150), TransactionType.ACCOUNT_FILTER_ADDRESS);
       expect(TransactionType.getType(0x4250), TransactionType.ACCOUNT_FILTER_MOSAIC);
-      expect(
-          TransactionType.getType(0x4350), TransactionType.ACCOUNT_FILTER_ENTITY_TYPE);
+      expect(TransactionType.getType(0x4350), TransactionType.ACCOUNT_FILTER_ENTITY_TYPE);
 
       // Mosaic
       expect(TransactionType.getType(0x414d), TransactionType.MOSAIC_DEFINITION);
@@ -80,10 +79,8 @@ void main() {
 
       // Namespace
       expect(TransactionType.getType(0x414e), TransactionType.NAMESPACE_REGISTRATION);
-      expect(
-          TransactionType.getType(0x424e), TransactionType.NAMESPACE_ATTACH_TO_ACCOUNT);
-      expect(
-          TransactionType.getType(0x434e), TransactionType.NAMESPACE_ATTACH_TO_MOSAIC);
+      expect(TransactionType.getType(0x424e), TransactionType.NAMESPACE_ATTACH_TO_ACCOUNT);
+      expect(TransactionType.getType(0x434e), TransactionType.NAMESPACE_ATTACH_TO_MOSAIC);
 
       // Transfer
       expect(TransactionType.getType(0x4154), TransactionType.TRANSFER);
@@ -92,8 +89,7 @@ void main() {
       expect(TransactionType.getType(0x4155), TransactionType.MULTISIG_MODIFY);
 
       // Aggregate
-      expect(
-          TransactionType.getType(0x4141), TransactionType.AGGREGATE_COMPLETE);
+      expect(TransactionType.getType(0x4141), TransactionType.AGGREGATE_COMPLETE);
       expect(TransactionType.getType(0x4241), TransactionType.AGGREGATE_BONDED);
 
       // Hash lock / Lock funds
@@ -105,6 +101,16 @@ void main() {
 
       // Account link / remote harvesting
       expect(TransactionType.getType(0x414C), TransactionType.ACCOUNT_LINK);
+    });
+
+    test('Can determine aggregate transaction types', () {
+      expect(TransactionType.isAggregateType(0x4141), isTrue);
+      expect(TransactionType.isAggregateType(0x4241), isTrue);
+      expect(TransactionType.isAggregateType(TransactionType.AGGREGATE_COMPLETE), isTrue);
+      expect(TransactionType.isAggregateType(TransactionType.AGGREGATE_BONDED), isTrue);
+
+      expect(TransactionType.isAggregateType(0x4150), isFalse);
+      expect(TransactionType.isAggregateType(TransactionType.TRANSFER), isFalse);
     });
 
     test('Trying to retrieve an invalid transaction type will throw an error', () {

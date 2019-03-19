@@ -113,6 +113,7 @@ class TransactionType {
     return _singleton;
   }
 
+  /// Returns the transaction type. Throws an error if the transaction type is invalid.
   static int getType(final int transactionType) {
     switch (transactionType) {
       case ACCOUNT_FILTER_ADDRESS:
@@ -151,6 +152,17 @@ class TransactionType {
         return TransactionType.SECRET_PROOF;
       default:
         throw new ArgumentError(_INVALID_TRANSACTION_TYPE);
+    }
+  }
+
+  /// Returns true if the given [transactionType] is an aggregate transaction type.
+  static bool isAggregateType(final int transactionType) {
+    switch (transactionType) {
+      case AGGREGATE_BONDED:
+      case AGGREGATE_COMPLETE:
+        return true;
+      default:
+        return false;
     }
   }
 }
