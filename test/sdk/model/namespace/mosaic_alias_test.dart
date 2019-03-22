@@ -38,7 +38,7 @@ void main() {
       final alias1 = new MosaicAlias(mosaicId);
       final alias2 = new MosaicAlias(mosaicId);
 
-      final MosaicId mosaicId2 = MosaicId.fromHex('85bbea6cc462b244');
+      final MosaicId mosaicId2 = MosaicId.fromHex('85bbea6cc462b242');
       final alias3 = new MosaicAlias(mosaicId2);
 
       expect((alias1 == alias2), isTrue);
