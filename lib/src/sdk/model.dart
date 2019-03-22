@@ -65,7 +65,6 @@ export 'model/namespace/namespace_type.dart';
 // Transaction
 export 'model/transaction/deadline.dart';
 export 'model/transaction/hash_type.dart';
-export 'model/transaction/inner_transaction.dart';
 export 'model/transaction/messages/message.dart'; // abstract class
 export 'model/transaction/messages/message_type.dart';
 export 'model/transaction/messages/plain_message.dart';

@@ -19,13 +19,13 @@ library nem2_sdk_dart.test.sdk.model.transaction.transaction_test;
 import 'package:nem2_sdk_dart/sdk.dart'
     show
         Deadline,
-        InnerTransaction,
         NetworkType,
         PublicAccount,
         Transaction,
         TransactionInfo,
         TransactionType,
-        Uint64;
+        Uint64,
+        VerifiableTransaction;
 import 'package:test/test.dart';
 
 void main() {
@@ -91,7 +91,7 @@ class MockTransaction extends Transaction {
             transactionInfo);
 
   @override
-  InnerTransaction toAggregate(PublicAccount signer) {
+  VerifiableTransaction buildTransaction() {
     return null;
   }
 }

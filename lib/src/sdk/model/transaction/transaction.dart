@@ -21,9 +21,7 @@ import 'package:nem2_sdk_dart/core.dart' show KeyPair;
 import '../account/account.dart';
 import '../account/public_account.dart';
 import '../common/uint64.dart';
-
 import 'deadline.dart';
-import 'inner_transaction.dart';
 import 'signed_transaction.dart';
 import 'transaction_info.dart';
 import 'transaction_type.dart';
@@ -55,7 +53,7 @@ abstract class Transaction {
   final String signature;
 
   /// The public account of the transaction creator.
-  final PublicAccount signer;
+  PublicAccount signer;
 
   /// The meta data object contains additional information about the transaction.
   final TransactionInfo transactionInfo;
@@ -96,10 +94,12 @@ abstract class Transaction {
   }
 
   /// Converts an aggregate transaction to an inner transaction including transaction signer.
-  InnerTransaction toAggregate(final PublicAccount signer) {
+  Transaction toAggregate(final PublicAccount signer) {
     _validateAggregatedTransaction();
 
-    return new InnerTransaction(this, signer);
+    this.signer = signer;
+
+    return this;
   }
 
 //  /// An abstract method to generate the transaction payload bytes.
@@ -115,17 +115,17 @@ abstract class Transaction {
 
   /// Serialize and sign transaction creating a new SignedTransaction.
   SignedTransaction signWith(final Account account) {
-    final VerifiableTransaction tx = _buildTransaction();
+    final VerifiableTransaction tx = buildTransaction();
     final String txSigned = tx.signTransaction(KeyPair.fromPrivateKey(account.privateKey));
     final String txHash = VerifiableTransaction.createTransactionHash(txSigned);
 
     return new SignedTransaction(txSigned, txHash, account.publicKey, transactionType, networkType);
   }
 
-  // ------------------------------ private / protected functions ------------------------------ //
+  // for internal use
+  VerifiableTransaction buildTransaction();
 
-  // internal
-  VerifiableTransaction _buildTransaction();
+  // ------------------------------ private / protected functions ------------------------------ //
 
   void _validateAggregatedTransaction() {
     if (TransactionType.isAggregateType(transactionType)) {
