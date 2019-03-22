@@ -14,20 +14,20 @@
 // limitations under the License.
 //
 
-library nem2_sdk_dart.sdk.model.transaction.inner_transaction;
+library nem2_sdk_dart.sdk.model.schema.scalar_attribute;
 
-import '../account/public_account.dart';
-import 'transaction.dart';
+import 'dart:typed_data' show Uint8List;
 
-/// A transaction with signer included.
-///
-/// This class is used when adding signer to transactions included in an aggregate transaction.
-class InnerTransaction extends Transaction {
-  final PublicAccount _signer;
+import 'schema_attribute.dart';
 
-  InnerTransaction(Transaction tx, this._signer)
-      : super(tx.transactionType, tx.networkType, tx.version, tx.deadline, tx.fee, tx.signature,
-            _signer, tx.transactionInfo);
+class ScalarAttribute extends SchemaAttribute {
+  final int _size;
 
-  PublicAccount get innerSigner => _signer;
+  ScalarAttribute(final String name, this._size) : super(name);
+
+  @override
+  Uint8List serialize(final Uint8List buffer, final int position,
+      [final int innerObjectPosition]) {
+    return findParam(innerObjectPosition, position, buffer, _size);
+  }
 }

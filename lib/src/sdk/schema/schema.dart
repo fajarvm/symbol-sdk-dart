@@ -20,19 +20,20 @@ import 'dart:typed_data' show Uint8List;
 
 import 'schema_attribute.dart';
 
+/// Defines a Schema object.
 class Schema {
-  final List<SchemaAttribute> _schemaDefinition;
+  final List<SchemaAttribute> schemaDefinition;
 
-  Schema(this._schemaDefinition);
+  Schema(this.schemaDefinition);
 
-  /// Creates a catapult bytes buffer of the given flatbuffers [bytes].
+  /// Creates a catapult bytes buffer of the given catbuffers [bytes].
   Uint8List serialize(final Uint8List bytes) {
-    Uint8List result;
-    for (int i = 0; i < _schemaDefinition.length; i++) {
-      Uint8List temp = _schemaDefinition[i].serialize(bytes, 4 + (i * 2));
-      result = concat(result, temp);
+    List<int> result = <int>[];
+    for (int i = 0; i < schemaDefinition.length; i++) {
+      Uint8List temp = schemaDefinition[i].serialize(bytes, 4 + (i * 2));
+      result = concat(Uint8List.fromList(result), temp);
     }
-    return result;
+    return Uint8List.fromList(result);
   }
 
   /// Concatenates two bytes together into a new bytes.

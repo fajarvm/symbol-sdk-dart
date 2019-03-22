@@ -16,10 +16,14 @@
 
 import 'package:test/test.dart';
 
+import 'schema/constants_test.dart' as constants_test;
 import 'schema/schema_attribute_test.dart' as schema_attribute_test;
+import 'schema/schema_test.dart' as schema_test;
 
 void main() {
   group('Schema:', () {
+    constants_test.main();
     schema_attribute_test.main();
+    schema_test.main();
   });
 }

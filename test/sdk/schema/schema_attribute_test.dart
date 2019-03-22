@@ -16,25 +16,25 @@
 
 library nem2_sdk_dart.test.sdk.schema.schema_attribute_test;
 
+import 'dart:typed_data' show Uint8List;
+
+import 'package:nem2_sdk_dart/core.dart' show ArrayUtils;
 import 'package:test/test.dart';
 
-import 'package:nem2_sdk_dart/sdk.dart' show SchemaAttribute;
+import 'schema_test.dart' show MockSchemaAttribute;
 
 void main() {
   group('SchemaAttribute', () {
-    test('default serialize() implemententation throws an unsupported error', () {
-      final schema = new MockSchemaAttribute();
+    test('serialize()', () {
+      final schemaAttribute = new MockSchemaAttribute('test');
+      final result = schemaAttribute.serialize(null, 0);
+      final expected = Uint8List.fromList([1, 2, 3]);
 
-      expect(schema.name, equals('MockSchemaAttribute'));
-
-      expect(() => schema.serialize(null, 0),
-          throwsA(predicate((e) => e is UnsupportedError && e.message == 'Unimplemented method')));
+      expect(ArrayUtils.deepEqual(result, expected), isTrue);
     });
 
-    // TODO: complete unit test
+    test('readInt32()', () {
+      // TODO: complete unit test
+    });
   });
-}
-
-class MockSchemaAttribute extends SchemaAttribute {
-  MockSchemaAttribute() : super('MockSchemaAttribute');
 }
