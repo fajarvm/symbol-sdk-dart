@@ -14,18 +14,19 @@
 // limitations under the License.
 //
 
-import 'package:test/test.dart';
+library nem2_sdk_dart.sdk.model.schema.array_attribute;
 
-import 'schema/array_attribute_test.dart' as array_attribute_test;
-import 'schema/constants_test.dart' as constants_test;
-import 'schema/schema_attribute_test.dart' as schema_attribute_test;
-import 'schema/schema_test.dart' as schema_test;
+import 'dart:typed_data' show Uint8List;
 
-void main() {
-  group('Schema:', () {
-    array_attribute_test.main();
-    constants_test.main();
-    schema_attribute_test.main();
-    schema_test.main();
-  });
+import 'schema_attribute.dart';
+
+class ArrayAttribute extends SchemaAttribute {
+  final int _typeSize;
+
+  ArrayAttribute(final String name, this._typeSize) : super(name);
+
+  @override
+  Uint8List serialize(final Uint8List buffer, final int position, [final int innerObjectPosition]) {
+    return findVector(innerObjectPosition, position, buffer, _typeSize);
+  }
 }

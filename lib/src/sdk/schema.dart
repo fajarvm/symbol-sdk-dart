@@ -16,6 +16,7 @@
 
 library nem2_sdk_dart.sdk.schema;
 
+export 'schema/array_attribute.dart';
 export 'schema/constants.dart';
 export 'schema/scalar_attribute.dart';
 export 'schema/schema.dart';
