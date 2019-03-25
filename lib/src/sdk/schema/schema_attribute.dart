@@ -38,7 +38,7 @@ abstract class SchemaAttribute {
   // ------------------------------ private / protected functions ------------------------------ //
 
   Uint8List findParam(int innerObjectPosition, int position, Uint8List buffer, int typeSize) {
-    int offset = __offset(innerObjectPosition, position, buffer);
+    int offset = getOffset(innerObjectPosition, position, buffer);
     if (offset == 0) {
       return new Uint8List.fromList([0]);
     }
@@ -48,10 +48,10 @@ abstract class SchemaAttribute {
   }
 
   Uint8List findVector(int innerObjectPosition, int position, Uint8List buffer, int typeSize) {
-    int offset = __offset(innerObjectPosition, position, buffer);
+    int offset = getOffset(innerObjectPosition, position, buffer);
     int offsetLong = offset + innerObjectPosition;
-    int vecStart = __vector(offsetLong, buffer);
-    int vecLength = __vector_length(offsetLong, buffer) * typeSize;
+    int vecStart = getVector(offsetLong, buffer);
+    int vecLength = getVectorLength(offsetLong, buffer) * typeSize;
     if (offset == 0) {
       return new Uint8List.fromList([0]);
     }
@@ -60,20 +60,20 @@ abstract class SchemaAttribute {
   }
 
   int findObjectStartPosition(int innerObjectPosition, int position, Uint8List buffer) {
-    int offset = __offset(innerObjectPosition, position, buffer);
-    return __indirect(offset + innerObjectPosition, buffer);
+    int offset = getOffset(innerObjectPosition, position, buffer);
+    return getIndirect(offset + innerObjectPosition, buffer);
   }
 
   int findArrayLength(int innerObjectPosition, int position, Uint8List buffer) {
-    int offset = __offset(innerObjectPosition, position, buffer);
-    return offset == 0 ? 0 : __vector_length(innerObjectPosition + offset, buffer);
+    int offset = getOffset(innerObjectPosition, position, buffer);
+    return offset == 0 ? 0 : getVectorLength(innerObjectPosition + offset, buffer);
   }
 
   int findObjectArrayElementStartPosition(
       int innerObjectPosition, int position, Uint8List buffer, int startPosition) {
-    int offset = __offset(innerObjectPosition, position, buffer);
-    int vector = __vector(innerObjectPosition + offset, buffer);
-    return __indirect(vector + startPosition * 4, buffer);
+    int offset = getOffset(innerObjectPosition, position, buffer);
+    int vector = getVector(innerObjectPosition + offset, buffer);
+    return getIndirect(vector + startPosition * 4, buffer);
   }
 
   int readInt32(int offset, Uint8List buffer) {
@@ -90,20 +90,20 @@ abstract class SchemaAttribute {
     return value;
   }
 
-  int __offset(int innerObjectPosition, int position, Uint8List buffer) {
+  int getOffset(int innerObjectPosition, int position, Uint8List buffer) {
     int vtable = innerObjectPosition - readInt32(innerObjectPosition, buffer);
     return position < readInt16(vtable, buffer) ? readInt16(vtable + position, buffer) : 0;
   }
 
-  int __vector_length(int offset, Uint8List buffer) {
+  int getVectorLength(int offset, Uint8List buffer) {
     return readInt32(offset + readInt32(offset, buffer), buffer);
   }
 
-  int __indirect(int offset, Uint8List buffer) {
+  int getIndirect(int offset, Uint8List buffer) {
     return offset + readInt32(offset, buffer);
   }
 
-  int __vector(int offset, Uint8List buffer) {
+  int getVector(int offset, Uint8List buffer) {
     return offset + readInt32(offset, buffer) + 4;
   }
 }
