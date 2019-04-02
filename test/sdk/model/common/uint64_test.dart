@@ -19,11 +19,9 @@ library nem2_sdk_dart.test.sdk.model.uint64_test;
 import 'dart:typed_data' show Uint8List;
 
 import 'package:fixnum/fixnum.dart' show Int64;
-
-import 'package:test/test.dart';
-
 import 'package:nem2_sdk_dart/core.dart' show ArrayUtils;
 import 'package:nem2_sdk_dart/sdk.dart' show Uint64;
+import 'package:test/test.dart';
 
 void main() {
   final List<String> HEX_TEST_CASES = [
@@ -107,6 +105,39 @@ void main() {
       }
     });
 
+    test('Can create from a pair of 32-bit integers', () {
+      // zero ( min value)
+      Uint64 actual = Uint64.fromInts(0, 0);
+      expect(actual.value, equals(Uint64.MIN_VALUE));
+      expect(actual.value, equals(BigInt.zero));
+
+      // one
+      actual = Uint64.fromInts(1, 0);
+      expect(actual.value, equals(BigInt.one));
+
+      // one hundred
+      actual = Uint64.fromInts(100, 0);
+      expect(actual.value, equals(BigInt.from(100)));
+
+      // one thousand
+      actual = Uint64.fromInts(1000, 0);
+      expect(actual.value, equals(BigInt.from(1000)));
+
+      // ten thousand
+      actual = Uint64.fromInts(10000, 0);
+      expect(actual.value, equals(BigInt.from(10000)));
+
+      actual = Uint64.fromInts(12345, 99999);
+      expect(actual.value, equals(BigInt.parse('429492434645049')));
+
+      actual = Uint64.fromInts(1111, 2222);
+      expect(actual.value, equals(BigInt.parse('9543417332823')));
+
+      // max value
+      actual = Uint64.fromInts(0xFFFFFFFF, 0xFFFFFFFF);
+      expect(actual.value, equals(Uint64.MAX_VALUE));
+    });
+
     test('Equals', () {
       for (var hexString in HEX_TEST_CASES) {
         final actual = Uint64.fromHex(hexString);
@@ -157,6 +188,38 @@ void main() {
 
       expect(actual, equals(expected));
       expect(ArrayUtils.deepEqual(actual, expected), isTrue);
+    });
+
+    test('toHex', () {
+      const hexString = '000000000000A1B2';
+      final actual = Uint64.fromHex(hexString);
+
+      expect(actual.toHex(), equals(hexString.toLowerCase()));
+    });
+
+    test('toInts', () {
+      // min value
+      Uint64 actual = Uint64.fromBigInt(BigInt.zero);
+      expect(actual.toInts(), equals([0, 0]));
+
+      actual = Uint64.fromInts(0, 0);
+      expect(actual.toInts(), equals([0, 0]));
+
+      actual = Uint64.fromBigInt(BigInt.one);
+      expect(actual.toInts(), equals([1, 0]));
+
+      actual = Uint64.fromInts(1, 0);
+      expect(actual.toInts(), equals([1, 0]));
+
+      actual = Uint64.fromBigInt(BigInt.parse('429492434645049'));
+      expect(actual.toInts(), equals([12345, 99999]));
+
+      actual = Uint64.fromBigInt(BigInt.parse('9543417332823'));
+      expect(actual.toInts(), equals([1111, 2222]));
+
+      // max value
+      actual = Uint64.fromBigInt(BigInt.parse('FFFFFFFFFFFFFFFF', radix: 16));
+      expect(actual.toInts(), equals([0xFFFFFFFF, 0xFFFFFFFF]));
     });
   });
 }

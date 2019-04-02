@@ -16,10 +16,9 @@
 
 library nem2_sdk_dart.sdk.model.common.uint64;
 
-import 'dart:typed_data' show Uint8List;
+import 'dart:typed_data' show ByteData, ByteBuffer, Endian, Uint8List;
 
 import 'package:fixnum/fixnum.dart' show Int64;
-
 import 'package:nem2_sdk_dart/core.dart' show ArrayUtils, StringUtils;
 
 // Developer note:
@@ -89,6 +88,12 @@ class Uint64 implements Comparable<Uint64> {
     return fromBigInt(bigInt);
   }
 
+  /// Creates a [Uint64] from a pair of 32-bit integers.
+  static Uint64 fromInts(final int lower, final int higher) {
+    final Int64 int64 = Int64.fromInts(higher, lower);
+    return fromHex(int64.toHexString());
+  }
+
   @override
   bool operator ==(final other) => other is Uint64 && _value == other.value;
 
@@ -115,6 +120,29 @@ class Uint64 implements Comparable<Uint64> {
     final Int64 int64 = Int64.parseHex(hex);
 
     return Uint8List.fromList(int64.toBytes());
+  }
+
+  /// Converts to a pair of 32-bit integers ([lower, higher]).
+  List<int> toInts() {
+    Uint8List bytes = toBytes();
+
+    int higher = bytes[7] & 0xff;
+    higher <<= 8;
+    higher |= bytes[6] & 0xff;
+    higher <<= 8;
+    higher |= bytes[5] & 0xff;
+    higher <<= 8;
+    higher |= bytes[4] & 0xff;
+
+    int lower = bytes[3] & 0xff;
+    lower <<= 8;
+    lower |= bytes[2] & 0xff;
+    lower <<= 8;
+    lower |= bytes[1] & 0xff;
+    lower <<= 8;
+    lower |= bytes[0] & 0xff;
+
+    return [lower, higher];
   }
 
   // ------------------------------ private / protected functions ------------------------------ //
