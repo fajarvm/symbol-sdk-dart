@@ -21,3 +21,5 @@ export 'schema/constants.dart';
 export 'schema/scalar_attribute.dart';
 export 'schema/schema.dart';
 export 'schema/schema_attribute.dart';
+export 'schema/table_array_attribute.dart';
+export 'schema/table_attribute.dart';

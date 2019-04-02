@@ -20,6 +20,8 @@ import 'schema/array_attribute_test.dart' as array_attribute_test;
 import 'schema/constants_test.dart' as constants_test;
 import 'schema/schema_attribute_test.dart' as schema_attribute_test;
 import 'schema/schema_test.dart' as schema_test;
+import 'schema/table_array_attribute_test.dart' as table_array_attribute_test;
+import 'schema/table_attribute_test.dart' as table_attribute_test;
 
 void main() {
   group('Schema:', () {
@@ -27,5 +29,7 @@ void main() {
     constants_test.main();
     schema_attribute_test.main();
     schema_test.main();
+    table_array_attribute_test.main();
+    table_attribute_test.main();
   });
 }

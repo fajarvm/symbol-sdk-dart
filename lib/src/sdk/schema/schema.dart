@@ -22,6 +22,7 @@ import 'schema_attribute.dart';
 
 /// Defines a Schema object.
 class Schema {
+  /// A list of schema attributes.
   final List<SchemaAttribute> schemaDefinition;
 
   Schema(this.schemaDefinition);
