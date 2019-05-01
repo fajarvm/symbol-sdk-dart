@@ -52,6 +52,16 @@ void main() {
   // ---- KeyPair creation -----
   // ---------------------------
   group('construction', () {
+    test('can create a new random key pair', () {
+      final keyPair = KeyPair.random();
+
+      expect(keyPair, isNotNull);
+      expect(keyPair.privateKey, isNotNull);
+      expect(keyPair.publicKey, isNotNull);
+      expect(HexUtils.getString(keyPair.privateKey).length == 64, isTrue);
+      expect(HexUtils.getString(keyPair.publicKey).length == 64, isTrue);
+    });
+
     test('can extract from private key test vectors', () {
       final List<String> EXPECTED_PUBLIC_KEYS = [
         '53C659B47C176A70EB228DE5C0A0FF391282C96640C2A42CD5BBD0982176AB1B',

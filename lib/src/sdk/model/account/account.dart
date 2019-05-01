@@ -18,11 +18,10 @@ library nem2_sdk_dart.sdk.model.account.account;
 
 import 'dart:typed_data' show Uint8List;
 
-import 'package:nem2_sdk_dart/core.dart' show Ed25519, HexUtils, KeyPair, SHA3DigestNist;
+import 'package:nem2_sdk_dart/core.dart' show HexUtils, KeyPair;
 
 import '../transaction/signed_transaction.dart';
 import '../transaction/transaction.dart';
-
 import 'address.dart';
 import 'public_account.dart';
 
@@ -73,13 +72,7 @@ class Account {
 
   /// Creates a new [Account] for the given [networkType].
   static Account create(final int networkType) {
-    final Uint8List randomBytes = Ed25519.getRandomBytes(Ed25519.KEY_SIZE);
-    final Uint8List stepOne = new Uint8List(Ed25519.KEY_SIZE);
-    final SHA3DigestNist sha3Digest = Ed25519.createSha3Digest(length: 32);
-    sha3Digest.update(randomBytes, 0, Ed25519.KEY_SIZE);
-    sha3Digest.doFinal(stepOne, 0);
-
-    final KeyPair keyPair = KeyPair.fromPrivateKey(HexUtils.getString(stepOne));
+    final KeyPair keyPair = KeyPair.random();
     final Address address =
         Address.fromPublicKey(HexUtils.getString(keyPair.publicKey), networkType);
 
@@ -107,5 +100,10 @@ class Account {
   /// Sign aggregate signature transaction.
   void signCosignatureTransaction() {
     // TODO: implement
+  }
+
+  @override
+  String toString() {
+    return 'Account{address= $address, publicKey= $publicKey}';
   }
 }
