@@ -3,8 +3,8 @@
 # NEM2 SDK for Dart
 
 [![Runtime](https://img.shields.io/badge/dart-%3E%3D2.2-brightgreen.svg)][dart-version]
-[![Build Status](https://api.travis-ci.org/fajarvm/nem2-sdk-dart.svg?branch=dev)][travis-build]
-[![Coverage Status](https://coveralls.io/repos/github/fajarvm/nem2-sdk-dart/badge.svg?branch=dev)][coveralls-build]
+[![Build Status](https://api.travis-ci.org/fajarvm/nem2-sdk-dart.svg?branch=master)][travis-build]
+[![Coverage Status](https://coveralls.io/repos/github/fajarvm/nem2-sdk-dart/badge.svg?branch=master)][coveralls-build]
 [![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)][apache-license]
 
 > :construction: :warning: :rotating_light: :warning: :construction:
@@ -37,7 +37,7 @@ THIS SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPL
 
 [apache-license]: https://opensource.org/licenses/Apache-2.0
 [travis-build]: https://travis-ci.org/fajarvm/nem2-sdk-dart
-[coveralls-build]: https://coveralls.io/github/fajarvm/nem2-sdk-dart?branch=dev
+[coveralls-build]: https://coveralls.io/github/fajarvm/nem2-sdk-dart?branch=master
 
 [dart-version]: https://api.dartlang.org/stable/2.2.0/index.html
 [dart-platforms]: https://www.dartlang.org/guides/platforms
