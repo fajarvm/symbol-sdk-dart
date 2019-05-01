@@ -89,4 +89,9 @@ class PublicAccount {
 
     return KeyPair.verify(pkByte, dataByte, sigByte);
   }
+
+  @override
+  String toString() {
+    return 'PublicAccount{address= $plainAddress, publicKey= $publicKey}';
+  }
 }

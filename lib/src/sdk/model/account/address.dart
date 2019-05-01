@@ -130,8 +130,7 @@ class Address {
   static String addressToString(final Uint8List decodedAddress) {
     final String hexAddress = HexUtils.getString(decodedAddress);
     if (ADDRESS_DECODED_SIZE != decodedAddress.length) {
-      throw ArgumentError(
-          'The Address $hexAddress does not represent a valid decoded address');
+      throw ArgumentError('The Address $hexAddress does not represent a valid decoded address');
     }
 
     return Base32.encode(decodedAddress);
@@ -221,5 +220,10 @@ class Address {
     } catch (e) {
       return false;
     }
+  }
+
+  @override
+  String toString() {
+    return 'Address{address= $plain, networkType= $networkType}';
   }
 }
