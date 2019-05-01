@@ -62,11 +62,23 @@ class BlockInfo {
   /// The Proof-of-Importance difficulty to harvest a block.
   final Uint64 difficulty;
 
+  /// The fee multiplier as defined by the harvester.
+  final int feeMultiplier;
+
   /// The hash of the previous block.
   final String previousBlockHash;
 
   /// The block transaction hash.
-  final String blockTransactionHash;
+  final String blockTransactionsHash;
+
+  /// The block receipt hash.
+  final String blockReceiptsHash;
+
+  /// The state hash.
+  final String stateHash;
+
+  /// The public account of the benificiary.
+  final PublicAccount benificiary;
 
   const BlockInfo(
       this.hash,
@@ -81,8 +93,12 @@ class BlockInfo {
       this.height,
       this.timestamp,
       this.difficulty,
+      this.feeMultiplier,
       this.previousBlockHash,
-      this.blockTransactionHash);
+      this.blockTransactionsHash,
+      this.blockReceiptsHash,
+      this.stateHash,
+      [this.benificiary]);
 
   @override
   String toString() {
@@ -99,8 +115,12 @@ class BlockInfo {
         'height= $height, '
         'timestamp= $timestamp, '
         'difficulty= $difficulty, '
+        'feeMultiplier= $feeMultiplier, '
         'previousBlockHash= $previousBlockHash, '
-        'blockTransactionHash= $blockTransactionHash'
+        'blockTransactionsHash= $blockTransactionsHash, '
+        'blockReceiptsHash= $blockReceiptsHash, '
+        'stateHash= $stateHash, '
+        'benificiary= $benificiary'
         '}';
   }
 }
