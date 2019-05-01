@@ -114,27 +114,41 @@ void main() {
       // one
       actual = Uint64.fromInts(1, 0);
       expect(actual.value, equals(BigInt.one));
+      actual = Uint64(1, 0);
+      expect(actual.value, equals(BigInt.one));
 
       // one hundred
       actual = Uint64.fromInts(100, 0);
+      expect(actual.value, equals(BigInt.from(100)));
+      actual = Uint64(100, 0);
       expect(actual.value, equals(BigInt.from(100)));
 
       // one thousand
       actual = Uint64.fromInts(1000, 0);
       expect(actual.value, equals(BigInt.from(1000)));
+      actual = Uint64(1000, 0);
+      expect(actual.value, equals(BigInt.from(1000)));
 
       // ten thousand
       actual = Uint64.fromInts(10000, 0);
       expect(actual.value, equals(BigInt.from(10000)));
+      actual = Uint64(10000, 0);
+      expect(actual.value, equals(BigInt.from(10000)));
 
       actual = Uint64.fromInts(12345, 99999);
+      expect(actual.value, equals(BigInt.parse('429492434645049')));
+      actual = Uint64(12345, 99999);
       expect(actual.value, equals(BigInt.parse('429492434645049')));
 
       actual = Uint64.fromInts(1111, 2222);
       expect(actual.value, equals(BigInt.parse('9543417332823')));
+      actual = Uint64(1111, 2222);
+      expect(actual.value, equals(BigInt.parse('9543417332823')));
 
       // max value
       actual = Uint64.fromInts(0xFFFFFFFF, 0xFFFFFFFF);
+      expect(actual.value, equals(Uint64.MAX_VALUE));
+      actual = Uint64(0xFFFFFFFF, 0xFFFFFFFF);
       expect(actual.value, equals(Uint64.MAX_VALUE));
     });
 
@@ -209,6 +223,9 @@ void main() {
       expect(actual.toInts(), equals([1, 0]));
 
       actual = Uint64.fromInts(1, 0);
+      expect(actual.toInts(), equals([1, 0]));
+
+      actual = Uint64(1, 0);
       expect(actual.toInts(), equals([1, 0]));
 
       actual = Uint64.fromBigInt(BigInt.parse('429492434645049'));

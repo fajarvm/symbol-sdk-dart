@@ -16,7 +16,7 @@
 
 library nem2_sdk_dart.sdk.model.common.uint64;
 
-import 'dart:typed_data' show ByteData, ByteBuffer, Endian, Uint8List;
+import 'dart:typed_data' show Uint8List;
 
 import 'package:fixnum/fixnum.dart' show Int64;
 import 'package:nem2_sdk_dart/core.dart' show ArrayUtils, StringUtils;
@@ -59,9 +59,14 @@ class Uint64 implements Comparable<Uint64> {
 
   const Uint64._(this._value);
 
-  factory Uint64([final int value = 0]) {
-    if (MIN_VALUE_SIGNED > value) {
+  factory Uint64([final int value = 0, final int value2 = 0]) {
+    if (MIN_VALUE_SIGNED > value || MIN_VALUE_SIGNED > value2) {
       throw new ArgumentError('Value must be above $MIN_VALUE');
+    }
+
+    // check if user is trying to create using an array of (32-bit) int
+    if (MIN_VALUE_SIGNED < value2) {
+      return Uint64.fromInts(value, value2);
     }
 
     final BigInt bigValue = BigInt.from(value);
