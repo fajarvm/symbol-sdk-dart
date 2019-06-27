@@ -31,9 +31,9 @@ class AliasType {
 
   static const int ADDRESS = 2;
 
-  static final AliasType _singleton = new AliasType._();
+  static const AliasType _singleton = AliasType._();
 
-  AliasType._();
+  const AliasType._();
 
   factory AliasType() {
     return _singleton;

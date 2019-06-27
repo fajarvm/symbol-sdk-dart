@@ -28,9 +28,9 @@ class AliasActionType {
 
   static const int UNLINK = 1;
 
-  static final AliasActionType _singleton = new AliasActionType._();
+  static const AliasActionType _singleton = AliasActionType._();
 
-  AliasActionType._();
+  const AliasActionType._();
 
   factory AliasActionType() {
     return _singleton;

@@ -24,9 +24,9 @@ library nem2_sdk_dart.sdk.model.account.property_modification_type;
 class PropertyModificationType {
   static const String _INVALID_PROPERTY_MODIFICATION_TYPE = 'invalid property modification type';
 
-  static final PropertyModificationType _singleton = new PropertyModificationType._();
+  static const PropertyModificationType _singleton = PropertyModificationType._();
 
-  PropertyModificationType._();
+  const PropertyModificationType._();
 
   factory PropertyModificationType() {
     return _singleton;

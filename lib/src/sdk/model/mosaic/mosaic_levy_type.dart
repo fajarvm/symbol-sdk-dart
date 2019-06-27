@@ -36,9 +36,9 @@ class MosaicLevyType {
   /// be transferred to the recipient.
   static const int CALCULATED = 2;
 
-  static final MosaicLevyType _singleton = new MosaicLevyType._();
+  static const MosaicLevyType _singleton = MosaicLevyType._();
 
-  MosaicLevyType._();
+  const MosaicLevyType._();
 
   factory MosaicLevyType() {
     return _singleton;

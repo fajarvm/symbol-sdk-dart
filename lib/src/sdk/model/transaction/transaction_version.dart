@@ -96,9 +96,9 @@ class TransactionVersion {
   /// Delegates the account importance to a proxy account to enable delegated harvesting.
   static const int ACCOUNT_LINK = 2;
 
-  static final TransactionVersion _singleton = new TransactionVersion._();
+  static const TransactionVersion _singleton = TransactionVersion._();
 
-  TransactionVersion._();
+  const TransactionVersion._();
 
   factory TransactionVersion() {
     return _singleton;

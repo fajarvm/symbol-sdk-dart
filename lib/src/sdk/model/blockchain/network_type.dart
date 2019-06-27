@@ -20,9 +20,9 @@ library nem2_sdk_dart.sdk.model.blockchain.network_type;
 class NetworkType {
   static const String _UNKNOWN_NETWORK_TYPE = 'network type is unknown';
 
-  static final NetworkType _singleton = new NetworkType._();
+  static const NetworkType _singleton = NetworkType._();
 
-  NetworkType._();
+  const NetworkType._();
 
   factory NetworkType() {
     return _singleton;

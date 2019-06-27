@@ -27,9 +27,9 @@ library nem2_sdk_dart.sdk.model.account.property_type;
 class PropertyType {
   static const String _INVALID_PROPERTY_TYPE = 'invalid property type';
 
-  static final PropertyType _singleton = new PropertyType._();
+  static const PropertyType _singleton = PropertyType._();
 
-  PropertyType._();
+  const PropertyType._();
 
   factory PropertyType() {
     return _singleton;

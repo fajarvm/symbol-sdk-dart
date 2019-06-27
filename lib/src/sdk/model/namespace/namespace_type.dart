@@ -28,9 +28,9 @@ class NamespaceType {
 
   static const int SUB_NAMESPACE = 1;
 
-  static final NamespaceType _singleton = new NamespaceType._();
+  static const NamespaceType _singleton = NamespaceType._();
 
-  NamespaceType._();
+  const NamespaceType._();
 
   factory NamespaceType() {
     return _singleton;

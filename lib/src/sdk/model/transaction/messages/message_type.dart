@@ -30,9 +30,9 @@ class MessageType {
   /// Secured text or encrypted.
   static const int ENCRYPTED = 0x01;
 
-  static final MessageType _singleton = new MessageType._();
+  static const MessageType _singleton = MessageType._();
 
-  MessageType._();
+  const MessageType._();
 
   factory MessageType() {
     return _singleton;

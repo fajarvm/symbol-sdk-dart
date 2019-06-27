@@ -105,9 +105,9 @@ class TransactionType {
   /// Delegates the account importance to a proxy account to enable delegated harvesting.
   static const int ACCOUNT_LINK = 0x414C;
 
-  static final TransactionType _singleton = new TransactionType._();
+  static const TransactionType _singleton = TransactionType._();
 
-  TransactionType._();
+  const TransactionType._();
 
   factory TransactionType() {
     return _singleton;
