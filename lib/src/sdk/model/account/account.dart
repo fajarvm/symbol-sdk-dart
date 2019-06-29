@@ -31,11 +31,11 @@ class Account {
   /// The key pair of the account which contains a public key and a private key.
   final KeyPair _keyPair;
 
-  /// The account address.
-  final Address address;
+  /// The public account.
+  final PublicAccount _publicAccount;
 
   // private constructor
-  const Account._(this.address, this._keyPair);
+  Account._(this._keyPair, this._publicAccount);
 
   /// Retrieves the public key of this account.
   String get publicKey => HexUtils.getString(_keyPair.publicKey);
@@ -44,10 +44,10 @@ class Account {
   String get privateKey => HexUtils.getString(_keyPair.privateKey);
 
   /// Retrieves the plain text address of this account.
-  String get plainAddress => address.plain;
+  String get plainAddress => _publicAccount.address.plain;
 
   /// Retrieves the public account of this account.
-  PublicAccount get publicAccount => PublicAccount.fromPublicKey(publicKey, address.networkType);
+  PublicAccount get publicAccount => _publicAccount;
 
   @override
   int get hashCode => _keyPair.hashCode ^ address.hashCode;

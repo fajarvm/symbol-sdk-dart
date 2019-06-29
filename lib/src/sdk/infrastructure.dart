@@ -14,23 +14,6 @@
 // limitations under the License.
 //
 
-library nem2_sdk_dart.sdk.model.blockchain.blockchain_storage_info;
+library nem2_sdk_dart.sdk.infrastructure;
 
-/// The blockchain storage info structure describes stored data.
-class BlockchainStorageInfo {
-  final int _numAccounts;
-  final int _numBlocks;
-  final int _numTransactions;
-
-  BlockchainStorageInfo(this._numAccounts, this._numBlocks, this._numTransactions);
-
-  /// The number of accounts published in the blockchain.
-  int get numTransactions => _numTransactions;
-
-  /// The number of confirmed blocks.
-  int get numBlocks => _numBlocks;
-
-  /// The number of confirmed transactions.
-  int get numAccounts => _numAccounts;
-
-}
+export 'infrastructure/amount_dto.dart';

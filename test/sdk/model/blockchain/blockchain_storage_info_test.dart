@@ -23,11 +23,11 @@ import 'package:nem2_sdk_dart/sdk.dart' show BlockchainStorageInfo;
 void main() {
   group('BlockchainStorageInfo', () {
     test('Can create a BlockchainStorageInfo object', () {
-      const blockchainStorageInfo = BlockchainStorageInfo(1, 100, 10);
+      final blockchainStorageInfo = BlockchainStorageInfo(1, 2, 3);
 
-      expect(blockchainStorageInfo.numAccounts, 10);
-      expect(blockchainStorageInfo.numBlocks, 1);
-      expect(blockchainStorageInfo.numTransactions, 100);
+      expect(blockchainStorageInfo.numAccounts, 1);
+      expect(blockchainStorageInfo.numBlocks, 2);
+      expect(blockchainStorageInfo.numTransactions, 3);
     });
   });
 }

@@ -14,23 +14,32 @@
 // limitations under the License.
 //
 
-library nem2_sdk_dart.sdk.model.blockchain.blockchain_storage_info;
+library nem2_sdk_dart.sdk.infrastructure.amount_dto;
 
-/// The blockchain storage info structure describes stored data.
-class BlockchainStorageInfo {
-  final int _numAccounts;
-  final int _numBlocks;
-  final int _numTransactions;
+import 'data_input.dart';
+import 'data_stream.dart';
 
-  BlockchainStorageInfo(this._numAccounts, this._numBlocks, this._numTransactions);
+class AmountDTO {
+  final int _amount;
+  final int _size = 8;
 
-  /// The number of accounts published in the blockchain.
-  int get numTransactions => _numTransactions;
+  AmountDTO(this._amount);
 
-  /// The number of confirmed blocks.
-  int get numBlocks => _numBlocks;
+  int get size => _size;
 
-  /// The number of confirmed transactions.
-  int get numAccounts => _numAccounts;
+  int get amount => _amount;
 
+  static AmountDTO fromStream(final DataInput stream) {
+    return new AmountDTO(stream.readLong());
+  }
+
+  static AmountDTO loadFromBinary(final DataInput stream) {
+    return fromStream(stream);
+  }
+
+  List<int> serialize() {
+    DataOutputStream outputStream = new DataOutputStream();
+    outputStream.writeLong(_amount);
+    return outputStream.bytes;
+  }
 }

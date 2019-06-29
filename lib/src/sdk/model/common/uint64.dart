@@ -128,7 +128,7 @@ class Uint64 implements Comparable<Uint64> {
   }
 
   /// Converts to a pair of 32-bit integers ([lower, higher]).
-  List<int> toInts() {
+  List<int> toIntArray() {
     Uint8List bytes = toBytes();
 
     int higher = bytes[7] & 0xff;

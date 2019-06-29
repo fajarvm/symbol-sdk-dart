@@ -211,32 +211,32 @@ void main() {
       expect(actual.toHex(), equals(hexString.toLowerCase()));
     });
 
-    test('toInts', () {
+    test('toIntArray', () {
       // min value
       Uint64 actual = Uint64.fromBigInt(BigInt.zero);
-      expect(actual.toInts(), equals([0, 0]));
+      expect(actual.toIntArray(), equals([0, 0]));
 
       actual = Uint64.fromInts(0, 0);
-      expect(actual.toInts(), equals([0, 0]));
+      expect(actual.toIntArray(), equals([0, 0]));
 
       actual = Uint64.fromBigInt(BigInt.one);
-      expect(actual.toInts(), equals([1, 0]));
+      expect(actual.toIntArray(), equals([1, 0]));
 
       actual = Uint64.fromInts(1, 0);
-      expect(actual.toInts(), equals([1, 0]));
+      expect(actual.toIntArray(), equals([1, 0]));
 
       actual = Uint64(1, 0);
-      expect(actual.toInts(), equals([1, 0]));
+      expect(actual.toIntArray(), equals([1, 0]));
 
       actual = Uint64.fromBigInt(BigInt.parse('429492434645049'));
-      expect(actual.toInts(), equals([12345, 99999]));
+      expect(actual.toIntArray(), equals([12345, 99999]));
 
       actual = Uint64.fromBigInt(BigInt.parse('9543417332823'));
-      expect(actual.toInts(), equals([1111, 2222]));
+      expect(actual.toIntArray(), equals([1111, 2222]));
 
       // max value
       actual = Uint64.fromBigInt(BigInt.parse('FFFFFFFFFFFFFFFF', radix: 16));
-      expect(actual.toInts(), equals([0xFFFFFFFF, 0xFFFFFFFF]));
+      expect(actual.toIntArray(), equals([0xFFFFFFFF, 0xFFFFFFFF]));
     });
   });
 }
