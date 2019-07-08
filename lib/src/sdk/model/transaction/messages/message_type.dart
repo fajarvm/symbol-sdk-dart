@@ -17,35 +17,36 @@
 library nem2_sdk_dart.sdk.model.transaction.messages.message_type;
 
 /// The Message type.
-///
-/// Supported types are:
-/// * 0: Plain text (Unencrypted).
-/// * 1: Secured text (Encrypted).
 class MessageType {
-  static const String _INVALID_MESSAGE_TYPE = 'invalid message type';
+  static const String UNKNOWN_MESSAGE_TYPE = 'unknown message type';
 
-  /// Plain text or unencrypted.
-  static const int UNENCRYPTED = 0x00;
+  /// Plain text or unencrypted message.
+  static const MessageType UNENCRYPTED = MessageType._(0x00);
 
-  /// Secured text or encrypted.
-  static const int ENCRYPTED = 0x01;
+  /// Secured text or encrypted message.
+  static const MessageType ENCRYPTED = MessageType._(0x01);
 
-  static const MessageType _singleton = MessageType._();
+  static final List<MessageType> values = <MessageType>[UNENCRYPTED, ENCRYPTED];
 
-  const MessageType._();
+  final int _value;
 
-  factory MessageType() {
-    return _singleton;
-  }
+  // constant constructor: makes this class available on runtime.
+  // emulates an enum class with a value.
+  const MessageType._(this._value);
 
-  static int getType(final int messageType) {
-    switch (messageType) {
-      case UNENCRYPTED:
-        return MessageType.UNENCRYPTED;
-      case ENCRYPTED:
-        return MessageType.ENCRYPTED;
-      default:
-        throw new ArgumentError(_INVALID_MESSAGE_TYPE);
+  /// The int value of this type.
+  int get value => _value;
+
+  /// Returns a [AliasType] for the given int value.
+  ///
+  /// Throws an error when the type is unknown.
+  static MessageType getType(final int value) {
+    for (var type in values) {
+      if (type.value == value) {
+        return type;
+      }
     }
+
+    throw new ArgumentError(UNKNOWN_MESSAGE_TYPE);
   }
 }

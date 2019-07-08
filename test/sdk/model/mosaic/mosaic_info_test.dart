@@ -32,11 +32,9 @@
 
 library nem2_sdk_dart.test.sdk.model.mosaic.mosaic_info_test;
 
-import 'package:test/test.dart';
-
 import 'package:nem2_sdk_dart/sdk.dart'
-    show Address, MosaicId, MosaicInfo, MosaicLevy, MosaicLevyType, MosaicProperties, NetworkType,
-    PublicAccount, Uint64;
+    show MosaicId, MosaicInfo, MosaicProperties, NetworkType, PublicAccount, Uint64;
+import 'package:test/test.dart';
 
 void main() {
   group('Create MosaicInfo via constructor', () {
@@ -54,9 +52,7 @@ void main() {
       const int revision = 1;
 
       final properties = MosaicProperties.create(Uint64(9000));
-
-      final recipient = Address.fromPublicKey(publicKey, NetworkType.MIJIN_TEST);
-      final mosaicLevy = MosaicLevy(mosaicId, recipient, MosaicLevyType.CALCULATED);
+      final mosaicLevy = new Object();
 
       // Create MosaicInfo
       final MosaicInfo mosaicInfo =
@@ -74,9 +70,7 @@ void main() {
       expect(mosaicInfo.isLevyMutable, isFalse);
       expect(mosaicInfo.divisibility, 0);
       expect(mosaicInfo.duration.value.toInt(), 9000);
-      expect(mosaicInfo.mosaicLevy.mosaicId, equals(mosaicId));
-      expect(mosaicInfo.mosaicLevy.recipient, equals(recipient));
-      expect(mosaicInfo.mosaicLevy.levyType, equals(MosaicLevyType.CALCULATED));
+      expect(mosaicInfo.mosaicLevy, isNotNull);
     });
 
     test('Cannot create with invalid revision', () {

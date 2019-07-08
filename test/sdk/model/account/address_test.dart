@@ -42,34 +42,34 @@ void main() {
     });
 
     test('can create from public key for the designated network type', () {
-      const publicKey = 'c2f93346e27ce6ad1a9f8f5e3066f8326593a406bdf357acb041e2f9ab402efe';
+      const publicKey = 'b4f12e7c9f6946091e2cb8b6d3a12b50d17ccbbf646386ea27ce2946a7423dcf';
       final address1 = Address.fromPublicKey(publicKey, NetworkType.MIJIN);
-      expect(address1.plain, equals('MCTVW23D2MN5VE4AQ4TZIDZENGNOZXPRPR72DYSX'));
-      expect(address1.pretty, equals('MCTVW2-3D2MN5-VE4AQ4-TZIDZE-NGNOZX-PRPR72-DYSX'));
+      expect(address1.plain, equals('MARNASAS2BIAB6LMFA3FPMGBPGIJGK6IJE5K5RYU'));
+      expect(address1.pretty, equals('MARNAS-AS2BIA-B6LMFA-3FPMGB-PGIJGK-6IJE5K-5RYU'));
       expect(address1.networkType, equals(NetworkType.MIJIN));
       expect(address1.hashCode, isNotNull);
 
       final address2 = Address.fromPublicKey(publicKey, NetworkType.MIJIN_TEST);
-      expect(address2.plain, equals('SCTVW23D2MN5VE4AQ4TZIDZENGNOZXPRPRLIKCF2'));
-      expect(address2.pretty, equals('SCTVW2-3D2MN5-VE4AQ4-TZIDZE-NGNOZX-PRPRLI-KCF2'));
+      expect(address2.plain, equals('SARNASAS2BIAB6LMFA3FPMGBPGIJGK6IJETM3ZSP'));
+      expect(address2.pretty, equals('SARNAS-AS2BIA-B6LMFA-3FPMGB-PGIJGK-6IJETM-3ZSP'));
       expect(address2.networkType, equals(NetworkType.MIJIN_TEST));
       expect(address2.hashCode, isNotNull);
 
       final address3 = Address.fromPublicKey(publicKey, NetworkType.MAIN_NET);
-      expect(address3.plain, equals('NCTVW23D2MN5VE4AQ4TZIDZENGNOZXPRPQUJ2ZML'));
-      expect(address3.pretty, equals('NCTVW2-3D2MN5-VE4AQ4-TZIDZE-NGNOZX-PRPQUJ-2ZML'));
+      expect(address3.plain, equals('NARNASAS2BIAB6LMFA3FPMGBPGIJGK6IJFJKUV32'));
+      expect(address3.pretty, equals('NARNAS-AS2BIA-B6LMFA-3FPMGB-PGIJGK-6IJFJK-UV32'));
       expect(address3.networkType, equals(NetworkType.MAIN_NET));
       expect(address3.hashCode, isNotNull);
 
       final address4 = Address.fromPublicKey(publicKey, NetworkType.TEST_NET);
-      expect(address4.plain, equals('TCTVW23D2MN5VE4AQ4TZIDZENGNOZXPRPSDRSFRF'));
-      expect(address4.pretty, equals('TCTVW2-3D2MN5-VE4AQ4-TZIDZE-NGNOZX-PRPSDR-SFRF'));
+      expect(address4.plain, equals('TARNASAS2BIAB6LMFA3FPMGBPGIJGK6IJE47FYR3'));
+      expect(address4.pretty, equals('TARNAS-AS2BIA-B6LMFA-3FPMGB-PGIJGK-6IJE47-FYR3'));
       expect(address4.networkType, equals(NetworkType.TEST_NET));
       expect(address4.hashCode, isNotNull);
     });
 
     test('cannot create for an invalid network type', () {
-      expect(() => Address.fromPublicKey(null, -1),
+      expect(() => Address.fromPublicKey(null, new MockNetworkType(-1)),
           throwsA(predicate((e) => e is ArgumentError && e.message == 'Network type unsupported')));
     });
   });
@@ -172,7 +172,7 @@ void main() {
 
       final decoded = Address.publicKeyToAddress(publicKey, NetworkType.MIJIN);
 
-      expect(decoded[0], equals(NetworkType.MIJIN));
+      expect(decoded[0], equals(NetworkType.MIJIN.value));
       expect(Address.isValidAddress(decoded), isTrue);
       expect(HexUtils.getString(decoded).toUpperCase(), equals(expected));
     });
@@ -184,7 +184,7 @@ void main() {
 
       final decoded = Address.publicKeyToAddress(publicKey, NetworkType.TEST_NET);
 
-      expect(decoded[0], equals(NetworkType.TEST_NET));
+      expect(decoded[0], equals(NetworkType.TEST_NET.value));
       expect(Address.isValidAddress(decoded), isTrue);
       expect(HexUtils.getString(decoded).toUpperCase(), equals(expected));
     });
@@ -317,4 +317,13 @@ void main() {
 void assertCannotCreateAddress(final String encodedAddress, final String message) {
   expect(() => Address.stringToAddress(encodedAddress),
       throwsA(predicate((e) => e is ArgumentError && e.message == message)));
+}
+
+class MockNetworkType implements NetworkType {
+  final int _value;
+
+  MockNetworkType(this._value);
+
+  @override
+  int get value => this._value;
 }

@@ -16,23 +16,15 @@
 
 library nem2_sdk_dart.test.sdk.model.namespace.alias_type_test;
 
-import 'package:test/test.dart';
-
 import 'package:nem2_sdk_dart/sdk.dart' show AliasType;
+import 'package:test/test.dart';
 
 void main() {
   group('AliasType', () {
-    test('creating a new instance returns a singleton', () {
-      final type1 = new AliasType();
-      final type2 = new AliasType();
-
-      expect(identical(type1, type2), isTrue);
-    });
-
     test('valid alias types', () {
-      expect(AliasType.NONE, 0);
-      expect(AliasType.MOSAIC, 1);
-      expect(AliasType.ADDRESS, 2);
+      expect(AliasType.NONE.value, 0);
+      expect(AliasType.MOSAIC.value, 1);
+      expect(AliasType.ADDRESS.value, 2);
     });
 
     test('Can retrieve a valid alias types', () {
@@ -42,12 +34,13 @@ void main() {
     });
 
     test('Trying to retrieve an invalid alias type will throw an error', () {
+      String errorMessage = AliasType.UNKNOWN_ALIAS_TYPE;
       expect(() => AliasType.getType(null),
-          throwsA(predicate((e) => e is ArgumentError && e.message == 'invalid alias type')));
+          throwsA(predicate((e) => e is ArgumentError && e.message == errorMessage)));
       expect(() => AliasType.getType(-1),
-          throwsA(predicate((e) => e is ArgumentError && e.message == 'invalid alias type')));
+          throwsA(predicate((e) => e is ArgumentError && e.message == errorMessage)));
       expect(() => AliasType.getType(3),
-          throwsA(predicate((e) => e is ArgumentError && e.message == 'invalid alias type')));
+          throwsA(predicate((e) => e is ArgumentError && e.message == errorMessage)));
     });
   });
 }

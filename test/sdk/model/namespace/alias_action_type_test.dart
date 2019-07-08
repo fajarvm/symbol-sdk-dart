@@ -16,42 +16,29 @@
 
 library nem2_sdk_dart.test.sdk.model.namespace.alias_action_type_test;
 
-import 'package:test/test.dart';
-
 import 'package:nem2_sdk_dart/sdk.dart' show AliasActionType;
+import 'package:test/test.dart';
 
 void main() {
   group('AliasActionType', () {
-    test('creating a new instance returns a singleton', () {
-      final type1 = new AliasActionType();
-      final type2 = new AliasActionType();
-
-      expect(identical(type1, type2), isTrue);
-    });
-
     test('valid alias action types', () {
-      expect(AliasActionType.LINK, 0);
-      expect(AliasActionType.UNLINK, 1);
+      expect(AliasActionType.LINK.value, 0);
+      expect(AliasActionType.UNLINK.value, 1);
     });
 
     test('Can retrieve a valid action alias types', () {
-      expect(AliasActionType.getAliasActionType(0), AliasActionType.LINK);
-      expect(AliasActionType.getAliasActionType(1), AliasActionType.UNLINK);
+      expect(AliasActionType.getType(0), AliasActionType.LINK);
+      expect(AliasActionType.getType(1), AliasActionType.UNLINK);
     });
 
     test('Trying to retrieve an invalid alias action type will throw an error', () {
-      expect(
-          () => AliasActionType.getAliasActionType(null),
-          throwsA(
-              predicate((e) => e is ArgumentError && e.message == 'invalid alias action type')));
-      expect(
-          () => AliasActionType.getAliasActionType(-1),
-          throwsA(
-              predicate((e) => e is ArgumentError && e.message == 'invalid alias action type')));
-      expect(
-          () => AliasActionType.getAliasActionType(2),
-          throwsA(
-              predicate((e) => e is ArgumentError && e.message == 'invalid alias action type')));
+      String errorMessage = AliasActionType.UNKNOWN_ALIAS_ACTION_TYPE;
+      expect(() => AliasActionType.getType(null),
+          throwsA(predicate((e) => e is ArgumentError && e.message == errorMessage)));
+      expect(() => AliasActionType.getType(-1),
+          throwsA(predicate((e) => e is ArgumentError && e.message == errorMessage)));
+      expect(() => AliasActionType.getType(2),
+          throwsA(predicate((e) => e is ArgumentError && e.message == errorMessage)));
     });
   });
 }

@@ -44,8 +44,6 @@ export 'model/common/uint64.dart';
 export 'model/mosaic/mosaic.dart';
 export 'model/mosaic/mosaic_id.dart';
 export 'model/mosaic/mosaic_info.dart';
-export 'model/mosaic/mosaic_levy.dart';
-export 'model/mosaic/mosaic_levy_type.dart';
 export 'model/mosaic/mosaic_nonce.dart';
 export 'model/mosaic/mosaic_properties.dart';
 export 'model/mosaic/mosaic_supply_type.dart';

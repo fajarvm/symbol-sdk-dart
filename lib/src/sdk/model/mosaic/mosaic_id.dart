@@ -28,7 +28,7 @@ import 'mosaic_nonce.dart';
 /// The mosaic id structure describes mosaic id.
 class MosaicId extends Id {
   // private constructor
-  const MosaicId._(id) : super(id);
+  MosaicId._(id) : super(id);
 
   factory MosaicId({final Uint64 id}) {
     if (id == null) {

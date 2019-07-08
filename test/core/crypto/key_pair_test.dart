@@ -18,10 +18,9 @@ library nem2_sdk_dart.test.core.crypto.key_pair_test;
 
 import 'dart:typed_data' show Uint8List;
 
-import 'package:test/test.dart';
-
 import 'package:nem2_sdk_dart/core.dart'
     show ArrayUtils, HexUtils, CryptoException, Ed25519, KeyPair;
+import 'package:test/test.dart';
 
 void main() {
   final List<String> TEST_PRIVATE_KEYS = [
@@ -103,7 +102,7 @@ void main() {
                 e is CryptoException &&
                 e.message ==
                     'Private key has an unexpected size. '
-                    'Expected: ${Ed25519.KEY_SIZE}, Got: ${privateKeySeed.length}')));
+                        'Expected: ${Ed25519.KEY_SIZE}, Got: ${privateKeySeed.length}')));
       }
     });
 
@@ -116,27 +115,6 @@ void main() {
       expect(keyPair1.privateKey, equals(keyPair2.privateKey));
       expect(keyPair1.publicKey, equals(keyPair2.publicKey));
       expect(keyPair1 == keyPair2, isTrue);
-    });
-
-    test('cannot create with invalid arguments', () {
-      expect(
-          () => new KeyPair(),
-          throwsA(predicate(
-              (e) => e is ArgumentError && e.message == 'privateKey byte cannot be null')));
-
-      Uint8List pk = new Uint8List(31);
-      expect(
-          () => new KeyPair(privateKey: pk),
-          throwsA(predicate((e) =>
-              e is ArgumentError &&
-              e.message == 'Invalid length for privateKey. Length: ${pk.lengthInBytes}')));
-
-      pk = new Uint8List(34);
-      expect(
-          () => new KeyPair(privateKey: pk),
-          throwsA(predicate((e) =>
-              e is ArgumentError &&
-              e.message == 'Invalid length for privateKey. Length: ${pk.lengthInBytes}')));
     });
   });
 

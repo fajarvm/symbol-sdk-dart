@@ -22,85 +22,86 @@ class TransactionVersion {
   // Mosaic
   //
   /// Register a new mosaic.
-  static const int MOSAIC_DEFINITION = 3;
+  static const TransactionVersion MOSAIC_DEFINITION = TransactionVersion._(3);
 
   /// Change an existent mosaic supply.
-  static const int MOSAIC_SUPPLY_CHANGE = 2;
+  static const TransactionVersion MOSAIC_SUPPLY_CHANGE = TransactionVersion._(2);
 
   /// Change the levy of a mosaic.
-  static const int MOSAIC_LEVY_CHANGE = 1;
+  static const TransactionVersion MOSAIC_LEVY_CHANGE = TransactionVersion._(1);
 
   //
   // Namespace
   //
   /// Register a namespace.
-  static const int NAMESPACE_REGISTRATION = 2;
+  static const TransactionVersion NAMESPACE_REGISTRATION = TransactionVersion._(2);
 
   /// Attach a namespace name to an account.
-  static const int NAMESPACE_ATTACH_TO_ACCOUNT = 1;
+  static const TransactionVersion NAMESPACE_ATTACH_TO_ACCOUNT = TransactionVersion._(1);
 
   /// Attach a namespace name to a mosaic.
-  static const int NAMESPACE_ATTACH_TO_MOSAIC = 1;
+  static const TransactionVersion NAMESPACE_ATTACH_TO_MOSAIC = TransactionVersion._(1);
 
   //
   // Transfer
   //
   /// Transfer mosaics and messages between two accounts.
-  static const int TRANSFER = 3;
+  static const TransactionVersion TRANSFER = TransactionVersion._(3);
 
   //
   // Multi-signature
   //
   /// Create or modify a multi-signature contract.
-  static const int MULTISIG_MODIFY = 3;
+  static const TransactionVersion MULTISIG_MODIFY = TransactionVersion._(3);
 
   //
   // Aggregate
   //
   /// Send transactions in batches to different accounts.
-  static const int AGGREGATE_COMPLETE = 2;
+  static const TransactionVersion AGGREGATE_COMPLETE = TransactionVersion._(2);
 
   /// Propose many transactions between different accounts.
-  static const int AGGREGATE_BONDED = 2;
+  static const TransactionVersion AGGREGATE_BONDED = TransactionVersion._(2);
 
   //
   // Hash lock / Lock funds
   //
   /// Lock the funds to allow deposit before announcing aggregate bonded transactions.
-  static const int HASH_LOCK = 1;
+  static const TransactionVersion HASH_LOCK = TransactionVersion._(1);
 
   //
   // Account filters
   //
   /// Allow or block incoming transactions for a given a set of addresses.
-  static const int ACCOUNT_FILTER_ADDRESS = 1;
+  static const TransactionVersion ACCOUNT_FILTER_ADDRESS = TransactionVersion._(1);
 
   /// Allow or block incoming transactions containing a given set of mosaics.
-  static const int ACCOUNT_FILTER_MOSAIC = 1;
+  static const TransactionVersion ACCOUNT_FILTER_MOSAIC = TransactionVersion._(1);
 
   /// Allow or block incoming transactions by transaction type.
-  static const int ACCOUNT_FILTER_ENTITY_TYPE = 1;
+  static const TransactionVersion ACCOUNT_FILTER_ENTITY_TYPE = TransactionVersion._(1);
 
   //
   // Cross-chain swaps
   //
   /// The secret lock transaction type.
-  static const int SECRET_LOCK = 1;
+  static const TransactionVersion SECRET_LOCK = TransactionVersion._(1);
 
   /// The secret proof transaction type.
-  static const int SECRET_PROOF = 1;
+  static const TransactionVersion SECRET_PROOF = TransactionVersion._(1);
 
   //
   // Account link / Remote harvesting
   //
   /// Delegates the account importance to a proxy account to enable delegated harvesting.
-  static const int ACCOUNT_LINK = 2;
+  static const TransactionVersion ACCOUNT_LINK = TransactionVersion._(2);
 
-  static const TransactionVersion _singleton = TransactionVersion._();
+  final int _value;
 
-  const TransactionVersion._();
+  // constant constructor: makes this class available on runtime.
+  // emulates an enum class with a value.
+  const TransactionVersion._(this._value);
 
-  factory TransactionVersion() {
-    return _singleton;
-  }
+  /// The int value of this version.
+  int get value => _value;
 }

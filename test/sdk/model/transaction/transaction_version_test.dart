@@ -16,47 +16,46 @@
 
 library nem2_sdk_dart.test.sdk.model.transaction.transaction_version_test;
 
-import 'package:test/test.dart';
-
 import 'package:nem2_sdk_dart/sdk.dart' show TransactionVersion;
+import 'package:test/test.dart';
 
 void main() {
   group('TransactionVersion', () {
     test('valid transaction versions', () {
       // Account filters
-      expect(TransactionVersion.ACCOUNT_FILTER_ADDRESS, 1);
-      expect(TransactionVersion.ACCOUNT_FILTER_MOSAIC, 1);
-      expect(TransactionVersion.ACCOUNT_FILTER_ENTITY_TYPE, 1);
+      expect(TransactionVersion.ACCOUNT_FILTER_ADDRESS.value, 1);
+      expect(TransactionVersion.ACCOUNT_FILTER_MOSAIC.value, 1);
+      expect(TransactionVersion.ACCOUNT_FILTER_ENTITY_TYPE.value, 1);
 
       // Mosaic
-      expect(TransactionVersion.MOSAIC_DEFINITION, 3);
-      expect(TransactionVersion.MOSAIC_SUPPLY_CHANGE, 2);
-      expect(TransactionVersion.MOSAIC_LEVY_CHANGE, 1);
+      expect(TransactionVersion.MOSAIC_DEFINITION.value, 3);
+      expect(TransactionVersion.MOSAIC_SUPPLY_CHANGE.value, 2);
+      expect(TransactionVersion.MOSAIC_LEVY_CHANGE.value, 1);
 
       // Namespace
-      expect(TransactionVersion.NAMESPACE_REGISTRATION, 2);
-      expect(TransactionVersion.NAMESPACE_ATTACH_TO_ACCOUNT, 1);
-      expect(TransactionVersion.NAMESPACE_ATTACH_TO_MOSAIC, 1);
+      expect(TransactionVersion.NAMESPACE_REGISTRATION.value, 2);
+      expect(TransactionVersion.NAMESPACE_ATTACH_TO_ACCOUNT.value, 1);
+      expect(TransactionVersion.NAMESPACE_ATTACH_TO_MOSAIC.value, 1);
 
       // Transfer
-      expect(TransactionVersion.TRANSFER, 3);
+      expect(TransactionVersion.TRANSFER.value, 3);
 
       // Multi-signature
-      expect(TransactionVersion.MULTISIG_MODIFY, 3);
+      expect(TransactionVersion.MULTISIG_MODIFY.value, 3);
 
       // Aggregate
-      expect(TransactionVersion.AGGREGATE_COMPLETE, 2);
-      expect(TransactionVersion.AGGREGATE_BONDED, 2);
+      expect(TransactionVersion.AGGREGATE_COMPLETE.value, 2);
+      expect(TransactionVersion.AGGREGATE_BONDED.value, 2);
 
       // Hash lock / Lock funds
-      expect(TransactionVersion.HASH_LOCK, 1);
+      expect(TransactionVersion.HASH_LOCK.value, 1);
 
       // Cross-chain swaps
-      expect(TransactionVersion.SECRET_LOCK, 1);
-      expect(TransactionVersion.SECRET_PROOF, 1);
+      expect(TransactionVersion.SECRET_LOCK.value, 1);
+      expect(TransactionVersion.SECRET_PROOF.value, 1);
 
       // Account link / remote harvesting
-      expect(TransactionVersion.ACCOUNT_LINK, 2);
+      expect(TransactionVersion.ACCOUNT_LINK.value, 2);
     });
   });
 }

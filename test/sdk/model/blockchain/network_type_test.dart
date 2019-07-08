@@ -22,26 +22,19 @@ import 'package:nem2_sdk_dart/sdk.dart' show NetworkType;
 
 void main() {
   group('NetworkType', () {
-    test('creating a new instance returns a singleton', () {
-      final type1 = new NetworkType();
-      final type2 = new NetworkType();
-
-      expect(identical(type1, type2), isTrue);
-    });
-
     test('valid network types', () {
       // Main net
-      expect(NetworkType.MAIN_NET, 0x68);
-      expect(NetworkType.MAIN_NET, 104);
+      expect(NetworkType.MAIN_NET.value, 0x68);
+      expect(NetworkType.MAIN_NET.value, 104);
       // Test net
-      expect(NetworkType.TEST_NET, 0x98);
-      expect(NetworkType.TEST_NET, 152);
+      expect(NetworkType.TEST_NET.value, 0x98);
+      expect(NetworkType.TEST_NET.value, 152);
       // Mijin main net
-      expect(NetworkType.MIJIN, 0x60);
-      expect(NetworkType.MIJIN, 96);
+      expect(NetworkType.MIJIN.value, 0x60);
+      expect(NetworkType.MIJIN.value, 96);
       // Mijin test net
-      expect(NetworkType.MIJIN_TEST, 0x90);
-      expect(NetworkType.MIJIN_TEST, 144);
+      expect(NetworkType.MIJIN_TEST.value, 0x90);
+      expect(NetworkType.MIJIN_TEST.value, 144);
     });
   });
 
@@ -58,27 +51,28 @@ void main() {
     });
 
     test('invalid or unknown network type should throw an error', () {
+      String errorMessage = NetworkType.UNKNOWN_NETWORK_TYPE;
       expect(() => NetworkType.getType(null),
-          throwsA(predicate((e) => e is ArgumentError && e.message == 'network type is unknown')));
+          throwsA(predicate((e) => e is ArgumentError && e.message == errorMessage)));
       expect(() => NetworkType.getType(0),
-          throwsA(predicate((e) => e is ArgumentError && e.message == 'network type is unknown')));
+          throwsA(predicate((e) => e is ArgumentError && e.message == errorMessage)));
       expect(() => NetworkType.getType(103),
-          throwsA(predicate((e) => e is ArgumentError && e.message == 'network type is unknown')));
+          throwsA(predicate((e) => e is ArgumentError && e.message == errorMessage)));
     });
   });
 
   group('isValidNetworkType()', () {
     test('Can identify that a network tye is valid/supported', () {
-      expect(NetworkType.isValid(NetworkType.MAIN_NET), isTrue);
+      expect(NetworkType.isValid(NetworkType.MAIN_NET.value), isTrue);
       expect(NetworkType.isValid(0x68), isTrue);
       expect(NetworkType.isValid(104), isTrue);
-      expect(NetworkType.isValid(NetworkType.TEST_NET), isTrue);
+      expect(NetworkType.isValid(NetworkType.TEST_NET.value), isTrue);
       expect(NetworkType.isValid(0x98), isTrue);
       expect(NetworkType.isValid(152), isTrue);
-      expect(NetworkType.isValid(NetworkType.MIJIN), isTrue);
+      expect(NetworkType.isValid(NetworkType.MIJIN.value), isTrue);
       expect(NetworkType.isValid(0x60), isTrue);
       expect(NetworkType.isValid(96), isTrue);
-      expect(NetworkType.isValid(NetworkType.MIJIN_TEST), isTrue);
+      expect(NetworkType.isValid(NetworkType.MIJIN_TEST.value), isTrue);
       expect(NetworkType.isValid(0x90), isTrue);
       expect(NetworkType.isValid(144), isTrue);
     });

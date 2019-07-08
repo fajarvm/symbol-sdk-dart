@@ -18,46 +18,53 @@ library nem2_sdk_dart.sdk.model.blockchain.network_type;
 
 /// This class is used to identify a network type.
 class NetworkType {
-  static const String _UNKNOWN_NETWORK_TYPE = 'network type is unknown';
+  static const String UNKNOWN_NETWORK_TYPE = 'network type is unknown';
 
-  static const NetworkType _singleton = NetworkType._();
+  /// The public main net network identifier. Decimal value = 104.
+  static const NetworkType MAIN_NET = NetworkType._(0x68); // 104
 
-  const NetworkType._();
+  /// The public test network identifier. Decimal value = 152.
+  static const NetworkType TEST_NET = NetworkType._(0x98); // 152
 
-  factory NetworkType() {
-    return _singleton;
-  }
+  /// Mijin private network identifier. Decimal value = 96.
+  static const NetworkType MIJIN = NetworkType._(0x60); // 96
 
-  /// The public main net network identifier (104).
-  static const int MAIN_NET = 0x68; // 104
+  /// Mijin private test network identifier. Decimal value = 144.
+  static const NetworkType MIJIN_TEST = NetworkType._(0x90); // 144
 
-  /// The public test network identifier (152).
-  static const int TEST_NET = 0x98; // 152
+  /// Supported network types.
+  static final List<NetworkType> values = <NetworkType>[MAIN_NET, TEST_NET, MIJIN, MIJIN_TEST];
 
-  /// Mijin private network identifier (96).
-  static const int MIJIN = 0x60; // 96
+  final int _value;
 
-  /// Mijin private test network identifier (144).
-  static const int MIJIN_TEST = 0x90; // 144
+  // constant constructor: makes this class available on runtime.
+  // emulates an enum class with a value.
+  const NetworkType._(this._value);
 
-  static int getType(final int networkType) {
-    switch (networkType) {
-      case MAIN_NET:
-        return NetworkType.MAIN_NET;
-      case TEST_NET:
-        return NetworkType.TEST_NET;
-      case MIJIN:
-        return NetworkType.MIJIN;
-      case MIJIN_TEST:
-        return NetworkType.MIJIN_TEST;
-      default:
-        throw new ArgumentError(_UNKNOWN_NETWORK_TYPE);
+  /// The int value of this type.
+  int get value => _value;
+
+  /// Returns a [NetworkType] for the given int value.
+  ///
+  /// Throws an error when the type is unknown.
+  static NetworkType getType(final int value) {
+    for (var type in values) {
+      if (type.value == value) {
+        return type;
+      }
     }
+
+    throw new ArgumentError(UNKNOWN_NETWORK_TYPE);
   }
 
+  /// Checks if the given int value is of a valid network type.
   static bool isValid(final int networkType) {
     try {
-      return 0 < getType(networkType);
+      if (getType(networkType) != null) {
+        return true;
+      } else {
+        return false;
+      }
     } catch (e) {
       return false;
     }

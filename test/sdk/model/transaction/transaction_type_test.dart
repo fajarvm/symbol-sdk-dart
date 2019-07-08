@@ -22,48 +22,40 @@ import 'package:nem2_sdk_dart/sdk.dart' show TransactionType;
 
 void main() {
   group('TransactionType', () {
-    test('creating a new instance returns a singleton', () {
-      final type1 = new TransactionType();
-      final type2 = new TransactionType();
-
-      expect(identical(type1, type2), isTrue);
-    });
-
     test('valid transaction types', () {
       // Account filters
-      expect(TransactionType.ACCOUNT_FILTER_ADDRESS, 0x4150);
-      expect(TransactionType.ACCOUNT_FILTER_MOSAIC, 0x4250);
-      expect(TransactionType.ACCOUNT_FILTER_ENTITY_TYPE, 0x4350);
+      expect(TransactionType.ACCOUNT_FILTER_ADDRESS.value, 0x4150);
+      expect(TransactionType.ACCOUNT_FILTER_MOSAIC.value, 0x4250);
+      expect(TransactionType.ACCOUNT_FILTER_ENTITY_TYPE.value, 0x4350);
 
       // Mosaic
-      expect(TransactionType.MOSAIC_DEFINITION, 0x414d);
-      expect(TransactionType.MOSAIC_SUPPLY_CHANGE, 0x424d);
-      expect(TransactionType.MOSAIC_LEVY_CHANGE, 0x434d);
+      expect(TransactionType.MOSAIC_DEFINITION.value, 0x414d);
+      expect(TransactionType.MOSAIC_SUPPLY_CHANGE.value, 0x424d);
 
       // Namespace
-      expect(TransactionType.NAMESPACE_REGISTRATION, 0x414e);
-      expect(TransactionType.NAMESPACE_ATTACH_TO_ACCOUNT, 0x424e);
-      expect(TransactionType.NAMESPACE_ATTACH_TO_MOSAIC, 0x434e);
+      expect(TransactionType.NAMESPACE_REGISTRATION.value, 0x414e);
+      expect(TransactionType.NAMESPACE_ATTACH_TO_ACCOUNT.value, 0x424e);
+      expect(TransactionType.NAMESPACE_ATTACH_TO_MOSAIC.value, 0x434e);
 
       // Transfer
-      expect(TransactionType.TRANSFER, 0x4154);
+      expect(TransactionType.TRANSFER.value, 0x4154);
 
       // Multi-signature
-      expect(TransactionType.MULTISIG_MODIFY, 0x4155);
+      expect(TransactionType.MULTISIG_MODIFY.value, 0x4155);
 
       // Aggregate
-      expect(TransactionType.AGGREGATE_COMPLETE, 0x4141);
-      expect(TransactionType.AGGREGATE_BONDED, 0x4241);
+      expect(TransactionType.AGGREGATE_COMPLETE.value, 0x4141);
+      expect(TransactionType.AGGREGATE_BONDED.value, 0x4241);
 
       // Hash lock / Lock funds
-      expect(TransactionType.HASH_LOCK, 0x4148);
+      expect(TransactionType.HASH_LOCK.value, 0x4148);
 
       // Cross-chain swaps
-      expect(TransactionType.SECRET_LOCK, 0x4152);
-      expect(TransactionType.SECRET_PROOF, 0x4252);
+      expect(TransactionType.SECRET_LOCK.value, 0x4152);
+      expect(TransactionType.SECRET_PROOF.value, 0x4252);
 
       // Account link / remote harvesting
-      expect(TransactionType.ACCOUNT_LINK, 0x414C);
+      expect(TransactionType.ACCOUNT_LINK.value, 0x414C);
     });
 
     test('Can retrieve a valid transaction types', () {
@@ -75,7 +67,6 @@ void main() {
       // Mosaic
       expect(TransactionType.getType(0x414d), TransactionType.MOSAIC_DEFINITION);
       expect(TransactionType.getType(0x424d), TransactionType.MOSAIC_SUPPLY_CHANGE);
-      expect(TransactionType.getType(0x434d), TransactionType.MOSAIC_LEVY_CHANGE);
 
       // Namespace
       expect(TransactionType.getType(0x414e), TransactionType.NAMESPACE_REGISTRATION);
@@ -104,20 +95,18 @@ void main() {
     });
 
     test('Can determine aggregate transaction types', () {
-      expect(TransactionType.isAggregateType(0x4141), isTrue);
-      expect(TransactionType.isAggregateType(0x4241), isTrue);
       expect(TransactionType.isAggregateType(TransactionType.AGGREGATE_COMPLETE), isTrue);
       expect(TransactionType.isAggregateType(TransactionType.AGGREGATE_BONDED), isTrue);
 
-      expect(TransactionType.isAggregateType(0x4150), isFalse);
       expect(TransactionType.isAggregateType(TransactionType.TRANSFER), isFalse);
     });
 
     test('Trying to retrieve an invalid transaction type will throw an error', () {
+      String errorMessage = TransactionType.UNKNOWN_TRANSACTION_TYPE;
       expect(() => TransactionType.getType(null),
-          throwsA(predicate((e) => e is ArgumentError && e.message == 'invalid transaction type')));
+          throwsA(predicate((e) => e is ArgumentError && e.message == errorMessage)));
       expect(() => TransactionType.getType(0x0000),
-          throwsA(predicate((e) => e is ArgumentError && e.message == 'invalid transaction type')));
+                 throwsA(predicate((e) => e is ArgumentError && e.message == errorMessage)));
     });
   });
 }

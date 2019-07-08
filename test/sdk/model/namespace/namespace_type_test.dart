@@ -16,22 +16,14 @@
 
 library nem2_sdk_dart.test.sdk.model.namespace.namespace_type_test;
 
-import 'package:test/test.dart';
-
 import 'package:nem2_sdk_dart/sdk.dart' show NamespaceType;
+import 'package:test/test.dart';
 
 void main() {
   group('NamespaceType', () {
-    test('creating a new instance returns a singleton', () {
-      final namespaceType1 = new NamespaceType();
-      final namespaceType2 = new NamespaceType();
-
-      expect(identical(namespaceType1, namespaceType2), isTrue);
-    });
-
     test('valid namespace types', () {
-      expect(NamespaceType.ROOT_NAMESPACE, 0);
-      expect(NamespaceType.SUB_NAMESPACE, 1);
+      expect(NamespaceType.ROOT_NAMESPACE.value, 0);
+      expect(NamespaceType.SUB_NAMESPACE.value, 1);
     });
 
     test('Can retrieve a valid namespace types', () {
@@ -40,12 +32,13 @@ void main() {
     });
 
     test('Trying to retrieve an invalid namespace type will throw an error', () {
+      String errorMessage = NamespaceType.UNKNOWN_NAMESPACE_TYPE;
       expect(() => NamespaceType.getType(null),
-          throwsA(predicate((e) => e is ArgumentError && e.message == 'invalid namespace type')));
+          throwsA(predicate((e) => e is ArgumentError && e.message == errorMessage)));
       expect(() => NamespaceType.getType(-1),
-          throwsA(predicate((e) => e is ArgumentError && e.message == 'invalid namespace type')));
+          throwsA(predicate((e) => e is ArgumentError && e.message == errorMessage)));
       expect(() => NamespaceType.getType(2),
-          throwsA(predicate((e) => e is ArgumentError && e.message == 'invalid namespace type')));
+          throwsA(predicate((e) => e is ArgumentError && e.message == errorMessage)));
     });
   });
 }

@@ -16,39 +16,28 @@
 
 library nem2_sdk_dart.test.sdk.model.account.account_properties_info_test;
 
-import 'package:test/test.dart';
-
-import 'package:nem2_sdk_dart/core.dart' show ArrayUtils;
 import 'package:nem2_sdk_dart/sdk.dart'
-    show
-        AccountProperty,
-        AccountProperties,
-        AccountPropertiesInfo,
-        Address,
-        PropertyModificationType,
-        PropertyType;
+    show AccountProperty, AccountProperties, AccountPropertiesInfo, Address, PropertyType;
+import 'package:test/test.dart';
 
 void main() {
   group('AccountPropertiesInfo', () {
     test('Can create an AccountPropertiesInfo object', () {
-      final meta = {'id': '12345'};
+      const metaId = '12345';
       final address = Address.fromEncoded('9050B9837EFAB4BBE8A4B9BB32D812F9885C00D8FC1650E142');
-      final property = new AccountProperty(PropertyType.ALLOW_ADDRESS, [
-        {
-          'modificationType': PropertyModificationType.ADD,
-          'value': 'SDUP5PLHDXKBX3UU5Q52LAY4WYEKGEWC6IB3VBFM',
-        }
-      ]);
-      final accountProperties = new AccountProperties(address, [property]);
-      final propertyList = <AccountProperties>[accountProperties];
+      final accountProperty = new AccountProperty(
+          PropertyType.ALLOW_ADDRESS, ['SDUP5PLHDXKBX3UU5Q52LAY4WYEKGEWC6IB3VBFM']);
+      final accountProperties = new AccountProperties(address, [accountProperty]);
 
       // create
-      final accountPropertiesInfo = new AccountPropertiesInfo(meta, propertyList);
+      final accountPropertiesInfo = new AccountPropertiesInfo(metaId, accountProperties);
 
       // Assert
-      expect(accountPropertiesInfo.meta['id'], equals(meta['id']));
-      expect(accountPropertiesInfo.accountProperties.length, 1);
-      expect(ArrayUtils.deepEqual(accountPropertiesInfo.accountProperties, propertyList), isTrue);
+      expect(accountPropertiesInfo.metaId, equals(metaId));
+      expect(accountPropertiesInfo.accountProperties.address, equals(address));
+      expect(accountPropertiesInfo.accountProperties.properties.length, 1);
+      expect(accountPropertiesInfo.accountProperties.properties[0].propertyType,
+          PropertyType.ALLOW_ADDRESS);
     });
   });
 }

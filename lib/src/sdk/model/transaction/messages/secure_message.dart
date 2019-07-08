@@ -75,8 +75,8 @@ class SecureMessage extends Message {
     final Uint8List salt = Ed25519.getRandomBytes(KEY_SIZE);
     final iv = IV(Ed25519.getRandomBytes(BLOCK_SIZE));
     final Uint8List sharedKey = Ed25519.deriveSharedKey(salt, senderPrivateKey, receiverPublicKey);
-    final Encrypter encrypter = Encrypter(AES(Key(sharedKey), iv, mode: AESMode.cbc));
-    final encryptedMessage = encrypter.algo.encrypt(payload);
+    final Encrypter encrypter = Encrypter(AES(Key(sharedKey), mode: AESMode.cbc));
+    final encryptedMessage = encrypter.algo.encrypt(payload, iv: iv);
 
     // Creates a concatenated byte array as the encrypted payload
     final Uint8List encryptedPayload = Uint8List.fromList(salt + iv.bytes + encryptedMessage.bytes);
@@ -101,8 +101,8 @@ class SecureMessage extends Message {
     try {
       final Uint8List sharedKey =
           Ed25519.deriveSharedKey(salt, senderPrivateKey, receiverPublicKey);
-      final Encrypter encrypter = Encrypter(AES(Key(sharedKey), IV(iv), mode: AESMode.cbc));
-      final String decrypted = encrypter.decrypt(Encrypted(encrypted));
+      final Encrypter encrypter = Encrypter(AES(Key(sharedKey), mode: AESMode.cbc));
+      final String decrypted = encrypter.decrypt(Encrypted(encrypted), iv: IV(iv));
       return decrypted;
     } catch (e) {
       throw new CryptoException('Failed to decrypt message');

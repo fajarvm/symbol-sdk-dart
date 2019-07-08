@@ -20,7 +20,6 @@ import '../account/public_account.dart';
 import '../common/uint64.dart';
 
 import 'mosaic_id.dart';
-import 'mosaic_levy.dart';
 import 'mosaic_properties.dart';
 
 /// Contains information about a mosaic.
@@ -46,10 +45,10 @@ class MosaicInfo {
   /// The properties of the mosaic.
   final MosaicProperties properties;
 
-  /// The levy of the mosaic.
-  final MosaicLevy mosaicLevy;
+  /// The levy of the mosaic (optional).
+  final Object mosaicLevy;
 
-  const MosaicInfo._(this.metaId, this.mosaicId, this.supply, this.height, this.owner,
+  MosaicInfo._(this.metaId, this.mosaicId, this.supply, this.height, this.owner,
       this.revision, this.properties, [this.mosaicLevy]);
 
   factory MosaicInfo(
@@ -59,7 +58,7 @@ class MosaicInfo {
       final Uint64 height,
       final PublicAccount owner,
       final int revision,
-      final MosaicProperties properties, [final MosaicLevy mosaicLevy]) {
+      final MosaicProperties properties, [final Object mosaicLevy]) {
     if (0 > revision) {
       throw new ArgumentError('revision must not be negative');
     }

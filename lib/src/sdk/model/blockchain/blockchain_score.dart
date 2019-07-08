@@ -26,5 +26,5 @@ class BlockchainScore {
   /// The high part of the blockchain score.
   final Uint64 scoreHigh;
 
-  const BlockchainScore(this.scoreLow, this.scoreHigh);
+  BlockchainScore(this.scoreLow, this.scoreHigh);
 }

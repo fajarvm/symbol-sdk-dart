@@ -16,21 +16,14 @@
 
 library nem2_sdk_dart.test.sdk.model.mosaic.mosaic_supply_type_test;
 
-import 'package:test/test.dart';
-
 import 'package:nem2_sdk_dart/sdk.dart' show MosaicSupplyType;
+import 'package:test/test.dart';
 
 void main() {
   group('MosaicSupplyType', () {
-    test('creating a new instance returns a singleton', () {
-      final type1 = new MosaicSupplyType();
-      final type2 = new MosaicSupplyType();
-
-      expect(identical(type1, type2), isTrue);
-    });
     test('valid mosaic supply types', () {
-      expect(MosaicSupplyType.DECREASE, 0);
-      expect(MosaicSupplyType.INCREASE, 1);
+      expect(MosaicSupplyType.DECREASE.value, 0);
+      expect(MosaicSupplyType.INCREASE.value, 1);
     });
 
     test('Can retrieve a valid mosaic supply types', () {
@@ -39,18 +32,13 @@ void main() {
     });
 
     test('Trying to retrieve an invalid supply type will throw an error', () {
-      expect(
-          () => MosaicSupplyType.getType(null),
-          throwsA(
-              predicate((e) => e is ArgumentError && e.message == 'invalid mosaic supply type')));
-      expect(
-          () => MosaicSupplyType.getType(-1),
-          throwsA(
-              predicate((e) => e is ArgumentError && e.message == 'invalid mosaic supply type')));
-      expect(
-          () => MosaicSupplyType.getType(2),
-          throwsA(
-              predicate((e) => e is ArgumentError && e.message == 'invalid mosaic supply type')));
+      String errorMessage = MosaicSupplyType.UNKNOWN_MOSAIC_SUPPLY_TYPE;
+      expect(() => MosaicSupplyType.getType(null),
+          throwsA(predicate((e) => e is ArgumentError && e.message == errorMessage)));
+      expect(() => MosaicSupplyType.getType(-1),
+          throwsA(predicate((e) => e is ArgumentError && e.message == errorMessage)));
+      expect(() => MosaicSupplyType.getType(2),
+          throwsA(predicate((e) => e is ArgumentError && e.message == errorMessage)));
     });
   });
 }

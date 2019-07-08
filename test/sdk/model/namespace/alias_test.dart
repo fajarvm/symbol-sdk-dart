@@ -45,5 +45,5 @@ class MockAlias implements Alias {
   MosaicId get mosaicId => null;
 
   @override
-  int get type => AliasType.NONE;
+  AliasType get type => AliasType.NONE;
 }

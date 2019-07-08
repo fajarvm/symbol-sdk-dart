@@ -34,7 +34,7 @@ void main() {
 
       expect(account.publicKey, equals(testAccount['publicKey']));
       expect(account.privateKey, equals(testAccount['privateKey']));
-      expect(account.address.plain, equals(testAccount['address']));
+      expect(account.plainAddress, equals(testAccount['address']));
     });
 
     test('should throw an exception when the private key is invalid', () {
@@ -52,7 +52,7 @@ void main() {
 
       expect(account.publicKey, isNotNull);
       expect(account.privateKey, isNotNull);
-      expect(account.address.plain, isNotNull);
+      expect(account.plainAddress, isNotNull);
     });
   });
 

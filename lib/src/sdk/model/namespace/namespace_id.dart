@@ -30,7 +30,7 @@ class NamespaceId extends Id {
   final String fullName;
 
   // private constructor
-  const NamespaceId._(id, this.fullName) : super(id);
+  NamespaceId._(id, this.fullName) : super(id);
 
   /// Create a [NamespaceId] from a 64-bit unsigned integer [id] OR a namespace [fullName].
   ///

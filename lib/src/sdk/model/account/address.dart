@@ -42,7 +42,7 @@ class Address {
   static final RegExp REGEX_DASH = new RegExp(r'-');
   static final RegExp REGEX_PRETTY = new RegExp('.{1,6}');
 
-  final int _networkType;
+  final NetworkType _networkType;
   final String _address;
 
   // private constructor
@@ -59,7 +59,7 @@ class Address {
   String get pretty => prettify(_address);
 
   /// Get the network type of this address.
-  int get networkType => _networkType;
+  NetworkType get networkType => _networkType;
 
   @override
   bool operator ==(final other) =>
@@ -73,8 +73,8 @@ class Address {
   int get hashCode => _networkType.hashCode ^ _address.hashCode;
 
   /// Creates an [Address] from a given [publicKey] string for the given [networkType].
-  static Address fromPublicKey(final String publicKey, final int networkType) {
-    if (networkType == null || !NetworkType.isValid(networkType)) {
+  static Address fromPublicKey(final String publicKey, final NetworkType networkType) {
+    if (networkType == null || !NetworkType.isValid(networkType.value)) {
       throw new ArgumentError('Network type unsupported');
     }
 
@@ -137,7 +137,7 @@ class Address {
   }
 
   /// Converts a [publicKey] to decoded address byte for a specific [networkType].
-  static Uint8List publicKeyToAddress(final Uint8List publicKey, final int networkType) {
+  static Uint8List publicKeyToAddress(final Uint8List publicKey, final NetworkType networkType) {
     // Step 1: create a SHA3-256 hash of the public key
     final SHA3DigestNist digest = Ed25519.createSha3Digest(length: Ed25519.KEY_SIZE);
     final Uint8List stepOne = new Uint8List(KEY_SIZE);
@@ -152,7 +152,7 @@ class Address {
 
     // Step 3: prepend network type
     final Uint8List decodedAddress = new Uint8List(ADDRESS_DECODED_SIZE);
-    decodedAddress[0] = networkType;
+    decodedAddress[0] = networkType.value;
     ArrayUtils.copy(decodedAddress, stepTwo, numElementsToCopy: RIPEMD_160_SIZE, destOffset: 1);
 
     // Step 4: perform SHA3-256 on previous step

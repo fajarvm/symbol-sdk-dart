@@ -17,56 +17,60 @@
 library nem2_sdk_dart.sdk.model.account.property_type;
 
 /// The property type of an account.
-///
-/// Supported types are:
-/// * 0x01: The property type is an address.
-/// * 0x02: The property type is mosaic id.
-/// * 0x04: The property type is a transaction type.
-/// * 0x05: Property type sentinel.
-/// * 0x80 + type:	The property is interpreted as a blocking operation.
 class PropertyType {
-  static const String _INVALID_PROPERTY_TYPE = 'invalid property type';
+  static const String UNKNOWN_PROPERTY_TYPE = 'unknown property type';
 
-  static const PropertyType _singleton = PropertyType._();
+  /// Allows receiving transactions from an address.
+  static const PropertyType ALLOW_ADDRESS = PropertyType._(0x01);
 
-  const PropertyType._();
+  /// Allows receiving transactions containing a mosaic id.
+  static const PropertyType ALLOW_MOSAIC = PropertyType._(0x02);
 
-  factory PropertyType() {
-    return _singleton;
-  }
+  /// Allows sending transactions with a given transaction type.
+  static const PropertyType ALLOW_TRANSACTION = PropertyType._(0x04);
 
-  static const int ALLOW_ADDRESS = 0x01;
+  /// Property type sentinel.
+  static const PropertyType SENTINEL = PropertyType._(0x05);
 
-  static const int ALLOW_MOSAIC = 0x02;
+  /// Blocks receiving transactions from an address.
+  static const PropertyType BLOCK_ADDRESS = PropertyType._(0x80 + 0x01);
 
-  static const int ALLOW_TRANSACTION = 0x04;
+  /// Blocks receiving transactions containing a mosaic id.
+  static const PropertyType BLOCK_MOSAIC = PropertyType._(0x80 + 0x02);
 
-  static const int SENTINEL = 0x05;
+  /// Blocks sending transactions with a given transaction type.
+  static const PropertyType BLOCK_TRANSACTION = PropertyType._(0x80 + 0x04);
 
-  static const int BLOCK_ADDRESS = (0x80 + ALLOW_ADDRESS);
+  /// Supported property types.
+  static final List<PropertyType> values = <PropertyType>[
+    ALLOW_ADDRESS,
+    ALLOW_MOSAIC,
+    ALLOW_TRANSACTION,
+    SENTINEL,
+    BLOCK_ADDRESS,
+    BLOCK_MOSAIC,
+    BLOCK_TRANSACTION
+  ];
 
-  static const int BLOCK_MOSAIC = (0x80 + ALLOW_MOSAIC);
+  final int _value;
 
-  static const int BLOCK_TRANSACTION = (0x80 + ALLOW_TRANSACTION);
+  // constant constructor: makes this class available on runtime.
+  // emulates an enum class with a value.
+  const PropertyType._(this._value);
 
-  static int getType(final int propertyType) {
-    switch (propertyType) {
-      case ALLOW_ADDRESS:
-        return PropertyType.ALLOW_ADDRESS;
-      case ALLOW_MOSAIC:
-        return PropertyType.ALLOW_MOSAIC;
-      case ALLOW_TRANSACTION:
-        return PropertyType.ALLOW_TRANSACTION;
-      case SENTINEL:
-        return PropertyType.SENTINEL;
-      case BLOCK_ADDRESS:
-        return PropertyType.BLOCK_ADDRESS;
-      case BLOCK_MOSAIC:
-        return PropertyType.BLOCK_MOSAIC;
-      case BLOCK_TRANSACTION:
-        return PropertyType.BLOCK_TRANSACTION;
-      default:
-        throw new ArgumentError(_INVALID_PROPERTY_TYPE);
+  /// The int value of this type.
+  int get value => _value;
+
+  /// Returns a [PropertyType] for the given int value.
+  ///
+  /// Throws an error when the type is unknown.
+  static PropertyType getType(final int value) {
+    for (var type in values) {
+      if (type.value == value) {
+        return type;
+      }
     }
+
+    throw new ArgumentError(UNKNOWN_PROPERTY_TYPE);
   }
 }

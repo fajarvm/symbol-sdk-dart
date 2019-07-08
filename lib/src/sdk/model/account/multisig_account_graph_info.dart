@@ -23,7 +23,7 @@ import 'multisig_account_info.dart';
 class MultisigAccountGraphInfo {
   final Map<int, List<MultisigAccountInfo>> multisigAccounts;
 
-  const MultisigAccountGraphInfo._(this.multisigAccounts);
+  MultisigAccountGraphInfo._(this.multisigAccounts);
 
   factory MultisigAccountGraphInfo(final Map<int, List<MultisigAccountInfo>> multisigAccounts) {
     if (multisigAccounts.isNotEmpty) {

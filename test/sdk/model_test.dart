@@ -36,8 +36,6 @@ import 'model/common/id_test.dart' as id_test;
 import 'model/common/uint64_test.dart' as uint64_test;
 import 'model/mosaic/mosaic_id_test.dart' as mosaic_id_test;
 import 'model/mosaic/mosaic_info_test.dart' as mosaic_info_test;
-import 'model/mosaic/mosaic_levy_test.dart' as mosaic_levy_test;
-import 'model/mosaic/mosaic_levy_type_test.dart' as mosaic_levy_type_test;
 import 'model/mosaic/mosaic_nonce_test.dart' as mosaic_nonce_test;
 import 'model/mosaic/mosaic_properties_test.dart' as mosaic_properties_test;
 import 'model/mosaic/mosaic_supply_type_test.dart' as mosaic_supply_type_test;
@@ -102,8 +100,6 @@ void main() {
     mosaic_id_test.main();
     mosaic_info_test.main();
     mosaic_nonce_test.main();
-    mosaic_levy_test.main();
-    mosaic_levy_type_test.main();
     mosaic_properties_test.main();
     mosaic_supply_type_test.main();
     network_currency_mosaic_test.main();

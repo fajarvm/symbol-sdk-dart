@@ -32,43 +32,30 @@
 
 library nem2_sdk_dart.test.sdk.model.account.property_modificatoin_type_test;
 
-import 'package:test/test.dart';
-
 import 'package:nem2_sdk_dart/sdk.dart' show PropertyModificationType;
+import 'package:test/test.dart';
 
 void main() {
   group('PropertyModificationType', () {
-    test('creating a new instance returns a singleton', () {
-      final type1 = new PropertyModificationType();
-      final type2 = new PropertyModificationType();
-
-      expect(identical(type1, type2), isTrue);
-    });
-
     test('valid transaction types', () {
-      expect(PropertyModificationType.ADD, 0);
-      expect(PropertyModificationType.DEL, 1);
+      expect(PropertyModificationType.ADD.value, 0x00);
+      expect(PropertyModificationType.DEL.value, 0x01);
     });
 
     test('Can retrieve a valid transaction types', () {
       // Account filters
-      expect(PropertyModificationType.getType(0), PropertyModificationType.ADD);
-      expect(PropertyModificationType.getType(1), PropertyModificationType.DEL);
+      expect(PropertyModificationType.getType(0x00), PropertyModificationType.ADD);
+      expect(PropertyModificationType.getType(0x01), PropertyModificationType.DEL);
     });
 
     test('Trying to retrieve an invalid property type will throw an error', () {
-      expect(
-          () => PropertyModificationType.getType(null),
-          throwsA(predicate(
-              (e) => e is ArgumentError && e.message == 'invalid property modification type')));
-      expect(
-          () => PropertyModificationType.getType(-1),
-          throwsA(predicate(
-              (e) => e is ArgumentError && e.message == 'invalid property modification type')));
-      expect(
-          () => PropertyModificationType.getType(2),
-          throwsA(predicate(
-              (e) => e is ArgumentError && e.message == 'invalid property modification type')));
+      String errorMessage = PropertyModificationType.UNKNOWN_PROPERTY_MODIFICATION_TYPE;
+      expect(() => PropertyModificationType.getType(null),
+          throwsA(predicate((e) => e is ArgumentError && e.message == errorMessage)));
+      expect(() => PropertyModificationType.getType(-1),
+          throwsA(predicate((e) => e is ArgumentError && e.message == errorMessage)));
+      expect(() => PropertyModificationType.getType(2),
+          throwsA(predicate((e) => e is ArgumentError && e.message == errorMessage)));
     });
   });
 }

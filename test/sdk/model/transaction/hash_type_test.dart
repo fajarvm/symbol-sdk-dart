@@ -18,25 +18,17 @@ library nem2_sdk_dart.test.sdk.model.transaction.hash_type_test;
 
 import 'dart:typed_data' show Uint8List;
 
-import 'package:test/test.dart';
-
 import 'package:nem2_sdk_dart/core.dart' show Ed25519, HexUtils;
 import 'package:nem2_sdk_dart/sdk.dart' show HashType;
+import 'package:test/test.dart';
 
 void main() {
   group('HashType', () {
-    test('creating a new instance returns a singleton', () {
-      final type1 = new HashType();
-      final type2 = new HashType();
-
-      expect(identical(type1, type2), isTrue);
-    });
-
     test('valid hash types', () {
-      expect(HashType.SHA3_256, 0);
-      expect(HashType.KECCAK_256, 1);
-      expect(HashType.RIPEMD_160, 2);
-      expect(HashType.SHA_256, 3);
+      expect(HashType.SHA3_256.value, 0);
+      expect(HashType.KECCAK_256.value, 1);
+      expect(HashType.RIPEMD_160.value, 2);
+      expect(HashType.SHA_256.value, 3);
     });
 
     test('Can retrieve valid hash types', () {
@@ -47,12 +39,13 @@ void main() {
     });
 
     test('Trying to retrieve an invalid namespace type will throw an error', () {
+      String errorMessage = HashType.UNSUPPORTED_HASH_TYPE;
       expect(() => HashType.getType(null),
-          throwsA(predicate((e) => e is ArgumentError && e.message == 'invalid hash type')));
+          throwsA(predicate((e) => e is ArgumentError && e.message == errorMessage)));
       expect(() => HashType.getType(-1),
-          throwsA(predicate((e) => e is ArgumentError && e.message == 'invalid hash type')));
+          throwsA(predicate((e) => e is ArgumentError && e.message == errorMessage)));
       expect(() => HashType.getType(4),
-          throwsA(predicate((e) => e is ArgumentError && e.message == 'invalid hash type')));
+          throwsA(predicate((e) => e is ArgumentError && e.message == errorMessage)));
     });
 
     test('The hash of SHA3-256 should be valid', () {

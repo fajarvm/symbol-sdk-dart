@@ -29,9 +29,12 @@ class KeyPair {
   final Uint8List _privateKey;
   final Uint8List _publicKey;
 
-  const KeyPair._(this._privateKey, this._publicKey);
+  // private constructor
+  KeyPair._(this._privateKey, this._publicKey);
 
-  factory KeyPair({Uint8List privateKey, Uint8List publicKey}) {
+  // A private method that creates a new instance of [KeyPair].
+  // Throws an error when [privateKey] has an unexpected length.
+  static KeyPair _create(Uint8List privateKey, Uint8List publicKey) {
     if (privateKey == null) {
       throw new ArgumentError('privateKey byte cannot be null');
     }
@@ -43,10 +46,10 @@ class KeyPair {
     return new KeyPair._(privateKey, publicKey);
   }
 
-  /// Retrieves the public key of this key pair.
+  /// The public key of this key pair.
   Uint8List get publicKey => _publicKey;
 
-  /// Retrieves the private key of this key pair.
+  /// The private key of this key pair.
   Uint8List get privateKey => _privateKey;
 
   @override
@@ -73,7 +76,7 @@ class KeyPair {
 
     final Uint8List publicKey = Ed25519.extractPublicKey(privateKeySeed);
 
-    return new KeyPair(privateKey: privateKeySeed, publicKey: publicKey);
+    return _create(privateKeySeed, publicKey);
   }
 
   /// Creates a random public key.

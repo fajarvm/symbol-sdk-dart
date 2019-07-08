@@ -19,6 +19,7 @@ library nem2_sdk_dart.sdk.model.account.public_account;
 import 'dart:typed_data' show Uint8List;
 
 import 'package:nem2_sdk_dart/core.dart' show HexUtils, KeyPair;
+import 'package:nem2_sdk_dart/sdk.dart';
 
 import 'address.dart';
 
@@ -29,7 +30,7 @@ class PublicAccount {
 
   static const int HASH512_LENGTH = 64;
 
-  const PublicAccount._(this._address, this._publicKey);
+  PublicAccount._(this._address, this._publicKey);
 
   factory PublicAccount({final Address address, final String publicKey}) {
     if (address == null || publicKey == null) {
@@ -61,7 +62,7 @@ class PublicAccount {
           plainAddress == other.plainAddress;
 
   /// Create a [PublicAccount] from a [publicKey] for the given [networkType].
-  static PublicAccount fromPublicKey(final String publicKey, final int networkType) {
+  static PublicAccount fromPublicKey(final String publicKey, final NetworkType networkType) {
     if (publicKey == null || (64 != publicKey.length && 66 != publicKey.length)) {
       throw new ArgumentError('Not a valid public key');
     }

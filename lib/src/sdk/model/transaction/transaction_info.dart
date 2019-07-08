@@ -43,7 +43,7 @@ class TransactionInfo {
   final String aggregateId;
 
   // private constructor
-  const TransactionInfo._(this.height, this.index, this.id, this.hash, this.merkleComponentHash,
+  TransactionInfo._(this.height, this.index, this.id, this.hash, this.merkleComponentHash,
       this.aggregateHash, this.aggregateId);
 
   /// Creates transaction info object for aggregate transaction inner transaction.

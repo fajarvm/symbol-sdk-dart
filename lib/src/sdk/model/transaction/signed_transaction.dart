@@ -16,6 +16,8 @@
 
 library nem2_sdk_dart.sdk.model.transaction.signed_transaction;
 
+import 'package:nem2_sdk_dart/sdk.dart';
+
 /// Used to transfer the transaction data and the signature to a nem server in order to
 /// initiate and broadcast a transaction.
 class SignedTransaction {
@@ -29,15 +31,15 @@ class SignedTransaction {
   final String signer;
 
   /// The transaction type.
-  final int type;
+  final TransactionType type;
 
   /// The signer network type.
-  final int networkType;
+  final NetworkType networkType;
 
   SignedTransaction._(this.payload, this.hash, this.signer, this.type, this.networkType);
 
   factory SignedTransaction(final String payload, final String hash, final String signer,
-      final int type, final int networkType) {
+      final TransactionType type, final NetworkType networkType) {
     if (hash == null || hash.length != 64) {
       throw new ArgumentError('Invalid hash size. The hash must be 64 characters long.');
     }

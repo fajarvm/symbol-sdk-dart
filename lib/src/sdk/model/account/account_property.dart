@@ -16,10 +16,12 @@
 
 library nem2_sdk_dart.sdk.model.account.account_property;
 
+import 'property_type.dart';
+
 /// Account property structure describes property information.
 class AccountProperty {
   /// Account property type.
-  final int propertyType;
+  final PropertyType propertyType;
 
   /// Property values.
   final List<Object> values;

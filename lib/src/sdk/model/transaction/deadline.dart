@@ -34,7 +34,7 @@ class Deadline {
   final DateTime value;
 
   // private constructor
-  const Deadline._(this.value);
+  Deadline._(this.value);
 
   /// Create a new deadline.
   ///

@@ -21,6 +21,7 @@ import '../common/uint64.dart';
 
 import 'alias.dart';
 import 'namespace_id.dart';
+import 'namespace_type.dart';
 
 /// Contains information about a namespace
 class NamespaceInfo {
@@ -34,7 +35,7 @@ class NamespaceInfo {
   final String metaId;
 
   /// The namespace type, namespace and sub namespace.
-  final int type;
+  final NamespaceType type;
 
   /// The level of namespace.
   final int depth;
@@ -57,14 +58,14 @@ class NamespaceInfo {
   /// The alias linked to a namespace.
   final Alias alias;
 
-  const NamespaceInfo._(this.active, this.index, this.metaId, this.type, this.depth, this.levels,
+  NamespaceInfo._(this.active, this.index, this.metaId, this.type, this.depth, this.levels,
       this.parentId, this.owner, this.startHeight, this.endHeight, this.alias);
 
   factory NamespaceInfo(
       final bool isActive,
       final int index,
       final String metaId,
-      final int type,
+      final NamespaceType type,
       final int depth,
       final List<NamespaceId> levels,
       final NamespaceId parentId,
@@ -92,16 +93,16 @@ class NamespaceInfo {
 
   /// Determines if this is a namespace root.
   bool isRoot() {
-    return this.type == 0;
+    return NamespaceType.ROOT_NAMESPACE == this.type;
   }
 
   /// Determines if this is a sub namespace.
   bool isSubnamespace() {
-    return this.type == 1;
+    return NamespaceType.SUB_NAMESPACE == this.type;
   }
 
   bool hasAlias() {
-    return this.alias != null && this.alias.type != 0;
+    return this.alias != null && this.alias.type.value != 0;
   }
 
   /// Retrieves the parent namespace id.

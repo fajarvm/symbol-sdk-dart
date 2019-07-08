@@ -20,11 +20,11 @@ import 'account_properties.dart';
 
 /// Describes property information for an account.
 class AccountPropertiesInfo {
-  /// The meta data of this account properties info.
-  final Map meta;
+  /// The meta id.
+  final String metaId;
 
-  /// A list of account properties.
-  final List<AccountProperties> accountProperties;
+  /// The account properties.
+  final AccountProperties accountProperties;
 
-  const AccountPropertiesInfo(this.meta, this.accountProperties);
+  AccountPropertiesInfo(this.metaId, this.accountProperties);
 }

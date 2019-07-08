@@ -32,32 +32,24 @@
 
 library nem2_sdk_dart.test.sdk.model.account.property_type_test;
 
-import 'package:test/test.dart';
-
 import 'package:nem2_sdk_dart/sdk.dart' show PropertyType;
+import 'package:test/test.dart';
 
 void main() {
   group('PropertyType', () {
-    test('creating a new instance returns a singleton', () {
-      final type1 = new PropertyType();
-      final type2 = new PropertyType();
-
-      expect(identical(type1, type2), isTrue);
-    });
-
     test('valid transaction types', () {
       // Allow
-      expect(PropertyType.ALLOW_ADDRESS, 0x01);
-      expect(PropertyType.ALLOW_MOSAIC, 0x02);
-      expect(PropertyType.ALLOW_TRANSACTION, 0x04);
+      expect(PropertyType.ALLOW_ADDRESS.value, 0x01);
+      expect(PropertyType.ALLOW_MOSAIC.value, 0x02);
+      expect(PropertyType.ALLOW_TRANSACTION.value, 0x04);
 
       // Sentinel
-      expect(PropertyType.SENTINEL, 0x05);
+      expect(PropertyType.SENTINEL.value, 0x05);
 
       // Block
-      expect(PropertyType.BLOCK_ADDRESS, (0x80 + 0x01));
-      expect(PropertyType.BLOCK_MOSAIC, (0x80 + 0x02));
-      expect(PropertyType.BLOCK_TRANSACTION, (0x80 + 0x04));
+      expect(PropertyType.BLOCK_ADDRESS.value, (0x80 + 0x01));
+      expect(PropertyType.BLOCK_MOSAIC.value, (0x80 + 0x02));
+      expect(PropertyType.BLOCK_TRANSACTION.value, (0x80 + 0x04));
     });
 
     test('Can retrieve a valid transaction types', () {
@@ -71,13 +63,14 @@ void main() {
       expect(PropertyType.getType(0x80 + 0x04), PropertyType.BLOCK_TRANSACTION);
     });
 
-    test('Trying to retrieve an invalid property type will throw an error', () {
+    test('Trying to retrieve an unknown property type will throw an error', () {
+      String errorMessage = PropertyType.UNKNOWN_PROPERTY_TYPE;
       expect(() => PropertyType.getType(null),
-          throwsA(predicate((e) => e is ArgumentError && e.message == 'invalid property type')));
+          throwsA(predicate((e) => e is ArgumentError && e.message == errorMessage)));
       expect(() => PropertyType.getType(0x03),
-          throwsA(predicate((e) => e is ArgumentError && e.message == 'invalid property type')));
+          throwsA(predicate((e) => e is ArgumentError && e.message == errorMessage)));
       expect(() => PropertyType.getType(0x80 + 0x03),
-          throwsA(predicate((e) => e is ArgumentError && e.message == 'invalid property type')));
+          throwsA(predicate((e) => e is ArgumentError && e.message == errorMessage)));
     });
   });
 }

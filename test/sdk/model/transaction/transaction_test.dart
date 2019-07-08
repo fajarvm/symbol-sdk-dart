@@ -24,6 +24,7 @@ import 'package:nem2_sdk_dart/sdk.dart'
         Transaction,
         TransactionInfo,
         TransactionType,
+        TransactionVersion,
         Uint64,
         VerifiableTransaction;
 import 'package:test/test.dart';
@@ -32,8 +33,8 @@ void main() {
   group('Transaction', () {
     group('isUnannounced', () {
       test('returns true when there is no TransactionInfo vailable', () {
-        final tx = new MockTransaction(
-            TransactionType.TRANSFER, NetworkType.MIJIN_TEST, 1, Deadline.create(), Uint64(0));
+        final tx = new MockTransaction(TransactionType.TRANSFER, NetworkType.MIJIN_TEST,
+            TransactionVersion.TRANSFER, Deadline.create(), Uint64(0));
 
         expect(tx.isUnannounced(), isTrue);
       });
@@ -42,8 +43,8 @@ void main() {
     group('isUnconfirmed', () {
       test('returns true when height is 0', () {
         final txInfo = TransactionInfo.create(Uint64(0), 'hash', 'hash', index: 1, id: 'hash');
-        final tx = new MockTransaction(
-            TransactionType.TRANSFER, NetworkType.MIJIN_TEST, 1, Deadline.create(), Uint64(0),
+        final tx = new MockTransaction(TransactionType.TRANSFER, NetworkType.MIJIN_TEST,
+            TransactionVersion.TRANSFER, Deadline.create(), Uint64(0),
             transactionInfo: txInfo);
 
         expect(tx.isUnconfirmed(), isTrue);
@@ -51,8 +52,8 @@ void main() {
 
       test('returns false when height is not 0', () {
         final txInfo = TransactionInfo.create(Uint64(100), 'hash', 'hash', index: 1, id: 'hash');
-        final tx = new MockTransaction(
-            TransactionType.TRANSFER, NetworkType.MIJIN_TEST, 1, Deadline.create(), Uint64(0),
+        final tx = new MockTransaction(TransactionType.TRANSFER, NetworkType.MIJIN_TEST,
+            TransactionVersion.TRANSFER, Deadline.create(), Uint64(0),
             transactionInfo: txInfo);
 
         expect(tx.isUnconfirmed(), isFalse);
@@ -62,8 +63,8 @@ void main() {
     group('isConfirmed', () {
       test('returns true when height is not 0', () {
         final txInfo = TransactionInfo.create(Uint64(100), 'hash', 'hash', index: 1, id: 'hash');
-        final tx = new MockTransaction(
-            TransactionType.TRANSFER, NetworkType.MIJIN_TEST, 1, Deadline.create(), Uint64(0),
+        final tx = new MockTransaction(TransactionType.TRANSFER, NetworkType.MIJIN_TEST,
+            TransactionVersion.TRANSFER, Deadline.create(), Uint64(0),
             transactionInfo: txInfo);
 
         expect(tx.isConfirmed(), isTrue);
@@ -73,8 +74,8 @@ void main() {
     group('hasMissingSignatures', () {
       test('returns true when height is 0 and the hash are different to the merkle hash', () {
         final txInfo = TransactionInfo.create(Uint64(0), 'hash', 'hash_2', index: 1, id: 'hash');
-        final tx = new MockTransaction(
-            TransactionType.TRANSFER, NetworkType.MIJIN_TEST, 1, Deadline.create(), Uint64(0),
+        final tx = new MockTransaction(TransactionType.TRANSFER, NetworkType.MIJIN_TEST,
+            TransactionVersion.TRANSFER, Deadline.create(), Uint64(0),
             transactionInfo: txInfo);
 
         expect(tx.hasMissingSignatures(), isTrue);
@@ -84,8 +85,8 @@ void main() {
 }
 
 class MockTransaction extends Transaction {
-  MockTransaction(final int transactionType, final int networkType, final int version,
-      final Deadline deadline, final Uint64 fee,
+  MockTransaction(final TransactionType transactionType, final NetworkType networkType,
+      final TransactionVersion version, final Deadline deadline, final Uint64 fee,
       {final String signature, final PublicAccount signer, final TransactionInfo transactionInfo})
       : super(transactionType, networkType, version, deadline, fee, signature, signer,
             transactionInfo);

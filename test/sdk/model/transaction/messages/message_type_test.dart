@@ -16,22 +16,14 @@
 
 library nem2_sdk_dart.test.sdk.model.transaction.messages.message_type_test;
 
-import 'package:test/test.dart';
-
 import 'package:nem2_sdk_dart/sdk.dart' show MessageType;
+import 'package:test/test.dart';
 
 void main() {
   group('MessageType', () {
-    test('creating a new instance returns a singleton', () {
-      final type1 = new MessageType();
-      final type2 = new MessageType();
-
-      expect(identical(type1, type2), isTrue);
-    });
-
     test('valid message types', () {
-      expect(MessageType.UNENCRYPTED, 0x00);
-      expect(MessageType.ENCRYPTED, 0x01);
+      expect(MessageType.UNENCRYPTED.value, 0x00);
+      expect(MessageType.ENCRYPTED.value, 0x01);
     });
 
     test('Can retrieve valid message types', () {
@@ -40,12 +32,13 @@ void main() {
     });
 
     test('Trying to retrieve an invalid message type will throw an error', () {
+      String errorMessage = MessageType.UNKNOWN_MESSAGE_TYPE;
       expect(() => MessageType.getType(null),
-          throwsA(predicate((e) => e is ArgumentError && e.message == 'invalid message type')));
+          throwsA(predicate((e) => e is ArgumentError && e.message == errorMessage)));
       expect(() => MessageType.getType(-1),
-          throwsA(predicate((e) => e is ArgumentError && e.message == 'invalid message type')));
+          throwsA(predicate((e) => e is ArgumentError && e.message == errorMessage)));
       expect(() => MessageType.getType(2),
-          throwsA(predicate((e) => e is ArgumentError && e.message == 'invalid message type')));
+          throwsA(predicate((e) => e is ArgumentError && e.message == errorMessage)));
     });
   });
 }

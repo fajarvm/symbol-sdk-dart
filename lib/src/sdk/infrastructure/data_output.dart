@@ -27,7 +27,7 @@ import 'dart:typed_data';
 class DataOutput {
   List<int> data = [];
   int offset = 0;
-  Uint8List _buffer = Uint8List(8);
+  final Uint8List _buffer = Uint8List(8);
   ByteData _view;
 
   int get fileLength => data.length;

@@ -18,43 +18,40 @@ library nem2_sdk_dart.sdk.model.transaction.transaction_type;
 
 /// The available transaction types.
 class TransactionType {
-  static const String _INVALID_TRANSACTION_TYPE = 'invalid transaction type';
+  static const String UNKNOWN_TRANSACTION_TYPE = 'unknown transaction type';
 
   //
   // Mosaic
   //
   /// Register a new mosaic.
-  static const int MOSAIC_DEFINITION = 0x414D;
+  static const TransactionType MOSAIC_DEFINITION = TransactionType._(0x414D);
 
   /// Change an existent mosaic supply.
-  static const int MOSAIC_SUPPLY_CHANGE = 0x424D;
-
-  /// Change the levy of a mosaic.
-  static const int MOSAIC_LEVY_CHANGE = 0x434D;
+  static const TransactionType MOSAIC_SUPPLY_CHANGE = TransactionType._(0x424D);
 
   //
   // Namespace
   //
   /// Register a namespace.
-  static const int NAMESPACE_REGISTRATION = 0x414E;
+  static const TransactionType NAMESPACE_REGISTRATION = TransactionType._(0x414E);
 
   /// Attach a namespace name to an account.
-  static const int NAMESPACE_ATTACH_TO_ACCOUNT = 0x424E;
+  static const TransactionType NAMESPACE_ATTACH_TO_ACCOUNT = TransactionType._(0x424E);
 
   /// Attach a namespace name to a mosaic.
-  static const int NAMESPACE_ATTACH_TO_MOSAIC = 0x434E;
+  static const TransactionType NAMESPACE_ATTACH_TO_MOSAIC = TransactionType._(0x434E);
 
   //
   // Transfer
   //
   /// Transfer mosaics and messages between two accounts.
-  static const int TRANSFER = 0x4154;
+  static const TransactionType TRANSFER = TransactionType._(0x4154);
 
   //
   // Multi-signature
   //
   /// Create or modify a multi-signature contract.
-  static const int MULTISIG_MODIFY = 0x4155;
+  static const TransactionType MULTISIG_MODIFY = TransactionType._(0x4155);
 
   //
   // Aggregate
@@ -62,12 +59,12 @@ class TransactionType {
   /// Send transactions in batches to different accounts.
   ///
   /// An aggregate transaction is complete when all the required participants have signed it.
-  static const int AGGREGATE_COMPLETE = 0x4141;
+  static const TransactionType AGGREGATE_COMPLETE = TransactionType._(0x4141);
 
   /// Propose many transactions between different accounts.
   ///
   /// An aggregate transaction is bonded when it requires signatures from other participants.
-  static const int AGGREGATE_BONDED = 0x4241;
+  static const TransactionType AGGREGATE_BONDED = TransactionType._(0x4241);
 
   //
   // Hash lock / Lock funds
@@ -76,87 +73,78 @@ class TransactionType {
   ///
   /// Announce a hash lock transaction before sending a signed aggregate bonded transaction.
   /// This mechanism is required to prevent network spamming.
-  static const int HASH_LOCK = 0x4148;
+  static const TransactionType HASH_LOCK = TransactionType._(0x4148);
 
   //
   // Account filters
   //
   /// Allow or block incoming transactions for a given a set of addresses.
-  static const int ACCOUNT_FILTER_ADDRESS = 0x4150;
+  static const TransactionType ACCOUNT_FILTER_ADDRESS = TransactionType._(0x4150);
 
   /// Allow or block incoming transactions containing a given set of mosaics.
-  static const int ACCOUNT_FILTER_MOSAIC = 0x4250;
+  static const TransactionType ACCOUNT_FILTER_MOSAIC = TransactionType._(0x4250);
 
   /// Allow or block incoming transactions by transaction type.
-  static const int ACCOUNT_FILTER_ENTITY_TYPE = 0x4350;
+  static const TransactionType ACCOUNT_FILTER_ENTITY_TYPE = TransactionType._(0x4350);
 
   //
   // Cross-chain swaps
   //
   /// The secret lock transaction type.
-  static const int SECRET_LOCK = 0x4152;
+  static const TransactionType SECRET_LOCK = TransactionType._(0x4152);
 
   /// The secret proof transaction type.
-  static const int SECRET_PROOF = 0x4252;
+  static const TransactionType SECRET_PROOF = TransactionType._(0x4252);
 
   //
   // Account link / Remote harvesting
   //
   /// Delegates the account importance to a proxy account to enable delegated harvesting.
-  static const int ACCOUNT_LINK = 0x414C;
+  static const TransactionType ACCOUNT_LINK = TransactionType._(0x414C);
 
-  static const TransactionType _singleton = TransactionType._();
+  static final List<TransactionType> values = <TransactionType>[
+    MOSAIC_DEFINITION,
+    MOSAIC_SUPPLY_CHANGE,
+    NAMESPACE_REGISTRATION,
+    NAMESPACE_ATTACH_TO_ACCOUNT,
+    NAMESPACE_ATTACH_TO_MOSAIC,
+    TRANSFER,
+    MULTISIG_MODIFY,
+    AGGREGATE_COMPLETE,
+    AGGREGATE_BONDED,
+    HASH_LOCK,
+    ACCOUNT_FILTER_ADDRESS,
+    ACCOUNT_FILTER_MOSAIC,
+    ACCOUNT_FILTER_ENTITY_TYPE,
+    SECRET_LOCK,
+    SECRET_PROOF,
+    ACCOUNT_LINK
+  ];
 
-  const TransactionType._();
+  final int _value;
 
-  factory TransactionType() {
-    return _singleton;
-  }
+  // constant constructor: makes this class available on runtime.
+  // emulates an enum class with a value.
+  const TransactionType._(this._value);
 
-  /// Returns the transaction type. Throws an error if the transaction type is invalid.
-  static int getType(final int transactionType) {
-    switch (transactionType) {
-      case ACCOUNT_FILTER_ADDRESS:
-        return TransactionType.ACCOUNT_FILTER_ADDRESS;
-      case ACCOUNT_FILTER_ENTITY_TYPE:
-        return TransactionType.ACCOUNT_FILTER_ENTITY_TYPE;
-      case ACCOUNT_FILTER_MOSAIC:
-        return TransactionType.ACCOUNT_FILTER_MOSAIC;
-      case MOSAIC_DEFINITION:
-        return TransactionType.MOSAIC_DEFINITION;
-      case MOSAIC_LEVY_CHANGE:
-        return TransactionType.MOSAIC_LEVY_CHANGE;
-      case MOSAIC_SUPPLY_CHANGE:
-        return TransactionType.MOSAIC_SUPPLY_CHANGE;
-      case NAMESPACE_REGISTRATION:
-        return TransactionType.NAMESPACE_REGISTRATION;
-      case NAMESPACE_ATTACH_TO_ACCOUNT:
-        return TransactionType.NAMESPACE_ATTACH_TO_ACCOUNT;
-      case NAMESPACE_ATTACH_TO_MOSAIC:
-        return TransactionType.NAMESPACE_ATTACH_TO_MOSAIC;
-      case TRANSFER:
-        return TransactionType.TRANSFER;
-      case MULTISIG_MODIFY:
-        return TransactionType.MULTISIG_MODIFY;
-      case AGGREGATE_BONDED:
-        return TransactionType.AGGREGATE_BONDED;
-      case AGGREGATE_COMPLETE:
-        return TransactionType.AGGREGATE_COMPLETE;
-      case HASH_LOCK:
-        return TransactionType.HASH_LOCK;
-      case ACCOUNT_LINK:
-        return TransactionType.ACCOUNT_LINK;
-      case SECRET_LOCK:
-        return TransactionType.SECRET_LOCK;
-      case SECRET_PROOF:
-        return TransactionType.SECRET_PROOF;
-      default:
-        throw new ArgumentError(_INVALID_TRANSACTION_TYPE);
+  /// The int value of this type.
+  int get value => _value;
+
+  /// Returns a [TransactionType] for the given int value.
+  ///
+  /// Throws an error when the type is unknown.
+  static TransactionType getType(final int value) {
+    for (var type in values) {
+      if (type.value == value) {
+        return type;
+      }
     }
+
+    throw new ArgumentError(UNKNOWN_TRANSACTION_TYPE);
   }
 
   /// Returns true if the given [transactionType] is an aggregate transaction type.
-  static bool isAggregateType(final int transactionType) {
+  static bool isAggregateType(final TransactionType transactionType) {
     switch (transactionType) {
       case AGGREGATE_BONDED:
       case AGGREGATE_COMPLETE:

@@ -17,38 +17,39 @@
 library nem2_sdk_dart.sdk.model.namespace.alias_type;
 
 /// The alias type.
-///
-/// Supported types are:
-/// * 0: No alias.
-/// * 1: Mosaic id alias.
-/// * 2: Address alias.
 class AliasType {
-  static const String _INVALID_ALIAS_TYPE = 'invalid alias type';
+  static const String UNKNOWN_ALIAS_TYPE = 'unknown alias type';
 
-  static const int NONE = 0;
+  /// No alias.
+  static const AliasType NONE = AliasType._(0);
 
-  static const int MOSAIC = 1;
+  /// This type identifies an alias to a mosaic.
+  static const AliasType MOSAIC = AliasType._(1);
 
-  static const int ADDRESS = 2;
+  /// This type identifies an alias to an address.
+  static const AliasType ADDRESS = AliasType._(2);
 
-  static const AliasType _singleton = AliasType._();
+  static final List<AliasType> values = <AliasType>[NONE, MOSAIC, ADDRESS];
 
-  const AliasType._();
+  final int _value;
 
-  factory AliasType() {
-    return _singleton;
-  }
+  // constant constructor: makes this class available on runtime.
+  // emulates an enum class with a value.
+  const AliasType._(this._value);
 
-  static int getType(final int aliasType) {
-    switch (aliasType) {
-      case NONE:
-        return AliasType.NONE;
-      case MOSAIC:
-        return AliasType.MOSAIC;
-      case ADDRESS:
-        return AliasType.ADDRESS;
-      default:
-        throw new ArgumentError(_INVALID_ALIAS_TYPE);
+  /// The int value of this type.
+  int get value => _value;
+
+  /// Returns a [AliasType] for the given int value.
+  ///
+  /// Throws an error when the type is unknown.
+  static AliasType getType(final int value) {
+    for (var type in values) {
+      if (type.value == value) {
+        return type;
+      }
     }
+
+    throw new ArgumentError(UNKNOWN_ALIAS_TYPE);
   }
 }

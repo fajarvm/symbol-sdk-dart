@@ -53,8 +53,7 @@ class MosaicProperties {
   /// becomes inactive and a subject for renewal.
   final Uint64 duration;
 
-  const MosaicProperties._(
-      this.supplyMutable, this.transferable, this.levyMutable, this.divisibility, this.duration);
+  MosaicProperties._(this.supplyMutable, this.transferable, this.levyMutable, this.divisibility, this.duration);
 
   factory MosaicProperties(
       {final bool supplyMutable = false,

@@ -38,7 +38,7 @@ class AddressAlias implements Alias {
 
   /// The alias type. Always [AliasType.ADDRESS] (2).
   @override
-  int get type => AliasType.ADDRESS;
+  AliasType get type => AliasType.ADDRESS;
 
   @override
   bool operator ==(final other) =>

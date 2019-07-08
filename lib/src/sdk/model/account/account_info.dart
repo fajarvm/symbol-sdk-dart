@@ -32,7 +32,7 @@ class AccountInfo {
   /// The public key of the account.
   final String publicKey;
 
-  /// the block height when the public key was first published.
+  /// The block height when the public key was first published.
   final Uint64 publicKeyHeight;
 
   /// The importance of the account.
@@ -44,7 +44,7 @@ class AccountInfo {
   /// A collection of mosaics hold by the account.
   final List<Mosaic> mosaics;
 
-  const AccountInfo(this.address, this.addressHeight, this.publicKey, this.publicKeyHeight,
+  AccountInfo(this.address, this.addressHeight, this.publicKey, this.publicKeyHeight,
       this.importance, this.importanceHeight, this.mosaics);
 
   /// Returns the public account of this account.

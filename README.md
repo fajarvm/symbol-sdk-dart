@@ -19,7 +19,7 @@ The nem2-sdk-dart is an unofficial SDK written in Dart. Developers can use this 
 > This SDK is currently being built in the author's best effort. You may use it in your projects, however at your own risk. Please, refer to the disclaimer below.
 
 ## Requirements
-Dart SDK v2.2.0 or above.
+Dart SDK v2.3.0 or above.
 
 ## License
 

@@ -16,6 +16,8 @@
 
 library nem2_sdk_dart.sdk.model.blockchain.block_info;
 
+import 'package:nem2_sdk_dart/sdk.dart';
+
 import '../account/public_account.dart';
 import '../common/uint64.dart';
 
@@ -43,7 +45,7 @@ class BlockInfo {
   final PublicAccount signer;
 
   /// The network type.
-  final int networkType;
+  final NetworkType networkType;
 
   /// The transaction version.
   final int version;
@@ -80,7 +82,7 @@ class BlockInfo {
   /// The public account of the benificiary.
   final PublicAccount benificiary;
 
-  const BlockInfo(
+  BlockInfo(
       this.hash,
       this.generationHash,
       this.totalFee,

@@ -23,7 +23,7 @@ abstract class Id {
   /// 64-bit unsigned integer id.
   final Uint64 id;
 
-  const Id(this.id);
+  Id(this.id);
 
   @override
   bool operator ==(Object other) =>

@@ -16,34 +16,37 @@
 
 library nem2_sdk_dart.sdk.model.namespace.alias_action_type;
 
-/// The alias type.
-///
-/// The alias action type. Supported actions are:
-/// * 0: Link an alias.
-/// * 1: Unlink an alias.
+/// The alias action type.
 class AliasActionType {
-  static const String _INVALID_ALIAS_ACTION_TYPE = 'invalid alias action type';
+  static const String UNKNOWN_ALIAS_ACTION_TYPE = 'unknown alias action type';
 
-  static const int LINK = 0;
+  /// Links an alias.
+  static const AliasActionType LINK = AliasActionType._(0);
 
-  static const int UNLINK = 1;
+  /// Unlinks an alias.
+  static const AliasActionType UNLINK = AliasActionType._(1);
 
-  static const AliasActionType _singleton = AliasActionType._();
+  static final List<AliasActionType> values = <AliasActionType>[LINK, UNLINK];
 
-  const AliasActionType._();
+  final int _value;
 
-  factory AliasActionType() {
-    return _singleton;
-  }
+  // constant constructor: makes this class available on runtime.
+  // emulates an enum class with a value.
+  const AliasActionType._(this._value);
 
-  static int getAliasActionType(final int type) {
-    switch (type) {
-      case LINK:
-        return AliasActionType.LINK;
-      case UNLINK:
-        return AliasActionType.UNLINK;
-      default:
-        throw new ArgumentError(_INVALID_ALIAS_ACTION_TYPE);
+  /// The int value of this type.
+  int get value => _value;
+
+  /// Returns a [AliasActionType] for the given int value.
+  ///
+  /// Throws an error when the type is unknown.
+  static AliasActionType getType(final int value) {
+    for (var type in values) {
+      if (type.value == value) {
+        return type;
+      }
     }
+
+    throw new ArgumentError(UNKNOWN_ALIAS_ACTION_TYPE);
   }
 }

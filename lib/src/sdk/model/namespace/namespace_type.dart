@@ -17,33 +17,34 @@
 library nem2_sdk_dart.sdk.model.namespace.namespace_type;
 
 /// The namespace type.
-///
-/// Supported supply types are:
-/// * 0: Namespace.
-/// * 1: Sub namespace.
 class NamespaceType {
-  static const String _INVALID_NAMESPACE_TYPE = 'invalid namespace type';
+  static const String UNKNOWN_NAMESPACE_TYPE = 'unknown namespace type';
 
-  static const int ROOT_NAMESPACE = 0;
+  static const NamespaceType ROOT_NAMESPACE = NamespaceType._(0);
 
-  static const int SUB_NAMESPACE = 1;
+  static const NamespaceType SUB_NAMESPACE = NamespaceType._(1);
 
-  static const NamespaceType _singleton = NamespaceType._();
+  static final List<NamespaceType> values = <NamespaceType>[ROOT_NAMESPACE, SUB_NAMESPACE];
 
-  const NamespaceType._();
+  final int _value;
 
-  factory NamespaceType() {
-    return _singleton;
-  }
+  // constant constructor: makes this class available on runtime.
+  // emulates an enum class with a value.
+  const NamespaceType._(this._value);
 
-  static int getType(final int namespaceType) {
-    switch (namespaceType) {
-      case ROOT_NAMESPACE:
-        return NamespaceType.ROOT_NAMESPACE;
-      case SUB_NAMESPACE:
-        return NamespaceType.SUB_NAMESPACE;
-      default:
-        throw new ArgumentError(_INVALID_NAMESPACE_TYPE);
+  /// The int value of this type.
+  int get value => _value;
+
+  /// Returns a [NamespaceType] for the given int value.
+  ///
+  /// Throws an error when the type is unknown.
+  static NamespaceType getType(final int value) {
+    for (var type in values) {
+      if (type.value == value) {
+        return type;
+      }
     }
+
+    throw new ArgumentError(UNKNOWN_NAMESPACE_TYPE);
   }
 }

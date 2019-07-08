@@ -19,18 +19,15 @@ library nem2_sdk_dart.sdk.model.namespace.alias;
 import '../account/address.dart';
 import '../mosaic/mosaic_id.dart';
 
+import 'alias_type.dart';
+
 /// The alias structure defines an interface for Aliases.
 // Developer Note:
 // Dart doesn't have a syntax for declaring interfaces. Instead, every class implicitly defines an
 // interface containing all the instance members of the class and of any interfaces it implements.
 class Alias {
   /// The alias type.
-  ///
-  /// Available values:
-  ///  * 0 : No alias
-  ///  * 1 : Mosaic id alias
-  ///  * 2 : Address alias
-  final int type;
+  final AliasType type;
 
   /// The alias address.
   final Address address;
@@ -38,5 +35,5 @@ class Alias {
   /// The alias mosaicId.
   final MosaicId mosaicId;
 
-  const Alias._(this.type, [this.address, this.mosaicId]);
+  Alias._(this.type, [this.address, this.mosaicId]);
 }

@@ -17,35 +17,37 @@
 library nem2_sdk_dart.sdk.model.mosaic.mosaic_supply_type;
 
 /// The supply type of a mosaic.
-///
-/// Supported supply types are:
-/// * 0: Increase in supply.
-/// * 1: Decrease in supply.
 class MosaicSupplyType {
-  static const String _INVALID_MOSAIC_SUPPLY_TYPE = 'invalid mosaic supply type';
+  static const String UNKNOWN_MOSAIC_SUPPLY_TYPE = 'unknown mosaic supply type';
 
   /// Mosaic with this type can decrease in supply.
-  static const int DECREASE = 0;
+  static const MosaicSupplyType DECREASE = MosaicSupplyType._(0);
 
   /// Mosaic with this type can increase in supply.
-  static const int INCREASE = 1;
+  static const MosaicSupplyType INCREASE = MosaicSupplyType._(1);
 
-  static const MosaicSupplyType _singleton = MosaicSupplyType._();
+  /// Supported network types.
+  static final List<MosaicSupplyType> values = <MosaicSupplyType>[DECREASE, INCREASE];
 
-  const MosaicSupplyType._();
+  final int _value;
 
-  factory MosaicSupplyType() {
-    return _singleton;
-  }
+  // constant constructor: makes this class available on runtime.
+  // emulates an enum class with a value.
+  const MosaicSupplyType._(this._value);
 
-  static int getType(final int mosaicSupplyType) {
-    switch (mosaicSupplyType) {
-      case DECREASE:
-        return MosaicSupplyType.DECREASE;
-      case INCREASE:
-        return MosaicSupplyType.INCREASE;
-      default:
-        throw new ArgumentError(_INVALID_MOSAIC_SUPPLY_TYPE);
+  /// The int value of this type.
+  int get value => _value;
+
+  /// Returns a [MosaicSupplyType] for the given int value.
+  ///
+  /// Throws an error when the type is unknown.
+  static MosaicSupplyType getType(final int value) {
+    for (var type in values) {
+      if (type.value == value) {
+        return type;
+      }
     }
+
+    throw new ArgumentError(UNKNOWN_MOSAIC_SUPPLY_TYPE);
   }
 }

@@ -16,8 +16,6 @@
 
 library nem2_sdk_dart.test.sdk.model.namespace.namespace_info_test;
 
-import 'package:test/test.dart';
-
 import 'package:nem2_sdk_dart/sdk.dart'
     show
         AliasType,
@@ -29,6 +27,7 @@ import 'package:nem2_sdk_dart/sdk.dart'
         NetworkType,
         PublicAccount,
         Uint64;
+import 'package:test/test.dart';
 
 void main() {
   group('NamespaceInfo', () {
@@ -86,19 +85,23 @@ void main() {
 
     test('Cannot create with invalid index, depth or levels', () {
       expect(
-          () => new NamespaceInfo(true, -1, '', 0, 1, null, null, null, null, null, null),
+          () => new NamespaceInfo(
+              true, -1, '', NamespaceType.ROOT_NAMESPACE, 1, null, null, null, null, null, null),
           throwsA(
               predicate((e) => e is ArgumentError && e.message == 'index must not be negative')));
       expect(
-          () => new NamespaceInfo(true, 0, '', 0, -1, null, null, null, null, null, null),
+          () => new NamespaceInfo(
+              true, 0, '', NamespaceType.ROOT_NAMESPACE, -1, null, null, null, null, null, null),
           throwsA(
               predicate((e) => e is ArgumentError && e.message == 'depth must not be negative')));
       expect(
-          () => new NamespaceInfo(true, 0, '', 0, 1, null, null, null, null, null, null),
+          () => new NamespaceInfo(
+              true, 0, '', NamespaceType.ROOT_NAMESPACE, 1, null, null, null, null, null, null),
           throwsA(predicate(
               (e) => e is ArgumentError && e.message == 'levels must not be null or empty')));
       expect(
-          () => new NamespaceInfo(true, 0, '', 0, 1, [], null, null, null, null, null),
+          () => new NamespaceInfo(
+              true, 0, '', NamespaceType.ROOT_NAMESPACE, 1, [], null, null, null, null, null),
           throwsA(predicate(
               (e) => e is ArgumentError && e.message == 'levels must not be null or empty')));
     });

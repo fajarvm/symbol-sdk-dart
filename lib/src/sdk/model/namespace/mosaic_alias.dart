@@ -38,7 +38,7 @@ class MosaicAlias implements Alias {
 
   /// The alias type. Always [AliasType.MOSAIC] (1).
   @override
-  int get type => AliasType.MOSAIC;
+  AliasType get type => AliasType.MOSAIC;
 
   @override
   bool operator ==(final other) =>

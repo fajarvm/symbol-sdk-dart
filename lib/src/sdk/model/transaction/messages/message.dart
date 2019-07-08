@@ -18,10 +18,12 @@ library nem2_sdk_dart.sdk.model.transaction.messages.message;
 
 import 'dart:typed_data' show Uint8List;
 
+import 'message_type.dart';
+
 /// An abstract message class that serves as the base class of all message types.
 abstract class Message {
   /// Message type.
-  final int type;
+  final MessageType type;
 
   /// Message payload.
   final Uint8List payload;

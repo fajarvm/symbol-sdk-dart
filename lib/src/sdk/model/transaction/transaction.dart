@@ -17,6 +17,7 @@
 library nem2_sdk_dart.sdk.model.transaction.transaction;
 
 import 'package:nem2_sdk_dart/core.dart' show KeyPair;
+import 'package:nem2_sdk_dart/sdk.dart';
 
 import '../account/account.dart';
 import '../account/public_account.dart';
@@ -30,13 +31,13 @@ import 'verifiable_transaction.dart';
 /// An abstract transaction class that serves as the base class of all NEM transactions.
 abstract class Transaction {
   /// The transaction type.
-  final int transactionType;
+  final TransactionType transactionType;
 
   /// The network type.
-  final int networkType;
+  final NetworkType networkType;
 
   /// The transaction format version.
-  final int version;
+  final TransactionVersion version;
 
   /// The deadline for the transaction to be included before it expires.
   final Deadline deadline;

@@ -36,7 +36,7 @@ class EmptyAlias implements Alias {
 
   /// The alias type. Always [AliasType.NONE] (0).
   @override
-  int get type => AliasType.NONE;
+  AliasType get type => AliasType.NONE;
 
   @override
   bool operator ==(final other) =>

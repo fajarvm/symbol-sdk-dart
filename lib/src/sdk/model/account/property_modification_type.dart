@@ -17,33 +17,36 @@
 library nem2_sdk_dart.sdk.model.account.property_modification_type;
 
 /// The type of modification to a property type.
-///
-/// Supported types are:
-/// * 0x01: Add property value.
-/// * 0x02: Delete property value.
 class PropertyModificationType {
-  static const String _INVALID_PROPERTY_MODIFICATION_TYPE = 'invalid property modification type';
+  static const String UNKNOWN_PROPERTY_MODIFICATION_TYPE = 'unknown property modification type';
 
-  static const PropertyModificationType _singleton = PropertyModificationType._();
+  /// Addition.
+  static const PropertyModificationType ADD = PropertyModificationType._(0x00);
 
-  const PropertyModificationType._();
+  /// Deletion.
+  static const PropertyModificationType DEL = PropertyModificationType._(0x01);
 
-  factory PropertyModificationType() {
-    return _singleton;
-  }
+  static final List<PropertyModificationType> values = <PropertyModificationType>[ADD, DEL];
 
-  static const int ADD = 0;
+  final int _value;
 
-  static const int DEL = 1;
+  // constant constructor: makes this class available on runtime.
+  // emulates an enum class with a value.
+  const PropertyModificationType._(this._value);
 
-  static int getType(final int propertyModificationType) {
-    switch (propertyModificationType) {
-      case ADD:
-        return PropertyModificationType.ADD;
-      case DEL:
-        return PropertyModificationType.DEL;
-      default:
-        throw new ArgumentError(_INVALID_PROPERTY_MODIFICATION_TYPE);
+  /// The int value of this type.
+  int get value => _value;
+
+  /// Returns a [PropertyModificationType] for the given int value.
+  ///
+  /// Throws an error when the type is unknown.
+  static PropertyModificationType getType(final int value) {
+    for (var type in values) {
+      if (type.value == value) {
+        return type;
+      }
     }
+
+    throw new ArgumentError(UNKNOWN_PROPERTY_MODIFICATION_TYPE);
   }
 }
