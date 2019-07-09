@@ -36,7 +36,7 @@ void main() {
       expect(deadline.value.isBefore(now), isFalse);
       // default deadline value is 2 hours from now
       expect(deadline.value.isBefore(now.add(Duration(hours: 1))), isFalse);
-      expect(deadline.value.isBefore(now.add(Duration(hours: 2))), isTrue);
+      expect(deadline.value.isAtSameMomentAs(now.add(Duration(hours: 2))), isTrue);
       expect(deadline.value.isAfter(now.add(Duration(hours: 3))), isFalse);
     });
 
