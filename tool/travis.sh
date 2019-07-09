@@ -19,11 +19,12 @@ echo "Running all tests..."
 pub run test test/test_all.dart --reporter expanded
 
 # Gather coverage and upload to Coveralls.
-if [ "$COVERALLS_TOKEN" ] && [ "$TRAVIS_DART_VERSION" = "stable" ]; then
+if [ "$COVERALLS_TOKEN" ]; then
   OBS_PORT=9292
   echo "Collecting coverage on port $OBS_PORT..."
 
   # Start tests in one VM.
+  echo "Running all tests..."
   dart \
     --enable-vm-service=$OBS_PORT \
     --pause-isolates-on-exit \
@@ -45,7 +46,5 @@ if [ "$COVERALLS_TOKEN" ] && [ "$TRAVIS_DART_VERSION" = "stable" ]; then
     --packages=.packages \
     --report-on=lib
 
-  # Upload to coveralls
-  echo "Upload LCOV report to Coveralls..."
-  coveralls ./var/lcov.info
+  echo "LCOV report generated"
 fi

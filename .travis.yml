@@ -1,6 +1,9 @@
 language: dart
 dart:
-  - stable
+  - '2.2.0'
+# Coverage is currently broken for dart version 2.3.0 and above.
+# Using version 2.2.0 to run the tests for now.
+# Source: https://github.com/dart-lang/coverage/issues/249
 notifications: {email: false}
 before_install:
   - chmod +x ./tool/travis.sh
@@ -8,6 +11,8 @@ install:
   - pub global activate coveralls
   - pub global activate coverage
 script: ./tool/travis.sh
+after_success:
+  - coveralls var/lcov.info
 env:
   - DARTANALYZER_FLAGS=--fatal-warnings
 
