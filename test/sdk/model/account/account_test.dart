@@ -16,6 +16,7 @@
 
 library nem2_sdk_dart.test.sdk.model.account.account_test;
 
+import 'package:nem2_sdk_dart/core.dart';
 import 'package:test/test.dart';
 
 import 'package:nem2_sdk_dart/core.dart' show CryptoException, Ed25519;
@@ -29,12 +30,31 @@ void main() {
   };
 
   group('Account creation', () {
-    test('should be created from a private key', () {
+    test('can create a new account', () {
+      final account = Account.create(NetworkType.MIJIN_TEST);
+
+      expect(account.publicKey, isNotNull);
+      expect(account.privateKey, isNotNull);
+      expect(account.plainAddress, isNotNull);
+    });
+
+    test('can create an account from a private key', () {
       final account = Account.fromPrivateKey(testAccount['privateKey'], NetworkType.MIJIN_TEST);
 
       expect(account.publicKey, equals(testAccount['publicKey']));
       expect(account.privateKey, equals(testAccount['privateKey']));
       expect(account.plainAddress, equals(testAccount['address']));
+    });
+
+    test('can create an account from a keypair', () {
+      final keyPair = KeyPair.random();
+      final account = Account.fromKeyPair(keyPair, NetworkType.MIJIN_TEST);
+
+      expect(account.keyPair.publicKey, equals(keyPair.publicKey));
+      expect(account.keyPair.privateKey, equals(keyPair.privateKey));
+      expect(account.publicKey, equals(HexUtils.getString(keyPair.publicKey)));
+      expect(account.privateKey, equals(HexUtils.getString(keyPair.privateKey)));
+      expect(account.publicAccount.address.networkType, equals(NetworkType.MIJIN_TEST));
     });
 
     test('should throw an exception when the private key is invalid', () {
@@ -44,15 +64,7 @@ void main() {
               e is CryptoException &&
               e.message ==
                   'Private key has an unexpected size. '
-                  'Expected: ${Ed25519.KEY_SIZE}, Got: 0')));
-    });
-
-    test('should generate a new account', () {
-      final account = Account.create(NetworkType.MIJIN_TEST);
-
-      expect(account.publicKey, isNotNull);
-      expect(account.privateKey, isNotNull);
-      expect(account.plainAddress, isNotNull);
+                      'Expected: ${Ed25519.KEY_SIZE}, Got: 0')));
     });
   });
 

@@ -63,7 +63,9 @@ class PublicAccount {
 
   /// Create a [PublicAccount] from a [publicKey] for the given [networkType].
   static PublicAccount fromPublicKey(final String publicKey, final NetworkType networkType) {
-    if (publicKey == null || (64 != publicKey.length && 66 != publicKey.length)) {
+    ArgumentError.checkNotNull(publicKey);
+
+    if (64 != publicKey.length && 66 != publicKey.length) {
       throw new ArgumentError('Not a valid public key');
     }
 

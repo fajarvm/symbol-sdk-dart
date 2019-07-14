@@ -74,9 +74,8 @@ class Address {
 
   /// Creates an [Address] from a given [publicKey] string for the given [networkType].
   static Address fromPublicKey(final String publicKey, final NetworkType networkType) {
-    if (networkType == null || !NetworkType.isValid(networkType.value)) {
-      throw new ArgumentError('Network type unsupported');
-    }
+    ArgumentError.checkNotNull(networkType);
+    NetworkType.isValid(networkType.value, true);
 
     final Uint8List publicKeyByte = HexUtils.getBytes(publicKey);
     final Uint8List addressByte = publicKeyToAddress(publicKeyByte, networkType);
@@ -90,21 +89,23 @@ class Address {
   /// A raw address string looks like:
   /// SB3KUBHATFCPV7UZQLWAQ2EUR6SIHBSBEOEDDDF3 or SB3KUB-HATFCP-V7UZQL-WAQ2EU-R6SIHB-SBEOED-DDF3.
   static Address fromRawAddress(final String rawAddress) {
-    final String address = rawAddress.trim().toUpperCase().replaceAll(REGEX_DASH, EMPTY_STRING);
+    final String networkIdentifier =
+        rawAddress.trim().toUpperCase().replaceAll(REGEX_DASH, EMPTY_STRING);
 
-    if (address.length != ADDRESS_ENCODED_SIZE) {
-      throw new ArgumentError('Address $address has to be $ADDRESS_ENCODED_SIZE characters long');
+    if (networkIdentifier.length != ADDRESS_ENCODED_SIZE) {
+      throw new ArgumentError(
+          'Address $networkIdentifier has to be $ADDRESS_ENCODED_SIZE characters long');
     }
 
-    switch (address[0]) {
+    switch (networkIdentifier[0]) {
       case PREFIX_MIJIN_TEST:
-        return new Address._(address, NetworkType.MIJIN_TEST);
+        return new Address._(networkIdentifier, NetworkType.MIJIN_TEST);
       case PREFIX_MIJIN:
-        return new Address._(address, NetworkType.MIJIN);
+        return new Address._(networkIdentifier, NetworkType.MIJIN);
       case PREFIX_TEST_NET:
-        return new Address._(address, NetworkType.TEST_NET);
+        return new Address._(networkIdentifier, NetworkType.TEST_NET);
       case PREFIX_MAIN_NET:
-        return new Address._(address, NetworkType.MAIN_NET);
+        return new Address._(networkIdentifier, NetworkType.MAIN_NET);
       default:
         throw new UnsupportedError('unknown address network type');
     }

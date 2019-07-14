@@ -21,7 +21,11 @@ import 'multisig_account_info.dart';
 /// The multi-signature account graph info structure describes the information of all the
 /// multi-signature levels an account is involved in.
 class MultisigAccountGraphInfo {
+  /// The multisig accounts.
   final Map<int, List<MultisigAccountInfo>> multisigAccounts;
+
+  /// Returns multisig accounts levels number.
+  Iterable<int> get levelNumber => multisigAccounts.keys;
 
   MultisigAccountGraphInfo._(this.multisigAccounts);
 

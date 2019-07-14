@@ -58,14 +58,17 @@ class NetworkType {
   }
 
   /// Checks if the given int value is of a valid network type.
-  static bool isValid(final int networkType) {
+  ///
+  /// Throws an error if when the parameter [throwError] is set to true.
+  static bool isValid(final int networkType, [final bool throwError = false]) {
     try {
       if (getType(networkType) != null) {
         return true;
-      } else {
-        return false;
       }
     } catch (e) {
+      if (throwError) {
+        rethrow;
+      }
       return false;
     }
   }

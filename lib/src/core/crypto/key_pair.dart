@@ -35,9 +35,7 @@ class KeyPair {
   // A private method that creates a new instance of [KeyPair].
   // Throws an error when [privateKey] has an unexpected length.
   static KeyPair _create(Uint8List privateKey, Uint8List publicKey) {
-    if (privateKey == null) {
-      throw new ArgumentError('privateKey byte cannot be null');
-    }
+    ArgumentError.checkNotNull(privateKey);
 
     if (privateKey.lengthInBytes != 32 && privateKey.lengthInBytes != 33) {
       throw new ArgumentError('Invalid length for privateKey. Length: ${privateKey.lengthInBytes}');

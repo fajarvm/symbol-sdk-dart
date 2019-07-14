@@ -42,7 +42,7 @@ void main() {
 
     test('cannot create using invalid parameters', () {
       expect(() => PublicAccount.fromPublicKey(null, NetworkType.MIJIN_TEST),
-          throwsA(predicate((e) => e is ArgumentError && e.message == 'Not a valid public key')));
+          throwsA(predicate((e) => e is ArgumentError && e.message == 'Must not be null')));
       expect(
           () => PublicAccount.fromPublicKey(
               'b4f12e7c9f6946091e2cb8b6d3a12b50d17ccbbf646386ea27ce2946a7423dc',

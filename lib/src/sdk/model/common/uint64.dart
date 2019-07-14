@@ -32,8 +32,8 @@ import 'package:nem2_sdk_dart/core.dart' show ArrayUtils, StringUtils;
 
 /// Represents a 64-bit unsigned integer.
 ///
-/// The value is stored as Dart's native big number data type `BigInt` as it will be translated
-/// correctly into JavaScript (supported by dart2js).
+/// This class uses Dart's native number type [BigInt] and has a value check for big integers.
+/// [BigInt] will be translated correctly into JavaScript (supported by dart2js).
 /// Value range is 0 through 18446744073709551615.
 class Uint64 implements Comparable<Uint64> {
   /// The accepted min value of 64-bit signed integer.

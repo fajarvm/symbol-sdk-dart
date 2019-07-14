@@ -34,10 +34,10 @@ class Account {
   // private constructor
   Account._(this._keyPair, this._publicAccount);
 
-  /// The public key of this account.
+  /// The public key string of this account.
   String get publicKey => HexUtils.getString(_keyPair.publicKey);
 
-  /// The private key of this account.
+  /// The private key string of this account.
   String get privateKey => HexUtils.getString(_keyPair.privateKey);
 
   /// The plain text address of this account.
@@ -45,6 +45,9 @@ class Account {
 
   /// The public account of this account.
   PublicAccount get publicAccount => _publicAccount;
+
+  /// The keyPair containing the public and private key of this account.
+  KeyPair get keyPair => _keyPair;
 
   @override
   int get hashCode => _keyPair.hashCode ^ _publicAccount.hashCode;
@@ -57,13 +60,20 @@ class Account {
           _keyPair.publicKey == other._keyPair.publicKey &&
           plainAddress == other.plainAddress;
 
-  /// Creates an [Account] from a given [privateKey] for a specific [networkType].
-  static Account fromPrivateKey(final String privateKey, final NetworkType networkType) {
-    final KeyPair keyPair = KeyPair.fromPrivateKey(privateKey);
+  /// Creates an [Account] from a given [keyPair] for a specific [networkType].
+  static Account fromKeyPair(final KeyPair keyPair, final NetworkType networkType) {
     final String publicKey = HexUtils.getString(keyPair.publicKey);
     final PublicAccount publicAccount = PublicAccount.fromPublicKey(publicKey, networkType);
 
     return new Account._(keyPair, publicAccount);
+  }
+
+  /// Creates an [Account] from a given [privateKey] for a specific [networkType].
+  static Account fromPrivateKey(final String privateKey, final NetworkType networkType) {
+    ArgumentError.checkNotNull(privateKey);
+    final KeyPair keyPair = KeyPair.fromPrivateKey(privateKey);
+
+    return fromKeyPair(keyPair, networkType);
   }
 
   /// Creates a new [Account] for the given [networkType].

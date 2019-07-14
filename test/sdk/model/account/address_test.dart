@@ -69,8 +69,10 @@ void main() {
     });
 
     test('cannot create for an invalid network type', () {
+      String errorMessage = NetworkType.UNKNOWN_NETWORK_TYPE;
+      expect(errorMessage, 'network type is unknown');
       expect(() => Address.fromPublicKey(null, new MockNetworkType(-1)),
-          throwsA(predicate((e) => e is ArgumentError && e.message == 'Network type unsupported')));
+          throwsA(predicate((e) => e is ArgumentError && e.message == errorMessage)));
     });
   });
 

@@ -54,6 +54,8 @@ void main() {
 
       final multisigAccountInfoGraph = new MultisigAccountGraphInfo(multisigAccounts);
 
+      expect(multisigAccountInfoGraph.levelNumber, isNotEmpty);
+      expect(multisigAccountInfoGraph.levelNumber.length, 1);
       expect(multisigAccountInfoGraph.multisigAccounts.containsKey(2), isTrue);
       expect(multisigAccountInfoGraph.multisigAccounts.containsKey(3), isFalse);
       expect(multisigAccountInfoGraph.multisigAccounts[2][0].account, equals(account));
