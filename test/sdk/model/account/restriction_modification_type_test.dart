@@ -30,46 +30,33 @@
 // limitations under the License.
 //
 
-library nem2_sdk_dart.test.sdk.model.account.property_type_test;
+library nem2_sdk_dart.test.sdk.model.account.restriction_modificatoin_type_test;
 
-import 'package:nem2_sdk_dart/sdk.dart' show PropertyType;
+import 'package:nem2_sdk_dart/sdk.dart' show RestrictionModificationType;
 import 'package:test/test.dart';
 
 void main() {
-  group('PropertyType', () {
-    test('valid transaction types', () {
-      // Allow
-      expect(PropertyType.ALLOW_ADDRESS.value, 0x01);
-      expect(PropertyType.ALLOW_MOSAIC.value, 0x02);
-      expect(PropertyType.ALLOW_TRANSACTION.value, 0x04);
-
-      // Sentinel
-      expect(PropertyType.SENTINEL.value, 0x05);
-
-      // Block
-      expect(PropertyType.BLOCK_ADDRESS.value, (0x80 + 0x01));
-      expect(PropertyType.BLOCK_MOSAIC.value, (0x80 + 0x02));
-      expect(PropertyType.BLOCK_TRANSACTION.value, (0x80 + 0x04));
+  group('RestrictionModificationType', () {
+    test('valid types', () {
+      expect(RestrictionModificationType.ADD.value, 0x00);
+      expect(RestrictionModificationType.DEL.value, 0x01);
     });
 
-    test('Can retrieve a valid transaction types', () {
+    test('Can retrieve a valid restriction modification types', () {
       // Account filters
-      expect(PropertyType.getType(0x01), PropertyType.ALLOW_ADDRESS);
-      expect(PropertyType.getType(0x02), PropertyType.ALLOW_MOSAIC);
-      expect(PropertyType.getType(0x04), PropertyType.ALLOW_TRANSACTION);
-      expect(PropertyType.getType(0x05), PropertyType.SENTINEL);
-      expect(PropertyType.getType(0x80 + 0x01), PropertyType.BLOCK_ADDRESS);
-      expect(PropertyType.getType(0x80 + 0x02), PropertyType.BLOCK_MOSAIC);
-      expect(PropertyType.getType(0x80 + 0x04), PropertyType.BLOCK_TRANSACTION);
+      expect(RestrictionModificationType.getType(0x00), RestrictionModificationType.ADD);
+      expect(RestrictionModificationType.getType(0x01), RestrictionModificationType.DEL);
     });
 
-    test('Trying to retrieve an unknown property type will throw an error', () {
-      String errorMessage = PropertyType.UNKNOWN_PROPERTY_TYPE;
-      expect(() => PropertyType.getType(null),
+    test('Trying to retrieve an invalid restriction type will throw an error', () {
+      String errorMessage = RestrictionModificationType.UNKNOWN_RESTRICTION_MODIFICATION_TYPE;
+      expect(errorMessage, equals('unknown restriction modification type'));
+
+      expect(() => RestrictionModificationType.getType(null),
           throwsA(predicate((e) => e is ArgumentError && e.message == errorMessage)));
-      expect(() => PropertyType.getType(0x03),
+      expect(() => RestrictionModificationType.getType(-1),
           throwsA(predicate((e) => e is ArgumentError && e.message == errorMessage)));
-      expect(() => PropertyType.getType(0x80 + 0x03),
+      expect(() => RestrictionModificationType.getType(2),
           throwsA(predicate((e) => e is ArgumentError && e.message == errorMessage)));
     });
   });

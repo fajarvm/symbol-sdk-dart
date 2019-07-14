@@ -56,9 +56,9 @@ class Account {
   bool operator ==(final other) =>
       identical(this, other) ||
       other is Account &&
-          runtimeType == other.runtimeType &&
-          _keyPair.publicKey == other._keyPair.publicKey &&
-          plainAddress == other.plainAddress;
+          this.runtimeType == other.runtimeType &&
+          this.publicKey == other.publicKey &&
+          this.plainAddress == other.plainAddress;
 
   /// Creates an [Account] from a given [keyPair] for a specific [networkType].
   static Account fromKeyPair(final KeyPair keyPair, final NetworkType networkType) {

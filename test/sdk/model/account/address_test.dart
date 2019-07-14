@@ -22,7 +22,7 @@ import 'package:nem2_sdk_dart/core.dart' show ArrayUtils, HexUtils, KeyPair;
 import 'package:nem2_sdk_dart/sdk.dart' show Address, NetworkType;
 
 void main() {
-  group('fromPublicKey', () {
+  group('sanity test', (){
     test('valid constants', () {
       expect(Address.RIPEMD_160_SIZE, 20);
       expect(Address.ADDRESS_DECODED_SIZE, 25);
@@ -40,6 +40,21 @@ void main() {
       expect(Address.REGEX_DASH.hasMatch('-'), isTrue);
       expect(Address.REGEX_PRETTY.hasMatch('ABCFDG-HIJKLMN'), isTrue);
     });
+
+    test('can compare two addresses', () {
+      const publicKey = 'b4f12e7c9f6946091e2cb8b6d3a12b50d17ccbbf646386ea27ce2946a7423dcf';
+      final address1 = Address.fromPublicKey(publicKey, NetworkType.MIJIN_TEST);
+      final address2 = Address.fromPublicKey(publicKey, NetworkType.MIJIN_TEST);
+
+      expect(address1.hashCode, isNotNull);
+      expect(address2.hashCode, isNotNull);
+      expect(address1 == address2, isTrue);
+      expect(address1.toString(),
+          equals('Address{address= ${address1.plain}, networkType= ${address1.networkType}}'));
+    });
+  });
+
+  group('fromPublicKey', () {
 
     test('can create from public key for the designated network type', () {
       const publicKey = 'b4f12e7c9f6946091e2cb8b6d3a12b50d17ccbbf646386ea27ce2946a7423dcf';

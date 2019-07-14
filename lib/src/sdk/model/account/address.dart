@@ -65,9 +65,9 @@ class Address {
   bool operator ==(final other) =>
       identical(this, other) ||
       other is Address &&
-          runtimeType == other.runtimeType &&
-          _networkType == other._networkType &&
-          _address == other._address;
+          this.runtimeType == other.runtimeType &&
+          this._networkType == other.networkType &&
+          this._address == other.plain;
 
   @override
   int get hashCode => _networkType.hashCode ^ _address.hashCode;

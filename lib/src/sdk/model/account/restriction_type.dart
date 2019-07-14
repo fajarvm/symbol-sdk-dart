@@ -14,35 +14,35 @@
 // limitations under the License.
 //
 
-library nem2_sdk_dart.sdk.model.account.property_type;
+library nem2_sdk_dart.sdk.model.account.restriction_type;
 
-/// The property type of an account.
-class PropertyType {
-  static const String UNKNOWN_PROPERTY_TYPE = 'unknown property type';
+/// The restriction type of an account.
+class RestrictionType {
+  static const String UNKNOWN_RESTRICTION_TYPE = 'unknown restriction type';
 
   /// Allows receiving transactions from an address.
-  static const PropertyType ALLOW_ADDRESS = PropertyType._(0x01);
+  static const RestrictionType ALLOW_ADDRESS = RestrictionType._(0x01);
 
   /// Allows receiving transactions containing a mosaic id.
-  static const PropertyType ALLOW_MOSAIC = PropertyType._(0x02);
+  static const RestrictionType ALLOW_MOSAIC = RestrictionType._(0x02);
 
   /// Allows sending transactions with a given transaction type.
-  static const PropertyType ALLOW_TRANSACTION = PropertyType._(0x04);
+  static const RestrictionType ALLOW_TRANSACTION = RestrictionType._(0x04);
 
   /// Property type sentinel.
-  static const PropertyType SENTINEL = PropertyType._(0x05);
+  static const RestrictionType SENTINEL = RestrictionType._(0x05);
 
   /// Blocks receiving transactions from an address.
-  static const PropertyType BLOCK_ADDRESS = PropertyType._(0x80 + 0x01);
+  static const RestrictionType BLOCK_ADDRESS = RestrictionType._(0x80 + 0x01);
 
   /// Blocks receiving transactions containing a mosaic id.
-  static const PropertyType BLOCK_MOSAIC = PropertyType._(0x80 + 0x02);
+  static const RestrictionType BLOCK_MOSAIC = RestrictionType._(0x80 + 0x02);
 
   /// Blocks sending transactions with a given transaction type.
-  static const PropertyType BLOCK_TRANSACTION = PropertyType._(0x80 + 0x04);
+  static const RestrictionType BLOCK_TRANSACTION = RestrictionType._(0x80 + 0x04);
 
   /// Supported property types.
-  static final List<PropertyType> values = <PropertyType>[
+  static final List<RestrictionType> values = <RestrictionType>[
     ALLOW_ADDRESS,
     ALLOW_MOSAIC,
     ALLOW_TRANSACTION,
@@ -56,21 +56,21 @@ class PropertyType {
 
   // constant constructor: makes this class available on runtime.
   // emulates an enum class with a value.
-  const PropertyType._(this._value);
+  const RestrictionType._(this._value);
 
   /// The int value of this type.
   int get value => _value;
 
-  /// Returns a [PropertyType] for the given int value.
+  /// Returns a [RestrictionType] for the given int value.
   ///
   /// Throws an error when the type is unknown.
-  static PropertyType getType(final int value) {
+  static RestrictionType getType(final int value) {
     for (var type in values) {
       if (type.value == value) {
         return type;
       }
     }
 
-    throw new ArgumentError(UNKNOWN_PROPERTY_TYPE);
+    throw new ArgumentError(UNKNOWN_RESTRICTION_TYPE);
   }
 }

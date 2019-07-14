@@ -33,7 +33,7 @@ void main() {
         'signature': '37351C8244AC166BE6664E3FA954E99A3239AC46E51E2B32CEA1C72DD0851100A7731868'
             'E932E1A9BEF8A27D48E1FFEE401E933EB801824373E7537E51733E0F',
         'signer': 'B4F12E7C9F6946091E2CB8B6D3A12B50D17CCBBF646386EA27CE2946A7423DCF',
-        'benificiary': 'B4F12E7C9F6946091E2CB8B6D3A12B50D17CCBBF646386EA27CE2946A7423DCF',
+        'beneficiary': 'B4F12E7C9F6946091E2CB8B6D3A12B50D17CCBBF646386EA27CE2946A7423DCF',
         'timestamp': Uint64(0),
         'type': 32768,
         'version': 36867
@@ -56,8 +56,8 @@ void main() {
       final NetworkType networkType = NetworkType.getType(networkTypeRawValue);
       final int version = int.parse(versionPart, radix: 16);
       final signer = PublicAccount.fromPublicKey(testBlock['block']['signer'], networkType);
-      final benificiary =
-          PublicAccount.fromPublicKey(testBlock['block']['benificiary'], networkType);
+      final beneficiary =
+          PublicAccount.fromPublicKey(testBlock['block']['beneficiary'], networkType);
 
       // Create new Block info
       final blockInfo = new BlockInfo(
@@ -78,7 +78,7 @@ void main() {
           testBlock['block']['blockTransactionsHash'],
           testBlock['block']['blockReceiptsHash'],
           testBlock['block']['stateHash'],
-          benificiary);
+          beneficiary);
 
       // Assert
       expect(blockInfo.hash, equals(testBlock['meta']['hash']));
@@ -99,7 +99,7 @@ void main() {
       expect(blockInfo.blockTransactionsHash, equals(testBlock['block']['blockTransactionsHash']));
       expect(blockInfo.blockReceiptsHash, equals(testBlock['block']['blockReceiptsHash']));
       expect(blockInfo.stateHash, equals(testBlock['block']['stateHash']));
-      expect(blockInfo.benificiary.publicKey, equals(testBlock['block']['benificiary']));
+      expect(blockInfo.beneficiary.publicKey, equals(testBlock['block']['beneficiary']));
       expect(
           blockInfo.toString(),
           equals('BlockInfo{'
@@ -120,7 +120,7 @@ void main() {
               'blockTransactionsHash= ${blockInfo.blockTransactionsHash}, '
               'blockReceiptsHash= ${blockInfo.blockReceiptsHash}, '
               'stateHash= ${blockInfo.stateHash}, '
-              'benificiary= ${blockInfo.benificiary}'
+              'beneficiary= ${blockInfo.beneficiary}'
               '}'));
     });
   });

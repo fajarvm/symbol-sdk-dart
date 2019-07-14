@@ -14,17 +14,17 @@
 // limitations under the License.
 //
 
-library nem2_sdk_dart.sdk.model.account.account_properties_info;
+library nem2_sdk_dart.sdk.model.account.account_restrictions_info;
 
-import 'account_properties.dart';
+import 'account_restrictions.dart';
 
-/// Describes property information for an account.
-class AccountPropertiesInfo {
+/// Describes restriction information for an account.
+class AccountRestrictionsInfo {
   /// The meta id.
   final String metaId;
 
   /// The account properties.
-  final AccountProperties accountProperties;
+  final AccountRestrictions accountRestrictions;
 
-  AccountPropertiesInfo(this.metaId, this.accountProperties);
+  AccountRestrictionsInfo(this.metaId, this.accountRestrictions);
 }

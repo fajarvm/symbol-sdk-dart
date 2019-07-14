@@ -71,5 +71,8 @@ class NetworkType {
       }
       return false;
     }
+
+    // otherwise
+    return false;
   }
 }

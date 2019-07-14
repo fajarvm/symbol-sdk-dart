@@ -14,29 +14,29 @@
 // limitations under the License.
 //
 
-library nem2_sdk_dart.test.sdk.model.account.account_property_test;
+library nem2_sdk_dart.test.sdk.model.account.account_restriction_test;
 
 import 'package:test/test.dart';
 
 import 'package:nem2_sdk_dart/core.dart' show ArrayUtils;
 import 'package:nem2_sdk_dart/sdk.dart'
-    show AccountProperty, PropertyModificationType, PropertyType;
+    show AccountRestriction, RestrictionModificationType, RestrictionType;
 
 void main() {
-  group('AccountProperty', () {
-    test('Can create an AccountProperty object', () {
+  group('AccountRestriction', () {
+    test('Can create an AccountRestriction object', () {
       const values = [
         {
-          'modificationType': PropertyModificationType.ADD,
+          'modificationType': RestrictionModificationType.ADD,
           'value': 'SDUP5PLHDXKBX3UU5Q52LAY4WYEKGEWC6IB3VBFM'
         }
       ];
-      final accountProperty = new AccountProperty(PropertyType.ALLOW_ADDRESS, values);
+      final accountRestriction = new AccountRestriction(RestrictionType.ALLOW_ADDRESS, values);
 
       // Assert
-      expect(accountProperty.propertyType, equals(PropertyType.ALLOW_ADDRESS));
-      expect(accountProperty.values.length, equals(values.length));
-      expect(ArrayUtils.deepEqual(accountProperty.values, values), isTrue);
+      expect(accountRestriction.restrictionType, equals(RestrictionType.ALLOW_ADDRESS));
+      expect(accountRestriction.values.length, equals(values.length));
+      expect(ArrayUtils.deepEqual(accountRestriction.values, values), isTrue);
     });
   });
 }

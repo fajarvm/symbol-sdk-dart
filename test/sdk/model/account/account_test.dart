@@ -57,6 +57,17 @@ void main() {
       expect(account.publicAccount.address.networkType, equals(NetworkType.MIJIN_TEST));
     });
 
+    test('can compare two acconts', () {
+      final account1 = Account.fromPrivateKey(testAccount['privateKey'], NetworkType.MIJIN_TEST);
+      final account2 = Account.fromPrivateKey(testAccount['privateKey'], NetworkType.MIJIN_TEST);
+
+      expect(account1.hashCode, isNotNull);
+      expect(account2.hashCode, isNotNull);
+      expect(account1 == account2, isTrue);
+      expect(account1.toString(),
+          equals('Account{address= ${account1.plainAddress}, publicKey= ${account1.publicKey}}'));
+    });
+
     test('should throw an exception when the private key is invalid', () {
       expect(
           () => Account.fromPrivateKey('', NetworkType.MIJIN_TEST),

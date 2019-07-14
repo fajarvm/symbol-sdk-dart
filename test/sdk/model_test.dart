@@ -17,16 +17,17 @@
 import 'package:test/test.dart';
 
 import 'model/account/account_info_test.dart' as account_info_test;
-import 'model/account/account_properties_info_test.dart' as account_properties_info_test;
-import 'model/account/account_properties_test.dart' as account_properties_test;
-import 'model/account/account_property_test.dart' as account_property_test;
+import 'model/account/account_restriction_test.dart' as account_restriction_test;
+import 'model/account/account_restrictions_info_test.dart' as account_restrictions_info_test;
+import 'model/account/account_restrictions_test.dart' as account_restrictions_test;
 import 'model/account/account_test.dart' as account_test;
 import 'model/account/address_test.dart' as address_test;
 import 'model/account/multisig_account_graph_info_test.dart' as multisig_account_graph_info_test;
 import 'model/account/multisig_account_info_test.dart' as multisig_account_info_test;
-import 'model/account/property_modification_type_test.dart' as property_modification_type_test;
-import 'model/account/property_type_test.dart' as property_type_test;
 import 'model/account/public_account_test.dart' as public_account_test;
+import 'model/account/restriction_modification_type_test.dart'
+    as restriction_modification_type_test;
+import 'model/account/restriction_type_test.dart' as restriction_type_test;
 import 'model/blockchain/block_info_test.dart' as block_info_test;
 import 'model/blockchain/blockchain_score_test.dart' as blockchain_score_test;
 import 'model/blockchain/blockchain_storage_info_test.dart' as blockchain_storage_info_test;
@@ -67,15 +68,15 @@ void main() {
   // account
   group('Account:', () {
     account_info_test.main();
-    account_properties_info_test.main();
-    account_properties_test.main();
-    account_property_test.main();
+    account_restrictions_info_test.main();
+    account_restrictions_test.main();
+    account_restriction_test.main();
     account_test.main();
     address_test.main();
     multisig_account_graph_info_test.main();
     multisig_account_info_test.main();
-    property_modification_type_test.main();
-    property_type_test.main();
+    restriction_modification_type_test.main();
+    restriction_type_test.main();
     public_account_test.main();
   });
 

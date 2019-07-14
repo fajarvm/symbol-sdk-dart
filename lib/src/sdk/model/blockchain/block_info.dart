@@ -79,8 +79,8 @@ class BlockInfo {
   /// The state hash.
   final String stateHash;
 
-  /// The public account of the benificiary.
-  final PublicAccount benificiary;
+  /// The public account of the beneficiary.
+  final PublicAccount beneficiary;
 
   BlockInfo(
       this.hash,
@@ -100,7 +100,7 @@ class BlockInfo {
       this.blockTransactionsHash,
       this.blockReceiptsHash,
       this.stateHash,
-      [this.benificiary]);
+      [this.beneficiary]);
 
   @override
   String toString() {
@@ -122,7 +122,7 @@ class BlockInfo {
         'blockTransactionsHash= $blockTransactionsHash, '
         'blockReceiptsHash= $blockReceiptsHash, '
         'stateHash= $stateHash, '
-        'benificiary= $benificiary'
+        'beneficiary= $beneficiary'
         '}';
   }
 }

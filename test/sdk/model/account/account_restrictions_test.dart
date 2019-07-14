@@ -14,32 +14,37 @@
 // limitations under the License.
 //
 
-library nem2_sdk_dart.test.sdk.model.account.account_properties_test;
+library nem2_sdk_dart.test.sdk.model.account.account_restrictions_test;
 
 import 'package:test/test.dart';
 
 import 'package:nem2_sdk_dart/core.dart' show ArrayUtils;
 import 'package:nem2_sdk_dart/sdk.dart'
-    show AccountProperty, AccountProperties, Address, PropertyModificationType, PropertyType;
+    show
+        AccountRestriction,
+        AccountRestrictions,
+        Address,
+        RestrictionModificationType,
+        RestrictionType;
 
 void main() {
-  group('AccountProperties', () {
-    test('Can create an AccountProperties object', () {
+  group('AccountRestrictions', () {
+    test('Can create an AccountRestrictions object', () {
       final address = Address.fromEncoded('9050B9837EFAB4BBE8A4B9BB32D812F9885C00D8FC1650E142');
-      final property = new AccountProperty(PropertyType.ALLOW_ADDRESS, [
+      final restriction = new AccountRestriction(RestrictionType.ALLOW_ADDRESS, [
         {
-          'modificationType': PropertyModificationType.ADD,
+          'modificationType': RestrictionModificationType.ADD,
           'value': 'SDUP5PLHDXKBX3UU5Q52LAY4WYEKGEWC6IB3VBFM',
         }
       ]);
 
       // create
-      final accountProperties = new AccountProperties(address, [property]);
+      final accountRestrictions = new AccountRestrictions(address, [restriction]);
 
       // Assert
-      expect(accountProperties.address, equals(address));
-      expect(accountProperties.properties.length, 1);
-      expect(ArrayUtils.deepEqual(accountProperties.properties, [property]), isTrue);
+      expect(accountRestrictions.address, equals(address));
+      expect(accountRestrictions.restrictions.length, 1);
+      expect(ArrayUtils.deepEqual(accountRestrictions.restrictions, [restriction]), isTrue);
     });
   });
 }

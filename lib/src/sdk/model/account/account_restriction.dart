@@ -14,17 +14,17 @@
 // limitations under the License.
 //
 
-library nem2_sdk_dart.sdk.model.account.account_property;
+library nem2_sdk_dart.sdk.model.account.account_restriction;
 
-import 'property_type.dart';
+import 'restriction_type.dart';
 
-/// Account property structure describes property information.
-class AccountProperty {
-  /// Account property type.
-  final PropertyType propertyType;
+/// Account restriction structure describes restriction information.
+class AccountRestriction {
+  /// Account restriction type.
+  final RestrictionType restrictionType;
 
-  /// Property values.
+  /// Restriction values.
   final List<Object> values;
 
-  AccountProperty(this.propertyType, this.values);
+  AccountRestriction(this.restrictionType, this.values);
 }

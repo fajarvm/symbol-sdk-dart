@@ -19,15 +19,15 @@ library nem2_sdk_dart.sdk.model;
 // Account
 export 'model/account/account.dart';
 export 'model/account/account_info.dart';
-export 'model/account/account_properties.dart';
-export 'model/account/account_properties_info.dart';
-export 'model/account/account_property.dart';
+export 'model/account/account_restriction.dart';
+export 'model/account/account_restrictions.dart';
+export 'model/account/account_restrictions_info.dart';
 export 'model/account/address.dart';
 export 'model/account/multisig_account_graph_info.dart';
 export 'model/account/multisig_account_info.dart';
-export 'model/account/property_modification_type.dart';
-export 'model/account/property_type.dart';
 export 'model/account/public_account.dart';
+export 'model/account/restriction_modification_type.dart';
+export 'model/account/restriction_type.dart';
 
 // Blockchain
 export 'model/blockchain/block_info.dart';
