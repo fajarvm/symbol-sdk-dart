@@ -1,6 +1,6 @@
 language: dart
 dart:
-  - '2.4.0'
+  - '2.2.0'
 notifications: {email: false}
 install:
   - pub global activate coveralls
@@ -9,13 +9,11 @@ script:
   - set -e
   - pub get
   # Run dartanalyzer.
-  - echo "Running dartanalyzer..."
   - dartanalyzer --fatal-warnings ./
   # Start tests.
-  - echo "Running all tests..."
   - pub run test test/test_all.dart --reporter expanded
-  - echo "Collecting test coverage on port 8111"
   - dart --enable-vm-service=8111 --pause-isolates-on-exit test/test_all.dart &
+  - echo "Collecting test coverage on port 8111"
   # Run the coverage collector to generate the JSON coverage report.
   - nohup pub global run coverage:collect_coverage --port=8111 --out=var/coverage.json --wait-paused --resume-isolates
   # Convert the JSON coverage report to LCOV report.
