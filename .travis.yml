@@ -1,24 +1,31 @@
 language: dart
 dart:
-  - '2.2.0'
-# Coverage is currently broken for dart version 2.3.0 and above.
-# Using version 2.2.0 to run the tests for now.
-# Source: https://github.com/dart-lang/coverage/issues/249
+  - '2.4.0'
 notifications: {email: false}
-before_install:
-  - chmod +x ./tool/travis.sh
 install:
   - pub global activate coveralls
   - pub global activate coverage
-script: ./tool/travis.sh
+script:
+  - set -e
+  - pub get
+  # Run dartanalyzer.
+  - echo "Running dartanalyzer..."
+  - dartanalyzer --fatal-warnings ./
+  # Start tests.
+  - echo "Running all tests..."
+  - pub run test test/test_all.dart --reporter expanded
+  - echo "Collecting test coverage on port 8111"
+  - dart --enable-vm-service=8111 --pause-isolates-on-exit test/test_all.dart &
+  # Run the coverage collector to generate the JSON coverage report.
+  - collect_coverage --port=8111 --out=var/coverage.json --wait-paused --resume-isolates
+  # Convert the JSON coverage report to LCOV report.
+  - echo "Generating LCOV report..."
+  - format_coverage --lcov --in=var/coverage.json --out=var/lcov.info --packages=.packages --report-on=lib
 after_success:
+  # Submit LCOV report to Coveralls.
   - coveralls var/lcov.info
-env:
-  - DARTANALYZER_FLAGS=--fatal-warnings
-
-# Uploading LCOV to Coveralls is handled inside travis.sh
-# after_success:
-#  - coveralls var/lcov.info
+  # Submit LCOV reports to Codecov.
+  - bash <(curl -s https://codecov.io/bash)
 
 # Disable dart tasks. We're using ./tool/travis.sh to perform tests.
 # dart_task:
