@@ -21,12 +21,12 @@ import 'dart:typed_data' show Uint8List;
 import 'schema_attribute.dart';
 
 class ArrayAttribute extends SchemaAttribute {
-  final int _typeSize;
+  final int typeSize;
 
-  ArrayAttribute(final String name, this._typeSize) : super(name);
+  ArrayAttribute(final String name, this.typeSize) : super(name);
 
   @override
   Uint8List serialize(final Uint8List buffer, final int position, [final int innerObjectPosition]) {
-    return findVector(innerObjectPosition, position, buffer, _typeSize);
+    return findVector(innerObjectPosition, position, buffer, typeSize);
   }
 }

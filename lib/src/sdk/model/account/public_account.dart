@@ -25,12 +25,15 @@ import 'address.dart';
 
 /// The public account structure contains account's address and public key.
 class PublicAccount {
-  final Address _address;
-  final String _publicKey;
+  /// Retrieves the address of this public account.
+  final Address address;
+
+  /// Retrieves the public key of this public account.
+  final String publicKey;
 
   static const int HASH512_LENGTH = 64;
 
-  PublicAccount._(this._address, this._publicKey);
+  PublicAccount._(this.address, this.publicKey);
 
   factory PublicAccount({final Address address, final String publicKey}) {
     if (address == null || publicKey == null) {
@@ -41,14 +44,8 @@ class PublicAccount {
     return new PublicAccount._(address, publicKey);
   }
 
-  /// Retrieves the address of this public account.
-  Address get address => _address;
-
   /// Retrieves the plain text address of this public account.
-  String get plainAddress => _address.plain;
-
-  /// Retrieves the public key of this public account.
-  String get publicKey => _publicKey;
+  String get plainAddress => address.plain;
 
   @override
   int get hashCode => publicKey.hashCode ^ address.hashCode;
@@ -57,9 +54,9 @@ class PublicAccount {
   bool operator ==(final other) =>
       identical(this, other) ||
       other is PublicAccount &&
-          runtimeType == other.runtimeType &&
-          publicKey == other.publicKey &&
-          plainAddress == other.plainAddress;
+          this.runtimeType == other.runtimeType &&
+          this.publicKey == other.publicKey &&
+          this.plainAddress == other.plainAddress;
 
   /// Create a [PublicAccount] from a [publicKey] for the given [networkType].
   static PublicAccount fromPublicKey(final String publicKey, final NetworkType networkType) {

@@ -96,12 +96,10 @@ class TransactionVersion {
   /// Delegates the account importance to a proxy account to enable delegated harvesting.
   static const TransactionVersion ACCOUNT_LINK = TransactionVersion._(2);
 
-  final int _value;
+  /// The int value of this version.
+  final int value;
 
   // constant constructor: makes this class available on runtime.
   // emulates an enum class with a value.
-  const TransactionVersion._(this._value);
-
-  /// The int value of this version.
-  int get value => _value;
+  const TransactionVersion._(this.value);
 }

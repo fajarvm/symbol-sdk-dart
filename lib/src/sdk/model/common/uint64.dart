@@ -48,16 +48,13 @@ class Uint64 implements Comparable<Uint64> {
   /// The maximum value of 64-bit unsigned integer. Equals to 18446744073709551615.
   static final BigInt MAX_VALUE = BigInt.parse('FFFFFFFFFFFFFFFF', radix: 16);
 
-  /// The internal storage of the value.
-  final BigInt _value;
-
-  /// Get the value of this Uint64 as BigInt.
-  BigInt get value => _value;
+  /// The value of Uint64 is stored as BigInt.
+  final BigInt value;
 
   @override
-  int get hashCode => _value.hashCode;
+  int get hashCode => value.hashCode;
 
-  const Uint64._(this._value);
+  const Uint64._(this.value);
 
   factory Uint64([final int value = 0, final int value2 = 0]) {
     if (MIN_VALUE_SIGNED > value || MIN_VALUE_SIGNED > value2) {
@@ -100,19 +97,19 @@ class Uint64 implements Comparable<Uint64> {
   }
 
   @override
-  bool operator ==(final other) => other is Uint64 && _value == other.value;
+  bool operator ==(final other) => other is Uint64 && this.value == other.value;
 
   @override
-  int compareTo(final Uint64 other) => _value.compareTo(other.value);
+  int compareTo(final Uint64 other) => this.value.compareTo(other.value);
 
-  bool isZero() => BigInt.zero == _value && ArrayUtils.isZero(toBytes());
+  bool isZero() => BigInt.zero == value && ArrayUtils.isZero(toBytes());
 
   @override
-  String toString() => _value.toString();
+  String toString() => value.toString();
 
   /// Converts to hex string representation. Fills with leading 0 to reach 16 characters length.
   String toHex() {
-    final String hex = _value.toRadixString(16);
+    final String hex = value.toRadixString(16);
     if (hex.length != 16) {
       return StringUtils.padLeft(hex, 16, '0');
     }

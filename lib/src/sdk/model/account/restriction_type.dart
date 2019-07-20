@@ -52,14 +52,12 @@ class RestrictionType {
     BLOCK_TRANSACTION
   ];
 
-  final int _value;
+  /// The int value of this type.
+  final int value;
 
   // constant constructor: makes this class available on runtime.
   // emulates an enum class with a value.
-  const RestrictionType._(this._value);
-
-  /// The int value of this type.
-  int get value => _value;
+  const RestrictionType._(this.value);
 
   /// Returns a [RestrictionType] for the given int value.
   ///

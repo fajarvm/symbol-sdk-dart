@@ -26,11 +26,14 @@ import 'sha3nist.dart';
 
 /// Represents a key pair.
 class KeyPair {
-  final Uint8List _privateKey;
-  final Uint8List _publicKey;
+  /// The private key of this key pair.
+  final Uint8List privateKey;
+
+  /// The public key of this key pair.
+  final Uint8List publicKey;
 
   // private constructor
-  KeyPair._(this._privateKey, this._publicKey);
+  KeyPair._(this.privateKey, this.publicKey);
 
   // A private method that creates a new instance of [KeyPair].
   // Throws an error when [privateKey] has an unexpected length.
@@ -44,22 +47,16 @@ class KeyPair {
     return new KeyPair._(privateKey, publicKey);
   }
 
-  /// The public key of this key pair.
-  Uint8List get publicKey => _publicKey;
-
-  /// The private key of this key pair.
-  Uint8List get privateKey => _privateKey;
-
   @override
-  int get hashCode => _privateKey.hashCode ^ _publicKey.hashCode;
+  int get hashCode => privateKey.hashCode ^ publicKey.hashCode;
 
   @override
   bool operator ==(final other) =>
       identical(this, other) ||
       other is KeyPair &&
           runtimeType == other.runtimeType &&
-          ArrayUtils.deepEqual(_privateKey, other.privateKey) &&
-          ArrayUtils.deepEqual(_publicKey, other.publicKey);
+          ArrayUtils.deepEqual(privateKey, other.privateKey) &&
+          ArrayUtils.deepEqual(publicKey, other.publicKey);
 
   /// Creates a key pair from a [hexEncodedPrivateKey] string. The public key is extracted from
   /// the private key.

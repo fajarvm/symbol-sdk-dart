@@ -35,14 +35,12 @@ class NetworkType {
   /// Supported network types.
   static final List<NetworkType> values = <NetworkType>[MAIN_NET, TEST_NET, MIJIN, MIJIN_TEST];
 
-  final int _value;
+  /// The int value of this type.
+  final int value;
 
   // constant constructor: makes this class available on runtime.
-  // emulates an enum class with a value.
-  const NetworkType._(this._value);
-
-  /// The int value of this type.
-  int get value => _value;
+  // emulates an enum class with a ?value.
+  const NetworkType._(this.value);
 
   /// Returns a [NetworkType] for the given int value.
   ///

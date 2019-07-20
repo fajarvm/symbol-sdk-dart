@@ -47,16 +47,14 @@ class HashType {
 
   static final List<HashType> values = <HashType>[SHA3_256, KECCAK_256, RIPEMD_160, SHA_256];
 
-  final int _value;
+  /// The int value of this type.
+  final int value;
 
   // constant constructor: makes this class available on runtime.
   // emulates an enum class with a value.
-  const HashType._(this._value);
+  const HashType._(this.value);
 
-  /// The int value of this type.
-  int get value => this._value;
-
-  /// Returns a [AliasType] for the given int value.
+  /// Returns a [HashType] for the given int value.
   ///
   /// Throws an error when the type is unknown.
   static HashType getType(final int value) {

@@ -18,9 +18,8 @@ library nem2_sdk_dart.sdk.model.account.address;
 
 import 'dart:typed_data' show Uint8List;
 
-import 'package:pointycastle/export.dart' show RIPEMD160Digest;
-
 import 'package:nem2_sdk_dart/core.dart' show ArrayUtils, Base32, Ed25519, HexUtils, SHA3DigestNist;
+import 'package:pointycastle/export.dart' show RIPEMD160Digest;
 
 import '../blockchain/network_type.dart';
 
@@ -42,35 +41,35 @@ class Address {
   static final RegExp REGEX_DASH = new RegExp(r'-');
   static final RegExp REGEX_PRETTY = new RegExp('.{1,6}');
 
-  final NetworkType _networkType;
-  final String _address;
+  /// The address.
+  final String address;
+
+  /// The network type of this address.
+  final NetworkType networkType;
 
   // private constructor
-  const Address._(this._address, this._networkType);
+  const Address._(this.address, this.networkType);
 
   /// Get the address in plain format.
   ///
   /// For example: SB3KUBHATFCPV7UZQLWAQ2EUR6SIHBSBEOEDDDF3.
-  String get plain => _address;
+  String get plain => address;
 
   /// Get address in pretty format.
   ///
   /// For example: SB3KUB-HATFCP-V7UZQL-WAQ2EU-R6SIHB-SBEOED-DDF3.
-  String get pretty => prettify(_address);
-
-  /// Get the network type of this address.
-  NetworkType get networkType => _networkType;
+  String get pretty => prettify(address);
 
   @override
   bool operator ==(final other) =>
       identical(this, other) ||
       other is Address &&
           this.runtimeType == other.runtimeType &&
-          this._networkType == other.networkType &&
-          this._address == other.plain;
+          this.networkType == other.networkType &&
+          this.address == other.address;
 
   @override
-  int get hashCode => _networkType.hashCode ^ _address.hashCode;
+  int get hashCode => networkType.hashCode ^ address.hashCode;
 
   /// Creates an [Address] from a given [publicKey] string for the given [networkType].
   static Address fromPublicKey(final String publicKey, final NetworkType networkType) {
@@ -225,6 +224,6 @@ class Address {
 
   @override
   String toString() {
-    return 'Address{address= $plain, networkType= $networkType}';
+    return 'Address{address= $address, networkType= $networkType}';
   }
 }

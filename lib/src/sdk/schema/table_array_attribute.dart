@@ -21,9 +21,9 @@ import 'dart:typed_data' show Uint8List;
 import 'schema_attribute.dart';
 
 class TableArrayAttribute extends SchemaAttribute {
-  final List<SchemaAttribute> _schema;
+  final List<SchemaAttribute> schema;
 
-  TableArrayAttribute(final String name, this._schema) : super(name);
+  TableArrayAttribute(final String name, this.schema) : super(name);
 
   @override
   Uint8List serialize(final Uint8List buffer, final int position, [final int innerObjectPosition]) {
@@ -32,8 +32,8 @@ class TableArrayAttribute extends SchemaAttribute {
 
     for (int i = 0; i < arrayLength; i++) {
       int startArrayPosition = findObjectStartPosition(innerObjectPosition, position, buffer);
-      for (int j = 0; j < this._schema.length; j++) {
-        Uint8List temp = _schema[j].serialize(buffer, 4 + (j * 2), startArrayPosition);
+      for (int j = 0; j < this.schema.length; j++) {
+        Uint8List temp = schema[j].serialize(buffer, 4 + (j * 2), startArrayPosition);
         result.addAll(temp.toList());
       }
     }

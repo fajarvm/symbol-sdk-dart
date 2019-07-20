@@ -21,7 +21,6 @@ import 'dart:math' show pow;
 import '../common/id.dart';
 import '../common/uint64.dart';
 import '../namespace/namespace_id.dart';
-
 import 'mosaic.dart';
 
 /// The NetworkCurrencyMosaic mosaic.
@@ -47,13 +46,8 @@ class NetworkCurrencyMosaic extends Mosaic {
   /// The levy of mosaic cannot be changed (immutable levy).
   static const LEVY_MUTABLE = false;
 
-  final Uint64 _amount;
-
   // private constructor
-  NetworkCurrencyMosaic._(this._amount) : super(NAMESPACE_ID, _amount);
-
-  @override
-  Uint64 get amount => this._amount;
+  NetworkCurrencyMosaic._(Uint64 amount) : super(NAMESPACE_ID, amount);
 
   @override
   Id get id => NetworkCurrencyMosaic.NAMESPACE_ID;

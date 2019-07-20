@@ -31,14 +31,12 @@ class AliasType {
 
   static final List<AliasType> values = <AliasType>[NONE, MOSAIC, ADDRESS];
 
-  final int _value;
+  /// The int value of this type.
+  final int value;
 
   // constant constructor: makes this class available on runtime.
   // emulates an enum class with a value.
-  const AliasType._(this._value);
-
-  /// The int value of this type.
-  int get value => _value;
+  const AliasType._(this.value);
 
   /// Returns a [AliasType] for the given int value.
   ///

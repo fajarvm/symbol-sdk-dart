@@ -18,7 +18,6 @@ library nem2_sdk_dart.sdk.model.namespace.empty_alias;
 
 import '../account/address.dart';
 import '../mosaic/mosaic_id.dart';
-
 import 'alias.dart';
 import 'alias_type.dart';
 
@@ -41,7 +40,7 @@ class EmptyAlias implements Alias {
   @override
   bool operator ==(final other) =>
       identical(this, other) ||
-      other is EmptyAlias && runtimeType == other.runtimeType && type == other.type;
+      other is EmptyAlias && this.runtimeType == other.runtimeType && this.type == other.type;
 
   @override
   int get hashCode => 'EmptyAlias'.hashCode ^ type.hashCode;

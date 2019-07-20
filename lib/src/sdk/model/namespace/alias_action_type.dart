@@ -28,14 +28,12 @@ class AliasActionType {
 
   static final List<AliasActionType> values = <AliasActionType>[LINK, UNLINK];
 
-  final int _value;
+  /// The int value of this type.
+  final int value;
 
   // constant constructor: makes this class available on runtime.
   // emulates an enum class with a value.
-  const AliasActionType._(this._value);
-
-  /// The int value of this type.
-  int get value => _value;
+  const AliasActionType._(this.value);
 
   /// Returns a [AliasActionType] for the given int value.
   ///

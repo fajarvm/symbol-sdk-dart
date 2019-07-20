@@ -18,7 +18,8 @@ library nem2_sdk_dart.sdk.model.account.restriction_modification_type;
 
 /// The type of modification to a restriction type.
 class RestrictionModificationType {
-  static const String UNKNOWN_RESTRICTION_MODIFICATION_TYPE = 'unknown restriction modification type';
+  static const String UNKNOWN_RESTRICTION_MODIFICATION_TYPE =
+      'unknown restriction modification type';
 
   /// Addition.
   static const RestrictionModificationType ADD = RestrictionModificationType._(0x00);

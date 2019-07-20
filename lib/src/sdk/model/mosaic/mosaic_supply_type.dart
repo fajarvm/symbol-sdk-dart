@@ -29,14 +29,12 @@ class MosaicSupplyType {
   /// Supported network types.
   static final List<MosaicSupplyType> values = <MosaicSupplyType>[DECREASE, INCREASE];
 
-  final int _value;
+  /// The int value of this type.
+  final int value;
 
   // constant constructor: makes this class available on runtime.
   // emulates an enum class with a value.
-  const MosaicSupplyType._(this._value);
-
-  /// The int value of this type.
-  int get value => _value;
+  const MosaicSupplyType._(this.value);
 
   /// Returns a [MosaicSupplyType] for the given int value.
   ///

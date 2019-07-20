@@ -21,13 +21,13 @@ import 'dart:typed_data' show Uint8List;
 import 'schema_attribute.dart';
 
 class ScalarAttribute extends SchemaAttribute {
-  final int _size;
+  final int size;
 
-  ScalarAttribute(final String name, this._size) : super(name);
+  ScalarAttribute(final String name, this.size) : super(name);
 
   @override
   Uint8List serialize(final Uint8List buffer, final int position,
       [final int innerObjectPosition]) {
-    return findParam(innerObjectPosition, position, buffer, _size);
+    return findParam(innerObjectPosition, position, buffer, size);
   }
 }

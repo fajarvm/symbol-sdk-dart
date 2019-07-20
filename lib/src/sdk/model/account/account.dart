@@ -28,29 +28,26 @@ import 'public_account.dart';
 /// The account structure describes an account private key, public key, address and allows
 /// signing transactions.
 class Account {
-  final KeyPair _keyPair;
-  final PublicAccount _publicAccount;
-
-  // private constructor
-  Account._(this._keyPair, this._publicAccount);
-
-  /// The public key string of this account.
-  String get publicKey => HexUtils.getString(_keyPair.publicKey);
-
-  /// The private key string of this account.
-  String get privateKey => HexUtils.getString(_keyPair.privateKey);
-
-  /// The plain text address of this account.
-  String get plainAddress => _publicAccount.address.plain;
+  /// The keyPair containing the public and private key of this account.
+  final KeyPair keyPair;
 
   /// The public account of this account.
-  PublicAccount get publicAccount => _publicAccount;
+  final PublicAccount publicAccount;
 
-  /// The keyPair containing the public and private key of this account.
-  KeyPair get keyPair => _keyPair;
+  // private constructor
+  Account._(this.keyPair, this.publicAccount);
+
+  /// The public key string of this account.
+  String get publicKey => HexUtils.getString(keyPair.publicKey);
+
+  /// The private key string of this account.
+  String get privateKey => HexUtils.getString(keyPair.privateKey);
+
+  /// The plain text address of this account.
+  String get plainAddress => publicAccount.address.plain;
 
   @override
-  int get hashCode => _keyPair.hashCode ^ _publicAccount.hashCode;
+  int get hashCode => keyPair.hashCode ^ publicAccount.hashCode;
 
   @override
   bool operator ==(final other) =>
@@ -86,7 +83,7 @@ class Account {
   String signData(final String rawData) {
     final String hex = HexUtils.utf8ToHex(rawData);
     final Uint8List data = HexUtils.getBytes(hex);
-    final Uint8List signedData = KeyPair.signData(_keyPair, data);
+    final Uint8List signedData = KeyPair.signData(keyPair, data);
     return HexUtils.getString(signedData);
   }
 

@@ -121,14 +121,12 @@ class TransactionType {
     ACCOUNT_LINK
   ];
 
-  final int _value;
+  /// The int value of this type.
+  final int value;
 
   // constant constructor: makes this class available on runtime.
   // emulates an enum class with a value.
-  const TransactionType._(this._value);
-
-  /// The int value of this type.
-  int get value => _value;
+  const TransactionType._(this.value);
 
   /// Returns a [TransactionType] for the given int value.
   ///

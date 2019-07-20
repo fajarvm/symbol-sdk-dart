@@ -23,12 +23,9 @@ abstract class SchemaAttribute {
   static const int _BYTE_SIZE = 8;
 
   /// The name of this schema attribute
-  final String _name;
+  final String name;
 
-  SchemaAttribute(this._name);
-
-  /// Returns this schema attribute name
-  String get name => _name;
+  SchemaAttribute(this.name);
 
   /// Serialize catbuffer bytes at a certain position.
   Uint8List serialize(final Uint8List buffer, final int position, [final int innerObjectPosition]) {

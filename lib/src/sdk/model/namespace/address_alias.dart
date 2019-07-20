@@ -18,19 +18,16 @@ library nem2_sdk_dart.sdk.model.namespace.address_alias;
 
 import '../account/address.dart';
 import '../mosaic/mosaic_id.dart';
-
 import 'alias.dart';
 import 'alias_type.dart';
 
 /// The AddressAlias structure describes address aliases.
 class AddressAlias implements Alias {
-  final Address _address;
-
-  AddressAlias(this._address);
-
   /// The alias address.
   @override
-  Address get address => this._address;
+  final Address address;
+
+  AddressAlias(this.address);
 
   /// The alias mosaicId. Always `null` for [AddressAlias].
   @override
@@ -44,10 +41,10 @@ class AddressAlias implements Alias {
   bool operator ==(final other) =>
       identical(this, other) ||
       other is AddressAlias &&
-          runtimeType == other.runtimeType &&
-          type == other.type &&
-          _address == other._address;
+          this.runtimeType == other.runtimeType &&
+          this.type == other.type &&
+          this.address == other.address;
 
   @override
-  int get hashCode => type.hashCode ^ _address.hashCode;
+  int get hashCode => type.hashCode ^ address.hashCode;
 }

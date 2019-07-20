@@ -26,14 +26,12 @@ class NamespaceType {
 
   static final List<NamespaceType> values = <NamespaceType>[ROOT_NAMESPACE, SUB_NAMESPACE];
 
-  final int _value;
+  /// The int value of this type.
+  final int value;
 
   // constant constructor: makes this class available on runtime.
   // emulates an enum class with a value.
-  const NamespaceType._(this._value);
-
-  /// The int value of this type.
-  int get value => _value;
+  const NamespaceType._(this.value);
 
   /// Returns a [NamespaceType] for the given int value.
   ///

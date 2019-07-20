@@ -35,7 +35,8 @@ class MultisigAccountInfo {
   /// The list of multi-signature accounts that this account is a cosigner of.
   final List<PublicAccount> multisigAccounts;
 
-  MultisigAccountInfo._(this.account, this.minApproval, this.minRemoval, this.cosignatories, this.multisigAccounts);
+  MultisigAccountInfo._(
+      this.account, this.minApproval, this.minRemoval, this.cosignatories, this.multisigAccounts);
 
   factory MultisigAccountInfo(
       final PublicAccount account,
