@@ -33,12 +33,18 @@ export 'model/account/restriction_type.dart';
 export 'model/blockchain/block_info.dart';
 export 'model/blockchain/blockchain_score.dart';
 export 'model/blockchain/blockchain_storage_info.dart';
+export 'model/blockchain/chain_info.dart';
+export 'model/blockchain/merkle_path_item.dart';
+export 'model/blockchain/merkle_proof_info.dart';
 export 'model/blockchain/network_type.dart';
 
 // Common models
 export 'model/common/id.dart';
 export 'model/common/id_generator.dart';
 export 'model/common/uint64.dart';
+
+// Diagnostic
+export 'model/diagnostic/server_info.dart';
 
 // Mosaic
 export 'model/mosaic/mosaic.dart';
