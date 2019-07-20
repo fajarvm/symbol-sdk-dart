@@ -29,14 +29,12 @@ class RestrictionModificationType {
 
   static final List<RestrictionModificationType> values = <RestrictionModificationType>[ADD, DEL];
 
-  final int _value;
+  /// The int value of this type.
+  final int value;
 
   // constant constructor: makes this class available on runtime.
   // emulates an enum class with a value.
-  const RestrictionModificationType._(this._value);
-
-  /// The int value of this type.
-  int get value => _value;
+  const RestrictionModificationType._(this.value);
 
   /// Returns a [RestrictionModificationType] for the given int value.
   ///

@@ -19,8 +19,8 @@ library nem2_sdk_dart.sdk.model.account.public_account;
 import 'dart:typed_data' show Uint8List;
 
 import 'package:nem2_sdk_dart/core.dart' show HexUtils, KeyPair;
-import 'package:nem2_sdk_dart/sdk.dart';
 
+import '../blockchain/network_type.dart';
 import 'address.dart';
 
 /// The public account structure contains account's address and public key.

@@ -16,10 +16,9 @@
 
 library nem2_sdk_dart.sdk.model.blockchain.block_info;
 
-import 'package:nem2_sdk_dart/sdk.dart';
-
 import '../account/public_account.dart';
 import '../common/uint64.dart';
+import 'network_type.dart';
 
 /// The block info structure describes basic information of a block.
 class BlockInfo {

@@ -16,10 +16,9 @@
 
 library nem2_sdk_dart.sdk.model.transaction.transfer_transaction;
 
-import 'package:nem2_sdk_dart/sdk.dart';
-
 import '../account/address.dart';
 import '../account/public_account.dart';
+import '../blockchain/network_type.dart';
 import '../common/uint64.dart';
 import '../mosaic/mosaic.dart';
 import '../namespace/namespace_id.dart';
@@ -47,8 +46,8 @@ class TransferTransaction extends Transaction {
   /// The transaction message.
   final Message message;
 
-  TransferTransaction(NetworkType networkType, TransactionVersion version, Deadline deadline, Uint64 fee,
-      this.recipientAddress, this.recipientNamespaceId, this.mosaics, this.message,
+  TransferTransaction(NetworkType networkType, TransactionVersion version, Deadline deadline,
+      Uint64 fee, this.recipientAddress, this.recipientNamespaceId, this.mosaics, this.message,
       [String signature, PublicAccount signer, TransactionInfo transactionInfo])
       : super(TransactionType.TRANSFER, networkType, version, deadline, fee, signature, signer,
             transactionInfo);

@@ -19,8 +19,8 @@ library nem2_sdk_dart.sdk.model.account.account;
 import 'dart:typed_data' show Uint8List;
 
 import 'package:nem2_sdk_dart/core.dart' show HexUtils, KeyPair;
-import 'package:nem2_sdk_dart/sdk.dart';
 
+import '../blockchain/network_type.dart';
 import '../transaction/signed_transaction.dart';
 import '../transaction/transaction.dart';
 import 'public_account.dart';
