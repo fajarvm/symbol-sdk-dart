@@ -93,7 +93,9 @@ class NamespaceId extends Id {
   int get hashCode => 'NamespaceId'.hashCode ^ id.hashCode;
 
   @override
-  bool operator ==(final other) => other is NamespaceId && this.id == other.id;
+  bool operator ==(final other) => other is NamespaceId &&
+      this.runtimeType == other.runtimeType &&
+      this.id == other.id;
 
   @override
   String toString() => 'NamespaceId(id:$id, fullName:$fullName)';

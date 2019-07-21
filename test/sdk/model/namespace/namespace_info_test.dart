@@ -38,7 +38,7 @@ void main() {
       const metaId = '59FDA0733F17CF0001772CBC';
       const publicKey = 'b4f12e7c9f6946091e2cb8b6d3a12b50d17ccbbf646386ea27ce2946a7423dcf';
       final owner = PublicAccount.fromPublicKey(publicKey, NetworkType.MIJIN_TEST);
-      final mosaicId = MosaicId(id: Uint64.fromHex('D525AD41D95FCF29'));
+      final mosaicId = MosaicId(Uint64.fromHex('D525AD41D95FCF29'));
       final alias = new MosaicAlias(mosaicId);
 
       // sub namespaces

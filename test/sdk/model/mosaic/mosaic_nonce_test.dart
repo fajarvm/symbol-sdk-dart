@@ -18,6 +18,7 @@ library nem2_sdk_dart.test.sdk.model.mosaic.mosaic_nonce_test;
 
 import 'dart:typed_data' show Uint8List;
 
+import 'package:nem2_sdk_dart/sdk.dart';
 import 'package:test/test.dart';
 
 import 'package:nem2_sdk_dart/sdk.dart' show MosaicNonce;
@@ -34,17 +35,42 @@ void main() {
       expect(mosaicNonce.nonce.length, MosaicNonce.NONCE_SIZE);
     });
 
-    test('createRandom() can create a random MosaicNonce object', () {
-      final mosaicNonce = MosaicNonce.createRandom();
+    test('Can create a random MosaicNonce object', () {
+      final mosaicNonce = MosaicNonce.random();
       expect(mosaicNonce.nonce, isNotNull);
       expect(mosaicNonce.nonce.length, MosaicNonce.NONCE_SIZE);
     });
 
-    test('fromHex() can create a MosaicNonce object from a hex string', () {
-      final mosaicNonce = MosaicNonce.fromHex('00ffffff');
+    test('Can create a MosaicNonce object from a hex string', () {
+      // lower limit
+      MosaicNonce mosaicNonce = MosaicNonce.fromHex('00000000');
       expect(mosaicNonce.nonce, isNotNull);
       expect(mosaicNonce.nonce.length, MosaicNonce.NONCE_SIZE);
-      expect(mosaicNonce.toHex(), equals('00ffffff'));
+      expect(mosaicNonce.toHex(), equals('00000000'));
+
+      // upper limit
+      mosaicNonce = MosaicNonce.fromHex('ffffffff');
+      expect(mosaicNonce.nonce, isNotNull);
+      expect(mosaicNonce.nonce.length, MosaicNonce.NONCE_SIZE);
+      expect(mosaicNonce.toHex(), equals('ffffffff'));
+    });
+
+    test('Can create a MosaicNonce object from a Uint64 value', () {
+      // lower limit
+      Uint64 uint64 = Uint64.fromBigInt(BigInt.zero);
+      MosaicNonce mosaicNonce = MosaicNonce.fromUint64(uint64);
+      expect(mosaicNonce.nonce, isNotNull);
+      expect(mosaicNonce.nonce.length, MosaicNonce.NONCE_SIZE);
+      int actual = mosaicNonce.toInt();
+      expect(actual, equals(uint64.value.toInt()));
+
+      // upper limit
+      uint64 = Uint64.fromBigInt(BigInt.from(4294967295));
+      mosaicNonce = MosaicNonce.fromUint64(uint64);
+      expect(mosaicNonce.nonce, isNotNull);
+      expect(mosaicNonce.nonce.length, MosaicNonce.NONCE_SIZE);
+      actual = mosaicNonce.toInt();
+      expect(actual, equals(uint64.value.toInt()));
     });
 
     test('Cannot create MosaicNonce with invalid hex string', () {

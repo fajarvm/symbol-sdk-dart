@@ -20,6 +20,8 @@ import 'dart:typed_data' show Uint8List;
 
 import 'package:nem2_sdk_dart/core.dart' show Ed25519, HexUtils;
 
+import '../common/uint64.dart';
+
 /// The mosaic nonce structure.
 class MosaicNonce {
   static const int NONCE_SIZE = 4;
@@ -38,8 +40,8 @@ class MosaicNonce {
   }
 
   /// Creates a random MosaicNonce.
-  static MosaicNonce createRandom() {
-    return new MosaicNonce(Ed25519.getRandomBytes(4));
+  static MosaicNonce random() {
+    return MosaicNonce(Ed25519.getRandomBytes(4));
   }
 
   /// Creates a MosaicNonce from a [hex] string.
@@ -48,16 +50,52 @@ class MosaicNonce {
       throw new ArgumentError('invalid hex string');
     }
 
-    return new MosaicNonce(HexUtils.getBytes(hex));
+    return MosaicNonce(HexUtils.getBytes(hex));
   }
 
-  /// Returns the hex string representative of the nonce bytes.
+  /// Creates a [MosaicNonce] from a [Uint64] value.
+  static MosaicNonce fromUint64(final Uint64 uint64) {
+    List<int> intArray = uint64.toIntArray();
+    int lower = intArray[0];
+    Uint8List bytes = _intToBytes(lower);
+
+    return MosaicNonce._(bytes);
+  }
+
+  /// Converts the nonce bytes to a hex string.
   String toHex() {
     return HexUtils.getString(nonce);
+  }
+
+  /// Converts the nonce bytes to a 32-bit [int] value.
+  int toInt() {
+    return _bytesToInt(nonce);
   }
 
   // for internal use
   Uint8List toDTO() {
     return this.nonce;
+  }
+
+  // ------------------------------- private / protected functions ------------------------------ //
+
+  static Uint8List _intToBytes(int value) {
+    List<int> result = List<int>(4);
+    result[0] = value & 0xff;
+    result[1] = (value >> 8) & 0xff;
+    result[2] = (value >> 16) & 0xff;
+    result[3] = (value >> 24) & 0xff;
+    return Uint8List.fromList(result);
+  }
+
+  static int _bytesToInt(Uint8List bytes) {
+    int lower = bytes[3] & 0xff;
+    lower <<= 8;
+    lower |= bytes[2] & 0xff;
+    lower <<= 8;
+    lower |= bytes[1] & 0xff;
+    lower <<= 8;
+    lower |= bytes[0] & 0xff;
+    return lower;
   }
 }

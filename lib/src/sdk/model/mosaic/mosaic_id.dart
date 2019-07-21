@@ -28,46 +28,43 @@ import 'mosaic_nonce.dart';
 /// The mosaic id structure describes mosaic id.
 class MosaicId extends Id {
   // private constructor
-  MosaicId._(id) : super(id);
+  MosaicId._(Uint64 id) : super(id);
 
-  factory MosaicId({final Uint64 id}) {
-    if (id == null) {
-      throw new ArgumentError('The id must not be null');
-    }
+  factory MosaicId(final Uint64 id) {
+    ArgumentError.checkNotNull(id);
 
     return new MosaicId._(id);
   }
 
   /// Creates a new [MosaicId] from an [id].
   static MosaicId fromId(final Uint64 id) {
-    return new MosaicId(id: id);
+    return new MosaicId(id);
   }
 
   /// Creates a new [MosaicId] from a [bigInt].
   static MosaicId fromBigInt(final BigInt bigInt) {
-    if (bigInt == null) {
-      throw new ArgumentError('The bigInt must not be null');
-    }
-    return new MosaicId(id: Uint64.fromBigInt(bigInt));
+    ArgumentError.checkNotNull(bigInt);
+
+    return new MosaicId(Uint64.fromBigInt(bigInt));
   }
 
-  /// Creates a new [MosaicId] from a [hex].
+  /// Creates a new [MosaicId] from a [hex] string.
   static MosaicId fromHex(final String hex) {
     if (StringUtils.isEmpty(hex)) {
-      throw new ArgumentError('The hexString must not be null or empty');
+      throw new ArgumentError('The hex string must not be null or empty');
     }
 
     if (!HexUtils.isHex(hex)) {
-      throw new ArgumentError('invalid hex');
+      throw new ArgumentError('Invalid hex');
     }
 
-    return new MosaicId(id: Uint64.fromHex(hex));
+    return new MosaicId(Uint64.fromHex(hex));
   }
 
   /// Creates a new [MosaicId] from a given [mosaicNonce] and [owner]'s public account.
   static MosaicId fromNonce(final MosaicNonce mosaicNonce, final PublicAccount owner) {
     final Uint64 id = IdGenerator.generateMosaicId(mosaicNonce.nonce, owner.publicKey);
-    return new MosaicId(id: id);
+    return new MosaicId(id);
   }
 
   @override
@@ -76,7 +73,9 @@ class MosaicId extends Id {
   @override
   bool operator ==(final other) =>
       identical(this, other) ||
-      other is MosaicId && runtimeType == other.runtimeType && id == other.id;
+      other is MosaicId &&
+          this.runtimeType == other.runtimeType &&
+          this.id == other.id;
 
   @override
   String toString() => 'MosaicId(id:$id)';

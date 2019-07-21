@@ -27,7 +27,10 @@ abstract class Id {
 
   @override
   bool operator ==(Object other) =>
-      identical(this, other) || other is Id && runtimeType == other.runtimeType && id == other.id;
+      identical(this, other) ||
+      other is Id &&
+          this.runtimeType == other.runtimeType &&
+          this.id == other.id;
 
   @override
   int get hashCode => 'Id'.hashCode ^ id.hashCode;

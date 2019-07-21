@@ -270,8 +270,9 @@ void main() {
       final Uint8List canonicalSignature = KeyPair.signData(keyPair, payload);
 
       // this is signature with group order added to 'encodedS' part of signature
-      final Uint8List nonCanonicalSignature = new Uint8List(canonicalSignature.length);
-      ArrayUtils.copy(nonCanonicalSignature, canonicalSignature);
+      final int size = canonicalSignature.length;
+      final Uint8List nonCanonicalSignature = new Uint8List(size);
+      ArrayUtils.copy(nonCanonicalSignature, canonicalSignature, numOfElements: size);
       scalarAddGroupOrder(nonCanonicalSignature.sublist(32));
 
       final bool isCanonicalVerified =

@@ -35,7 +35,7 @@ void main() {
     test('Different implementation of Ids are not equals', () {
       final uint64 = Uint64(9000);
       final Id mockId = new MockId(uint64);
-      final Id mosaicId = new MosaicId(id: uint64);
+      final Id mosaicId = new MosaicId(uint64);
       final Id namespaceId = new NamespaceId(id: uint64);
 
       expect(mockId == mosaicId, isFalse);

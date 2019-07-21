@@ -16,12 +16,14 @@
 
 import 'package:test/test.dart';
 
+import 'utils/array_utils_test.dart' as array_utils_test;
 import 'utils/base32_test.dart' as base32_test;
 import 'utils/hex_utils_test.dart' as hex_utils_test;
 import 'utils/string_utils_test.dart' as string_utils_test;
 
 void main() {
   group('Utils:', () {
+    array_utils_test.main();
     base32_test.main();
     hex_utils_test.main();
     string_utils_test.main();

@@ -162,7 +162,7 @@ void main() {
       }
     });
 
-    test('compareTo', () {
+    test('compareTo()', () {
       final zero = Uint64.fromBigInt(BigInt.zero);
       final one = Uint64.fromBigInt(BigInt.one);
       final two = Uint64.fromBigInt(BigInt.two);
@@ -172,7 +172,7 @@ void main() {
       expect(two.compareTo(one), equals(1));
     });
 
-    test('isZero', () {
+    test('isZero()', () {
       final zero = Uint64.fromBigInt(BigInt.zero);
       final one = Uint64.fromBigInt(BigInt.one);
 
@@ -180,7 +180,7 @@ void main() {
       expect(one.isZero(), isFalse);
     });
 
-    test('toString', () {
+    test('toString()', () {
       const hexString = '000000000000A1B2';
       final Int64 int64 = Int64.parseHex(hexString);
       final Uint8List bytes = Uint8List.fromList(int64.toBytes());
@@ -193,7 +193,7 @@ void main() {
       expect(result3.toString(), equals('0'));
     });
 
-    test('toBytes', () {
+    test('toBytes()', () {
       const hexString = '000000000000A1B2';
       final Int64 int64 = Int64.parseHex(hexString);
       final Uint8List expected = Uint8List.fromList(int64.toBytes());
@@ -204,14 +204,14 @@ void main() {
       expect(ArrayUtils.deepEqual(actual, expected), isTrue);
     });
 
-    test('toHex', () {
+    test('toHex()', () {
       const hexString = '000000000000A1B2';
       final actual = Uint64.fromHex(hexString);
 
       expect(actual.toHex(), equals(hexString.toLowerCase()));
     });
 
-    test('toIntArray', () {
+    test('toIntArray()', () {
       // min value
       Uint64 actual = Uint64.fromBigInt(BigInt.zero);
       expect(actual.toIntArray(), equals([0, 0]));

@@ -86,7 +86,7 @@ class Ed25519 {
 
     // muladd
     final Int64List x = new Int64List(HASH_SIZE);
-    ArrayUtils.copy(x, r, numElementsToCopy: HALF_HASH_SIZE);
+    ArrayUtils.copy(x, r, numOfElements: HALF_HASH_SIZE);
 
     for (int i = 0; i < HALF_HASH_SIZE; i++) {
       for (int j = 0; j < HALF_HASH_SIZE; j++) {
@@ -248,7 +248,7 @@ class Ed25519 {
 
   static bool _isCanonical(Uint8List input) {
     final Uint8List copy = new Uint8List(SIGNATURE_SIZE);
-    ArrayUtils.copy(copy, input, numElementsToCopy: HALF_SIGNATURE_SIZE);
+    ArrayUtils.copy(copy, input, numOfElements: HALF_SIGNATURE_SIZE);
 
     tweetnacl.TweetNaclFast.reduce(copy);
     return ArrayUtils.deepEqual(input, copy, numElementsToCompare: HALF_SIGNATURE_SIZE);

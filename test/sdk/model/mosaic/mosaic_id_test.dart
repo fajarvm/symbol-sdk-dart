@@ -30,7 +30,7 @@ void main() {
 
   group('Create MosaicId via constructor', () {
     test('Can create using Uint64 id', () {
-      final mosaicId = MosaicId(id: testId);
+      final mosaicId = MosaicId(testId);
 
       expect(mosaicId.id, equals(testId));
       expect(mosaicId.id.toHex().toUpperCase(), equals(testHex));
@@ -39,8 +39,8 @@ void main() {
     });
 
     test('Should have equal Ids', () {
-      final mosaicId1 = MosaicId(id: testId);
-      final mosaicId2 = MosaicId(id: testId);
+      final mosaicId1 = MosaicId(testId);
+      final mosaicId2 = MosaicId(testId);
 
       expect(mosaicId1, equals(mosaicId2));
       expect(mosaicId1.id, equals(mosaicId2.id));
@@ -83,22 +83,26 @@ void main() {
 
   group('Cannot create with invalid inputs', () {
     test('Invalid constructor parameter', () {
-      expect(() => new MosaicId(id: null),
-          throwsA(predicate((e) => e is ArgumentError && e.message == 'The id must not be null')));
+      expect(
+          () => new MosaicId(null),
+          throwsA(predicate(
+              (e) => e is ArgumentError && e.message.toString().contains('Must not be null'))));
       expect(
           () => MosaicId.fromBigInt(null),
-          throwsA(
-              predicate((e) => e is ArgumentError && e.message == 'The bigInt must not be null')));
+          throwsA(predicate(
+              (e) => e is ArgumentError && e.message.toString().contains('Must not be null'))));
       expect(
           () => MosaicId.fromHex(null),
           throwsA(predicate((e) =>
-              e is ArgumentError && e.message == 'The hexString must not be null or empty')));
+              e is ArgumentError && e.message.toString().contains('hex string must not be null'))));
       expect(
           () => MosaicId.fromHex(''),
           throwsA(predicate((e) =>
-              e is ArgumentError && e.message == 'The hexString must not be null or empty')));
-      expect(() => MosaicId.fromHex('12zz34'),
-          throwsA(predicate((e) => e is ArgumentError && e.message == 'invalid hex')));
+              e is ArgumentError && e.message.toString().contains('hex string must not be null'))));
+      expect(
+          () => MosaicId.fromHex('12zz34'),
+          throwsA(predicate(
+              (e) => e is ArgumentError && e.message.toString().contains('Invalid hex'))));
     });
   });
 }

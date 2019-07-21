@@ -45,7 +45,7 @@ void main() {
     test('Can create via constructor', () {
       // Mosaic info parameters and properties
       const metaId = '59FDA0733F17CF0001772CBC';
-      final mosaicId = MosaicId(id: XEM_ID);
+      final mosaicId = MosaicId(XEM_ID);
       final supply = Uint64(9999999999);
       final height = Uint64(1);
       final owner = PublicAccount.fromPublicKey(publicKey, NetworkType.MIJIN_TEST);

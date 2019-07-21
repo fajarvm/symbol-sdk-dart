@@ -16,15 +16,59 @@
 
 library nem2_sdk_dart.core.utils.array_utils;
 
+import 'dart:math' show min;
+
 /// A collection of utility functions to manipulate arrays.
 class ArrayUtils {
-  /// Copies elements from the source array to a destination array.
-  static void copy(List<int> dest, List<int> source,
-      {final int numElementsToCopy = 0, final int destOffset = 0, final int srcOffset = 0}) {
-    final int length = numElementsToCopy == 0 ? dest.length : numElementsToCopy;
-    for (int i = 0; i < length; i++) {
-      dest[destOffset + i] = source[srcOffset + i];
+  /// Copies elements from the [source] array to the [destination] array.
+  ///
+  /// Both the [source] and the [destination] array must have a fixed-length.
+  /// If [numOfElements] is not given, it will try to copy all elements from the [source] array.
+  ///
+  /// Warning: Any occurred index out-of-bound error will exit the process. And the already copied
+  /// elements will not be rolled back.
+  static void copy(List<int> destination, List<int> source,
+      {int numOfElements = 0, final int destOffset = 0, final int srcOffset = 0}) {
+    ArgumentError.checkNotNull(source);
+    ArgumentError.checkNotNull(destination);
+
+    if (source.isEmpty || destination.isEmpty) {
+      throw new ArgumentError('The source and destination array must have a fixed-length.');
     }
+
+    if (numOfElements < 0 || destOffset < 0 || srcOffset < 0) {
+      throw new ArgumentError('Negative value is not accepted.');
+    }
+
+    // By default, copy all source elements.
+    if (numOfElements == 0) {
+      // Ensure the length to be within destination's range.
+      numOfElements = source.length <= destination.length ? source.length : destination.length;
+    }
+
+    for (int i = 0; i < numOfElements; i++) {
+      // will throw an error when index is out of bound
+      destination[destOffset + i] = source[srcOffset + i];
+    }
+  }
+
+  /// Copies the specified range of the specified array into a new array.
+  static List<int> copyOfRange(List<int> original, int fromIndex, int toIndex) {
+    ArgumentError.checkNotNull(original);
+
+    if (fromIndex < 0 || toIndex < 0) {
+      throw new ArgumentError('Negative value is not accepted.');
+    }
+
+    final int newLength = toIndex - fromIndex;
+    if (newLength < 0) {
+      new ArgumentError('$fromIndex > $toIndex');
+    }
+    List<int> result = List<int>(newLength);
+    final int toCopy = min(original.length - fromIndex, newLength);
+    copy(result, original, numOfElements: toCopy, destOffset: 0, srcOffset: fromIndex);
+
+    return result;
   }
 
   /// Determines whether or not an array is zero-filled.

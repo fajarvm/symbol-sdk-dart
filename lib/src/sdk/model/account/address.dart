@@ -153,7 +153,7 @@ class Address {
     // Step 3: prepend network type
     final Uint8List decodedAddress = new Uint8List(ADDRESS_DECODED_SIZE);
     decodedAddress[0] = networkType.value;
-    ArrayUtils.copy(decodedAddress, stepTwo, numElementsToCopy: RIPEMD_160_SIZE, destOffset: 1);
+    ArrayUtils.copy(decodedAddress, stepTwo, numOfElements: RIPEMD_160_SIZE, destOffset: 1);
 
     // Step 4: perform SHA3-256 on previous step
     final Uint8List stepFour = new Uint8List(KEY_SIZE);
@@ -163,12 +163,12 @@ class Address {
 
     // Step 5: retrieve checksum
     final Uint8List stepFive = new Uint8List(CHECKSUM_SIZE);
-    ArrayUtils.copy(stepFive, stepFour, numElementsToCopy: CHECKSUM_SIZE);
+    ArrayUtils.copy(stepFive, stepFour, numOfElements: CHECKSUM_SIZE);
 
     // Step 6: append stepFive to result of stepThree
     final Uint8List stepSix = new Uint8List(ADDRESS_DECODED_SIZE);
-    ArrayUtils.copy(stepSix, decodedAddress, numElementsToCopy: rm160Length);
-    ArrayUtils.copy(stepSix, stepFive, numElementsToCopy: CHECKSUM_SIZE, destOffset: rm160Length);
+    ArrayUtils.copy(stepSix, decodedAddress, numOfElements: rm160Length);
+    ArrayUtils.copy(stepSix, stepFive, numOfElements: CHECKSUM_SIZE, destOffset: rm160Length);
 
     // Step 7: return base 32 encoded address
     // String base32EncodedAddress = Base32.encode(stepSix);
