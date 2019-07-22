@@ -16,9 +16,8 @@
 
 library nem2_sdk_dart.test.sdk.model.mosaic.mosaic_properties_test;
 
-import 'package:test/test.dart';
-
 import 'package:nem2_sdk_dart/sdk.dart' show MosaicProperties, Uint64;
+import 'package:test/test.dart';
 
 void main() {
   group('MosaicProperties', () {
@@ -29,15 +28,10 @@ void main() {
 
     test('Can create via constructor', () {
       final MosaicProperties properties = new MosaicProperties(
-          supplyMutable: true,
-          transferable: false,
-          levyMutable: true,
-          divisibility: 5,
-          duration: Uint64(1000));
+          supplyMutable: true, transferable: false, divisibility: 5, duration: Uint64(1000));
 
       expect(properties.supplyMutable, isTrue);
       expect(properties.transferable, isFalse);
-      expect(properties.levyMutable, isTrue);
       expect(properties.divisibility, equals(5));
       expect(properties.duration.value.toInt(), equals(1000));
     });
@@ -47,7 +41,6 @@ void main() {
 
       expect(properties.supplyMutable, isFalse);
       expect(properties.transferable, isTrue);
-      expect(properties.levyMutable, isFalse);
       expect(properties.divisibility, equals(0));
       expect(properties.duration.value.toInt(), equals(3000));
     });
@@ -55,11 +48,7 @@ void main() {
     test('Cannot create with invalid divisibility', () {
       expect(
           () => new MosaicProperties(
-              supplyMutable: false,
-              transferable: false,
-              levyMutable: false,
-              divisibility: -1,
-              duration: Uint64(0)),
+              supplyMutable: false, transferable: false, divisibility: -1, duration: Uint64(0)),
           throwsA(predicate((e) =>
               e is ArgumentError &&
               e.message ==
@@ -67,11 +56,7 @@ void main() {
 
       expect(
           () => new MosaicProperties(
-              supplyMutable: false,
-              transferable: false,
-              levyMutable: false,
-              divisibility: 7,
-              duration: Uint64(0)),
+              supplyMutable: false, transferable: false, divisibility: 7, duration: Uint64(0)),
           throwsA(predicate((e) =>
               e is ArgumentError &&
               e.message ==

@@ -44,7 +44,6 @@ void main() {
       expect(NetworkCurrencyMosaic.DIVISIBILITY, 6);
       expect(NetworkCurrencyMosaic.TRANSFERABLE, isTrue);
       expect(NetworkCurrencyMosaic.SUPPLY_MUTABLE, isFalse);
-      expect(NetworkCurrencyMosaic.LEVY_MUTABLE, isFalse);
     });
   });
 }

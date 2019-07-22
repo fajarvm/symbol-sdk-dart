@@ -44,7 +44,6 @@ void main() {
       expect(NetworkHarvestMosaic.DIVISIBILITY, 3);
       expect(NetworkHarvestMosaic.TRANSFERABLE, isTrue);
       expect(NetworkHarvestMosaic.SUPPLY_MUTABLE, isTrue);
-      expect(NetworkHarvestMosaic.LEVY_MUTABLE, isFalse);
     });
   });
 }

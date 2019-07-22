@@ -43,9 +43,6 @@ class NetworkCurrencyMosaic extends Mosaic {
   /// The supply of mosaic cannot be changed (immutable supply).
   static const SUPPLY_MUTABLE = false;
 
-  /// The levy of mosaic cannot be changed (immutable levy).
-  static const LEVY_MUTABLE = false;
-
   // private constructor
   NetworkCurrencyMosaic._(Uint64 amount) : super(NAMESPACE_ID, amount);
 

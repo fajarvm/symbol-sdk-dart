@@ -52,11 +52,10 @@ void main() {
       const int revision = 1;
 
       final properties = MosaicProperties.create(Uint64(9000));
-      final mosaicLevy = new Object();
 
       // Create MosaicInfo
       final MosaicInfo mosaicInfo =
-          new MosaicInfo(metaId, mosaicId, supply, height, owner, revision, properties, mosaicLevy);
+          new MosaicInfo(metaId, mosaicId, supply, height, owner, revision, properties);
 
       // Assert
       expect(mosaicInfo.metaId, equals(metaId));
@@ -67,10 +66,8 @@ void main() {
       expect(mosaicInfo.revision, 1);
       expect(mosaicInfo.isSupplyMutable, isFalse);
       expect(mosaicInfo.isTransferable, isTrue);
-      expect(mosaicInfo.isLevyMutable, isFalse);
       expect(mosaicInfo.divisibility, 0);
       expect(mosaicInfo.duration.value.toInt(), 9000);
-      expect(mosaicInfo.mosaicLevy, isNotNull);
     });
 
     test('Cannot create with invalid revision', () {

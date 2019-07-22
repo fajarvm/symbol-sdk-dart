@@ -18,7 +18,6 @@ library nem2_sdk_dart.sdk.model.mosaic.mosaic_info;
 
 import '../account/public_account.dart';
 import '../common/uint64.dart';
-
 import 'mosaic_id.dart';
 import 'mosaic_properties.dart';
 
@@ -45,11 +44,8 @@ class MosaicInfo {
   /// The properties of the mosaic.
   final MosaicProperties properties;
 
-  /// The levy of the mosaic (optional).
-  final Object mosaicLevy;
-
-  MosaicInfo._(this.metaId, this.mosaicId, this.supply, this.height, this.owner,
-      this.revision, this.properties, [this.mosaicLevy]);
+  MosaicInfo._(this.metaId, this.mosaicId, this.supply, this.height, this.owner, this.revision,
+      this.properties);
 
   factory MosaicInfo(
       final String metaId,
@@ -58,26 +54,23 @@ class MosaicInfo {
       final Uint64 height,
       final PublicAccount owner,
       final int revision,
-      final MosaicProperties properties, [final Object mosaicLevy]) {
+      final MosaicProperties properties) {
     if (0 > revision) {
       throw new ArgumentError('revision must not be negative');
     }
 
-    return new MosaicInfo._(metaId, mosaicId, supply, height, owner, revision, properties, mosaicLevy);
+    return new MosaicInfo._(metaId, mosaicId, supply, height, owner, revision, properties);
   }
 
-  /// Returns the mosaic divisibility
+  /// Returns the mosaic divisibility.
   int get divisibility => properties.divisibility;
 
-  /// Returns the mosaic duration
+  /// Returns the mosaic duration.
   Uint64 get duration => properties.duration;
 
-  /// Returns the mosaic supply mutability
+  /// Returns the mosaic supply mutability.
   bool get isSupplyMutable => properties.supplyMutable;
 
-  /// Returns the mosaic transferability
+  /// Returns the mosaic transferability.
   bool get isTransferable => properties.transferable;
-
-  /// Returns the mosaic levy mutability
-  bool get isLevyMutable => properties.levyMutable;
 }

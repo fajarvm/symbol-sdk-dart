@@ -43,9 +43,6 @@ class NetworkHarvestMosaic extends Mosaic {
   /// The supply of mosaic can be changed (mutable supply).
   static const SUPPLY_MUTABLE = true;
 
-  /// The levy of mosaic cannot be changed (immutable levy).
-  static const LEVY_MUTABLE = false;
-
   // private constructor
   NetworkHarvestMosaic._(Uint64 amount) : super(NAMESPACE_ID, amount);
 

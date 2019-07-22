@@ -50,6 +50,7 @@ export 'model/diagnostic/server_info.dart';
 export 'model/mosaic/mosaic.dart';
 export 'model/mosaic/mosaic_id.dart';
 export 'model/mosaic/mosaic_info.dart';
+export 'model/mosaic/mosaic_name.dart';
 export 'model/mosaic/mosaic_nonce.dart';
 export 'model/mosaic/mosaic_properties.dart';
 export 'model/mosaic/mosaic_supply_type.dart';
