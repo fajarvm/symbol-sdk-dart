@@ -62,7 +62,7 @@ class RestrictionType {
   /// Returns a [RestrictionType] for the given int value.
   ///
   /// Throws an error when the type is unknown.
-  static RestrictionType getType(final int value) {
+  static RestrictionType fromInt(final int value) {
     for (var type in values) {
       if (type.value == value) {
         return type;

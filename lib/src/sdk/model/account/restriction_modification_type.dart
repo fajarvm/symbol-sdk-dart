@@ -39,7 +39,7 @@ class RestrictionModificationType {
   /// Returns a [RestrictionModificationType] for the given int value.
   ///
   /// Throws an error when the type is unknown.
-  static RestrictionModificationType getType(final int value) {
+  static RestrictionModificationType fromInt(final int value) {
     for (var type in values) {
       if (type.value == value) {
         return type;

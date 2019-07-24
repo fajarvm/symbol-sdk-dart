@@ -54,24 +54,24 @@ void main() {
 
     test('Can retrieve a valid restriction types', () {
       // Account filters
-      expect(RestrictionType.getType(0x01), RestrictionType.ALLOW_ADDRESS);
-      expect(RestrictionType.getType(0x02), RestrictionType.ALLOW_MOSAIC);
-      expect(RestrictionType.getType(0x04), RestrictionType.ALLOW_TRANSACTION);
-      expect(RestrictionType.getType(0x05), RestrictionType.SENTINEL);
-      expect(RestrictionType.getType(0x80 + 0x01), RestrictionType.BLOCK_ADDRESS);
-      expect(RestrictionType.getType(0x80 + 0x02), RestrictionType.BLOCK_MOSAIC);
-      expect(RestrictionType.getType(0x80 + 0x04), RestrictionType.BLOCK_TRANSACTION);
+      expect(RestrictionType.fromInt(0x01), RestrictionType.ALLOW_ADDRESS);
+      expect(RestrictionType.fromInt(0x02), RestrictionType.ALLOW_MOSAIC);
+      expect(RestrictionType.fromInt(0x04), RestrictionType.ALLOW_TRANSACTION);
+      expect(RestrictionType.fromInt(0x05), RestrictionType.SENTINEL);
+      expect(RestrictionType.fromInt(0x80 + 0x01), RestrictionType.BLOCK_ADDRESS);
+      expect(RestrictionType.fromInt(0x80 + 0x02), RestrictionType.BLOCK_MOSAIC);
+      expect(RestrictionType.fromInt(0x80 + 0x04), RestrictionType.BLOCK_TRANSACTION);
     });
 
     test('Trying to retrieve an unknown property type will throw an error', () {
       String errorMessage = RestrictionType.UNKNOWN_RESTRICTION_TYPE;
       expect(errorMessage, equals('unknown restriction type'));
 
-      expect(() => RestrictionType.getType(null),
+      expect(() => RestrictionType.fromInt(null),
           throwsA(predicate((e) => e is ArgumentError && e.message == errorMessage)));
-      expect(() => RestrictionType.getType(0x03),
+      expect(() => RestrictionType.fromInt(0x03),
           throwsA(predicate((e) => e is ArgumentError && e.message == errorMessage)));
-      expect(() => RestrictionType.getType(0x80 + 0x03),
+      expect(() => RestrictionType.fromInt(0x80 + 0x03),
           throwsA(predicate((e) => e is ArgumentError && e.message == errorMessage)));
     });
   });

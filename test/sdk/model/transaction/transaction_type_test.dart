@@ -60,38 +60,38 @@ void main() {
 
     test('Can retrieve a valid transaction types', () {
       // Account filters
-      expect(TransactionType.getType(0x4150), TransactionType.ACCOUNT_FILTER_ADDRESS);
-      expect(TransactionType.getType(0x4250), TransactionType.ACCOUNT_FILTER_MOSAIC);
-      expect(TransactionType.getType(0x4350), TransactionType.ACCOUNT_FILTER_ENTITY_TYPE);
+      expect(TransactionType.fromInt(0x4150), TransactionType.ACCOUNT_FILTER_ADDRESS);
+      expect(TransactionType.fromInt(0x4250), TransactionType.ACCOUNT_FILTER_MOSAIC);
+      expect(TransactionType.fromInt(0x4350), TransactionType.ACCOUNT_FILTER_ENTITY_TYPE);
 
       // Mosaic
-      expect(TransactionType.getType(0x414d), TransactionType.MOSAIC_DEFINITION);
-      expect(TransactionType.getType(0x424d), TransactionType.MOSAIC_SUPPLY_CHANGE);
+      expect(TransactionType.fromInt(0x414d), TransactionType.MOSAIC_DEFINITION);
+      expect(TransactionType.fromInt(0x424d), TransactionType.MOSAIC_SUPPLY_CHANGE);
 
       // Namespace
-      expect(TransactionType.getType(0x414e), TransactionType.NAMESPACE_REGISTRATION);
-      expect(TransactionType.getType(0x424e), TransactionType.NAMESPACE_ATTACH_TO_ACCOUNT);
-      expect(TransactionType.getType(0x434e), TransactionType.NAMESPACE_ATTACH_TO_MOSAIC);
+      expect(TransactionType.fromInt(0x414e), TransactionType.NAMESPACE_REGISTRATION);
+      expect(TransactionType.fromInt(0x424e), TransactionType.NAMESPACE_ATTACH_TO_ACCOUNT);
+      expect(TransactionType.fromInt(0x434e), TransactionType.NAMESPACE_ATTACH_TO_MOSAIC);
 
       // Transfer
-      expect(TransactionType.getType(0x4154), TransactionType.TRANSFER);
+      expect(TransactionType.fromInt(0x4154), TransactionType.TRANSFER);
 
       // Multi-signature
-      expect(TransactionType.getType(0x4155), TransactionType.MULTISIG_MODIFY);
+      expect(TransactionType.fromInt(0x4155), TransactionType.MULTISIG_MODIFY);
 
       // Aggregate
-      expect(TransactionType.getType(0x4141), TransactionType.AGGREGATE_COMPLETE);
-      expect(TransactionType.getType(0x4241), TransactionType.AGGREGATE_BONDED);
+      expect(TransactionType.fromInt(0x4141), TransactionType.AGGREGATE_COMPLETE);
+      expect(TransactionType.fromInt(0x4241), TransactionType.AGGREGATE_BONDED);
 
       // Hash lock / Lock funds
-      expect(TransactionType.getType(0x4148), TransactionType.HASH_LOCK);
+      expect(TransactionType.fromInt(0x4148), TransactionType.HASH_LOCK);
 
       // Cross-chain swaps
-      expect(TransactionType.getType(0x4152), TransactionType.SECRET_LOCK);
-      expect(TransactionType.getType(0x4252), TransactionType.SECRET_PROOF);
+      expect(TransactionType.fromInt(0x4152), TransactionType.SECRET_LOCK);
+      expect(TransactionType.fromInt(0x4252), TransactionType.SECRET_PROOF);
 
       // Account link / remote harvesting
-      expect(TransactionType.getType(0x414C), TransactionType.ACCOUNT_LINK);
+      expect(TransactionType.fromInt(0x414C), TransactionType.ACCOUNT_LINK);
     });
 
     test('Can determine aggregate transaction types', () {
@@ -103,9 +103,9 @@ void main() {
 
     test('Trying to retrieve an invalid transaction type will throw an error', () {
       String errorMessage = TransactionType.UNKNOWN_TRANSACTION_TYPE;
-      expect(() => TransactionType.getType(null),
+      expect(() => TransactionType.fromInt(null),
           throwsA(predicate((e) => e is ArgumentError && e.message == errorMessage)));
-      expect(() => TransactionType.getType(0x0000),
+      expect(() => TransactionType.fromInt(0x0000),
                  throwsA(predicate((e) => e is ArgumentError && e.message == errorMessage)));
     });
   });

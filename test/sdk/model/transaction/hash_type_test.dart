@@ -32,19 +32,19 @@ void main() {
     });
 
     test('Can retrieve valid hash types', () {
-      expect(HashType.getType(0), HashType.SHA3_256);
-      expect(HashType.getType(1), HashType.KECCAK_256);
-      expect(HashType.getType(2), HashType.RIPEMD_160);
-      expect(HashType.getType(3), HashType.SHA_256);
+      expect(HashType.fromInt(0), HashType.SHA3_256);
+      expect(HashType.fromInt(1), HashType.KECCAK_256);
+      expect(HashType.fromInt(2), HashType.RIPEMD_160);
+      expect(HashType.fromInt(3), HashType.SHA_256);
     });
 
     test('Trying to retrieve an invalid namespace type will throw an error', () {
       String errorMessage = HashType.UNSUPPORTED_HASH_TYPE;
-      expect(() => HashType.getType(null),
+      expect(() => HashType.fromInt(null),
           throwsA(predicate((e) => e is ArgumentError && e.message == errorMessage)));
-      expect(() => HashType.getType(-1),
+      expect(() => HashType.fromInt(-1),
           throwsA(predicate((e) => e is ArgumentError && e.message == errorMessage)));
-      expect(() => HashType.getType(4),
+      expect(() => HashType.fromInt(4),
           throwsA(predicate((e) => e is ArgumentError && e.message == errorMessage)));
     });
 

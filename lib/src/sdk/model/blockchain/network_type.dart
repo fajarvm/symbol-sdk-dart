@@ -45,7 +45,7 @@ class NetworkType {
   /// Returns a [NetworkType] for the given int value.
   ///
   /// Throws an error when the type is unknown.
-  static NetworkType getType(final int value) {
+  static NetworkType fromInt(final int value) {
     for (var type in values) {
       if (type.value == value) {
         return type;
@@ -60,7 +60,7 @@ class NetworkType {
   /// Throws an error if when the parameter [throwError] is set to true.
   static bool isValid(final int networkType, [final bool throwError = false]) {
     try {
-      if (getType(networkType) != null) {
+      if (fromInt(networkType) != null) {
         return true;
       }
     } catch (e) {

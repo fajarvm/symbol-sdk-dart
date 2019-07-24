@@ -27,17 +27,17 @@ void main() {
     });
 
     test('Can retrieve a valid namespace types', () {
-      expect(NamespaceType.getType(0), NamespaceType.ROOT_NAMESPACE);
-      expect(NamespaceType.getType(1), NamespaceType.SUB_NAMESPACE);
+      expect(NamespaceType.fromInt(0), NamespaceType.ROOT_NAMESPACE);
+      expect(NamespaceType.fromInt(1), NamespaceType.SUB_NAMESPACE);
     });
 
     test('Trying to retrieve an invalid namespace type will throw an error', () {
       String errorMessage = NamespaceType.UNKNOWN_NAMESPACE_TYPE;
-      expect(() => NamespaceType.getType(null),
+      expect(() => NamespaceType.fromInt(null),
           throwsA(predicate((e) => e is ArgumentError && e.message == errorMessage)));
-      expect(() => NamespaceType.getType(-1),
+      expect(() => NamespaceType.fromInt(-1),
           throwsA(predicate((e) => e is ArgumentError && e.message == errorMessage)));
-      expect(() => NamespaceType.getType(2),
+      expect(() => NamespaceType.fromInt(2),
           throwsA(predicate((e) => e is ArgumentError && e.message == errorMessage)));
     });
   });

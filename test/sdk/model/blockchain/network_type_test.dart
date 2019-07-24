@@ -40,23 +40,23 @@ void main() {
 
   group('getNetworkType()', () {
     test('Can identify a valid NetworkType', () {
-      expect(NetworkType.getType(0x68), NetworkType.MAIN_NET);
-      expect(NetworkType.getType(104), NetworkType.MAIN_NET);
-      expect(NetworkType.getType(0x98), NetworkType.TEST_NET);
-      expect(NetworkType.getType(152), NetworkType.TEST_NET);
-      expect(NetworkType.getType(0x60), NetworkType.MIJIN);
-      expect(NetworkType.getType(96), NetworkType.MIJIN);
-      expect(NetworkType.getType(0x90), NetworkType.MIJIN_TEST);
-      expect(NetworkType.getType(144), NetworkType.MIJIN_TEST);
+      expect(NetworkType.fromInt(0x68), NetworkType.MAIN_NET);
+      expect(NetworkType.fromInt(104), NetworkType.MAIN_NET);
+      expect(NetworkType.fromInt(0x98), NetworkType.TEST_NET);
+      expect(NetworkType.fromInt(152), NetworkType.TEST_NET);
+      expect(NetworkType.fromInt(0x60), NetworkType.MIJIN);
+      expect(NetworkType.fromInt(96), NetworkType.MIJIN);
+      expect(NetworkType.fromInt(0x90), NetworkType.MIJIN_TEST);
+      expect(NetworkType.fromInt(144), NetworkType.MIJIN_TEST);
     });
 
     test('invalid or unknown network type should throw an error', () {
       String errorMessage = NetworkType.UNKNOWN_NETWORK_TYPE;
-      expect(() => NetworkType.getType(null),
+      expect(() => NetworkType.fromInt(null),
           throwsA(predicate((e) => e is ArgumentError && e.message == errorMessage)));
-      expect(() => NetworkType.getType(0),
+      expect(() => NetworkType.fromInt(0),
           throwsA(predicate((e) => e is ArgumentError && e.message == errorMessage)));
-      expect(() => NetworkType.getType(103),
+      expect(() => NetworkType.fromInt(103),
           throwsA(predicate((e) => e is ArgumentError && e.message == errorMessage)));
     });
   });

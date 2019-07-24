@@ -57,7 +57,7 @@ class HashType {
   /// Returns a [HashType] for the given int value.
   ///
   /// Throws an error when the type is unknown.
-  static HashType getType(final int value) {
+  static HashType fromInt(final int value) {
     for (var type in values) {
       if (type.value == value) {
         return type;

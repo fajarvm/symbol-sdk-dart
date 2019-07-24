@@ -44,19 +44,19 @@ void main() {
 
     test('Can retrieve a valid restriction modification types', () {
       // Account filters
-      expect(RestrictionModificationType.getType(0x00), RestrictionModificationType.ADD);
-      expect(RestrictionModificationType.getType(0x01), RestrictionModificationType.DEL);
+      expect(RestrictionModificationType.fromInt(0x00), RestrictionModificationType.ADD);
+      expect(RestrictionModificationType.fromInt(0x01), RestrictionModificationType.DEL);
     });
 
     test('Trying to retrieve an invalid restriction type will throw an error', () {
       String errorMessage = RestrictionModificationType.UNKNOWN_RESTRICTION_MODIFICATION_TYPE;
       expect(errorMessage, equals('unknown restriction modification type'));
 
-      expect(() => RestrictionModificationType.getType(null),
+      expect(() => RestrictionModificationType.fromInt(null),
           throwsA(predicate((e) => e is ArgumentError && e.message == errorMessage)));
-      expect(() => RestrictionModificationType.getType(-1),
+      expect(() => RestrictionModificationType.fromInt(-1),
           throwsA(predicate((e) => e is ArgumentError && e.message == errorMessage)));
-      expect(() => RestrictionModificationType.getType(2),
+      expect(() => RestrictionModificationType.fromInt(2),
           throwsA(predicate((e) => e is ArgumentError && e.message == errorMessage)));
     });
   });

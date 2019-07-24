@@ -28,18 +28,18 @@ void main() {
     });
 
     test('Can retrieve a valid alias types', () {
-      expect(AliasType.getType(0), AliasType.NONE);
-      expect(AliasType.getType(1), AliasType.MOSAIC);
-      expect(AliasType.getType(2), AliasType.ADDRESS);
+      expect(AliasType.fromInt(0), AliasType.NONE);
+      expect(AliasType.fromInt(1), AliasType.MOSAIC);
+      expect(AliasType.fromInt(2), AliasType.ADDRESS);
     });
 
     test('Trying to retrieve an invalid alias type will throw an error', () {
       String errorMessage = AliasType.UNKNOWN_ALIAS_TYPE;
-      expect(() => AliasType.getType(null),
+      expect(() => AliasType.fromInt(null),
           throwsA(predicate((e) => e is ArgumentError && e.message == errorMessage)));
-      expect(() => AliasType.getType(-1),
+      expect(() => AliasType.fromInt(-1),
           throwsA(predicate((e) => e is ArgumentError && e.message == errorMessage)));
-      expect(() => AliasType.getType(3),
+      expect(() => AliasType.fromInt(3),
           throwsA(predicate((e) => e is ArgumentError && e.message == errorMessage)));
     });
   });

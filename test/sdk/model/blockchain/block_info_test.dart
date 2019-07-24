@@ -53,7 +53,7 @@ void main() {
       final String networkPart = blockVersionHex.substring(0, 2);
       final String versionPart = blockVersionHex.substring(2, 4);
       final int networkTypeRawValue = int.parse(networkPart, radix: 16);
-      final NetworkType networkType = NetworkType.getType(networkTypeRawValue);
+      final NetworkType networkType = NetworkType.fromInt(networkTypeRawValue);
       final int version = int.parse(versionPart, radix: 16);
       final signer = PublicAccount.fromPublicKey(testBlock['block']['signer'], networkType);
       final beneficiary =

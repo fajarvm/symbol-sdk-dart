@@ -39,7 +39,7 @@ class MosaicSupplyType {
   /// Returns a [MosaicSupplyType] for the given int value.
   ///
   /// Throws an error when the type is unknown.
-  static MosaicSupplyType getType(final int value) {
+  static MosaicSupplyType fromInt(final int value) {
     for (var type in values) {
       if (type.value == value) {
         return type;

@@ -27,17 +27,17 @@ void main() {
     });
 
     test('Can retrieve a valid action alias types', () {
-      expect(AliasActionType.getType(0), AliasActionType.LINK);
-      expect(AliasActionType.getType(1), AliasActionType.UNLINK);
+      expect(AliasActionType.fromInt(0), AliasActionType.LINK);
+      expect(AliasActionType.fromInt(1), AliasActionType.UNLINK);
     });
 
     test('Trying to retrieve an invalid alias action type will throw an error', () {
       String errorMessage = AliasActionType.UNKNOWN_ALIAS_ACTION_TYPE;
-      expect(() => AliasActionType.getType(null),
+      expect(() => AliasActionType.fromInt(null),
           throwsA(predicate((e) => e is ArgumentError && e.message == errorMessage)));
-      expect(() => AliasActionType.getType(-1),
+      expect(() => AliasActionType.fromInt(-1),
           throwsA(predicate((e) => e is ArgumentError && e.message == errorMessage)));
-      expect(() => AliasActionType.getType(2),
+      expect(() => AliasActionType.fromInt(2),
           throwsA(predicate((e) => e is ArgumentError && e.message == errorMessage)));
     });
   });

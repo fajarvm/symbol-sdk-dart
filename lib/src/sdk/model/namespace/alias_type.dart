@@ -41,7 +41,7 @@ class AliasType {
   /// Returns a [AliasType] for the given int value.
   ///
   /// Throws an error when the type is unknown.
-  static AliasType getType(final int value) {
+  static AliasType fromInt(final int value) {
     for (var type in values) {
       if (type.value == value) {
         return type;

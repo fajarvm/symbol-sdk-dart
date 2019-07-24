@@ -131,7 +131,7 @@ class TransactionType {
   /// Returns a [TransactionType] for the given int value.
   ///
   /// Throws an error when the type is unknown.
-  static TransactionType getType(final int value) {
+  static TransactionType fromInt(final int value) {
     for (var type in values) {
       if (type.value == value) {
         return type;

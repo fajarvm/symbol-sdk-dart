@@ -38,7 +38,7 @@ class AliasActionType {
   /// Returns a [AliasActionType] for the given int value.
   ///
   /// Throws an error when the type is unknown.
-  static AliasActionType getType(final int value) {
+  static AliasActionType fromInt(final int value) {
     for (var type in values) {
       if (type.value == value) {
         return type;
