@@ -26,7 +26,7 @@ class MosaicSupplyType {
   /// Mosaic with this type can increase in supply.
   static const MosaicSupplyType INCREASE = MosaicSupplyType._(1);
 
-  /// Supported network types.
+  /// Supported mosaic supply types.
   static final List<MosaicSupplyType> values = <MosaicSupplyType>[DECREASE, INCREASE];
 
   /// The int value of this type.

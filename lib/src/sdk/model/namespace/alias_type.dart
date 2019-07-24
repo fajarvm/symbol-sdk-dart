@@ -29,6 +29,7 @@ class AliasType {
   /// This type identifies an alias to an address.
   static const AliasType ADDRESS = AliasType._(2);
 
+  /// Supported alias types.
   static final List<AliasType> values = <AliasType>[NONE, MOSAIC, ADDRESS];
 
   /// The int value of this type.

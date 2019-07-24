@@ -42,7 +42,7 @@ void main() {
       expect(RestrictionModificationType.DEL.value, 0x01);
     });
 
-    test('Can retrieve a valid restriction modification types', () {
+    test('Can retrieve a valid restriction modification type', () {
       // Account filters
       expect(RestrictionModificationType.fromInt(0x00), RestrictionModificationType.ADD);
       expect(RestrictionModificationType.fromInt(0x01), RestrictionModificationType.DEL);

@@ -14,32 +14,31 @@
 // limitations under the License.
 //
 
-library nem2_sdk_dart.test.sdk.model.namespace.alias_type_test;
+library nem2_sdk_dart.test.sdk.model.node.role_type_test;
 
-import 'package:nem2_sdk_dart/sdk.dart' show AliasType;
 import 'package:test/test.dart';
 
+import 'package:nem2_sdk_dart/sdk.dart' show RoleType;
+
 void main() {
-  group('AliasType', () {
-    test('valid alias types', () {
-      expect(AliasType.NONE.value, 0);
-      expect(AliasType.MOSAIC.value, 1);
-      expect(AliasType.ADDRESS.value, 2);
+  group('RoleType', () {
+    test('Valid role types', () {
+      expect(RoleType.PEER_NODE.value, 1);
+      expect(RoleType.API_NODE.value, 2);
     });
 
-    test('Can retrieve a valid alias type', () {
-      expect(AliasType.fromInt(0), AliasType.NONE);
-      expect(AliasType.fromInt(1), AliasType.MOSAIC);
-      expect(AliasType.fromInt(2), AliasType.ADDRESS);
+    test('Can retrieve a valid role type', () {
+      expect(RoleType.fromInt(1), RoleType.PEER_NODE);
+      expect(RoleType.fromInt(2), RoleType.API_NODE);
     });
 
-    test('Trying to retrieve an invalid alias type will throw an error', () {
-      String errorMessage = AliasType.UNKNOWN_ALIAS_TYPE;
-      expect(() => AliasType.fromInt(null),
+    test('invalid or unknown type should throw an error', () {
+      String errorMessage = RoleType.UNKNOWN_ROLE_TYPE;
+      expect(() => RoleType.fromInt(null),
           throwsA(predicate((e) => e is ArgumentError && e.message == errorMessage)));
-      expect(() => AliasType.fromInt(-1),
+      expect(() => RoleType.fromInt(-1),
           throwsA(predicate((e) => e is ArgumentError && e.message == errorMessage)));
-      expect(() => AliasType.fromInt(3),
+      expect(() => RoleType.fromInt(0),
           throwsA(predicate((e) => e is ArgumentError && e.message == errorMessage)));
     });
   });

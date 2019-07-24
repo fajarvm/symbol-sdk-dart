@@ -26,7 +26,7 @@ void main() {
       expect(MosaicSupplyType.INCREASE.value, 1);
     });
 
-    test('Can retrieve a valid mosaic supply types', () {
+    test('Can retrieve a valid mosaic supply type', () {
       expect(MosaicSupplyType.fromInt(0), MosaicSupplyType.DECREASE);
       expect(MosaicSupplyType.fromInt(1), MosaicSupplyType.INCREASE);
     });

@@ -14,7 +14,7 @@
 // limitations under the License.
 //
 
-library nem2_sdk_dart.test.sdk.model.uint64_test;
+library nem2_sdk_dart.test.sdk.model.common.uint64_test;
 
 import 'dart:typed_data' show Uint8List;
 

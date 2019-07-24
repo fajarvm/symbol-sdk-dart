@@ -14,38 +14,38 @@
 // limitations under the License.
 //
 
-library nem2_sdk_dart.sdk.model.namespace.namespace_type;
+library nem2_sdk_dart.sdk.model.node.role_type;
 
-/// The namespace type.
-class NamespaceType {
-  static const String UNKNOWN_NAMESPACE_TYPE = 'unknown namespace type';
+/// The role type of a node.
+class RoleType {
+  static const String UNKNOWN_ROLE_TYPE = 'unknown role type';
 
-  /// Indicates a root namespace.
-  static const NamespaceType ROOT_NAMESPACE = NamespaceType._(0);
+  /// Indicates a peer type node.
+  static const RoleType PEER_NODE = RoleType._(1);
 
-  /// Indicates a sub namespace.
-  static const NamespaceType SUB_NAMESPACE = NamespaceType._(1);
+  /// Indicates an API type node.
+  static const RoleType API_NODE = RoleType._(2);
 
-  /// Supported namespace types.
-  static final List<NamespaceType> values = <NamespaceType>[ROOT_NAMESPACE, SUB_NAMESPACE];
+  /// Supported role types.
+  static final List<RoleType> values = <RoleType>[PEER_NODE, API_NODE];
 
   /// The int value of this type.
   final int value;
 
   // constant constructor: makes this class available on runtime.
   // emulates an enum class with a value.
-  const NamespaceType._(this.value);
+  const RoleType._(this.value);
 
-  /// Returns a [NamespaceType] for the given int value.
+  /// Returns a [RoleType] for the given int value.
   ///
   /// Throws an error when the type is unknown.
-  static NamespaceType fromInt(final int value) {
+  static RoleType fromInt(final int value) {
     for (var type in values) {
       if (type.value == value) {
         return type;
       }
     }
 
-    throw new ArgumentError(UNKNOWN_NAMESPACE_TYPE);
+    throw new ArgumentError(UNKNOWN_ROLE_TYPE);
   }
 }

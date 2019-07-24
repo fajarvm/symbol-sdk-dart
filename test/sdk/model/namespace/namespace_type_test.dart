@@ -26,7 +26,7 @@ void main() {
       expect(NamespaceType.SUB_NAMESPACE.value, 1);
     });
 
-    test('Can retrieve a valid namespace types', () {
+    test('Can retrieve a valid namespace type', () {
       expect(NamespaceType.fromInt(0), NamespaceType.ROOT_NAMESPACE);
       expect(NamespaceType.fromInt(1), NamespaceType.SUB_NAMESPACE);
     });

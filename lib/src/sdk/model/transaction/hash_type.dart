@@ -45,6 +45,7 @@ class HashType {
   /// SHA-256 input is hashed twice with SHA-256 (Bitcoin BTC compatibility).
   static const HashType SHA_256 = HashType._(3);
 
+  /// Supported hash types.
   static final List<HashType> values = <HashType>[SHA3_256, KECCAK_256, RIPEMD_160, SHA_256];
 
   /// The int value of this type.

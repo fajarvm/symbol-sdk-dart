@@ -22,7 +22,7 @@ import 'package:nem2_sdk_dart/sdk.dart' show NetworkType;
 
 void main() {
   group('NetworkType', () {
-    test('valid network types', () {
+    test('Valid network types', () {
       // Main net
       expect(NetworkType.MAIN_NET.value, 0x68);
       expect(NetworkType.MAIN_NET.value, 104);
@@ -36,10 +36,8 @@ void main() {
       expect(NetworkType.MIJIN_TEST.value, 0x90);
       expect(NetworkType.MIJIN_TEST.value, 144);
     });
-  });
 
-  group('getNetworkType()', () {
-    test('Can identify a valid NetworkType', () {
+    test('Can retrieve a valid network type', () {
       expect(NetworkType.fromInt(0x68), NetworkType.MAIN_NET);
       expect(NetworkType.fromInt(104), NetworkType.MAIN_NET);
       expect(NetworkType.fromInt(0x98), NetworkType.TEST_NET);
@@ -50,7 +48,7 @@ void main() {
       expect(NetworkType.fromInt(144), NetworkType.MIJIN_TEST);
     });
 
-    test('invalid or unknown network type should throw an error', () {
+    test('Invalid or unknown network type should throw an error', () {
       String errorMessage = NetworkType.UNKNOWN_NETWORK_TYPE;
       expect(() => NetworkType.fromInt(null),
           throwsA(predicate((e) => e is ArgumentError && e.message == errorMessage)));
@@ -59,9 +57,7 @@ void main() {
       expect(() => NetworkType.fromInt(103),
           throwsA(predicate((e) => e is ArgumentError && e.message == errorMessage)));
     });
-  });
 
-  group('isValidNetworkType()', () {
     test('Can identify that a network tye is valid/supported', () {
       expect(NetworkType.isValid(NetworkType.MAIN_NET.value), isTrue);
       expect(NetworkType.isValid(0x68), isTrue);

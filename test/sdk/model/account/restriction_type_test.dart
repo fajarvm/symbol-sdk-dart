@@ -37,7 +37,7 @@ import 'package:test/test.dart';
 
 void main() {
   group('RestrictionType', () {
-    test('valid restriction types', () {
+    test('valid types', () {
       // Allow
       expect(RestrictionType.ALLOW_ADDRESS.value, 0x01);
       expect(RestrictionType.ALLOW_MOSAIC.value, 0x02);
@@ -52,7 +52,7 @@ void main() {
       expect(RestrictionType.BLOCK_TRANSACTION.value, (0x80 + 0x04));
     });
 
-    test('Can retrieve a valid restriction types', () {
+    test('Can retrieve a valid restriction type', () {
       // Account filters
       expect(RestrictionType.fromInt(0x01), RestrictionType.ALLOW_ADDRESS);
       expect(RestrictionType.fromInt(0x02), RestrictionType.ALLOW_MOSAIC);
@@ -63,7 +63,7 @@ void main() {
       expect(RestrictionType.fromInt(0x80 + 0x04), RestrictionType.BLOCK_TRANSACTION);
     });
 
-    test('Trying to retrieve an unknown property type will throw an error', () {
+    test('Trying to retrieve an unknown restriction type will throw an error', () {
       String errorMessage = RestrictionType.UNKNOWN_RESTRICTION_TYPE;
       expect(errorMessage, equals('unknown restriction type'));
 

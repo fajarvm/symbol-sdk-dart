@@ -102,6 +102,7 @@ class TransactionType {
   /// Delegates the account importance to a proxy account to enable delegated harvesting.
   static const TransactionType ACCOUNT_LINK = TransactionType._(0x414C);
 
+  /// Supported transaction types.
   static final List<TransactionType> values = <TransactionType>[
     MOSAIC_DEFINITION,
     MOSAIC_SUPPLY_CHANGE,

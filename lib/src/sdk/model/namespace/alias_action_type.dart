@@ -26,6 +26,7 @@ class AliasActionType {
   /// Unlinks an alias.
   static const AliasActionType UNLINK = AliasActionType._(1);
 
+  /// Supported alias action types.
   static final List<AliasActionType> values = <AliasActionType>[LINK, UNLINK];
 
   /// The int value of this type.

@@ -16,6 +16,7 @@
 
 import 'package:test/test.dart';
 
+// account
 import 'model/account/account_info_test.dart' as account_info_test;
 import 'model/account/account_restriction_test.dart' as account_restriction_test;
 import 'model/account/account_restrictions_info_test.dart' as account_restrictions_info_test;
@@ -28,13 +29,22 @@ import 'model/account/public_account_test.dart' as public_account_test;
 import 'model/account/restriction_modification_type_test.dart'
     as restriction_modification_type_test;
 import 'model/account/restriction_type_test.dart' as restriction_type_test;
+
+// blockchain
 import 'model/blockchain/block_info_test.dart' as block_info_test;
 import 'model/blockchain/blockchain_score_test.dart' as blockchain_score_test;
 import 'model/blockchain/blockchain_storage_info_test.dart' as blockchain_storage_info_test;
 import 'model/blockchain/network_type_test.dart' as network_type_test;
+
+// common
 import 'model/common/id_generator_test.dart' as id_generator_test;
 import 'model/common/id_test.dart' as id_test;
 import 'model/common/uint64_test.dart' as uint64_test;
+
+// diagnostic
+import 'model/diagnostic/server_info_test.dart' as server_info_test;
+
+// mosaic
 import 'model/mosaic/mosaic_id_test.dart' as mosaic_id_test;
 import 'model/mosaic/mosaic_info_test.dart' as mosaic_info_test;
 import 'model/mosaic/mosaic_name_test.dart' as mosaic_name_test;
@@ -44,6 +54,8 @@ import 'model/mosaic/mosaic_supply_type_test.dart' as mosaic_supply_type_test;
 import 'model/mosaic/mosaic_test.dart' as mosaic_test;
 import 'model/mosaic/network_currency_mosaic_test.dart' as network_currency_mosaic_test;
 import 'model/mosaic/network_harvest_mosaic_test.dart' as network_harvest_mosaic_test;
+
+// namespace
 import 'model/namespace/address_alias_test.dart' as address_alias_test;
 import 'model/namespace/alias_test.dart' as alias_test;
 import 'model/namespace/alias_type_test.dart' as alias_type_test;
@@ -53,6 +65,13 @@ import 'model/namespace/namespace_id_test.dart' as namespace_id_test;
 import 'model/namespace/namespace_info_test.dart' as namespace_info_test;
 import 'model/namespace/namespace_name_test.dart' as namespace_name_test;
 import 'model/namespace/namespace_type_test.dart' as namespace_type_test;
+
+// node
+import 'model/node/node_info_test.dart' as node_info_test;
+import 'model/node/node_time_test.dart' as node_time_test;
+import 'model/node/role_type_test.dart' as role_type_test;
+
+// transaction
 import 'model/transaction/deadline_test.dart' as deadline_test;
 import 'model/transaction/hash_type_test.dart' as hash_type_test;
 import 'model/transaction/messages/message_type_test.dart' as message_type_test;
@@ -96,6 +115,11 @@ void main() {
     uint64_test.main();
   });
 
+  // diagnostic
+  group('Diagnostic models:', () {
+    server_info_test.main();
+  });
+
   // mosaic
   group('Mosaic:', () {
     mosaic_test.main();
@@ -120,6 +144,13 @@ void main() {
     namespace_info_test.main();
     namespace_name_test.main();
     namespace_type_test.main();
+  });
+
+  // node
+  group('Node:', () {
+    node_info_test.main();
+    node_time_test.main();
+    role_type_test.main();
   });
 
   // transaction

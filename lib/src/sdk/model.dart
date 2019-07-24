@@ -69,6 +69,11 @@ export 'model/namespace/namespace_info.dart';
 export 'model/namespace/namespace_name.dart';
 export 'model/namespace/namespace_type.dart';
 
+// Node
+export 'model/node/node_info.dart';
+export 'model/node/node_time.dart';
+export 'model/node/role_type.dart';
+
 // Transaction
 export 'model/transaction/deadline.dart';
 export 'model/transaction/hash_type.dart';

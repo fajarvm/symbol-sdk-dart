@@ -26,7 +26,7 @@ void main() {
       expect(AliasActionType.UNLINK.value, 1);
     });
 
-    test('Can retrieve a valid action alias types', () {
+    test('Can retrieve a valid action alias type', () {
       expect(AliasActionType.fromInt(0), AliasActionType.LINK);
       expect(AliasActionType.fromInt(1), AliasActionType.UNLINK);
     });

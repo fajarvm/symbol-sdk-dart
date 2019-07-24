@@ -41,7 +41,7 @@ class RestrictionType {
   /// Blocks sending transactions with a given transaction type.
   static const RestrictionType BLOCK_TRANSACTION = RestrictionType._(0x80 + 0x04);
 
-  /// Supported property types.
+  /// Supported restriction types.
   static final List<RestrictionType> values = <RestrictionType>[
     ALLOW_ADDRESS,
     ALLOW_MOSAIC,
