@@ -24,7 +24,6 @@
 
 library nem2_sdk_dart.core.crypto.tweetnacl;
 
-import 'dart:convert';
 import 'dart:core';
 import 'dart:math';
 import 'dart:typed_data';
@@ -32,663 +31,8 @@ import 'dart:typed_data';
 import 'package:convert/convert.dart';
 import 'package:fixnum/fixnum.dart';
 
-class NaclKeyPair {
-  Uint8List _publicKey;
-  Uint8List _secretKey;
-
-  NaclKeyPair(publicKeyLength, secretKeyLength) {
-    _publicKey = Uint8List(publicKeyLength);
-    _secretKey = Uint8List(secretKeyLength);
-  }
-
-  Uint8List get publicKey => _publicKey;
-
-  Uint8List get secretKey => _secretKey;
-}
-
-/// Box algorithm, Public-key authenticated encryption
-class Box {
-  /// The length of public key in bytes.
-  static const int publicKeyLength = 32;
-
-  /// The length of secret key in bytes.
-  static const int secretKeyLength = 32;
-
-  /// The length of precomputed shared key in bytes.
-  static const int sharedKeyLength = 32;
-
-  /// The length of nonce in bytes.
-  static const int nonceLength = 24;
-
-  /// Zero bytes in case box.
-  static const int zerobytesLength = 32;
-
-  /// Zero bytes in case open box.
-  static const int boxzerobytesLength = 16;
-
-  /// The length of overhead added to box compared to original message.
-  static const int overheadLength = 16;
-
-  int _nonce;
-
-  Uint8List _theirPublicKey;
-  Uint8List _mySecretKey;
-  Uint8List _sharedKey;
-
-  Box(this._theirPublicKey, this._mySecretKey) {
-    _nonce = 68;
-  }
-
-  Box.nonce(this._theirPublicKey, this._mySecretKey, this._nonce) {
-    // Generate pre-computed shared key
-    before();
-  }
-
-  void setNonce(int nonce) {
-    this._nonce = nonce;
-  }
-
-  int getNonce() => this._nonce;
-
-  int incrNonce() {
-    return ++this._nonce;
-  }
-
-  Uint8List _generateNonce() {
-    // Generate nonce
-    final Int64 nonce = Int64(this._nonce);
-
-    final Uint8List n = Uint8List(nonceLength);
-    for (int i = 0; i < nonceLength; i += 8) {
-      n[i + 0] = nonce.shiftRightUnsigned(0).toInt();
-      n[i + 1] = nonce.shiftRightUnsigned(8).toInt();
-      n[i + 2] = nonce.shiftRightUnsigned(16).toInt();
-      n[i + 3] = nonce.shiftRightUnsigned(24).toInt();
-      n[i + 4] = nonce.shiftRightUnsigned(32).toInt();
-      n[i + 5] = nonce.shiftRightUnsigned(40).toInt();
-      n[i + 6] = nonce.shiftRightUnsigned(48).toInt();
-      n[i + 7] = nonce.shiftRightUnsigned(56).toInt();
-    }
-
-    return n;
-  }
-
-  /// Encrypt and authenticates message using peer's public key,
-  /// our secret key, and the given nonce, which must be unique
-  /// for each distinct message for a key pair.
-  ///
-  /// Returns an encrypted and authenticated message,
-  /// which is nacl.box.overheadLength longer than the original message.
-  Uint8List box(Uint8List message) {
-    if (message == null) return null;
-    return box_len(message, 0, message.length);
-  }
-
-  Uint8List box_off(Uint8List message, final int moff) {
-    if (!(message != null && message.length > moff)) return null;
-    return box_len(message, moff, message.length - moff);
-  }
-
-  Uint8List box_len(Uint8List message, final int moff, final int mlen) {
-    if (!(message != null && message.length >= (moff + mlen))) return null;
-
-    // prepare shared key
-    if (this._sharedKey == null) before();
-
-    return after(message, moff, mlen);
-  }
-
-  /// Encrypt and authenticates message using peer's public key,
-  /// our secret key, and the given nonce, which must be unique
-  /// for each distinct message for a key pair.
-  ///
-  /// Explicitly pass the nonce
-  ///
-  /// Returns an encrypted and authenticated message,
-  /// which is nacl.box.overheadLength longer than the original message.
-  Uint8List box_nonce(Uint8List message, Uint8List theNonce) {
-    if (message == null) return null;
-    return box_nonce_len(message, 0, message.length, theNonce);
-  }
-
-  Uint8List box_nonce_off(Uint8List message, final int moff, Uint8List theNonce) {
-    if (!(message != null && message.length > moff)) return null;
-    return box_nonce_len(message, moff, message.length - moff, theNonce);
-  }
-
-  Uint8List box_nonce_len(Uint8List message, final int moff, final int mlen, Uint8List theNonce) {
-    if (!(message != null &&
-        message.length >= (moff + mlen) &&
-        theNonce != null &&
-        theNonce.length == nonceLength)) return null;
-
-    // prepare shared key
-    if (this._sharedKey == null) before();
-
-    return after_len(message, moff, mlen, theNonce);
-  }
-
-  /// Authenticates and decrypts the given box with peer's public key,
-  /// our secret key, and the given nonce.
-  ///
-  /// Returns the original message, or null if authentication fails.
-  Uint8List open(Uint8List box) {
-    if (box == null) return null;
-
-    // prepare shared key
-    if (this._sharedKey == null) before();
-
-    return open_after(box, 0, box.length);
-  }
-
-  Uint8List open_off(Uint8List box, final int boxoff) {
-    if (!(box != null && box.length > boxoff)) return null;
-
-    // prepare shared key
-    if (this._sharedKey == null) before();
-
-    return open_after(box, boxoff, box.length - boxoff);
-  }
-
-  Uint8List open_len(Uint8List box, final int boxoff, final int boxlen) {
-    if (!(box != null && box.length >= (boxoff + boxlen))) return null;
-
-    // prepare shared key
-    if (this._sharedKey == null) before();
-
-    return open_after(box, boxoff, boxlen);
-  }
-
-  /// Authenticates and decrypts the given box with peer's public key,
-  /// our secret key, and the given nonce.
-  /// Explicit passing of nonce
-  /// Returns the original message, or null if authentication fails.
-  Uint8List open_nonce(Uint8List box, Uint8List theNonce) {
-    if (!(box != null && theNonce != null && theNonce.length == nonceLength)) return null;
-
-    // prepare shared key
-    if (this._sharedKey == null) before();
-
-    return open_after_len(box, 0, box.length, theNonce);
-  }
-
-  Uint8List open_nonce_off(Uint8List box, final int boxoff, Uint8List theNonce) {
-    if (!(box != null && box.length > boxoff && theNonce != null && theNonce.length == nonceLength))
-      return null;
-
-    // prepare shared key
-    if (this._sharedKey == null) before();
-
-    return open_after_len(box, boxoff, box.length - boxoff, theNonce);
-  }
-
-  Uint8List open_nonce_len(Uint8List box, final int boxoff, final int boxlen, Uint8List theNonce) {
-    if (!(box != null &&
-        box.length >= (boxoff + boxlen) &&
-        theNonce != null &&
-        theNonce.length == nonceLength)) return null;
-
-    // prepare shared key
-    if (this._sharedKey == null) before();
-
-    return open_after_len(box, boxoff, boxlen, theNonce);
-  }
-
-  Uint8List before() {
-    if (this._sharedKey == null) {
-      this._sharedKey = Uint8List(sharedKeyLength);
-      TweetNaclFast.crypto_box_beforenm(this._sharedKey, this._theirPublicKey, this._mySecretKey);
-    }
-
-    return this._sharedKey;
-  }
-
-  /// Same as nacl.box, but uses a shared key precomputed with nacl.box.before.
-  Uint8List after(Uint8List message, final int moff, final int mlen) {
-    return after_len(message, moff, mlen, _generateNonce());
-  }
-
-  /// Same as nacl.box, but uses a shared key precomputed with nacl.box.before,
-  /// and passes a nonce explicitly.
-  Uint8List after_len(Uint8List message, final int moff, final int mlen, Uint8List theNonce) {
-    // check message
-    if (!(message != null &&
-        message.length >= (moff + mlen) &&
-        theNonce != null &&
-        theNonce.length == nonceLength)) return null;
-
-    // message buffer
-    final Uint8List m = Uint8List(mlen + zerobytesLength);
-
-    // cipher buffer
-    final Uint8List c = Uint8List(m.length);
-
-    for (int i = 0; i < mlen; i++) m[i + zerobytesLength] = message[i + moff];
-
-    if (0 != TweetNaclFast.crypto_box_afternm(c, m, m.length, theNonce, _sharedKey)) return null;
-
-    // wrap byte_buf_t on c offset@boxzerobytesLength
-    ///return new byte_buf_t(c, boxzerobytesLength, c.length-boxzerobytesLength);
-    final Uint8List ret = Uint8List(c.length - boxzerobytesLength);
-
-    for (int i = 0; i < ret.length; i++) ret[i] = c[i + boxzerobytesLength];
-
-    return ret;
-  }
-
-  /// Same as nacl.box.open, but uses a shared key pre-computed with nacl.box.before.
-  Uint8List open_after(Uint8List box, final int boxoff, final int boxlen) {
-    return open_after_len(box, boxoff, boxlen, _generateNonce());
-  }
-
-  Uint8List open_after_len(Uint8List box, final int boxoff, final int boxlen, Uint8List theNonce) {
-    // check message
-    if (!(box != null && box.length >= (boxoff + boxlen) && boxlen >= boxzerobytesLength))
-      return null;
-
-    // cipher buffer
-    final Uint8List c = Uint8List(boxlen + boxzerobytesLength);
-
-    // message buffer
-    final Uint8List m = Uint8List(c.length);
-
-    for (int i = 0; i < boxlen; i++) c[i + boxzerobytesLength] = box[i + boxoff];
-
-    if (TweetNaclFast.crypto_box_open_afternm(m, c, c.length, theNonce, _sharedKey) != 0)
-      return null;
-
-    // wrap byte_buf_t on m offset@zerobytesLength
-    // return new byte_buf_t(m, zerobytesLength, m.length-zerobytesLength);
-    final Uint8List ret = Uint8List(m.length - zerobytesLength);
-
-    for (int i = 0; i < ret.length; i++) ret[i] = m[i + zerobytesLength];
-
-    return ret;
-  }
-
-  /// Generates a new random key pair for box and
-  /// returns it as an object with publicKey and secretKey members:
-  static NaclKeyPair keyPair() {
-    NaclKeyPair kp = new NaclKeyPair(publicKeyLength, secretKeyLength);
-
-    TweetNaclFast.crypto_box_keypair(kp.publicKey, kp.secretKey);
-    return kp;
-  }
-
-  static NaclKeyPair keyPair_fromSecretKey(Uint8List secretKey) {
-    NaclKeyPair kp = new NaclKeyPair(publicKeyLength, secretKeyLength);
-    Uint8List sk = kp.secretKey;
-    Uint8List pk = kp.publicKey;
-
-    // copy sk
-    for (int i = 0; i < sk.length; i++) sk[i] = secretKey[i];
-
-    TweetNaclFast.crypto_scalarmult_base(pk, sk);
-    return kp;
-  }
-}
-
-/// Secret Box algorithm, secret key
-class SecretBox {
-  //Length of key in bytes.
-  static const int keyLength = 32;
-
-  //Length of nonce in bytes.
-  static const int nonceLength = 24;
-
-  //Length of overhead added to secret box compared to original message.
-  static const int overheadLength = 16;
-
-  //zero bytes in case box
-  static const int zerobytesLength = 32;
-
-  //zero bytes in case open box
-  static const int boxzerobytesLength = 16;
-
-  int _nonce;
-
-  final Uint8List _key;
-
-  SecretBox(this._key) {
-    _nonce = 68;
-  }
-
-  SecretBox.nonce(this._key, this._nonce);
-
-  void setNonce(int nonce) {
-    this._nonce = nonce;
-  }
-
-  int getNonce() => this._nonce;
-
-  int incrNonce() {
-    return ++this._nonce;
-  }
-
-  Uint8List _generateNonce() {
-    // generate nonce
-    final Int64 nonce = Int64(this._nonce);
-
-    Uint8List n = Uint8List(nonceLength);
-    for (int i = 0; i < nonceLength; i += 8) {
-      n[i + 0] = nonce.shiftRightUnsigned(0).toInt();
-      n[i + 1] = nonce.shiftRightUnsigned(8).toInt();
-      n[i + 2] = nonce.shiftRightUnsigned(16).toInt();
-      n[i + 3] = nonce.shiftRightUnsigned(24).toInt();
-      n[i + 4] = nonce.shiftRightUnsigned(32).toInt();
-      n[i + 5] = nonce.shiftRightUnsigned(40).toInt();
-      n[i + 6] = nonce.shiftRightUnsigned(48).toInt();
-      n[i + 7] = nonce.shiftRightUnsigned(56).toInt();
-    }
-
-    return n;
-  }
-
-  /// Encrypt and authenticates message using the key and the nonce.
-  /// The nonce must be unique for each distinct message for this key.
-  ///
-  /// Returns an encrypted and authenticated message,
-  /// which is nacl.secretbox.overheadLength longer than the original message.
-  Uint8List box(Uint8List message) {
-    if (message == null) return null;
-    return box_len(message, 0, message.length);
-  }
-
-  Uint8List box_off(Uint8List message, final int moff) {
-    if (!(message != null && message.length > moff)) return null;
-    return box_len(message, moff, message.length - moff);
-  }
-
-  Uint8List box_len(Uint8List message, final int moff, final int mlen) {
-    // check message
-    if (!(message != null && message.length >= (moff + mlen))) return null;
-    return box_nonce_len(message, moff, message.length - moff, _generateNonce());
-  }
-
-  Uint8List box_nonce(Uint8List message, Uint8List theNonce) {
-    if (message == null) return null;
-    return box_nonce_len(message, 0, message.length, theNonce);
-  }
-
-  Uint8List box_nonce_off(Uint8List message, final int moff, Uint8List theNonce) {
-    if (!(message != null && message.length > moff)) return null;
-    return box_nonce_len(message, moff, message.length - moff, theNonce);
-  }
-
-  Uint8List box_nonce_len(Uint8List message, final int moff, final int mlen, Uint8List theNonce) {
-    // check message
-    if (!(message != null &&
-        message.length >= (moff + mlen) &&
-        theNonce != null &&
-        theNonce.length == nonceLength)) return null;
-
-    // message buffer
-    Uint8List m = Uint8List(mlen + zerobytesLength);
-
-    // cipher buffer
-    Uint8List c = Uint8List(m.length);
-
-    for (int i = 0; i < mlen; i++) m[i + zerobytesLength] = message[i + moff];
-
-    if (0 != TweetNaclFast.crypto_secretbox(c, m, m.length, theNonce, _key)) return null;
-
-    // TBD optimizing ...
-    // wrap byte_buf_t on c offset@boxzerobytesLength
-    ///return new byte_buf_t(c, boxzerobytesLength, c.length-boxzerobytesLength);
-    Uint8List ret = Uint8List(c.length - boxzerobytesLength);
-
-    for (int i = 0; i < ret.length; i++) ret[i] = c[i + boxzerobytesLength];
-
-    return ret;
-  }
-
-  /// Authenticates and decrypts the given secret box
-  /// using the key and the nonce.
-  ///
-  /// Returns the original message, or null if authentication fails.
-  Uint8List open(Uint8List box) {
-    if (box == null) return null;
-    return open_len(box, 0, box.length);
-  }
-
-  Uint8List open_off(Uint8List box, final int boxoff) {
-    if (!(box != null && box.length > boxoff)) return null;
-    return open_len(box, boxoff, box.length - boxoff);
-  }
-
-  Uint8List open_len(Uint8List box, final int boxoff, final int boxlen) {
-    // check message
-    if (!(box != null && box.length >= (boxoff + boxlen) && boxlen >= boxzerobytesLength))
-      return null;
-    return open_nonce_len(box, boxoff, box.length - boxoff, _generateNonce());
-  }
-
-  Uint8List open_nonce(Uint8List box, Uint8List theNonce) {
-    if (box == null) return null;
-    return open_nonce_len(box, 0, box.length, theNonce);
-  }
-
-  Uint8List open_nonce_off(Uint8List box, final int boxoff, Uint8List theNonce) {
-    if (!(box != null && box.length > boxoff)) return null;
-    return open_nonce_len(box, boxoff, box.length - boxoff, theNonce);
-  }
-
-  Uint8List open_nonce_len(Uint8List box, final int boxoff, final int boxlen, Uint8List theNonce) {
-    // check message
-    if (!(box != null &&
-        box.length >= (boxoff + boxlen) &&
-        boxlen >= boxzerobytesLength &&
-        theNonce != null &&
-        theNonce.length == nonceLength)) return null;
-
-    // cipher buffer
-    Uint8List c = Uint8List(boxlen + boxzerobytesLength);
-
-    // message buffer
-    Uint8List m = Uint8List(c.length);
-
-    for (int i = 0; i < boxlen; i++) c[i + boxzerobytesLength] = box[i + boxoff];
-
-    if (0 != TweetNaclFast.crypto_secretbox_open(m, c, c.length, theNonce, _key)) return null;
-
-    // wrap byte_buf_t on m offset@zerobytesLength
-    ///return new byte_buf_t(m, zerobytesLength, m.length-zerobytesLength);
-    Uint8List ret = Uint8List(m.length - zerobytesLength);
-
-    for (int i = 0; i < ret.length; i++) ret[i] = m[i + zerobytesLength];
-
-    return ret;
-  }
-}
-
-/// Scalar multiplication, Implements curve25519.
-class ScalarMult {
-  //Length of scalar in bytes.
-  static const int scalarLength = 32;
-
-  //Length of group element in bytes.
-  static const int groupElementLength = 32;
-
-  /// Multiplies an integer n by a group element p and
-  /// returns the resulting group element.
-  static Uint8List scalseMult(Uint8List n, Uint8List p) {
-    if (!(n.length == scalarLength && p.length == groupElementLength)) return null;
-
-    Uint8List q = Uint8List(scalarLength);
-
-    TweetNaclFast.crypto_scalarmult(q, n, p);
-
-    return q;
-  }
-
-  /// Multiplies an integer n by a standard group element and
-  /// returns the resulting group element.
-  static Uint8List scalseMult_base(Uint8List n) {
-    if (!(n.length == scalarLength)) return null;
-
-    Uint8List q = Uint8List(scalarLength);
-
-    TweetNaclFast.crypto_scalarmult_base(q, n);
-
-    return q;
-  }
-}
-
-/// Hash algorithm, Implements SHA-512.
-class Hash {
-  //Length of hash in bytes.
-  static const int hashLength = 64;
-
-  /// Returns SHA-512 hash of the message.
-  static Uint8List sha512(Uint8List message) {
-    if (!(message != null && message.isNotEmpty)) return null;
-
-    Uint8List out = Uint8List(hashLength);
-
-    TweetNaclFast.crypto_hash(out, message);
-
-    return out;
-  }
-
-  static Uint8List sha512_string(String message) {
-    return sha512(Uint8List.fromList(utf8.encode(message)));
-  }
-}
-
-/// Signature algorithm, Implements ed25519.
-class Signature {
-  //Length of signing public key in bytes.
-  static const int publicKeyLength = 32;
-
-  //Length of signing secret key in bytes.
-  static const int secretKeyLength = 64;
-
-  //Length of seed for nacl.sign.keyPair.fromSeed in bytes.
-  static const int seedLength = 32;
-
-  //Length of signature in bytes.
-  static const int signatureLength = 64;
-
-  Uint8List _theirPublicKey;
-  Uint8List _mySecretKey;
-
-  Signature(this._theirPublicKey, this._mySecretKey);
-
-  /// Signs the message using the secret key and returns a signed message.
-  Uint8List sign(Uint8List message) {
-    if (message == null) return null;
-
-    return sign_len(message, 0, message.length);
-  }
-
-  Uint8List sign_off(Uint8List message, final int moff) {
-    if (!(message != null && message.length > moff)) return null;
-
-    return sign_len(message, moff, message.length - moff);
-  }
-
-  Uint8List sign_len(Uint8List message, final int moff, final int mlen) {
-    // check message
-    if (!(message != null && message.length >= (moff + mlen))) return null;
-
-    // signed message
-    Uint8List sm = Uint8List(mlen + signatureLength);
-
-    TweetNaclFast.crypto_sign(sm, -1, message, moff, mlen, _mySecretKey);
-
-    return sm;
-  }
-
-  /// Verifies the signed message and returns the message without signature.
-  /// Returns null if verification failed.
-  Uint8List open(Uint8List signedMessage) {
-    if (signedMessage == null) return null;
-
-    return open_len(signedMessage, 0, signedMessage.length);
-  }
-
-  Uint8List open_off(Uint8List signedMessage, final int smoff) {
-    if (!(signedMessage != null && signedMessage.length > smoff)) return null;
-
-    return open_len(signedMessage, smoff, signedMessage.length - smoff);
-  }
-
-  Uint8List open_len(Uint8List signedMessage, final int smoff, final int smlen) {
-    // check sm length
-    if (!(signedMessage != null &&
-        signedMessage.length >= (smoff + smlen) &&
-        smlen >= signatureLength)) return null;
-
-    // temp buffer
-    Uint8List tmp = Uint8List(smlen);
-
-    if (0 != TweetNaclFast.crypto_sign_open(tmp, -1, signedMessage, smoff, smlen, _theirPublicKey))
-      return null;
-
-    // message
-    Uint8List msg = Uint8List(smlen - signatureLength);
-    for (int i = 0; i < msg.length; i++) msg[i] = signedMessage[smoff + i + signatureLength];
-
-    return msg;
-  }
-
-  /// Signs the message using the secret key and returns a signature.
-  Uint8List detached(Uint8List message) {
-    Uint8List signedMsg = this.sign(message);
-    Uint8List sig = Uint8List(signatureLength);
-    for (int i = 0; i < sig.length; i++) sig[i] = signedMsg[i];
-    return sig;
-  }
-
-  /// Verifies the signature for the message and
-  /// returns true if verification succeeded or false if it failed.
-  bool detached_verify(Uint8List message, Uint8List signature) {
-    if (signature.length != signatureLength) return false;
-    if (_theirPublicKey.length != publicKeyLength) return false;
-    Uint8List sm = Uint8List(signatureLength + message.length);
-    Uint8List m = Uint8List(signatureLength + message.length);
-    for (int i = 0; i < signatureLength; i++) sm[i] = signature[i];
-    for (int i = 0; i < message.length; i++) sm[i + signatureLength] = message[i];
-    return (TweetNaclFast.crypto_sign_open(m, -1, sm, 0, sm.length, _theirPublicKey) >= 0);
-  }
-
-  /// Signs the message using the secret key and returns a signed message.
-  static NaclKeyPair keyPair() {
-    NaclKeyPair kp = new NaclKeyPair(publicKeyLength, secretKeyLength);
-
-    TweetNaclFast.crypto_sign_keypair(kp.publicKey, kp.secretKey, false);
-    return kp;
-  }
-
-  static NaclKeyPair keyPair_fromSecretKey(Uint8List secretKey) {
-    NaclKeyPair kp = new NaclKeyPair(publicKeyLength, secretKeyLength);
-    Uint8List pk = kp.publicKey;
-    Uint8List sk = kp.secretKey;
-
-    // copy sk
-    for (int i = 0; i < kp.secretKey.length; i++) sk[i] = secretKey[i];
-
-    // copy pk from sk
-    for (int i = 0; i < kp.publicKey.length; i++) pk[i] = secretKey[32 + i]; // hard-copy
-
-    return kp;
-  }
-
-  static NaclKeyPair keyPair_fromSeed(Uint8List seed) {
-    NaclKeyPair kp = new NaclKeyPair(publicKeyLength, secretKeyLength);
-    Uint8List pk = kp.publicKey;
-    Uint8List sk = kp.secretKey;
-
-    // copy sk
-    for (int i = 0; i < seedLength; i++) sk[i] = seed[i];
-
-    // generate pk from sk
-    TweetNaclFast.crypto_sign_keypair(pk, sk, true);
-
-    return kp;
-  }
-}
-
+/// This class contains TweetNaCl cryptographic related classes and functions.
+/// For a complete library, see tweetnacl-dart by Jeff Lee (github.com/jspschool)
 class TweetNaclFast {
   static final Uint8List _0 =
       Uint8List.fromList([0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]); //16
@@ -1241,7 +585,7 @@ class TweetNaclFast {
     return 0;
   }
 
-// "expand 32-byte k"
+  // "expand 32-byte k"
   static final Uint8List _sigma =
       Uint8List.fromList([101, 120, 112, 97, 110, 100, 32, 51, 50, 45, 98, 121, 116, 101, 32, 107]);
 
@@ -1810,9 +1154,9 @@ class TweetNaclFast {
     t12 += 38 * t28;
     t13 += 38 * t29;
     t14 += 38 * t30;
-// t15 left as is
+    // t15 left as is
 
-// first car
+    // first car
     c = 1;
     v = t0 + c + 65535;
     c = v >> 16;
@@ -1864,7 +1208,7 @@ class TweetNaclFast {
     t15 = v - c * 65536;
     t0 += c - 1 + 37 * (c - 1);
 
-// second car
+    // second car
     c = 1;
     v = t0 + c + 65535;
     c = v >> 16;
@@ -2037,7 +1381,7 @@ class TweetNaclFast {
     Uint8List s = Uint8List(32);
     crypto_scalarmult(s, x, y);
 
-/*String dbgt = "";
+    /*String dbgt = "";
 		for (int dbg = 0; dbg < s.length; dbg ++) dbgt += " "+s[dbg];
 		Log.d(TAG, "crypto_box_beforenm -> "+dbgt);
 
@@ -2635,7 +1979,7 @@ class TweetNaclFast {
     return n;
   }
 
-// TBD 64bits of n
+  // TBD 64bits of n
   ///int crypto_hash(Uint8List out, Uint8List m, long n)
   static int crypto_hash_off(Uint8List out, Uint8List m, final int moff, int n) {
     List<Int32> hh = List<Int32>(8), hl = List<Int32>(8);
@@ -2672,8 +2016,7 @@ class TweetNaclFast {
     n = 256 - 128 * (n < 112 ? 1 : 0);
     x[n - 9] = 0;
 
-    _ts64(x, n - 8, Int64(b << 3) /*(b / 0x20000000) | 0, b << 3*/
-        );
+    _ts64(x, n - 8, Int64(b << 3) /*(b / 0x20000000) | 0, b << 3*/);
 
     crypto_hashblocks_hl(hh, hl, x, 0, n);
 
@@ -2691,7 +2034,7 @@ class TweetNaclFast {
     return crypto_hash_off(out, m, 0, m != null ? m.length : 0);
   }
 
-// gf: long[16]
+  // gf: long[16]
   ///private static void add(gf p[4],gf q[4])
   static void add(List<Int64List> p, List<Int64List> q) {
     final Int64List a = Int64List(16);
@@ -2890,7 +2233,7 @@ class TweetNaclFast {
     modL(r, 0, x);
   }
 
-// TBD... 64bits of n
+  // TBD... 64bits of n
   ///int crypto_sign(Uint8List sm, long * smlen, Uint8List m, long n, Uint8List sk)
   static int crypto_sign(Uint8List sm, int dummy /* *smlen not used*/, Uint8List m, final int moff,
       int /*long*/ n, Uint8List sk) {
@@ -3022,12 +2365,12 @@ class TweetNaclFast {
 
     n -= 64;
     if (_crypto_verify_32(sm, smoff, t, 0) != 0) {
-// optimizing it
+      // optimizing it
       ///for (i = 0; i < n; i ++) m[i] = 0;
       return -1;
     }
 
-// TBD optimizing ...
+    // TBD optimizing ...
     ///for (i = 0; i < n; i ++) m[i] = sm[i + 64 + smoff];
     ///*mlen = n;
 
@@ -3059,14 +2402,6 @@ class TweetNaclFast {
       for (int i = len - ret; i < len; i++) x[i] = (rnd.shiftRightUnsigned(8 * i).toInt());
     }
     return x;
-  }
-
-  static Uint8List makeBoxNonce() {
-    return randombytes(Box.nonceLength);
-  }
-
-  static Uint8List makeSecretBoxNonce() {
-    return randombytes(SecretBox.nonceLength);
   }
 
   static String hexEncodeToString(Uint8List raw) {
