@@ -47,9 +47,7 @@ class NamespaceId extends Id {
       return new NamespaceId._(namespaceId, fullNamespaceName);
     }
 
-    if (id == null) {
-      throw new ArgumentError('The id must not be null or empty');
-    }
+    ArgumentError.checkNotNull(id);
 
     return new NamespaceId._(id, null);
   }
@@ -61,9 +59,8 @@ class NamespaceId extends Id {
 
   /// Creates a new [NamespaceId] from a [bigInt].
   static NamespaceId fromBigInt(final BigInt bigInt) {
-    if (bigInt == null) {
-      throw new ArgumentError('The bigInt must not be null');
-    }
+    ArgumentError.checkNotNull(bigInt);
+
     return new NamespaceId(id: Uint64.fromBigInt(bigInt));
   }
 

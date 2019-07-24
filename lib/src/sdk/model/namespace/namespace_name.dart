@@ -26,7 +26,7 @@ class NamespaceName {
   /// The namespace name.
   final String name;
 
-  /// The parent namespace id.
+  /// The parent namespace id. The [parentId] is optional.
   final NamespaceId parentId;
 
   NamespaceName(this.namespaceId, this.name, [this.parentId]);

@@ -101,8 +101,8 @@ void main() {
               e.message == 'Missing argument. Either id or fullName is required.')));
       expect(
           () => NamespaceId.fromBigInt(null),
-          throwsA(
-              predicate((e) => e is ArgumentError && e.message == 'The bigInt must not be null')));
+          throwsA(predicate(
+              (e) => e is ArgumentError && e.message.toString().contains('Must not be null'))));
       expect(
           () => NamespaceId.fromHex(null),
           throwsA(predicate((e) =>

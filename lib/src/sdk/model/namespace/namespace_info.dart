@@ -20,6 +20,7 @@ import '../account/public_account.dart';
 import '../common/uint64.dart';
 
 import 'alias.dart';
+import 'alias_type.dart';
 import 'namespace_id.dart';
 import 'namespace_type.dart';
 
@@ -102,7 +103,7 @@ class NamespaceInfo {
   }
 
   bool hasAlias() {
-    return this.alias != null && this.alias.type.value != 0;
+    return this.alias != null && AliasType.NONE != this.alias.type;
   }
 
   /// Retrieves the parent namespace id.
