@@ -38,6 +38,7 @@ class InflationReceipt extends Receipt {
       [int size]) {
     ArgumentError.checkNotNull(mosaicId);
     ArgumentError.checkNotNull(type);
+    ArgumentError.checkNotNull(version);
     _validate(type);
     return InflationReceipt._(mosaicId, amount, type, version, size);
   }

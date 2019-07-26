@@ -71,6 +71,12 @@ import 'model/node/node_info_test.dart' as node_info_test;
 import 'model/node/node_time_test.dart' as node_time_test;
 import 'model/node/role_type_test.dart' as role_type_test;
 
+// receipt
+import 'model/receipt/artifact_expiry_receipt_test.dart' as artifact_expiry_receipt_test;
+import 'model/receipt/balance_change_receipt_test.dart' as balance_change_receipt_test;
+import 'model/receipt/balance_transfer_receipt_test.dart' as balance_transfer_receipt_test;
+import 'model/receipt/inflation_receipt_test.dart' as inflation_receipt_test;
+
 // transaction
 import 'model/transaction/deadline_test.dart' as deadline_test;
 import 'model/transaction/hash_type_test.dart' as hash_type_test;
@@ -151,6 +157,14 @@ void main() {
     node_info_test.main();
     node_time_test.main();
     role_type_test.main();
+  });
+
+  // receipt
+  group('Receipt:', () {
+    artifact_expiry_receipt_test.main();
+    balance_change_receipt_test.main();
+    balance_transfer_receipt_test.main();
+    inflation_receipt_test.main();
   });
 
   // transaction

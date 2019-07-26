@@ -27,8 +27,8 @@ abstract class Receipt {
   /// The receipt version.
   final ReceiptVersion version;
 
-  /// The receipt size.
+  /// The receipt size. The size is optional.
   final int size;
 
-  Receipt(this.type, this.version, this.size);
+  Receipt(this.type, this.version, this.size) : assert(type != null && version != null);
 }

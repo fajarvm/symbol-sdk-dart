@@ -44,6 +44,7 @@ class BalanceChangeReceipt extends Receipt {
     ArgumentError.checkNotNull(account);
     ArgumentError.checkNotNull(mosaicId);
     ArgumentError.checkNotNull(type);
+    ArgumentError.checkNotNull(version);
     _validate(type);
     return BalanceChangeReceipt._(account, mosaicId, amount, type, version, size);
   }

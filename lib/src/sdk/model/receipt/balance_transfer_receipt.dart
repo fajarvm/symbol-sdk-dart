@@ -43,15 +43,16 @@ class BalanceTransferReceipt<T> extends Receipt {
       ReceiptType type, ReceiptVersion version, int size)
       : super(type, version, size);
 
-  factory BalanceTransferReceipt(PublicAccount account, Object recipient, MosaicId mosaicId,
+  factory BalanceTransferReceipt(PublicAccount sender, Object recipient, MosaicId mosaicId,
       Uint64 amount, ReceiptType type, ReceiptVersion version,
       [int size]) {
-    ArgumentError.checkNotNull(account);
+    ArgumentError.checkNotNull(sender);
     ArgumentError.checkNotNull(recipient);
     ArgumentError.checkNotNull(mosaicId);
     ArgumentError.checkNotNull(type);
+    ArgumentError.checkNotNull(version);
     _validate(recipient, type);
-    return BalanceTransferReceipt._(account, recipient, mosaicId, amount, type, version, size);
+    return BalanceTransferReceipt._(sender, recipient, mosaicId, amount, type, version, size);
   }
 
   /// Validates the receipt type.
