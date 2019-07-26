@@ -16,20 +16,19 @@
 
 library nem2_sdk_dart.sdk.model.receipt.resolution_statement;
 
-import 'package:nem2_sdk_dart/src/sdk/model/receipt/receipt_type.dart';
-
 import '../account/address.dart';
 import '../common/uint64.dart';
 import '../mosaic/mosaic_id.dart';
+import 'receipt_type.dart';
 import 'resolution_entry.dart';
 
 /// The receipt source object.
-class ResolutionStatement {
+class ResolutionStatement<T> {
   /// The block height.
   final Uint64 height;
 
   /// The unresolved object. It can be either an [Address] or a [MosaicId].
-  final Object unresolved;
+  final T unresolved;
 
   /// Returns a list of resolution entry.
   final List<ResolutionEntry> resolutionEntries;
@@ -37,27 +36,33 @@ class ResolutionStatement {
   // private constructor
   ResolutionStatement._(this.height, this.unresolved, this.resolutionEntries);
 
-  factory ResolutionStatement(Uint64 height, Object unresolved, List<ResolutionEntry> entries) {
+  factory ResolutionStatement(Uint64 height, T unresolved, List<ResolutionEntry> entries) {
+    if (!_isValid(unresolved, entries)) {
+      throw new ArgumentError('Invalid ResolutionStatement: ['
+          'unresolvedObject="$unresolved",'
+          'resolutionEntries="$entries",'
+          ']');
+    }
     return ResolutionStatement._(height, unresolved, entries);
   }
 
   /// Validates an unresolved object against a list of resolution entry.
-  ///
-  /// Throws an error if no resolution match can be found.
-  static void _validateType(Object unresolved, List<ResolutionEntry> entries) {
-    if (!(unresolved is Address) && !(unresolved is MosaicId)) {
-      throw new ArgumentError('Unresolved type: ["$unresolved"] '
-          'is not valid for this ResolutionStatement');
+  static bool _isValid(Object unresolved, List<ResolutionEntry> entries) {
+    if (unresolved is! MosaicId && unresolved is! Address) {
+      return false;
     }
 
     for (var entry in entries) {
-      if ((unresolved is Address && ReceiptType.ADDRESS_ALIAS_RESOLUTION != entry.receiptType) ||
-          (unresolved is MosaicId && ReceiptType.MOSAIC_ALIAS_RESOLUTION != entry.receiptType)) {
-        throw new ArgumentError('Unresolved type: ["$unresolved"] '
-            'does not match ResolutionEntry type: [${entry.receiptType}]');
+      if (unresolved is Address && ReceiptType.ADDRESS_ALIAS_RESOLUTION == entry.receiptType) {
+        // OK. Match found.
+        return true;
+      }
+      if (unresolved is MosaicId && ReceiptType.MOSAIC_ALIAS_RESOLUTION == entry.receiptType) {
+        // OK. Match found.
+        return true;
       }
     }
 
-    throw new StateError('should not have reached this state');
+    return false;
   }
 }

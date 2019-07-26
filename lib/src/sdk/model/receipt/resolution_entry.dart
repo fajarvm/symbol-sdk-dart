@@ -21,7 +21,7 @@ import '../namespace/mosaic_alias.dart';
 import 'receipt_source.dart';
 import 'receipt_type.dart';
 
-/// The receipt source object.
+/// The resolution entry object.
 class ResolutionEntry {
   /// A resolved address or resolved mosaicId alias (MosaicAlias| AddressAlias).
   final Object resolved;
@@ -34,15 +34,15 @@ class ResolutionEntry {
 
   ResolutionEntry._(this.resolved, this.receiptSource, this.receiptType);
 
-  factory ResolutionEntry(Object resolved, ReceiptSource receiptSource, ReceiptType receiptType) {
+  factory ResolutionEntry(Object resolved, ReceiptSource source, ReceiptType type) {
     ArgumentError.checkNotNull(resolved);
-    ArgumentError.checkNotNull(receiptSource);
-    ArgumentError.checkNotNull(receiptType);
+    ArgumentError.checkNotNull(source);
+    ArgumentError.checkNotNull(type);
 
-    _validateReceiptType(receiptType);
+    _validateReceiptType(type);
     _validateResolvedType(resolved);
 
-    return ResolutionEntry._(resolved, receiptSource, receiptType);
+    return ResolutionEntry._(resolved, source, type);
   }
 
   /// Validates the given receipt [type].

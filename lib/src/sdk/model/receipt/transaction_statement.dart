@@ -14,21 +14,23 @@
 // limitations under the License.
 //
 
-library nem2_sdk_dart.sdk.model.receipt.receipt;
+library nem2_sdk_dart.sdk.model.receipt.transaction_statement;
 
-import 'receipt_type.dart';
-import 'receipt_version.dart';
+import '../common/uint64.dart';
+import 'receipt.dart';
+import 'receipt_source.dart';
 
-/// An abstract transaction class that serves as the base class of all receipts.
-abstract class Receipt {
-  /// The receipt type.
-  final ReceiptType type;
+/// A transaction statement is a collection of receipts linked with a transaction in a
+/// particular block.
+class TransactionStatement {
+  /// The block height.
+  final Uint64 height;
 
-  /// The receipt version.
-  final ReceiptVersion version;
+  /// The receipt source of this statement.
+  final ReceiptSource receiptSource;
 
-  /// The receipt size.
-  final int size;
+  /// A collection of receipts.
+  final List<Receipt> receipts;
 
-  Receipt(this.type, this.version, this.size);
+  TransactionStatement(this.height, this.receiptSource, this.receipts);
 }
