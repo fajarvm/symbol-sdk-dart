@@ -18,10 +18,8 @@ library nem2_sdk_dart.test.sdk.model.mosaic.mosaic_nonce_test;
 
 import 'dart:typed_data' show Uint8List;
 
-import 'package:nem2_sdk_dart/sdk.dart';
+import 'package:nem2_sdk_dart/sdk.dart' show MosaicNonce, Uint64;
 import 'package:test/test.dart';
-
-import 'package:nem2_sdk_dart/sdk.dart' show MosaicNonce;
 
 void main() {
   group('MosaicNonce', () {

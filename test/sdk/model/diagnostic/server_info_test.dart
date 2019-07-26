@@ -16,7 +16,7 @@
 
 library nem2_sdk_dart.test.sdk.model.diagnostic.server_info_test;
 
-import 'package:nem2_sdk_dart/sdk.dart';
+import 'package:nem2_sdk_dart/sdk.dart' show ServerInfo;
 import 'package:test/test.dart';
 
 void main() {

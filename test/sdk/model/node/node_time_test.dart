@@ -16,10 +16,8 @@
 
 library nem2_sdk_dart.test.sdk.model.node.node_time_test;
 
-import 'package:nem2_sdk_dart/sdk.dart';
+import 'package:nem2_sdk_dart/sdk.dart' show NodeTime, Uint64;
 import 'package:test/test.dart';
-
-import 'package:nem2_sdk_dart/sdk.dart' show NodeTime;
 
 void main() {
   group('NodeTime', () {

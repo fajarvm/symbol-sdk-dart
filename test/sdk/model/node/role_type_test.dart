@@ -16,9 +16,8 @@
 
 library nem2_sdk_dart.test.sdk.model.node.role_type_test;
 
-import 'package:test/test.dart';
-
 import 'package:nem2_sdk_dart/sdk.dart' show RoleType;
+import 'package:test/test.dart';
 
 void main() {
   group('RoleType', () {

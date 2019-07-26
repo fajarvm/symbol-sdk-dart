@@ -16,10 +16,8 @@
 
 library nem2_sdk_dart.test.sdk.model.node.node_info_test;
 
-import 'package:nem2_sdk_dart/sdk.dart';
+import 'package:nem2_sdk_dart/sdk.dart' show Account, NetworkType, NodeInfo, RoleType;
 import 'package:test/test.dart';
-
-import 'package:nem2_sdk_dart/sdk.dart' show Account, NetworkType, NodeInfo;
 
 void main() {
   group('NodeInfo', () {

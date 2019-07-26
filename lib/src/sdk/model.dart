@@ -74,6 +74,20 @@ export 'model/node/node_info.dart';
 export 'model/node/node_time.dart';
 export 'model/node/role_type.dart';
 
+// Receipt
+export 'model/receipt/artifact_expiry_receipt.dart';
+export 'model/receipt/balance_change_receipt.dart';
+export 'model/receipt/balance_transfer_receipt.dart';
+export 'model/receipt/inlation_receipt.dart';
+export 'model/receipt/receipt.dart'; // abstract class
+export 'model/receipt/receipt_source.dart';
+export 'model/receipt/receipt_type.dart';
+export 'model/receipt/receipt_version.dart';
+export 'model/receipt/resolution_entry.dart';
+export 'model/receipt/resolution_statement.dart';
+export 'model/receipt/statement.dart';
+export 'model/receipt/transaction_statement.dart';
+
 // Transaction
 export 'model/transaction/deadline.dart';
 export 'model/transaction/hash_type.dart';
