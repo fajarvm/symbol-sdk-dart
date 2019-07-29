@@ -16,44 +16,30 @@
 
 library nem2_sdk_dart.test.core.crypto.tweetnacl_test;
 
-import 'dart:typed_data';
-
-import 'package:test/test.dart';
+import 'dart:typed_data' show Uint8List;
 
 import 'package:nem2_sdk_dart/core.dart' show HexUtils, TweetNaclFast;
+import 'package:test/test.dart';
 
 void main() {
-  group('TweetNacl', () {
-    group('TweetNaclFast', () {
-      test('hex encode/decode', () {
-        String plainMessage = 'Hello NEM';
-        String hexEncoded = HexUtils.utf8ToHex(plainMessage);
-        expect(hexEncoded, equals('48656c6c6f204e454d'));
+  group('TweetNaclFast', () {
+    test('hex encode/decode', () {
+      String plainMessage = 'Hello NEM';
+      String hexEncoded = HexUtils.utf8ToHex(plainMessage);
+      expect(hexEncoded, equals('48656c6c6f204e454d'));
 
-        List<int> decoded = TweetNaclFast.hexDecode(hexEncoded);
+      List<int> decoded = TweetNaclFast.hexDecode(hexEncoded);
 
-        String expected = TweetNaclFast.hexEncodeToString(Uint8List.fromList(decoded));
-        expect(expected, equals(hexEncoded.toUpperCase()));
-      });
-
-      test('create random bytes', () {
-        Uint8List randomBytes = TweetNaclFast.randombytes(8);
-        expect(randomBytes.lengthInBytes, 8);
-
-        randomBytes = TweetNaclFast.randombytes(32);
-        expect(randomBytes.lengthInBytes, 32);
-
-        Uint8List randomBytesArray = new Uint8List(16);
-        randomBytes = TweetNaclFast.randombytes_array(randomBytesArray);
-        expect(randomBytes.lengthInBytes, 16);
-
-        randomBytes = TweetNaclFast.randombytes_array_len(randomBytesArray, 8);
-        expect(randomBytes.lengthInBytes, 16);
-      });
+      String expected = TweetNaclFast.hexEncodeToString(Uint8List.fromList(decoded));
+      expect(expected, equals(hexEncoded.toUpperCase()));
     });
 
-    group('Poly1305', () {
-      // todo
+    test('create random bytes', () {
+      Uint8List randomBytes = TweetNaclFast.secureRandomBytes(8);
+      expect(randomBytes.lengthInBytes, 8);
+
+      randomBytes = TweetNaclFast.secureRandomBytes(32);
+      expect(randomBytes.lengthInBytes, 32);
     });
   });
 }
