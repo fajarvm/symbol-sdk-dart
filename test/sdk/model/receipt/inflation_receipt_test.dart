@@ -56,8 +56,6 @@ void main() {
           throwsA(predicate(
               (e) => e is ArgumentError && e.message.toString().contains('Must not be null'))));
 
-      MosaicId id = MosaicId.fromHex('85bbea6cc462b244');
-
       // null receipt type
       expect(
           () => InflationReceipt(mosaicId, amount, null, ReceiptVersion.INFLATION_RECEIPT),

@@ -76,6 +76,14 @@ import 'model/receipt/artifact_expiry_receipt_test.dart' as artifact_expiry_rece
 import 'model/receipt/balance_change_receipt_test.dart' as balance_change_receipt_test;
 import 'model/receipt/balance_transfer_receipt_test.dart' as balance_transfer_receipt_test;
 import 'model/receipt/inflation_receipt_test.dart' as inflation_receipt_test;
+import 'model/receipt/receipt_source_test.dart' as receipt_source_test;
+import 'model/receipt/receipt_type_test.dart' as receipt_type_test;
+import 'model/receipt/receipt_version_test.dart' as receipt_version_test;
+import 'model/receipt/resolution_entry_test.dart' as resolution_entry_test;
+import 'model/receipt/resolution_statement_test.dart' as resolution_statement_test;
+import 'model/receipt/resolution_type_test.dart' as resolution_type_test;
+import 'model/receipt/statement_test.dart' as statement_test;
+import 'model/receipt/transaction_statement_test.dart' as transaction_statement_test;
 
 // transaction
 import 'model/transaction/deadline_test.dart' as deadline_test;
@@ -165,6 +173,14 @@ void main() {
     balance_change_receipt_test.main();
     balance_transfer_receipt_test.main();
     inflation_receipt_test.main();
+    receipt_source_test.main();
+    receipt_type_test.main();
+    receipt_version_test.main();
+    resolution_entry_test.main();
+    resolution_statement_test.main();
+    resolution_type_test.main();
+    statement_test.main();
+    transaction_statement_test.main();
   });
 
   // transaction

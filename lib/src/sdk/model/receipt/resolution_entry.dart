@@ -22,9 +22,9 @@ import 'receipt_source.dart';
 import 'receipt_type.dart';
 
 /// The resolution entry object.
-class ResolutionEntry {
+class ResolutionEntry<T> {
   /// A resolved address or resolved mosaicId alias (MosaicAlias| AddressAlias).
-  final Object resolved;
+  final T resolved;
 
   /// The receipt source.
   final ReceiptSource receiptSource;
@@ -34,39 +34,28 @@ class ResolutionEntry {
 
   ResolutionEntry._(this.resolved, this.receiptSource, this.receiptType);
 
-  factory ResolutionEntry(Object resolved, ReceiptSource source, ReceiptType type) {
+  factory ResolutionEntry(T resolved, ReceiptSource source, ReceiptType type) {
     ArgumentError.checkNotNull(resolved);
     ArgumentError.checkNotNull(source);
     ArgumentError.checkNotNull(type);
 
-    _validateReceiptType(type);
-    _validateResolvedType(resolved);
+    _validate(resolved, type);
 
     return ResolutionEntry._(resolved, source, type);
   }
 
-  /// Validates the given receipt [type].
-  ///
-  /// Throws an error if the receipt type is not of type [ReceiptType.ResolutionStatement].
-  static void _validateReceiptType(final ReceiptType type) {
-    if (!ReceiptType.ResolutionStatement.contains(type)) {
-      throw new ArgumentError('Invalid receipt type: $type');
-    }
-  }
-
-  /// Validates the resolved type (MosaicId | NamespaceId) of the given [resolutionObject].
-  static void _validateResolvedType(Object resolutionObject) {
-    if (resolutionObject is AddressAlias) {
-      // OK
-      return;
+  /// Validates the resolved object and receipt type.
+  static void _validate(final Object object, final ReceiptType type) {
+    if (object is AddressAlias || object is MosaicAlias) {
+      if (ReceiptType.ResolutionStatement.contains(type)) {
+        // OK. Match found.
+        return;
+      }
     }
 
-    if (resolutionObject is MosaicAlias) {
-      // OK
-      return;
-    }
-
-    // Not OK. Throw an error.
-    throw new ArgumentError('Invalid resolution entry: $resolutionObject');
+    throw new ArgumentError('Invalid ResolutionEntry: ['
+        'resolved="$object",'
+        'receiptType="$type",'
+        ']');
   }
 }

@@ -60,10 +60,10 @@ void main() {
 
     int count = 1;
     for (var type in ReceiptType.BalanceChange) {
-      test('Can create balance change receipt #$count: $type', () {
+      test('Can create balance change receipt #$count: ${type.name}', () {
         _createAndAssertReceipt(type);
-        count++;
       });
+      count++;
     }
 
     test('Should throw an exception when creating a receipt with bad parameter values', () {

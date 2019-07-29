@@ -73,10 +73,11 @@ void main() {
 
     int count = 1;
     for (var type in ReceiptType.BalanceTransfer) {
-      test('Can create balance transfer receipt using address and type #$count: $type', () {
+      test('Can create balance transfer receipt using address and type #$count: ${type.name}', () {
         _createAndAssertReceipt(type, testAddress);
       });
-      test('Can create balance transfer receipt using address alias and type #$count: $type', () {
+      test('Can create balance transfer receipt using address alias and type #$count: ${type.name}',
+          () {
         _createAndAssertReceipt(type, testAlias);
       });
       count++;

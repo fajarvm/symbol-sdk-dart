@@ -85,6 +85,7 @@ export 'model/receipt/receipt_type.dart';
 export 'model/receipt/receipt_version.dart';
 export 'model/receipt/resolution_entry.dart';
 export 'model/receipt/resolution_statement.dart';
+export 'model/receipt/resolution_type.dart';
 export 'model/receipt/statement.dart';
 export 'model/receipt/transaction_statement.dart';
 
