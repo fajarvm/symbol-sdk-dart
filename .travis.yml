@@ -22,8 +22,6 @@ script:
 after_success:
   # Submit LCOV reports to Codecov.
   - bash <(curl -s https://codecov.io/bash)
-  # Submit LCOV report to Coveralls.
-  - coveralls var/lcov.info
 
 # Disable dart tasks. We're using ./tool/travis.sh to perform tests.
 # dart_task:
