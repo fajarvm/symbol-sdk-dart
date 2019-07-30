@@ -18,9 +18,8 @@ library nem2_sdk_dart.core.crypto.ed25519;
 
 import 'dart:typed_data' show ByteBuffer, Int64List, Uint8List;
 
-import 'package:pointycastle/export.dart' show RIPEMD160Digest, SHA256Digest, SHA3Digest;
-
 import 'package:nem2_sdk_dart/src/core/utils.dart' show ArrayUtils;
+import 'package:pointycastle/export.dart' show RIPEMD160Digest, SHA256Digest, SHA3Digest;
 
 import 'crypto_exception.dart';
 import 'sha3nist.dart';
@@ -36,9 +35,8 @@ class Ed25519 {
 
   /// Extracts a public key from the given [privateKeySeed].
   static Uint8List extractPublicKey(final Uint8List privateKeySeed) {
-    if (privateKeySeed == null) {
-      throw new ArgumentError('privateKeySeed may not be null');
-    }
+    ArgumentError.checkNotNull(privateKeySeed);
+
     if (privateKeySeed.lengthInBytes != 32 && privateKeySeed.lengthInBytes != 33) {
       throw new ArgumentError('Incorrect length of privateKeySeed');
     }

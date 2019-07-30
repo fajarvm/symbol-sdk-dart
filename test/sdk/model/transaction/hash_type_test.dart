@@ -108,5 +108,31 @@ void main() {
           '2ded096b766318580a569e74521a9d63885cc8d5e8644793be928';
       expect(HashType.validate(invalid, HashType.RIPEMD_160), isFalse);
     });
+
+    test('Cannot create digest with an invalid length', () {
+      // SHA3 digest 32-bit
+      expect(
+          () => Ed25519.createSha3Digest(length: 31),
+          throwsA(predicate(
+              (e) => e is ArgumentError && e.message.toString().contains('Unexpected length'))));
+
+      // SHA3 digest 64-bit
+      expect(
+          () => Ed25519.createSha3Digest(length: 63),
+          throwsA(predicate(
+              (e) => e is ArgumentError && e.message.toString().contains('Unexpected length'))));
+
+      // Keccak digest 32-bit
+      expect(
+          () => Ed25519.createKeccakDigest(length: 31),
+          throwsA(predicate(
+              (e) => e is ArgumentError && e.message.toString().contains('Unexpected length'))));
+
+      // Keccak digest 64-bit
+      expect(
+          () => Ed25519.createKeccakDigest(length: 63),
+          throwsA(predicate(
+              (e) => e is ArgumentError && e.message.toString().contains('Unexpected length'))));
+    });
   });
 }

@@ -18,9 +18,8 @@ library nem2_sdk_dart.test.core.crypto.sha3nist_test;
 
 import 'dart:typed_data' show Uint8List;
 
-import 'package:test/test.dart';
-
 import 'package:nem2_sdk_dart/core.dart' show HexUtils, SHA3DigestNist;
+import 'package:test/test.dart';
 
 void main() {
   const List<String> inputs = [
@@ -54,8 +53,9 @@ void main() {
         final expectedHash = expectedOutput[i];
 
         final SHA3DigestNist hasher = new SHA3DigestNist(256); // SHA3-256
-        final Uint8List hash = hasher.process(inputBuffer);
+        expect(hasher.algorithmName, equals('SHA-3-NIST/256'));
 
+        final Uint8List hash = hasher.process(inputBuffer);
         final String hashString = HexUtils.getString(hash).toUpperCase();
         expect(hashString, equals(expectedHash));
       }
@@ -132,8 +132,9 @@ void main() {
         final expectedHash = expectedOutput[i];
 
         final SHA3DigestNist hasher = new SHA3DigestNist(512); // SHA3-512
-        final Uint8List hash = hasher.process(inputBuffer);
+        expect(hasher.algorithmName, equals('SHA-3-NIST/512'));
 
+        final Uint8List hash = hasher.process(inputBuffer);
         final String hashString = HexUtils.getString(hash).toUpperCase();
         expect(hashString, equals(expectedHash));
       }

@@ -74,6 +74,11 @@ class KeyPair {
     return _create(privateKeySeed, publicKey);
   }
 
+  /// Extract a public key byte from a [privateKeySeed].
+  static Uint8List extractPublicKey(final Uint8List privateKeySeed) {
+    return Ed25519.extractPublicKey(privateKeySeed);
+  }
+
   /// Creates a random public key.
   static Uint8List randomPublicKey() {
     return Ed25519.getRandomBytes(Ed25519.KEY_SIZE);
