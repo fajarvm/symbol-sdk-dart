@@ -16,6 +16,8 @@
 
 library nem2_sdk_dart.sdk.model.transaction.deadline;
 
+import '../common/uint64.dart';
+
 /// The deadline of the transaction.
 ///
 /// The deadline is given as the number of seconds elapsed since the creation of the nemesis block.
@@ -52,5 +54,16 @@ class Deadline {
       throw new ArgumentError('deadline should be less than 24 hours');
     }
     return new Deadline._(new DateTime.now().add(duration));
+  }
+
+  /// Create a new deadline from a [Uint64] integer value representing milliseconds since epoch.
+  static Deadline fromUint64(final Uint64 millisecondsSinceEpoch) {
+    return fromInt(millisecondsSinceEpoch.value.toInt());
+  }
+
+  /// Create a new deadline from milliseconds since epoch.
+  static Deadline fromInt(final int millisecondsSinceEpoch) {
+    return new Deadline._(new DateTime.fromMillisecondsSinceEpoch(
+        millisecondsSinceEpoch + NEMESIS_BLOCK_DATETIME.millisecondsSinceEpoch));
   }
 }

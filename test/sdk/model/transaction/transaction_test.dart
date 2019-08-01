@@ -16,6 +16,8 @@
 
 library nem2_sdk_dart.test.sdk.model.transaction.transaction_test;
 
+import 'dart:typed_data' show Uint8List;
+
 import 'package:nem2_sdk_dart/sdk.dart'
     show
         Deadline,
@@ -25,8 +27,7 @@ import 'package:nem2_sdk_dart/sdk.dart'
         TransactionInfo,
         TransactionType,
         TransactionVersion,
-        Uint64,
-        VerifiableTransaction;
+        Uint64;
 import 'package:test/test.dart';
 
 void main() {
@@ -92,7 +93,12 @@ class MockTransaction extends Transaction {
             transactionInfo);
 
   @override
-  VerifiableTransaction buildTransaction() {
+  Uint8List generateEmbeddedBytes() {
+    return null;
+  }
+
+  @override
+  Uint8List generateBytes() {
     return null;
   }
 }

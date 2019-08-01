@@ -16,6 +16,8 @@
 
 library nem2_sdk_dart.sdk.model.transaction.transfer_transaction;
 
+import 'dart:typed_data' show Uint8List;
+
 import '../account/address.dart';
 import '../account/public_account.dart';
 import '../blockchain/network_type.dart';
@@ -28,7 +30,6 @@ import 'transaction.dart';
 import 'transaction_info.dart';
 import 'transaction_type.dart';
 import 'transaction_version.dart';
-import 'verifiable_transaction.dart';
 
 /// Transfer transactions contain data about transfers of mosaics and message to another account.
 ///
@@ -69,7 +70,13 @@ class TransferTransaction extends Transaction {
   }
 
   @override
-  VerifiableTransaction buildTransaction() {
+  Uint8List generateEmbeddedBytes() {
+    // TODO: implement
+    return null;
+  }
+
+  @override
+  Uint8List generateBytes() {
     // TODO: implement
     return null;
   }

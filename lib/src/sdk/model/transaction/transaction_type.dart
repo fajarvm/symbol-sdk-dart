@@ -35,11 +35,11 @@ class TransactionType {
   /// Register a namespace.
   static const TransactionType NAMESPACE_REGISTRATION = TransactionType._(0x414E);
 
-  /// Attach a namespace name to an account.
-  static const TransactionType NAMESPACE_ATTACH_TO_ACCOUNT = TransactionType._(0x424E);
+  /// Attach a namespace name to an address.
+  static const TransactionType ADDRESS_ALIAS = TransactionType._(0x424E);
 
   /// Attach a namespace name to a mosaic.
-  static const TransactionType NAMESPACE_ATTACH_TO_MOSAIC = TransactionType._(0x434E);
+  static const TransactionType MOSAIC_ALIAS = TransactionType._(0x434E);
 
   //
   // Transfer
@@ -51,7 +51,7 @@ class TransactionType {
   // Multi-signature
   //
   /// Create or modify a multi-signature contract.
-  static const TransactionType MULTISIG_MODIFY = TransactionType._(0x4155);
+  static const TransactionType MODIFY_MULTISIG_ACCOUNT = TransactionType._(0x4155);
 
   //
   // Aggregate
@@ -73,20 +73,8 @@ class TransactionType {
   ///
   /// Announce a hash lock transaction before sending a signed aggregate bonded transaction.
   /// This mechanism is required to prevent network spamming.
-  static const TransactionType HASH_LOCK = TransactionType._(0x4148);
-
-  //
-  // Account filters
-  //
-  /// Allow or block incoming transactions for a given a set of addresses.
-  static const TransactionType ACCOUNT_FILTER_ADDRESS = TransactionType._(0x4150);
-
-  /// Allow or block incoming transactions containing a given set of mosaics.
-  static const TransactionType ACCOUNT_FILTER_MOSAIC = TransactionType._(0x4250);
-
-  /// Allow or block incoming transactions by transaction type.
-  static const TransactionType ACCOUNT_FILTER_ENTITY_TYPE = TransactionType._(0x4350);
-
+  static const TransactionType LOCK = TransactionType._(0x4148);
+  
   //
   // Cross-chain swaps
   //
@@ -97,29 +85,58 @@ class TransactionType {
   static const TransactionType SECRET_PROOF = TransactionType._(0x4252);
 
   //
+  // Account restriction
+  //
+  /// Allow or block incoming transactions for a given a set of addresses.
+  static const TransactionType ACCOUNT_RESTRICTION_ADDRESS = TransactionType._(0x4150);
+
+  /// Allow or block incoming transactions containing a given set of mosaics.
+  static const TransactionType ACCOUNT_RESTRICTION_MOSAIC = TransactionType._(0x4250);
+
+  /// Allow or block incoming transactions by transaction type.
+  static const TransactionType ACCOUNT_RESTRICTION_OPERATION = TransactionType._(0x4350);
+
+  //
   // Account link / Remote harvesting
   //
   /// Delegates the account importance to a proxy account to enable delegated harvesting.
   static const TransactionType ACCOUNT_LINK = TransactionType._(0x414C);
+
+  //
+  // Mosaic restriction
+  //
+  /// Allow or block mosaic transaction from a certain address.
+  static const TransactionType MOSAIC_RESTRICTION_ADDRESS = TransactionType._(0x4251);
+
+  /// Allow or block mosaic transaction globally.
+  static const TransactionType MOSAIC_RESTRICTION_GLOBAL = TransactionType._(0x4151);
 
   /// Supported transaction types.
   static final List<TransactionType> values = <TransactionType>[
     MOSAIC_DEFINITION,
     MOSAIC_SUPPLY_CHANGE,
     NAMESPACE_REGISTRATION,
-    NAMESPACE_ATTACH_TO_ACCOUNT,
-    NAMESPACE_ATTACH_TO_MOSAIC,
+    ADDRESS_ALIAS,
+    MOSAIC_ALIAS,
     TRANSFER,
-    MULTISIG_MODIFY,
+    MODIFY_MULTISIG_ACCOUNT,
     AGGREGATE_COMPLETE,
     AGGREGATE_BONDED,
-    HASH_LOCK,
-    ACCOUNT_FILTER_ADDRESS,
-    ACCOUNT_FILTER_MOSAIC,
-    ACCOUNT_FILTER_ENTITY_TYPE,
+    LOCK,
     SECRET_LOCK,
     SECRET_PROOF,
-    ACCOUNT_LINK
+    ACCOUNT_RESTRICTION_ADDRESS,
+    ACCOUNT_RESTRICTION_MOSAIC,
+    ACCOUNT_RESTRICTION_OPERATION,
+    ACCOUNT_LINK,
+    MOSAIC_RESTRICTION_ADDRESS,
+    MOSAIC_RESTRICTION_GLOBAL
+  ];
+
+  /// A collection of aggregate transaction types.
+  static final List<TransactionType> aggregate = <TransactionType>[
+    AGGREGATE_COMPLETE,
+    AGGREGATE_BONDED
   ];
 
   /// The int value of this type.
@@ -142,14 +159,8 @@ class TransactionType {
     throw new ArgumentError(UNKNOWN_TRANSACTION_TYPE);
   }
 
-  /// Returns true if the given [transactionType] is an aggregate transaction type.
-  static bool isAggregateType(final TransactionType transactionType) {
-    switch (transactionType) {
-      case AGGREGATE_BONDED:
-      case AGGREGATE_COMPLETE:
-        return true;
-      default:
-        return false;
-    }
+  /// Returns true if the given [type] is of an aggregate transaction type.
+  static bool isAggregateType(final TransactionType type) {
+    return aggregate.contains(type);
   }
 }

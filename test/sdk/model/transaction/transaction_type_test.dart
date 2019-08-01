@@ -16,82 +16,95 @@
 
 library nem2_sdk_dart.test.sdk.model.transaction.transaction_type_test;
 
-import 'package:test/test.dart';
-
 import 'package:nem2_sdk_dart/sdk.dart' show TransactionType;
+import 'package:test/test.dart';
 
 void main() {
   group('TransactionType', () {
     test('valid transaction types', () {
-      // Account filters
-      expect(TransactionType.ACCOUNT_FILTER_ADDRESS.value, 0x4150);
-      expect(TransactionType.ACCOUNT_FILTER_MOSAIC.value, 0x4250);
-      expect(TransactionType.ACCOUNT_FILTER_ENTITY_TYPE.value, 0x4350);
-
       // Mosaic
       expect(TransactionType.MOSAIC_DEFINITION.value, 0x414d);
       expect(TransactionType.MOSAIC_SUPPLY_CHANGE.value, 0x424d);
 
       // Namespace
       expect(TransactionType.NAMESPACE_REGISTRATION.value, 0x414e);
-      expect(TransactionType.NAMESPACE_ATTACH_TO_ACCOUNT.value, 0x424e);
-      expect(TransactionType.NAMESPACE_ATTACH_TO_MOSAIC.value, 0x434e);
+      expect(TransactionType.ADDRESS_ALIAS.value, 0x424e);
+      expect(TransactionType.MOSAIC_ALIAS.value, 0x434e);
 
       // Transfer
       expect(TransactionType.TRANSFER.value, 0x4154);
 
       // Multi-signature
-      expect(TransactionType.MULTISIG_MODIFY.value, 0x4155);
+      expect(TransactionType.MODIFY_MULTISIG_ACCOUNT.value, 0x4155);
 
       // Aggregate
       expect(TransactionType.AGGREGATE_COMPLETE.value, 0x4141);
       expect(TransactionType.AGGREGATE_BONDED.value, 0x4241);
 
       // Hash lock / Lock funds
-      expect(TransactionType.HASH_LOCK.value, 0x4148);
+      expect(TransactionType.LOCK.value, 0x4148);
 
       // Cross-chain swaps
       expect(TransactionType.SECRET_LOCK.value, 0x4152);
       expect(TransactionType.SECRET_PROOF.value, 0x4252);
 
+      // Account restriction
+      expect(TransactionType.ACCOUNT_RESTRICTION_ADDRESS.value, 0x4150);
+      expect(TransactionType.ACCOUNT_RESTRICTION_MOSAIC.value, 0x4250);
+      expect(TransactionType.ACCOUNT_RESTRICTION_OPERATION.value, 0x4350);
+
       // Account link / remote harvesting
       expect(TransactionType.ACCOUNT_LINK.value, 0x414C);
+
+      // Mosaic restriction
+      expect(TransactionType.MOSAIC_RESTRICTION_ADDRESS.value, 0x4251);
+      expect(TransactionType.MOSAIC_RESTRICTION_GLOBAL.value, 0x4151);
     });
 
     test('Can retrieve a valid transaction types', () {
-      // Account filters
-      expect(TransactionType.fromInt(0x4150), TransactionType.ACCOUNT_FILTER_ADDRESS);
-      expect(TransactionType.fromInt(0x4250), TransactionType.ACCOUNT_FILTER_MOSAIC);
-      expect(TransactionType.fromInt(0x4350), TransactionType.ACCOUNT_FILTER_ENTITY_TYPE);
-
       // Mosaic
       expect(TransactionType.fromInt(0x414d), TransactionType.MOSAIC_DEFINITION);
       expect(TransactionType.fromInt(0x424d), TransactionType.MOSAIC_SUPPLY_CHANGE);
 
       // Namespace
       expect(TransactionType.fromInt(0x414e), TransactionType.NAMESPACE_REGISTRATION);
-      expect(TransactionType.fromInt(0x424e), TransactionType.NAMESPACE_ATTACH_TO_ACCOUNT);
-      expect(TransactionType.fromInt(0x434e), TransactionType.NAMESPACE_ATTACH_TO_MOSAIC);
+      expect(TransactionType.fromInt(0x424e), TransactionType.ADDRESS_ALIAS);
+      expect(TransactionType.fromInt(0x434e), TransactionType.MOSAIC_ALIAS);
 
       // Transfer
       expect(TransactionType.fromInt(0x4154), TransactionType.TRANSFER);
 
       // Multi-signature
-      expect(TransactionType.fromInt(0x4155), TransactionType.MULTISIG_MODIFY);
+      expect(TransactionType.fromInt(0x4155), TransactionType.MODIFY_MULTISIG_ACCOUNT);
 
       // Aggregate
       expect(TransactionType.fromInt(0x4141), TransactionType.AGGREGATE_COMPLETE);
       expect(TransactionType.fromInt(0x4241), TransactionType.AGGREGATE_BONDED);
 
       // Hash lock / Lock funds
-      expect(TransactionType.fromInt(0x4148), TransactionType.HASH_LOCK);
+      expect(TransactionType.fromInt(0x4148), TransactionType.LOCK);
 
       // Cross-chain swaps
       expect(TransactionType.fromInt(0x4152), TransactionType.SECRET_LOCK);
       expect(TransactionType.fromInt(0x4252), TransactionType.SECRET_PROOF);
 
+      // Account restriction
+      expect(TransactionType.fromInt(0x4150), TransactionType.ACCOUNT_RESTRICTION_ADDRESS);
+      expect(TransactionType.fromInt(0x4250), TransactionType.ACCOUNT_RESTRICTION_MOSAIC);
+      expect(TransactionType.fromInt(0x4350), TransactionType.ACCOUNT_RESTRICTION_OPERATION);
+
       // Account link / remote harvesting
       expect(TransactionType.fromInt(0x414C), TransactionType.ACCOUNT_LINK);
+
+      // Mosaic restriction
+      expect(TransactionType.fromInt(0x4251), TransactionType.MOSAIC_RESTRICTION_ADDRESS);
+      expect(TransactionType.fromInt(0x4151), TransactionType.MOSAIC_RESTRICTION_GLOBAL);
+    });
+
+    test('Valid aggregate transaction types', () {
+      expect(TransactionType.aggregate.length, 2);
+      expect(TransactionType.aggregate[0], equals(TransactionType.AGGREGATE_COMPLETE));
+      expect(TransactionType.aggregate[1], equals(TransactionType.AGGREGATE_BONDED));
     });
 
     test('Can determine aggregate transaction types', () {
@@ -106,7 +119,7 @@ void main() {
       expect(() => TransactionType.fromInt(null),
           throwsA(predicate((e) => e is ArgumentError && e.message == errorMessage)));
       expect(() => TransactionType.fromInt(0x0000),
-                 throwsA(predicate((e) => e is ArgumentError && e.message == errorMessage)));
+          throwsA(predicate((e) => e is ArgumentError && e.message == errorMessage)));
     });
   });
 }

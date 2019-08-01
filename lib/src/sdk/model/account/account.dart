@@ -88,8 +88,8 @@ class Account {
   }
 
   /// Signs a [transaction].
-  SignedTransaction signTransaction(final Transaction transaction) {
-    return transaction.signWith(this);
+  SignedTransaction signTransaction(final Transaction transaction, final String generationHash) {
+    return transaction.signWith(this, generationHash);
   }
 
   /// Sign transaction with cosignatories creating a new SignedTransaction.

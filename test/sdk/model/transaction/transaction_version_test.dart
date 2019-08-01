@@ -22,40 +22,43 @@ import 'package:test/test.dart';
 void main() {
   group('TransactionVersion', () {
     test('valid transaction versions', () {
-      // Account filters
-      expect(TransactionVersion.ACCOUNT_FILTER_ADDRESS.value, 1);
-      expect(TransactionVersion.ACCOUNT_FILTER_MOSAIC.value, 1);
-      expect(TransactionVersion.ACCOUNT_FILTER_ENTITY_TYPE.value, 1);
-
       // Mosaic
-      expect(TransactionVersion.MOSAIC_DEFINITION.value, 3);
-      expect(TransactionVersion.MOSAIC_SUPPLY_CHANGE.value, 2);
-      expect(TransactionVersion.MOSAIC_LEVY_CHANGE.value, 1);
+      expect(TransactionVersion.MOSAIC_DEFINITION.value, 1);
+      expect(TransactionVersion.MOSAIC_SUPPLY_CHANGE.value, 1);
 
       // Namespace
-      expect(TransactionVersion.NAMESPACE_REGISTRATION.value, 2);
-      expect(TransactionVersion.NAMESPACE_ATTACH_TO_ACCOUNT.value, 1);
-      expect(TransactionVersion.NAMESPACE_ATTACH_TO_MOSAIC.value, 1);
+      expect(TransactionVersion.NAMESPACE_REGISTRATION.value, 1);
+      expect(TransactionVersion.ADDRESS_ALIAS.value, 1);
+      expect(TransactionVersion.MOSAIC_ALIAS.value, 1);
 
       // Transfer
-      expect(TransactionVersion.TRANSFER.value, 3);
+      expect(TransactionVersion.TRANSFER.value, 1);
 
       // Multi-signature
-      expect(TransactionVersion.MULTISIG_MODIFY.value, 3);
+      expect(TransactionVersion.MODIFY_MULTISIG_ACCOUNT.value, 1);
 
       // Aggregate
-      expect(TransactionVersion.AGGREGATE_COMPLETE.value, 2);
-      expect(TransactionVersion.AGGREGATE_BONDED.value, 2);
+      expect(TransactionVersion.AGGREGATE_COMPLETE.value, 1);
+      expect(TransactionVersion.AGGREGATE_BONDED.value, 1);
 
       // Hash lock / Lock funds
-      expect(TransactionVersion.HASH_LOCK.value, 1);
+      expect(TransactionVersion.LOCK.value, 1);
 
       // Cross-chain swaps
       expect(TransactionVersion.SECRET_LOCK.value, 1);
       expect(TransactionVersion.SECRET_PROOF.value, 1);
 
+      // Account restriction
+      expect(TransactionVersion.ACCOUNT_RESTRICTION_ADDRESS.value, 1);
+      expect(TransactionVersion.ACCOUNT_RESTRICTION_MOSAIC.value, 1);
+      expect(TransactionVersion.ACCOUNT_RESTRICTION_OPERATION.value, 1);
+
       // Account link / remote harvesting
-      expect(TransactionVersion.ACCOUNT_LINK.value, 2);
+      expect(TransactionVersion.ACCOUNT_LINK.value, 1);
+
+      // Mosaic restriction
+      expect(TransactionVersion.MOSAIC_RESTRICTION_ADDRESS.value, 1);
+      expect(TransactionVersion.MOSAIC_RESTRICTION_GLOBAL.value, 1);
     });
   });
 }
