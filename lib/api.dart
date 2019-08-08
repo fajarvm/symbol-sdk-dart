@@ -14,6 +14,6 @@
 // limitations under the License.
 //
 
-library nem2_sdk_dart.sdk.infrastructure;
+library nem2_sdk_dart.api;
 
-export 'infrastructure/amount_dto.dart';
+export 'package:nem2_sdk_dart/api.dart';

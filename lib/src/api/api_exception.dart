@@ -14,32 +14,29 @@
 // limitations under the License.
 //
 
-library nem2_sdk_dart.sdk.infrastructure.amount_dto;
+library nem2_sdk_dart.sdk.api;
 
-import 'data_input.dart';
-import 'data_stream.dart';
+class ApiException implements Exception {
+  int code = 0;
+  String message;
+  Exception innerException;
+  StackTrace stackTrace;
 
-class AmountDTO {
-  final int _amount;
-  final int _size = 8;
+  ApiException(this.code, this.message);
 
-  AmountDTO(this._amount);
+  ApiException.withInner(this.code, this.message, this.innerException, this.stackTrace);
 
-  int get size => _size;
+  @override
+  String toString() {
+    if (message == null) return 'ApiException';
 
-  int get amount => _amount;
+    if (innerException == null) {
+      return 'ApiException $code: $message';
+    }
 
-  static AmountDTO fromStream(final DataInput stream) {
-    return new AmountDTO(stream.readLong());
-  }
-
-  static AmountDTO loadFromBinary(final DataInput stream) {
-    return fromStream(stream);
-  }
-
-  List<int> serialize() {
-    DataOutputStream outputStream = new DataOutputStream();
-    outputStream.writeLong(_amount);
-    return outputStream.bytes;
+    return 'ApiException $code: $message (Inner exception: $innerException)'
+        '\n'
+        '\n'
+        '${stackTrace.toString()}';
   }
 }
