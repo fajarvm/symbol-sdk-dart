@@ -2,7 +2,7 @@
 
 # NEM2 SDK for Dart
 
-[![Runtime](https://img.shields.io/badge/dart-%3E%3D2.2-brightgreen.svg)][dart-version]
+[![Runtime](https://img.shields.io/badge/dart-%3E%3D2.4-brightgreen.svg)][dart-version]
 [![Build Status](https://api.travis-ci.org/fajarvm/nem2-sdk-dart.svg?branch=master)][travis-build]
 [![Coverage Status](https://codecov.io/gh/fajarvm/nem2-sdk-dart/branch/master/graph/badge.svg)][codecov-build]
 [![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)][apache-license]
@@ -17,7 +17,7 @@
 The `nem2-sdk-dart` is an unofficial Software Development Kit for NEM2 written in Dart. Developers can use this SDK to build cross-platform applications and communicate with NEM2 [(Catapult) REST API][nemtech-api] enabled servers. The application can be deployed on [multiple platforms][dart-platforms] from a single codebase: Mobile for both iOS and Android (with Flutter), Web, or Command-line/Server-side.
 
 ## Requirements
-Dart SDK v2.2.0 or above.
+Dart SDK v2.4.0 or above.
 
 ## License
 

@@ -1,6 +1,6 @@
 language: dart
 dart:
-  - '2.2.0'
+  - '2.4.0'
 notifications: {email: false}
 install:
   - pub global activate coveralls
@@ -12,7 +12,7 @@ script:
   - dartanalyzer --fatal-warnings ./
   # Start tests.
   - pub run test test/test_all.dart --reporter expanded
-  - dart --enable-vm-service=8111 --pause-isolates-on-exit test/test_all.dart &
+  - dart --disable-service-auth-codes --enable-vm-service=8111 --pause-isolates-on-exit test/test_all.dart &
   - echo "Collecting test coverage on port 8111"
   # Run the coverage collector to generate the JSON coverage report.
   - nohup pub global run coverage:collect_coverage --port=8111 --out=var/coverage.json --wait-paused --resume-isolates
