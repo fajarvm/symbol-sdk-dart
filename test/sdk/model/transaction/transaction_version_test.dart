@@ -59,6 +59,11 @@ void main() {
       // Mosaic restriction
       expect(TransactionVersion.MOSAIC_RESTRICTION_ADDRESS.value, 1);
       expect(TransactionVersion.MOSAIC_RESTRICTION_GLOBAL.value, 1);
+
+      // Metadata
+      expect(TransactionVersion.METADATA_ACCOUNT.value, 1);
+      expect(TransactionVersion.METADATA_MOSAIC.value, 1);
+      expect(TransactionVersion.METADATA_NAMESPACE.value, 1);
     });
   });
 }

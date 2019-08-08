@@ -59,6 +59,11 @@ void main() {
       // Mosaic restriction
       expect(TransactionType.MOSAIC_RESTRICTION_ADDRESS.value, 0x4251);
       expect(TransactionType.MOSAIC_RESTRICTION_GLOBAL.value, 0x4151);
+
+      // Metadata
+      expect(TransactionType.METADATA_ACCOUNT.value, 0x4144);
+      expect(TransactionType.METADATA_MOSAIC.value, 0x4244);
+      expect(TransactionType.METADATA_NAMESPACE.value, 0x4344);
     });
 
     test('Can retrieve a valid transaction types', () {
@@ -99,6 +104,11 @@ void main() {
       // Mosaic restriction
       expect(TransactionType.fromInt(0x4251), TransactionType.MOSAIC_RESTRICTION_ADDRESS);
       expect(TransactionType.fromInt(0x4151), TransactionType.MOSAIC_RESTRICTION_GLOBAL);
+
+      // Metadata
+      expect(TransactionType.fromInt(0x4144), TransactionType.METADATA_ACCOUNT);
+      expect(TransactionType.fromInt(0x4244), TransactionType.METADATA_MOSAIC);
+      expect(TransactionType.fromInt(0x4344), TransactionType.METADATA_NAMESPACE);
     });
 
     test('Valid aggregate transaction types', () {

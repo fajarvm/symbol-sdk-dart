@@ -31,15 +31,16 @@ import 'transaction_info.dart';
 import 'transaction_type.dart';
 import 'transaction_version.dart';
 
-/// Transfer transactions contain data about transfers of mosaics and message to another account.
+/// Transfer transaction object contain data about transfers of mosaics and message to another
+/// account.
 ///
 /// The recipient of this kind of transaction can either be an address or a namespaceId.
 class TransferTransaction extends Transaction {
   /// The recipient address.
-  final Address recipientAddress;
+  final Address address;
 
   /// The recipient namespaceId.
-  final NamespaceId recipientNamespaceId;
+  final NamespaceId namespaceId;
 
   /// A list of mosaics.
   final List<Mosaic> mosaics;
@@ -48,14 +49,13 @@ class TransferTransaction extends Transaction {
   final Message message;
 
   TransferTransaction(NetworkType networkType, TransactionVersion version, Deadline deadline,
-      Uint64 fee, this.recipientAddress, this.recipientNamespaceId, this.mosaics, this.message,
+      Uint64 fee, this.address, this.namespaceId, this.mosaics, this.message,
       [String signature, PublicAccount signer, TransactionInfo transactionInfo])
       : super(TransactionType.TRANSFER, networkType, version, deadline, fee, signature, signer,
             transactionInfo);
 
   /// Returns the string notation of the recipient.
-  String get recipientString =>
-      recipientNamespaceId != null ? recipientNamespaceId.toHex() : recipientAddress.plain;
+  String get recipient => namespaceId != null ? namespaceId.toHex() : address.plain;
 
   /// Creates a transfer transaction object.
   static TransferTransaction create(

@@ -27,7 +27,7 @@ class ResolutionStatement<T> {
   /// The block height.
   final Uint64 height;
 
-  /// The unresolved object. It can be either an [Address] or a [MosaicId].
+  /// The unresolved object. It must be either an [Address] or a [MosaicId].
   final T unresolved;
 
   /// Returns a list of resolution entry.
@@ -47,7 +47,9 @@ class ResolutionStatement<T> {
   }
 
   /// Validates an unresolved object against a list of resolution entry.
-  static bool _isValid(Object unresolved, List<ResolutionEntry> entries) {
+  ///
+  /// The [unresolved] object must either be an [AddressAlias] or a [MosaicAlias].
+  static bool _isValid(dynamic unresolved, List<ResolutionEntry> entries) {
     if (unresolved is! MosaicId && unresolved is! Address) {
       return false;
     }

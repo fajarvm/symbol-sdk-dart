@@ -23,7 +23,7 @@ import 'receipt_type.dart';
 
 /// The resolution entry object.
 class ResolutionEntry<T> {
-  /// A resolved address or resolved mosaicId alias (MosaicAlias| AddressAlias).
+  /// The resolved object. It must either be an [AddressAlias] or a [MosaicAlias].
   final T resolved;
 
   /// The receipt source.
@@ -45,7 +45,9 @@ class ResolutionEntry<T> {
   }
 
   /// Validates the resolved object and receipt type.
-  static void _validate(final Object object, final ReceiptType type) {
+  ///
+  /// The input [object] must either be an [AddressAlias] or a [MosaicAlias].
+  static void _validate(final dynamic object, final ReceiptType type) {
     if (object is AddressAlias || object is MosaicAlias) {
       if (ReceiptType.ResolutionStatement.contains(type)) {
         // OK. Match found.

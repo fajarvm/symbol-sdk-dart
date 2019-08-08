@@ -44,7 +44,7 @@ class TransactionType {
   //
   // Transfer
   //
-  /// Transfer mosaics and messages between two accounts.
+  /// Send mosaics and messages between two accounts.
   static const TransactionType TRANSFER = TransactionType._(0x4154);
 
   //
@@ -61,7 +61,7 @@ class TransactionType {
   /// An aggregate transaction is complete when all the required participants have signed it.
   static const TransactionType AGGREGATE_COMPLETE = TransactionType._(0x4141);
 
-  /// Propose many transactions between different accounts.
+  /// Propose an arrangement of transactions between different accounts.
   ///
   /// An aggregate transaction is bonded when it requires signatures from other participants.
   static const TransactionType AGGREGATE_BONDED = TransactionType._(0x4241);
@@ -74,42 +74,54 @@ class TransactionType {
   /// Announce a hash lock transaction before sending a signed aggregate bonded transaction.
   /// This mechanism is required to prevent network spamming.
   static const TransactionType LOCK = TransactionType._(0x4148);
-  
+
   //
   // Cross-chain swaps
   //
-  /// The secret lock transaction type.
+  /// Start a token swap between different chains.
   static const TransactionType SECRET_LOCK = TransactionType._(0x4152);
 
-  /// The secret proof transaction type.
+  /// Conclude a token swap between different chains.
   static const TransactionType SECRET_PROOF = TransactionType._(0x4252);
 
   //
   // Account restriction
   //
-  /// Allow or block incoming transactions for a given a set of addresses.
+  /// Allow or block incoming and outgoing transactions for a given a set of addresses.
   static const TransactionType ACCOUNT_RESTRICTION_ADDRESS = TransactionType._(0x4150);
 
   /// Allow or block incoming transactions containing a given set of mosaics.
   static const TransactionType ACCOUNT_RESTRICTION_MOSAIC = TransactionType._(0x4250);
 
-  /// Allow or block incoming transactions by transaction type.
+  /// Allow or block outgoing transactions by transaction type.
   static const TransactionType ACCOUNT_RESTRICTION_OPERATION = TransactionType._(0x4350);
 
   //
   // Account link / Remote harvesting
   //
-  /// Delegates the account importance to a proxy account to enable delegated harvesting.
+  /// Delegate the account importance to a proxy account to enable delegated harvesting.
   static const TransactionType ACCOUNT_LINK = TransactionType._(0x414C);
 
   //
   // Mosaic restriction
   //
-  /// Allow or block mosaic transaction from a certain address.
+  /// Set a mosaic restriction to an specific address.
   static const TransactionType MOSAIC_RESTRICTION_ADDRESS = TransactionType._(0x4251);
 
-  /// Allow or block mosaic transaction globally.
+  /// Set a global restriction to a mosaic.
   static const TransactionType MOSAIC_RESTRICTION_GLOBAL = TransactionType._(0x4151);
+
+  //
+  // Metadata
+  //
+  /// Associate a key-value state to an account.
+  static const TransactionType METADATA_ACCOUNT = TransactionType._(0x4144);
+
+  /// Associate a key-value state to a mosaic.
+  static const TransactionType METADATA_MOSAIC = TransactionType._(0x4244);
+
+  /// Associate a key-value state to a namespace.
+  static const TransactionType METADATA_NAMESPACE = TransactionType._(0x4344);
 
   /// Supported transaction types.
   static final List<TransactionType> values = <TransactionType>[
@@ -130,7 +142,10 @@ class TransactionType {
     ACCOUNT_RESTRICTION_OPERATION,
     ACCOUNT_LINK,
     MOSAIC_RESTRICTION_ADDRESS,
-    MOSAIC_RESTRICTION_GLOBAL
+    MOSAIC_RESTRICTION_GLOBAL,
+    METADATA_ACCOUNT,
+    METADATA_MOSAIC,
+    METADATA_NAMESPACE
   ];
 
   /// A collection of aggregate transaction types.

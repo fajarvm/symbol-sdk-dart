@@ -24,7 +24,7 @@ import 'receipt_version.dart';
 
 /// Artifact Expiry: An artifact (e.g. namespace, mosaic) expired.
 class ArtifactExpiryReceipt<T> extends Receipt {
-  /// The artifact id. It can either be a [MosaicId] or a [NamespaceId].
+  /// The artifact id. It must either be a [MosaicId] or a [NamespaceId].
   final T artifactId;
 
   ArtifactExpiryReceipt._(this.artifactId, ReceiptType type, ReceiptVersion version, int size)
@@ -40,7 +40,9 @@ class ArtifactExpiryReceipt<T> extends Receipt {
   }
 
   /// Validates the artifact id and receipt type.
-  static void _validate(Object artifactId, ReceiptType type) {
+  ///
+  /// The [artifactId] must either be a [MosaicId] or a [NamespaceId].
+  static void _validate(final dynamic artifactId, final ReceiptType type) {
     if (artifactId is MosaicId || artifactId is NamespaceId) {
       if (ReceiptType.ArtifactExpiry.contains(type)) {
         // OK. Match found.

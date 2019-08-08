@@ -116,48 +116,61 @@ abstract class Transaction {
   }
 
   /// Generates the transaction hash for a serialized transaction payload.
-  static String createHash(final String payload, final Uint8List generationHash) {
-    final Uint8List payloadBytes = HexUtils.getBytes(payload);
-    final List<int> signingPart = payloadBytes.skip(4).take(32).toList();
-    final List<int> keyPart = payloadBytes.skip(4 + 64).take(32).toList();
-    final Uint8List signingBytes = Uint8List.fromList(signingPart + keyPart + generationHash);
+  ///
+  /// The [generationHash] must either be an encoded hex [String] or a byte array ([Uint8List]).
+  static String createHash(final String payload, final dynamic generationHash) {
+    ArgumentError.checkNotNull(payload);
+    ArgumentError.checkNotNull(generationHash);
 
-    final Uint8List hash = Ed25519.createSha3Digest(length: 32).process(signingBytes);
-    final String hashHex = HexUtils.getString(hash);
+    final Uint8List generationHashBytes = _getGenerationHashBytes(generationHash);
+
+    final Uint8List bytes = HexUtils.getBytes(payload);
+    final List<int> signing = bytes.skip(4).take(32).toList();
+    final List<int> key = bytes.skip(4 + 64).take(32).toList();
+    final List<int> suffix = bytes.skip(100).take(bytes.length - 100).toList();
+    final Uint8List signingBytes = Uint8List.fromList(signing + key + generationHashBytes + suffix);
+
+    final Uint8List result = Ed25519.createSha3Digest(length: 32).process(signingBytes);
+    final String hashHex = HexUtils.getString(result);
 
     return hashHex;
   }
 
-  /// Serialize and sign transaction with the given [account] and network [generationHash].
-  SignedTransaction signWith(final Account account, final String generationHash) {
-    final KeyPair keypair = KeyPair.fromPrivateKey(account.privateKey);
-    final String txSigned = sign(keypair);
-    final Uint8List generationHashBytes = HexUtils.getBytes(generationHash);
-    final String txHash = createHash(txSigned, generationHashBytes);
+  /// Serialize and sign transaction with the given [account] and network [generationHash] and
+  /// create a new [SignedTransaction].
+  ///
+  /// The [generationHash] must either be an encoded hex [String] or a byte array ([Uint8List]).
+  /// TODO: Add signing schema parameter (e.g. SignSchema.SHA3)
+  SignedTransaction signWith(final Account account, final dynamic generationHash) {
+    final Uint8List generationHashBytes = _getGenerationHashBytes(generationHash);
 
-    // TODO: complete and check
-//    final Uint8List bytes = this.generateBytes();
-//    final List<int> tx = bytes.skip(4).take(bytes.length - 4).toList();
-//    final KeyPair kp = KeyPair.fromPrivateKey(HexUtils.getString(keypair.privateKey));
-//    final Uint8List signing = Uint8List.fromList(bytes.take(4 + 64 + 32).toList());
-//    final Uint8List signature = KeyPair.signData(kp, signing);
-//    final Uint8List payload = Uint8List.fromList(tx + signature.toList() + kp.publicKey.toList());
+    final KeyPair keyPairEncoded = KeyPair.fromPrivateKey(account.privateKey);
+    final String txSigned = sign(keyPairEncoded, generationHashBytes);
+    final String txHash = createHash(txSigned, generationHashBytes);
 
     return new SignedTransaction(txSigned, txHash, account.publicKey, type, networkType);
   }
 
-  /// Sign this transaction with the given [keypair].
+  /// Sign this transaction with the given [keypair] and network [generationHash] and create
+  /// a new signed transaction payload string.
   ///
-  /// Returns the signed transaction payload as a hex string.
-  String sign(final KeyPair keypair) {
-    final Uint8List buffer = this.generateBytes();
-    final List<int> tx = buffer.skip(4).take(buffer.length - 4).toList();
-    final KeyPair kp = KeyPair.fromPrivateKey(HexUtils.getString(keypair.privateKey));
-    final Uint8List signing = Uint8List.fromList(buffer.take(4 + 64 + 32).toList());
-    final Uint8List signature = KeyPair.signData(kp, signing);
-    final Uint8List payload = Uint8List.fromList(tx + signature.toList() + kp.publicKey.toList());
+  /// The [generationHash] must either be an encoded hex [String] or a byte array ([Uint8List]).
+  String sign(final KeyPair keypair, final dynamic generationHash) {
+    final Uint8List bytes = this.generateBytes();
+    final Uint8List generationHashBytes = _getGenerationHashBytes(generationHash);
 
-    // TODO: complete and check
+    // create signing byte
+    final List<int> signingSuffix = bytes.take(4 + 64 + 32).toList();
+    final Uint8List signing = Uint8List.fromList(generationHashBytes + signingSuffix);
+
+    // create signature
+    final List<int> signature = KeyPair.signData(keypair, signing).toList();
+
+    // create transaction payload
+    final List<int> tx = bytes.skip(4).take(bytes.length - 4).toList();
+    final List<int> publicKey = keypair.publicKey.toList();
+    final List<int> suffix = bytes.skip(100).take(bytes.length - 100).toList();
+    final Uint8List payload = Uint8List.fromList(tx + signature + publicKey + suffix);
 
     return HexUtils.getString(payload);
   }
@@ -176,5 +189,13 @@ abstract class Transaction {
     }
 
     return BigInt.zero == transactionInfo.height.value;
+  }
+
+  static Uint8List _getGenerationHashBytes(final dynamic generationHash) {
+    if (generationHash is! String && generationHash is! Uint8List) {
+      throw new ArgumentError('Invalid data type for generation hash.');
+    }
+
+    return generationHash is String ? HexUtils.utf8ToByte(generationHash) : generationHash;
   }
 }

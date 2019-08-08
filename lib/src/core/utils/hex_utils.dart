@@ -44,7 +44,7 @@ class HexUtils {
   /// Converts byte array to a hex string.
   static String getString(final List<int> bytes) {
     final String encodedString = hex.encode(bytes);
-    return utf8.decode(encodedString.codeUnits);
+    return byteToUtf8(encodedString.codeUnits);
   }
 
   /// Determines whether or not an [input] string is a hex string.
@@ -76,10 +76,20 @@ class HexUtils {
   static String tryHexToUtf8(final String hex) {
     final List<int> codeUnits = _getCodeUnits(hex);
     try {
-      return utf8.decode(codeUnits);
+      return byteToUtf8(codeUnits);
     } catch (e) {
       return String.fromCharCodes(codeUnits);
     }
+  }
+
+  /// Converts a UTF-8 [input] string to an encoded byte array.
+  static List<int> utf8ToByte(final String input) {
+    return utf8.encode(input);
+  }
+
+  /// Converts an encoded byte array to a UTF-8 string.
+  static String byteToUtf8(final List<int> input) {
+    return utf8.decode(input);
   }
 
   /// Convert a byte array [bytes] into a hex string
@@ -96,7 +106,7 @@ class HexUtils {
   /// Converts a hex string into byte array. Also tries to correct malformed hex string.
   static List<int> _getBytesInternal(final String hexString) {
     final String paddedHexString = 0 == hexString.length % 2 ? hexString : '0$hexString';
-    final List<int> encodedBytes = utf8.encode(paddedHexString);
+    final List<int> encodedBytes = utf8ToByte(paddedHexString);
     return hex.decode(String.fromCharCodes(encodedBytes));
   }
 

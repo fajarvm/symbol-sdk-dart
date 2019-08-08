@@ -102,6 +102,18 @@ class TransactionVersion {
   /// Allow or block mosaic transaction globally.
   static const TransactionVersion MOSAIC_RESTRICTION_GLOBAL = TransactionVersion._(1);
 
+  //
+  // Metadata
+  //
+  /// Associate a key-value state to an account.
+  static const TransactionVersion METADATA_ACCOUNT = TransactionVersion._(1);
+
+  /// Associate a key-value state to a mosaic.
+  static const TransactionVersion METADATA_MOSAIC = TransactionVersion._(1);
+
+  /// Associate a key-value state to a namespace.
+  static const TransactionVersion METADATA_NAMESPACE = TransactionVersion._(1);
+
   /// The int value of this version.
   final int value;
 

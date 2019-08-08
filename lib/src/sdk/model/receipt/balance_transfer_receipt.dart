@@ -30,7 +30,7 @@ class BalanceTransferReceipt<T> extends Receipt {
   /// The sender's public account.
   final PublicAccount sender;
 
-  /// The recipient. Can either be an [Address] or an [AddressAlias].
+  /// The recipient. Must either be an [Address] or an [AddressAlias].
   final T recipient;
 
   /// The mosaic id.
@@ -43,7 +43,7 @@ class BalanceTransferReceipt<T> extends Receipt {
       ReceiptType type, ReceiptVersion version, int size)
       : super(type, version, size);
 
-  factory BalanceTransferReceipt(PublicAccount sender, Object recipient, MosaicId mosaicId,
+  factory BalanceTransferReceipt(PublicAccount sender, dynamic recipient, MosaicId mosaicId,
       Uint64 amount, ReceiptType type, ReceiptVersion version,
       [int size]) {
     ArgumentError.checkNotNull(sender);
@@ -55,10 +55,10 @@ class BalanceTransferReceipt<T> extends Receipt {
     return BalanceTransferReceipt._(sender, recipient, mosaicId, amount, type, version, size);
   }
 
-  /// Validates the receipt type.
+  /// Validates the receipt type. The [recipient] must either be an [Address] or an [AddressAlias].
   ///
   /// Throws an error when the type is not valid.
-  static void _validate(Object recipient, ReceiptType type) {
+  static void _validate(dynamic recipient, ReceiptType type) {
     if (recipient is Address || recipient is AddressAlias) {
       if (ReceiptType.BalanceTransfer.contains(type)) {
         return;
