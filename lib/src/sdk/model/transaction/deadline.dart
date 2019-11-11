@@ -30,7 +30,10 @@ class Deadline {
       new DateTime.fromMillisecondsSinceEpoch(1459468800000, isUtc: true);
 
   /// The default duration set when creating a new deadline without parameters.
-  static final Duration DEFAULT_DURATION = new Duration(hours: 2);
+  static const Duration DEFAULT_DURATION = Duration(hours: 2);
+
+  /// The maximum duration of a deadline.
+  static const Duration MAX_DURATION = Duration(hours: 24);
 
   /// The deadline value.
   final DateTime value;
@@ -50,7 +53,7 @@ class Deadline {
       throw new ArgumentError('deadline should be greater than 0');
     }
 
-    if (duration > new Duration(hours: 24)) {
+    if (duration > MAX_DURATION) {
       throw new ArgumentError('deadline should be less than 24 hours');
     }
     return new Deadline._(new DateTime.now().add(duration));

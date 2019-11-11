@@ -1,4 +1,0 @@
-# OpenAPI configuration file for Dart generator
-# Full spec can be viewed here: https://openapi-generator.tech/docs/generators/dart
-pubName: "nem2_sdk_dart"
-useEnumExtension: "true"

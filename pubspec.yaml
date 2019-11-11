@@ -10,16 +10,16 @@ issue_tracker: https://github.com/fajarvm/nem2-sdk-dart/issues
 repository: https://github.com/fajarvm/nem2-sdk-dart
 
 environment:
-  sdk: '>=2.4.0 <3.0.0'
+  sdk: '>=2.6.0 <3.0.0'
 
 dependencies:
   convert: ^2.1.1
-  fixnum: ^0.10.9
+  fixnum: ^0.10.11
   pointycastle: ^1.0.1
-  encrypt: ^3.2.0
+  encrypt: ^3.3.1
 
 dev_dependencies:
-  test: ^1.5.3
+  test: ^1.9.3
   # Enable these dependencies when not using the global library
-  # coveralls: ^5.3.0
-  # coverage: ^0.13.0
+  # coveralls: ^5.6.0
+  # coverage: ^0.13.3

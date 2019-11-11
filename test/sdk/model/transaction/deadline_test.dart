@@ -23,7 +23,7 @@ import 'package:nem2_sdk_dart/sdk.dart' show Deadline;
 void main() {
   group('Deadline', () {
     test('Valid constants', () {
-      expect(Deadline.DEFAULT_DURATION, equals(new Duration(hours: 2)));
+      expect(Deadline.DEFAULT_DURATION, equals(const Duration(hours: 2)));
       expect(Deadline.NEMESIS_BLOCK_DATETIME,
           equals(new DateTime.fromMillisecondsSinceEpoch(1459468800000, isUtc: true)));
     });
@@ -35,28 +35,28 @@ void main() {
       expect(deadline.value.isAfter(now), isTrue);
       expect(deadline.value.isBefore(now), isFalse);
       // default deadline value is 2 hours from now
-      expect(deadline.value.isBefore(now.add(Duration(hours: 1))), isFalse);
-      expect(deadline.value.isAfter(now.add(Duration(hours: 3))), isFalse);
+      expect(deadline.value.isBefore(now.add(const Duration(hours: 1))), isFalse);
+      expect(deadline.value.isAfter(now.add(const Duration(hours: 3))), isFalse);
     });
 
     test('Can create deadline within accepted duration', () {
       // greater than 0
-      expect(Deadline.create(Duration(milliseconds: 100)).value, isNotNull);
+      expect(Deadline.create(const Duration(milliseconds: 100)).value, isNotNull);
 
       // less than 24 hours
-      expect(Deadline.create(Duration(hours: 24)).value, isNotNull);
+      expect(Deadline.create(const Duration(hours: 24)).value, isNotNull);
     });
 
     test('Cannot create deadline outside the accepted duration', () {
       // less than 0
       expect(
-          () => Deadline.create(Duration(milliseconds: -100)),
+          () => Deadline.create(const Duration(milliseconds: -100)),
           throwsA(predicate(
               (e) => e is ArgumentError && e.message == 'deadline should be greater than 0')));
 
       // greater than 24 hours (24 hour + 1 minute)
       expect(
-          () => Deadline.create(Duration(minutes: (24 * 60) + 1)),
+          () => Deadline.create(const Duration(minutes: (24 * 60) + 1)),
           throwsA(predicate(
               (e) => e is ArgumentError && e.message == 'deadline should be less than 24 hours')));
     });

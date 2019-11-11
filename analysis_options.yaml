@@ -1,12 +1,17 @@
+# Developer note:
+# YAML is sensitive to whitespace. Don’t use tabs in a YAML file, and use 2 spaces to denote each level of indentation.
+
+# include: package:pedantic/analysis_options.1.8.0.yaml # Don't forget to add pedantic as dependency.
 analyzer:
-   exclude:
-     - lib/src/core/crypto/tweetnacl.dart # somehow still got picked up by the analyzer
+  exclude:
+    - lib/src/core/crypto/tweetnacl.dart
+    - lib/src/infrastructure/model/**
 
 # Lint rules and documentation, see http://dart-lang.github.io/linter/lints
 
 # Developer note:
-#  * Strive to satisfy lint rules enforced at Google. See the list at the bottom.
-#  * Try to satisfy as many rules from the full list as possible.
+#  Strive to satisfy lint rules enforced at Google. See the list at the bottom.
+#  Try to satisfy as many rules from the full list as possible.
 
 # The full list of Lint rules
 linter:
