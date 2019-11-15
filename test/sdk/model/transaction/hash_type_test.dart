@@ -38,7 +38,7 @@ void main() {
       expect(HashType.fromInt(3), HashType.SHA_256);
     });
 
-    test('Trying to retrieve an invalid namespace type will throw an error', () {
+    test('Trying to retrieve an invalid hash type will throw an error', () {
       String errorMessage = HashType.UNSUPPORTED_HASH_TYPE;
       expect(() => HashType.fromInt(null),
           throwsA(predicate((e) => e is ArgumentError && e.message == errorMessage)));

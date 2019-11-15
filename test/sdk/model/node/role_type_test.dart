@@ -35,9 +35,9 @@ void main() {
       String errorMessage = RoleType.UNKNOWN_ROLE_TYPE;
       expect(() => RoleType.fromInt(null),
           throwsA(predicate((e) => e is ArgumentError && e.message == errorMessage)));
-      expect(() => RoleType.fromInt(-1),
-          throwsA(predicate((e) => e is ArgumentError && e.message == errorMessage)));
       expect(() => RoleType.fromInt(0),
+          throwsA(predicate((e) => e is ArgumentError && e.message == errorMessage)));
+      expect(() => RoleType.fromInt(3),
           throwsA(predicate((e) => e is ArgumentError && e.message == errorMessage)));
     });
   });

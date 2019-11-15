@@ -73,8 +73,8 @@ class Account {
     return fromKeyPair(keyPair, networkType);
   }
 
-  /// Creates a new [Account] for the given [networkType].
-  static Account create(final NetworkType networkType) {
+  /// Generates a new [Account] for the given [networkType].
+  static Account generate(final NetworkType networkType) {
     final KeyPair random = KeyPair.random();
     return fromPrivateKey(HexUtils.getString(random.privateKey), networkType);
   }

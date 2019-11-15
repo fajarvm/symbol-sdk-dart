@@ -30,8 +30,8 @@ void main() {
   };
 
   group('Account creation', () {
-    test('can create a new account', () {
-      final account = Account.create(NetworkType.MIJIN_TEST);
+    test('can generate a new account for the given network type', () {
+      final account = Account.generate(NetworkType.MIJIN_TEST);
 
       expect(account.publicKey, isNotNull);
       expect(account.privateKey, isNotNull);
