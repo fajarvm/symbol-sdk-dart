@@ -16,8 +16,13 @@
 
 library nem2_sdk_dart.core.crypto.sign_schema;
 
+import 'dart:typed_data' show ByteBuffer, Uint8List;
+
 import 'package:pointycastle/api.dart' show Digest;
 
+import 'package:nem2_sdk_dart/src/core/utils.dart' show HexUtils;
+
+import 'crypto_exception.dart';
 import 'ed25519.dart';
 
 /// The sign schema enum defines the strategies that can be used when signing
@@ -60,17 +65,21 @@ class SignSchema {
     throw new ArgumentError(UNSUPPORTED_SIGN_SCHEMA);
   }
 
-  /// Retrieve the correct SHA3 hasher for the given [signSchema] and [hashSize].
-  ///
-  /// Default value for [hashSize] is 64 bytes.
-  /// Acceptable [hashSize] is either [HASH_SIZE_32_BYTES] or [HASH_SIZE_64_BYTES].
-  static Digest getHasher(SignSchema signSchema, {final int hashSize = HASH_SIZE_64_BYTES}) {
+  static void _validate(SignSchema signSchema, int hashSize) {
     if (!values.contains(signSchema)) {
       throw new ArgumentError('Unsupported SignSchema: $signSchema');
     }
     if (HASH_SIZE_32_BYTES != hashSize && HASH_SIZE_64_BYTES != hashSize) {
       throw new ArgumentError('Unsupported hash size: $hashSize');
     }
+  }
+
+  /// Retrieves the correct SHA3 hasher for the given [signSchema] and [hashSize].
+  ///
+  /// Default value for [hashSize] is 64 bytes.
+  /// Acceptable [hashSize] is either [HASH_SIZE_32_BYTES] or [HASH_SIZE_64_BYTES].
+  static Digest getHasher(SignSchema signSchema, {final int hashSize = HASH_SIZE_64_BYTES}) {
+    _validate(signSchema, hashSize);
 
     if (SignSchema.SHA3.value == signSchema.value) {
       return Ed25519.createSha3Digest(length: hashSize);
@@ -83,10 +92,36 @@ class SignSchema {
     throw new StateError('should not reach here');
   }
 
-  // TODO: complete
-  // toHash()
-  // toHash32Bytes()
-  // toHash64Bytes()
-  // reverseString()
-  // reverseByte()
+  /// Hashes the [input] bytes using the given [signSchema] and [hashSize].
+  ///
+  /// Default value for [hashSize] is 64 bytes.
+  /// Acceptable [hashSize] is either [HASH_SIZE_32_BYTES] or [HASH_SIZE_64_BYTES].
+  static Uint8List toHash(Uint8List input, SignSchema signSchema,
+      [final int hashSize = HASH_SIZE_64_BYTES]) {
+    _validate(signSchema, hashSize);
+
+    final Digest hasher = getHasher(signSchema, hashSize: hashSize);
+
+    // reverse the input here when necessary before processing it further
+
+    // processes the input and then returns the result
+    final Uint8List hash = hasher.process(input);
+    final ByteBuffer buffer = hash.buffer;
+    final Uint8List result = buffer.asUint8List(0, hashSize);
+    return result;
+  }
+
+  /// Returns the reversed order of the given [input] bytes.
+  static Uint8List reverseBytes(Uint8List input) {
+    return Uint8List.fromList(input.reversed.toList());
+  }
+
+  /// Returns the reversed order of the given [input] hex string.
+  static String reverseHexString(String input) {
+    try {
+      return HexUtils.getString(reverseBytes(HexUtils.getBytes(input)));
+    } catch (e) {
+      throw CryptoException('Failed reversing the input. Error: $e');
+    }
+  }
 }
