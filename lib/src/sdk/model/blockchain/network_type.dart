@@ -16,6 +16,8 @@
 
 library nem2_sdk_dart.sdk.model.blockchain.network_type;
 
+import 'package:nem2_sdk_dart/core.dart' show SignSchema;
+
 /// This class is used to identify a network type.
 class NetworkType {
   static const String UNKNOWN_NETWORK_TYPE = 'network type is unknown';
@@ -72,5 +74,13 @@ class NetworkType {
 
     // otherwise
     return false;
+  }
+
+  /// Resolve signature schema from given network type.
+  static SignSchema resolveSignSchema(final NetworkType networkType) {
+    if (NetworkType.MAIN_NET == networkType || NetworkType.TEST_NET == networkType) {
+      return SignSchema.KECCAK;
+    }
+    return SignSchema.SHA3;
   }
 }

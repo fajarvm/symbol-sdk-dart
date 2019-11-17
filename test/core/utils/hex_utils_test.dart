@@ -158,4 +158,19 @@ void main() {
       }
     });
   });
+
+  group('reverseHexString()', (){
+    test('Can reverse input hex string and bytes', () {
+      String input = '575dbb3062267eff57c970a336ebbc8fbcfe12c5bd3ed7bc11eb0481d7704ced';
+      String output = 'ed4c70d78104eb11bcd73ebdc512febc8fbceb36a370c957ff7e266230bb5d57';
+      expect(HexUtils.reverseHexString(input), equals(output));
+    });
+
+    test('Should throw an exception when reversing an invalid hex string', () {
+      expect(
+              () => HexUtils.reverseHexString('NOHEX'),
+          throwsA(predicate(
+                  (e) => e is ArgumentError && e.message.contains('Failed reversing the input.'))));
+    });
+  });
 }

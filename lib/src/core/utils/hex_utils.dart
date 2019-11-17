@@ -22,16 +22,19 @@ import 'package:convert/convert.dart' show hex;
 
 /// A utility class that provides functions for converting hex strings.
 class HexUtils {
-  /// Converts [hex] to a byte array.
+  /// Converts [hex] string to a byte array.
+  ///
+  /// Throws an exception upon failing.
   static List<int> getBytes(final String hex) {
     try {
       return _getBytesInternal(hex);
     } catch (e) {
-      throw new ArgumentError(e);
+      throw new ArgumentError('Could not convert hex string into a byte array. Error: $e');
     }
   }
 
-  /// Tries to convert [hex] to a byte array.
+  /// Tries to convert [hex] string to a byte array.
+  ///
   /// The output will be null if the input is malformed.
   static List<int> tryGetBytes(final String hex) {
     try {
@@ -87,18 +90,29 @@ class HexUtils {
     return utf8.encode(input);
   }
 
-  /// Converts an encoded byte array to a UTF-8 string.
+  /// Converts an encoded byte array [input] to a UTF-8 string.
   static String byteToUtf8(final List<int> input) {
     return utf8.decode(input);
   }
 
   /// Convert a byte array [bytes] into a hex string
-  static String bytesToHex(List<int> bytes) {
+  static String bytesToHex(final List<int> bytes) {
     final StringBuffer result = new StringBuffer();
     for (var part in bytes) {
       result.write('${part < 16 ? '0' : ''}${part.toRadixString(16)}');
     }
     return result.toString();
+  }
+
+  /// Returns the reversed order of the given [input] hex string.
+  ///
+  /// Throws an error if [input] could not be processed.
+  static String reverseHexString(String input) {
+    try {
+      return getString(getBytes(input).reversed.toList());
+    } catch (e) {
+      throw ArgumentError('Failed reversing the input. Error: $e');
+    }
   }
 
   // ------------------------------ private / protected functions ------------------------------ //

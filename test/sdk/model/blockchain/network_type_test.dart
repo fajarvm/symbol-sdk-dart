@@ -18,6 +18,7 @@ library nem2_sdk_dart.test.sdk.model.blockchain.network_type_test;
 
 import 'package:test/test.dart';
 
+import 'package:nem2_sdk_dart/core.dart' show SignSchema;
 import 'package:nem2_sdk_dart/sdk.dart' show NetworkType;
 
 void main() {
@@ -78,6 +79,13 @@ void main() {
       expect(NetworkType.isValid(0x00), isFalse);
       expect(NetworkType.isValid(0xFF), isFalse);
       expect(NetworkType.isValid(103), isFalse);
+    });
+
+    test('Can resolve sign schema for the given network type', () {
+      expect(NetworkType.resolveSignSchema(NetworkType.MAIN_NET), equals(SignSchema.KECCAK));
+      expect(NetworkType.resolveSignSchema(NetworkType.TEST_NET), equals(SignSchema.KECCAK));
+      expect(NetworkType.resolveSignSchema(NetworkType.MIJIN), equals(SignSchema.SHA3));
+      expect(NetworkType.resolveSignSchema(NetworkType.MIJIN_TEST), equals(SignSchema.SHA3));
     });
   });
 }
