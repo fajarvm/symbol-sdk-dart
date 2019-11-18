@@ -18,7 +18,7 @@ library nem2_sdk_dart.sdk.model.account.address;
 
 import 'dart:typed_data' show Uint8List;
 
-import 'package:nem2_sdk_dart/core.dart' show ArrayUtils, Base32, Ed25519, HexUtils, SHA3DigestNist;
+import 'package:nem2_sdk_dart/core.dart' show ArrayUtils, Base32, CryptoUtils, HexUtils, SHA3DigestNist;
 import 'package:pointycastle/export.dart' show RIPEMD160Digest;
 
 import '../blockchain/network_type.dart';
@@ -139,7 +139,7 @@ class Address {
   /// Converts a [publicKey] to decoded address byte for a specific [networkType].
   static Uint8List publicKeyToAddress(final Uint8List publicKey, final NetworkType networkType) {
     // Step 1: create a SHA3-256 hash of the public key
-    final SHA3DigestNist digest = Ed25519.createSha3Digest(length: Ed25519.KEY_SIZE);
+    final SHA3DigestNist digest = CryptoUtils.createSha3Digest(length: CryptoUtils.KEY_SIZE);
     final Uint8List stepOne = new Uint8List(KEY_SIZE);
     digest.update(publicKey, 0, KEY_SIZE);
     digest.doFinal(stepOne, 0);
@@ -202,7 +202,7 @@ class Address {
 
   /// Determines the validity of the given [decodedAddress].
   static bool isValidAddress(final Uint8List decodedAddress) {
-    final SHA3DigestNist digest = Ed25519.createSha3Digest(length: Ed25519.KEY_SIZE);
+    final SHA3DigestNist digest = CryptoUtils.createSha3Digest(length: CryptoUtils.KEY_SIZE);
     final Uint8List hash = digest.process(decodedAddress.sublist(0, START_CHECKSUM_SIZE));
     final Uint8List checksum = hash.buffer.asUint8List(0, CHECKSUM_SIZE);
     return ArrayUtils.deepEqual(checksum, decodedAddress.sublist(START_CHECKSUM_SIZE));

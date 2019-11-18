@@ -19,7 +19,7 @@ library nem2_sdk_dart.test.sdk.model.transaction.messages.secure_message_test;
 import 'package:test/test.dart';
 
 import 'package:nem2_sdk_dart/core.dart' show HexUtils;
-import 'package:nem2_sdk_dart/sdk.dart' show MessageType, SecureMessage;
+import 'package:nem2_sdk_dart/sdk.dart' show MessageType, NetworkType, SecureMessage;
 
 void main() {
   group('SecureMessage', () {
@@ -37,26 +37,26 @@ void main() {
     });
 
     test('Can create a secure message with an encrypted payload', () {
-      final secureMessage = SecureMessage.create('Hello', senderPrivateKey, receiverPublicKey);
+      final secureMessage = SecureMessage.create('Hello', senderPrivateKey, receiverPublicKey, NetworkType.MIJIN_TEST);
 
       expect(secureMessage.payload, isNotNull);
       expect(secureMessage.type, equals(MessageType.ENCRYPTED));
 
-      final decrypted = secureMessage.decryptMessage(senderPrivateKey, receiverPublicKey);
+      final decrypted = secureMessage.decryptMessage(senderPrivateKey, receiverPublicKey, NetworkType.MIJIN_TEST);
       expect(decrypted, equals('Hello'));
     });
 
     test('Cannot create a secure message without the message payload', () {
-      expect(() => SecureMessage.create(null, senderPrivateKey, receiverPublicKey),
-          throwsA(predicate((e) => e is ArgumentError && e.message == 'message cannot be null')));
+      expect(() => SecureMessage.create(null, senderPrivateKey, receiverPublicKey, NetworkType.MIJIN_TEST),
+          throwsA(predicate((e) => e is ArgumentError && e.message.contains('Must not be null'))));
     });
 
     test('Cannot create a secure message without private/public key', () {
-      expect(() => SecureMessage.create('Hello', null, receiverPublicKey),
+      expect(() => SecureMessage.create('Hello', null, receiverPublicKey, NetworkType.MIJIN_TEST),
           throwsA(predicate((e) => e is ArgumentError && e.message == ERROR_KEY)));
-      expect(() => SecureMessage.create('Hello', senderPrivateKey, null),
+      expect(() => SecureMessage.create('Hello', senderPrivateKey, null, NetworkType.MIJIN_TEST),
           throwsA(predicate((e) => e is ArgumentError && e.message == ERROR_KEY)));
-      expect(() => SecureMessage.create('Hello', null, null),
+      expect(() => SecureMessage.create('Hello', null, null, NetworkType.MIJIN_TEST),
           throwsA(predicate((e) => e is ArgumentError && e.message == ERROR_KEY)));
     });
   });

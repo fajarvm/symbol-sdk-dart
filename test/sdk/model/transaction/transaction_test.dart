@@ -43,7 +43,7 @@ void main() {
             'BEE94EC3BA5831CB608A312C2F203BA84AC03000300303064000000000000006400000000000000002F00'
             'FA0DEDD9086400000000000000443F6D806C05543A6400000000000000';
 
-        final hash = Transaction.createHash(payload, generationHash);
+        final hash = Transaction.createHash(payload, generationHash, NetworkType.MIJIN_TEST);
 
         const expected = 'BADC739882F2EE3D7D54A0DC3B62C2ADA50259CB32E99E012452C516C7BE94C6';
         expect(hash, equals(expected.toLowerCase()));
@@ -58,7 +58,7 @@ void main() {
             '3CBEE49EEB9953C6F3985B15A4F238E205584D8F924C621CBE4D7AC6EC2400B1B5581FC81A6970DEE418D'
             '2C2978F2724228B7B36C5C6DF71B0162BB04778B4';
 
-        final hash = Transaction.createHash(payload, generationHash);
+        final hash = Transaction.createHash(payload, generationHash, NetworkType.MIJIN_TEST);
 
         const expected = 'EA67D29F3E3EE1F5107AB68E0E8BD5F1CF85901F8778AAF6FAF74316D973B30D';
         expect(hash, equals(expected.toLowerCase()));

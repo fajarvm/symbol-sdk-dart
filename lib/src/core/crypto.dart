@@ -20,7 +20,7 @@ library nem2_sdk_dart.core.crypto;
 export 'crypto/crypto_exception.dart';
 
 // implementations
-export 'crypto/ed25519.dart';
+export 'crypto/crypto_utils.dart';
 export 'crypto/key_pair.dart';
 export 'crypto/sha3_hasher.dart';
 export 'crypto/sha3nist.dart';

@@ -18,7 +18,7 @@ library nem2_sdk_dart.sdk.model.mosaic.mosaic_nonce;
 
 import 'dart:typed_data' show Uint8List;
 
-import 'package:nem2_sdk_dart/core.dart' show Ed25519, HexUtils;
+import 'package:nem2_sdk_dart/core.dart' show CryptoUtils, HexUtils;
 
 import '../common/uint64.dart';
 
@@ -41,7 +41,7 @@ class MosaicNonce {
 
   /// Creates a random MosaicNonce.
   static MosaicNonce random() {
-    return MosaicNonce(Ed25519.getRandomBytes(4));
+    return MosaicNonce(CryptoUtils.getRandomBytes(4));
   }
 
   /// Creates a MosaicNonce from a [hex] string.

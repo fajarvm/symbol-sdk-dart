@@ -18,7 +18,7 @@ library nem2_sdk_dart.sdk.model.account.account;
 
 import 'dart:typed_data' show Uint8List;
 
-import 'package:nem2_sdk_dart/core.dart' show HexUtils, KeyPair;
+import 'package:nem2_sdk_dart/core.dart' show HexUtils, KeyPair, SignSchema;
 
 import '../blockchain/network_type.dart';
 import '../transaction/signed_transaction.dart';
@@ -46,6 +46,9 @@ class Account {
   /// The plain text address of this account.
   String get plainAddress => publicAccount.address.plain;
 
+  /// The network type of this account.
+  NetworkType get networkType => publicAccount.address.networkType;
+
   @override
   int get hashCode => keyPair.hashCode ^ publicAccount.hashCode;
 
@@ -68,14 +71,16 @@ class Account {
   /// Creates an [Account] from a given [privateKey] for a specific [networkType].
   static Account fromPrivateKey(final String privateKey, final NetworkType networkType) {
     ArgumentError.checkNotNull(privateKey);
-    final KeyPair keyPair = KeyPair.fromPrivateKey(privateKey);
+    final SignSchema signSchema = NetworkType.resolveSignSchema(networkType);
+    final KeyPair keyPair = KeyPair.fromPrivateKey(privateKey, signSchema);
 
     return fromKeyPair(keyPair, networkType);
   }
 
   /// Generates a new [Account] for the given [networkType].
   static Account generate(final NetworkType networkType) {
-    final KeyPair random = KeyPair.random();
+    final SignSchema signSchema = NetworkType.resolveSignSchema(networkType);
+    final KeyPair random = KeyPair.random(signSchema);
     return fromPrivateKey(HexUtils.getString(random.privateKey), networkType);
   }
 
@@ -83,12 +88,16 @@ class Account {
   String signData(final String rawData) {
     final String hex = HexUtils.utf8ToHex(rawData);
     final Uint8List data = HexUtils.getBytes(hex);
-    final Uint8List signedData = KeyPair.signData(keyPair, data);
+    final SignSchema signSchema = NetworkType.resolveSignSchema(networkType);
+    final Uint8List signedData = KeyPair.signData(keyPair, data, signSchema);
     return HexUtils.getString(signedData);
   }
 
   /// Signs a [transaction].
   SignedTransaction signTransaction(final Transaction transaction, final String generationHash) {
+    ArgumentError.checkNotNull(transaction);
+    ArgumentError.checkNotNull(generationHash);
+
     return transaction.signWith(this, generationHash);
   }
 

@@ -19,7 +19,7 @@ library nem2_sdk_dart.test.sdk.model.account.account_test;
 import 'package:nem2_sdk_dart/core.dart';
 import 'package:test/test.dart';
 
-import 'package:nem2_sdk_dart/core.dart' show CryptoException, Ed25519;
+import 'package:nem2_sdk_dart/core.dart' show CryptoException, CryptoUtils;
 import 'package:nem2_sdk_dart/sdk.dart' show Account, NetworkType;
 
 void main() {
@@ -47,7 +47,8 @@ void main() {
     });
 
     test('can create an account from a keypair', () {
-      final keyPair = KeyPair.random();
+      final SignSchema signSchema = NetworkType.resolveSignSchema(NetworkType.MIJIN_TEST);
+      final keyPair = KeyPair.random(signSchema);
       final account = Account.fromKeyPair(keyPair, NetworkType.MIJIN_TEST);
 
       expect(account.keyPair.publicKey, equals(keyPair.publicKey));
@@ -75,7 +76,7 @@ void main() {
               e is CryptoException &&
               e.message ==
                   'Private key has an unexpected size. '
-                      'Expected: ${Ed25519.KEY_SIZE}, Got: 0')));
+                      'Expected: ${CryptoUtils.KEY_SIZE}, Got: 0')));
     });
   });
 

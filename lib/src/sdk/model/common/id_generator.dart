@@ -22,7 +22,7 @@ import 'dart:typed_data' show Uint8List;
 import 'package:fixnum/fixnum.dart' show Int64;
 
 import 'package:nem2_sdk_dart/core.dart'
-    show CryptoException, Ed25519, HexUtils, SHA3DigestNist, StringUtils;
+    show CryptoException, CryptoUtils, HexUtils, SHA3DigestNist, StringUtils;
 
 import 'uint64.dart';
 
@@ -113,7 +113,7 @@ class IdGenerator {
   }
 
   static Uint8List generateRandomMosaicNonce() {
-    return Ed25519.getRandomBytes(IdGenerator.MOSAIC_NONCE_SIZE);
+    return CryptoUtils.getRandomBytes(IdGenerator.MOSAIC_NONCE_SIZE);
   }
 
   // ------------------------------ private / protected functions ------------------------------ //
@@ -129,7 +129,7 @@ class IdGenerator {
 
   static Uint8List _createSha3Hash(final List<Uint8List> listOfBytes, [final int bitLength = 32]) {
     // Create a sha3-256 digest
-    final SHA3DigestNist digest = Ed25519.createSha3Digest(length: bitLength);
+    final SHA3DigestNist digest = CryptoUtils.createSha3Digest(length: bitLength);
 
     // Add entries into digest
     for (var entry in listOfBytes) {

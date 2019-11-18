@@ -18,7 +18,7 @@ library nem2_sdk_dart.sdk.model.account.public_account;
 
 import 'dart:typed_data' show Uint8List;
 
-import 'package:nem2_sdk_dart/core.dart' show HexUtils, KeyPair;
+import 'package:nem2_sdk_dart/core.dart' show HexUtils, KeyPair, SignSchema;
 
 import '../blockchain/network_type.dart';
 import 'address.dart';
@@ -86,8 +86,9 @@ class PublicAccount {
     final String utf8Hex = HexUtils.utf8ToHex(data);
     final Uint8List dataByte = HexUtils.getBytes(utf8Hex);
     final Uint8List pkByte = HexUtils.getBytes(publicKey);
+    final SignSchema signSchema = NetworkType.resolveSignSchema(address.networkType);
 
-    return KeyPair.verify(pkByte, dataByte, sigByte);
+    return KeyPair.verify(pkByte, dataByte, sigByte, signSchema);
   }
 
   @override

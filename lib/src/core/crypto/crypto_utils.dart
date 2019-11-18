@@ -16,32 +16,35 @@
 
 library nem2_sdk_dart.core.crypto.ed25519;
 
-import 'dart:typed_data' show ByteBuffer, Int64List, Uint8List;
+import 'dart:typed_data' show Int64List, Uint8List;
 
 import 'package:nem2_sdk_dart/src/core/utils.dart' show ArrayUtils;
-import 'package:pointycastle/export.dart' show RIPEMD160Digest, SHA256Digest, SHA3Digest;
+import 'package:pointycastle/export.dart' show Digest, RIPEMD160Digest, SHA256Digest, SHA3Digest;
 
 import 'crypto_exception.dart';
+import 'sha3_hasher.dart';
 import 'sha3nist.dart';
+import 'sign_schema.dart';
 import 'tweetnacl.dart';
 
-/// This class provides various custom cryptographic operations.
-class Ed25519 {
+/// A utility class that provides various custom cryptographic operations.
+class CryptoUtils {
   static const int KEY_SIZE = 32;
   static const int SIGNATURE_SIZE = 64;
   static const int HALF_SIGNATURE_SIZE = 32;
   static const int HASH_SIZE = 64;
   static const int HALF_HASH_SIZE = 32;
 
-  /// Extracts a public key from the given [privateKeySeed].
-  static Uint8List extractPublicKey(final Uint8List privateKeySeed) {
+  /// Extracts a public key from the given [privateKeySeed] using the given [signSchema].
+  static Uint8List extractPublicKey(final Uint8List privateKeySeed, final SignSchema signSchema) {
     ArgumentError.checkNotNull(privateKeySeed);
+    ArgumentError.checkNotNull(signSchema);
 
     if (privateKeySeed.lengthInBytes != 32 && privateKeySeed.lengthInBytes != 33) {
       throw new ArgumentError('Incorrect length of privateKeySeed');
     }
 
-    final Uint8List d = prepareForScalarMult(privateKeySeed);
+    final Uint8List d = prepareForScalarMult(privateKeySeed, signSchema);
     final List<Int64List> p = [_gf(), _gf(), _gf(), _gf()];
     final Uint8List pk = new Uint8List(KEY_SIZE);
     TweetNaclFast.scalarBase(p, d, 0);
@@ -50,9 +53,10 @@ class Ed25519 {
     return pk;
   }
 
-  /// Signs a [message] with the given [publicKey] and [secretKey].
-  static Uint8List signData(Uint8List message, Uint8List publicKey, Uint8List secretKey) {
-    final SHA3DigestNist hasher = createSha3Digest();
+  /// Signs a [message] with the given [publicKey] and [secretKey] according to [signSchema].
+  static Uint8List signData(
+      Uint8List message, Uint8List publicKey, Uint8List secretKey, SignSchema signSchema) {
+    final Digest hasher = SHA3Hasher.create(signSchema, hashSize: HASH_SIZE);
     hasher.reset();
 
     final Uint8List d = new Uint8List(HASH_SIZE); // private hash
@@ -102,8 +106,9 @@ class Ed25519 {
     return signature;
   }
 
-  /// Verifies that the [signature] is signed with the [publicKey] and [data].
-  static bool verify(Uint8List publicKey, Uint8List data, Uint8List signature) {
+  /// Verifies that the [signature] is signed with the [publicKey], [data] and [signSchema].
+  static bool verify(
+      Uint8List publicKey, Uint8List data, Uint8List signature, SignSchema signSchema) {
     // reject non-canonical signature
     if (!_isCanonical(signature.sublist(HALF_SIGNATURE_SIZE))) {
       return false;
@@ -122,7 +127,7 @@ class Ed25519 {
 
     final Uint8List h = new Uint8List(HASH_SIZE);
 
-    final SHA3DigestNist hasher = createSha3Digest();
+    final Digest hasher = SHA3Hasher.create(signSchema, hashSize: SIGNATURE_SIZE);
     hasher.reset();
     hasher.update(signature.sublist(0, HALF_SIGNATURE_SIZE), 0, HALF_SIGNATURE_SIZE);
     hasher.update(publicKey, 0, KEY_SIZE);
@@ -142,14 +147,18 @@ class Ed25519 {
     return result == 0;
   }
 
-  /// Derives a shared key using the [salt], [privateKey] and [publicKey].
-  static Uint8List deriveSharedKey(
-      final Uint8List salt, final Uint8List privateKey, final Uint8List publicKey) {
-    if (Ed25519.KEY_SIZE != salt.length) {
+  /// Derives a shared key using the [salt], [privateKey], [publicKey] and [signSchema].
+  static Uint8List deriveSharedKey(final Uint8List salt, final Uint8List privateKey,
+      final Uint8List publicKey, final SignSchema signSchema) {
+    if (CryptoUtils.KEY_SIZE != salt.length) {
       throw ArgumentError('Salt has unexpected size: ${salt.length}');
     }
 
-    final Uint8List d = prepareForScalarMult(privateKey);
+    if (CryptoUtils.KEY_SIZE != publicKey.length) {
+      throw ArgumentError('Public key has unexpected size: ${publicKey.length}');
+    }
+
+    final Uint8List d = prepareForScalarMult(privateKey, signSchema);
 
     // sharedKey = pack(p = d (derived from sk) * q (derived from pk))
     final List<Int64List> q = [_gf(), _gf(), _gf(), _gf()];
@@ -165,22 +174,16 @@ class Ed25519 {
     }
 
     // return the hash of the result
-    final SHA3DigestNist hasher = createSha3Digest(length: KEY_SIZE);
-    final Uint8List hash = hasher.process(sharedKey);
-    final ByteBuffer buffer = hash.buffer;
-    final Uint8List result = buffer.asUint8List(0, KEY_SIZE);
-    return result;
+    final Uint8List sharedKeyHash = SHA3Hasher.hash(sharedKey, signSchema, KEY_SIZE);
+    return sharedKeyHash;
   }
 
   /// Creates random bytes with the given size.
   static Uint8List getRandomBytes(int size) => TweetNaclFast.secureRandomBytes(size);
 
-  /// Computes the hash of a [secretKey] using SHA3-512 (NIST) algorithm.
-  static Uint8List prepareForScalarMult(final Uint8List secretKey) {
-    final SHA3DigestNist sha3digest = createSha3Digest();
-    final Uint8List hash = sha3digest.process(secretKey);
-    final ByteBuffer buffer = hash.buffer;
-    final Uint8List d = buffer.asUint8List(0, HASH_SIZE);
+  /// Computes the hash of a [secretKey] using the given [signSchema].
+  static Uint8List prepareForScalarMult(final Uint8List secretKey, final SignSchema signSchema) {
+    final Uint8List d = SHA3Hasher.hash(secretKey, signSchema, HASH_SIZE);
     _clamp(d);
     return d;
   }

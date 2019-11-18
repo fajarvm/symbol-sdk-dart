@@ -18,7 +18,7 @@ library nem2_sdk_dart.test.sdk.model.transaction.hash_type_test;
 
 import 'dart:typed_data' show Uint8List;
 
-import 'package:nem2_sdk_dart/core.dart' show Ed25519, HexUtils;
+import 'package:nem2_sdk_dart/core.dart' show CryptoUtils, HexUtils;
 import 'package:nem2_sdk_dart/sdk.dart' show HashType;
 import 'package:test/test.dart';
 
@@ -50,12 +50,12 @@ void main() {
 
     test('The hash of SHA3-256 should be valid', () {
       // SHA3-256 = valid
-      final sha256digest = Ed25519.createSha3Digest(length: 32);
+      final sha256digest = CryptoUtils.createSha3Digest(length: 32);
       final result256 = sha256digest.process(HexUtils.getBytes(HexUtils.utf8ToHex('abcxyz')));
       expect(HashType.validate(HexUtils.getString(result256), HashType.SHA3_256), isTrue);
 
       // SHA3-512 = invalid
-      final sha512digest = Ed25519.createSha3Digest(length: 64);
+      final sha512digest = CryptoUtils.createSha3Digest(length: 64);
       final result512 = sha512digest.process(HexUtils.getBytes(HexUtils.utf8ToHex('abcxyz')));
       expect(HashType.validate(HexUtils.getString(result512), HashType.SHA3_256), isFalse);
 
@@ -67,19 +67,19 @@ void main() {
 
     test('The hash of Keccak-256 should be valid', () {
       // Keccak-256 = valid
-      final keccak256 = Ed25519.createKeccakDigest(length: 32);
+      final keccak256 = CryptoUtils.createKeccakDigest(length: 32);
       final result256 = keccak256.process(HexUtils.getBytes(HexUtils.utf8ToHex('abcxyz')));
       expect(HashType.validate(HexUtils.getString(result256), HashType.KECCAK_256), isTrue);
 
       // Keccak-512 = invalid
-      final keccak512 = Ed25519.createKeccakDigest(length: 64);
+      final keccak512 = CryptoUtils.createKeccakDigest(length: 64);
       final result512 = keccak512.process(HexUtils.getBytes(HexUtils.utf8ToHex('abcxyz')));
       expect(HashType.validate(HexUtils.getString(result512), HashType.KECCAK_256), isFalse);
     });
 
     test('The hash of SHA-256 should be valid', () {
       // Sha-256 = valid
-      final sha256 = Ed25519.createSha256Digest();
+      final sha256 = CryptoUtils.createSha256Digest();
       final result256 = sha256.process(HexUtils.getBytes(HexUtils.utf8ToHex('abcxyz')));
       expect(HashType.validate(HexUtils.getString(result256), HashType.SHA_256), isTrue);
 
@@ -92,12 +92,12 @@ void main() {
       final Uint8List input = HexUtils.getBytes(HexUtils.utf8ToHex('abcxyz'));
 
       // Ripemd-160 = invalid
-      final ripemd160 = Ed25519.createRipemd160Digest();
+      final ripemd160 = CryptoUtils.createRipemd160Digest();
       final result160 = ripemd160.process(input);
       expect(HashType.validate(HexUtils.getString(result160), HashType.RIPEMD_160), isTrue);
 
       // Sha-256  and then Ripemd-160 = valid
-      final sha256 = Ed25519.createSha256Digest();
+      final sha256 = CryptoUtils.createSha256Digest();
       final resultSha = sha256.process(input);
       ripemd160.reset();
       final result = ripemd160.process(resultSha);
@@ -112,25 +112,25 @@ void main() {
     test('Cannot create digest with an invalid length', () {
       // SHA3 digest 32-bit
       expect(
-          () => Ed25519.createSha3Digest(length: 31),
+          () => CryptoUtils.createSha3Digest(length: 31),
           throwsA(predicate(
               (e) => e is ArgumentError && e.message.toString().contains('Unexpected length'))));
 
       // SHA3 digest 64-bit
       expect(
-          () => Ed25519.createSha3Digest(length: 63),
+          () => CryptoUtils.createSha3Digest(length: 63),
           throwsA(predicate(
               (e) => e is ArgumentError && e.message.toString().contains('Unexpected length'))));
 
       // Keccak digest 32-bit
       expect(
-          () => Ed25519.createKeccakDigest(length: 31),
+          () => CryptoUtils.createKeccakDigest(length: 31),
           throwsA(predicate(
               (e) => e is ArgumentError && e.message.toString().contains('Unexpected length'))));
 
       // Keccak digest 64-bit
       expect(
-          () => Ed25519.createKeccakDigest(length: 63),
+          () => CryptoUtils.createKeccakDigest(length: 63),
           throwsA(predicate(
               (e) => e is ArgumentError && e.message.toString().contains('Unexpected length'))));
     });

@@ -18,7 +18,7 @@ library nem2_sdk_dart.sdk.model.transaction.verifiable_transaction;
 
 import 'dart:typed_data' show Uint8List;
 
-import 'package:nem2_sdk_dart/core.dart' show HexUtils, Ed25519, KeyPair;
+import 'package:nem2_sdk_dart/core.dart' show CryptoUtils, HexUtils, KeyPair, SignSchema;
 
 import '../../schema.dart' show Schema;
 
@@ -46,7 +46,7 @@ class VerifiableTransaction {
     final List<int> keyPart = payload.skip(4 + 64).take(payload.length - (4 + 64)).toList();
     final Uint8List signingBytes = Uint8List.fromList(signingPart + keyPart);
 
-    final Uint8List hash = Ed25519.createSha3Digest(length: 32).process(signingBytes);
+    final Uint8List hash = CryptoUtils.createSha3Digest(length: 32).process(signingBytes);
     final String hashHex = HexUtils.getString(hash);
 
     return hashHex;
@@ -55,12 +55,12 @@ class VerifiableTransaction {
   /// Sign this transaction with the given [keypair].
   ///
   /// Returns the signed transaction payload as a hex string.
-  String signTransaction(final KeyPair keypair) {
+  String signTransaction(final KeyPair keypair, final SignSchema signSchema) {
     final Uint8List buffer = this.serialize();
     final List<int> tx = buffer.skip(4).take(buffer.length - 4).toList();
-    final KeyPair kp = KeyPair.fromPrivateKey(HexUtils.getString(keypair.privateKey));
+    final KeyPair kp = KeyPair.fromPrivateKey(HexUtils.getString(keypair.privateKey), signSchema);
     final Uint8List signing = Uint8List.fromList(buffer.take(4 + 64 + 32).toList());
-    final Uint8List signature = KeyPair.signData(kp, signing);
+    final Uint8List signature = KeyPair.signData(kp, signing, signSchema);
     final Uint8List payload = Uint8List.fromList(tx + signature.toList() + kp.publicKey.toList());
 
     return HexUtils.getString(payload);

@@ -18,7 +18,7 @@ library nem2_sdk_dart.sdk.model.transaction.transaction;
 
 import 'dart:typed_data' show Uint8List;
 
-import 'package:nem2_sdk_dart/core.dart' show Ed25519, HexUtils, KeyPair;
+import 'package:nem2_sdk_dart/core.dart' show HexUtils, KeyPair, SHA3Hasher, SignSchema;
 
 import '../account/account.dart';
 import '../account/public_account.dart';
@@ -115,12 +115,14 @@ abstract class Transaction {
     return generateEmbeddedBytes();
   }
 
-  /// Generates the transaction hash for a serialized transaction payload.
+  /// Generates the transaction hash for a serialized transaction payload on a [networkType].
   ///
   /// The [generationHash] must either be an encoded hex [String] or a byte array ([Uint8List]).
-  static String createHash(final String payload, final dynamic generationHash) {
+  static String createHash(
+      final String payload, final dynamic generationHash, final NetworkType networkType) {
     ArgumentError.checkNotNull(payload);
     ArgumentError.checkNotNull(generationHash);
+    ArgumentError.checkNotNull(networkType);
 
     final Uint8List generationHashBytes = _getGenerationHashBytes(generationHash);
 
@@ -129,8 +131,9 @@ abstract class Transaction {
     final List<int> key = bytes.skip(4 + 64).take(32).toList();
     final List<int> suffix = bytes.skip(100).take(bytes.length - 100).toList();
     final Uint8List signingBytes = Uint8List.fromList(signing + key + generationHashBytes + suffix);
+    final SignSchema signSchema = NetworkType.resolveSignSchema(networkType);
 
-    final Uint8List result = Ed25519.createSha3Digest(length: 32).process(signingBytes);
+    final Uint8List result = SHA3Hasher.create(signSchema, hashSize: 32).process(signingBytes);
     final String hashHex = HexUtils.getString(result);
 
     return hashHex;
@@ -140,13 +143,13 @@ abstract class Transaction {
   /// create a new [SignedTransaction].
   ///
   /// The [generationHash] must either be an encoded hex [String] or a byte array ([Uint8List]).
-  /// TODO: Add signing schema parameter (e.g. SignSchema.SHA3)
   SignedTransaction signWith(final Account account, final dynamic generationHash) {
     final Uint8List generationHashBytes = _getGenerationHashBytes(generationHash);
+    final SignSchema signSchema = NetworkType.resolveSignSchema(account.networkType);
 
-    final KeyPair keyPairEncoded = KeyPair.fromPrivateKey(account.privateKey);
-    final String txSigned = sign(keyPairEncoded, generationHashBytes);
-    final String txHash = createHash(txSigned, generationHashBytes);
+    final KeyPair keyPairEncoded = KeyPair.fromPrivateKey(account.privateKey, signSchema);
+    final String txSigned = sign(keyPairEncoded, generationHashBytes, signSchema);
+    final String txHash = createHash(txSigned, generationHashBytes, account.networkType);
 
     return new SignedTransaction(txSigned, txHash, account.publicKey, type, networkType);
   }
@@ -155,7 +158,7 @@ abstract class Transaction {
   /// a new signed transaction payload string.
   ///
   /// The [generationHash] must either be an encoded hex [String] or a byte array ([Uint8List]).
-  String sign(final KeyPair keypair, final dynamic generationHash) {
+  String sign(final KeyPair keypair, final dynamic generationHash, final SignSchema signSchema) {
     final Uint8List bytes = this.generateBytes();
     final Uint8List generationHashBytes = _getGenerationHashBytes(generationHash);
 
@@ -164,7 +167,7 @@ abstract class Transaction {
     final Uint8List signing = Uint8List.fromList(generationHashBytes + signingSuffix);
 
     // create signature
-    final List<int> signature = KeyPair.signData(keypair, signing).toList();
+    final List<int> signature = KeyPair.signData(keypair, signing, signSchema).toList();
 
     // create transaction payload
     final List<int> tx = bytes.skip(4).take(bytes.length - 4).toList();

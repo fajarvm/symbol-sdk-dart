@@ -22,13 +22,13 @@ import 'package:test/test.dart';
 void main() {
   group('SignSchema', () {
     test('valid sign schemas', () {
-      expect(SignSchema.SHA3.value, 1);
-      expect(SignSchema.KECCAK.value, 2);
+      expect(SignSchema.KECCAK.value, 1);
+      expect(SignSchema.SHA3.value, 2);
     });
 
     test('Can retrieve valid sign schema', () {
-      expect(SignSchema.fromInt(1), SignSchema.SHA3);
-      expect(SignSchema.fromInt(2), SignSchema.KECCAK);
+      expect(SignSchema.fromInt(1), SignSchema.KECCAK);
+      expect(SignSchema.fromInt(2), SignSchema.SHA3);
     });
 
     test('Can validate sign schema and hash size combination', () {

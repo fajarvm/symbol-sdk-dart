@@ -27,14 +27,14 @@ class SignSchema {
   /// Hash size: 64 bytes / 512 bits.
   static const int HASH_SIZE_64_BYTES = 64;
 
-  /// SHA3 hash algorithm without key reversal.
-  static const SignSchema SHA3 = SignSchema._(1);
-
   /// Keccak hash algorithm without key reversal.
-  static const SignSchema KECCAK = SignSchema._(2);
+  static const SignSchema KECCAK = SignSchema._(1);
+
+  /// SHA3 hash algorithm without key reversal.
+  static const SignSchema SHA3 = SignSchema._(2);
 
   /// Supported restriction types.
-  static final List<SignSchema> values = <SignSchema>[SHA3, KECCAK];
+  static final List<SignSchema> values = <SignSchema>[KECCAK, SHA3];
 
   /// The int value of this type.
   final int value;
