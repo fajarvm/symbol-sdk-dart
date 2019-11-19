@@ -16,10 +16,11 @@
 
 library nem2_sdk_dart.sdk.model.account.account_info;
 
-import '../account/public_account.dart';
 import '../common/uint64.dart';
 import '../mosaic/mosaic.dart';
+import 'account_type.dart';
 import 'address.dart';
+import 'public_account.dart';
 
 /// The account info structure describes basic information for an account.
 class AccountInfo {
@@ -35,6 +36,9 @@ class AccountInfo {
   /// The block height when the public key was first published.
   final Uint64 publicKeyHeight;
 
+  /// The account type.
+  final AccountType accountType;
+
   /// The importance of the account.
   final Uint64 importance;
 
@@ -45,7 +49,7 @@ class AccountInfo {
   final List<Mosaic> mosaics;
 
   AccountInfo(this.address, this.addressHeight, this.publicKey, this.publicKeyHeight,
-      this.importance, this.importanceHeight, this.mosaics);
+      this.accountType, this.importance, this.importanceHeight, this.mosaics);
 
   /// Returns the public account of this account.
   PublicAccount get publicAccount => PublicAccount.fromPublicKey(publicKey, address.networkType);

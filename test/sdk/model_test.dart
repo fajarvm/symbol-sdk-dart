@@ -18,10 +18,12 @@ import 'package:test/test.dart';
 
 // account
 import 'model/account/account_info_test.dart' as account_info_test;
+import 'model/account/account_names_test.dart' as account_names_test;
 import 'model/account/account_restriction_test.dart' as account_restriction_test;
 import 'model/account/account_restrictions_info_test.dart' as account_restrictions_info_test;
 import 'model/account/account_restrictions_test.dart' as account_restrictions_test;
 import 'model/account/account_test.dart' as account_test;
+import 'model/account/account_type_test.dart' as account_type_test;
 import 'model/account/address_test.dart' as address_test;
 import 'model/account/multisig_account_graph_info_test.dart' as multisig_account_graph_info_test;
 import 'model/account/multisig_account_info_test.dart' as multisig_account_info_test;
@@ -102,11 +104,13 @@ void main() {
   // account
   group('Account:', () {
     account_info_test.main();
+    account_names_test.main();
     account_restrictions_info_test.main();
     account_restrictions_test.main();
     account_restriction_test.main();
     account_test.main();
     address_test.main();
+    account_type_test.main();
     multisig_account_graph_info_test.main();
     multisig_account_info_test.main();
     restriction_modification_type_test.main();

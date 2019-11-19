@@ -19,9 +19,11 @@ library nem2_sdk_dart.sdk.model;
 // Account
 export 'model/account/account.dart';
 export 'model/account/account_info.dart';
+export 'model/account/account_names.dart';
 export 'model/account/account_restriction.dart';
 export 'model/account/account_restrictions.dart';
 export 'model/account/account_restrictions_info.dart';
+export 'model/account/account_type.dart';
 export 'model/account/address.dart';
 export 'model/account/multisig_account_graph_info.dart';
 export 'model/account/multisig_account_info.dart';

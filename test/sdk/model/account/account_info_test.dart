@@ -19,7 +19,7 @@ library nem2_sdk_dart.test.sdk.model.account.account_info_test;
 import 'package:test/test.dart';
 
 import 'package:nem2_sdk_dart/sdk.dart'
-    show AccountInfo, Address, Mosaic, MosaicId, NetworkType, PublicAccount, Uint64;
+    show AccountInfo, AccountType, Address, Mosaic, MosaicId, NetworkType, PublicAccount, Uint64;
 
 void main() {
   group('AccountInfo', () {
@@ -32,13 +32,14 @@ void main() {
       final importance = Uint64(9000);
       final importanceHeight = Uint64(50);
       final publicKeyHeight = Uint64(100);
+      final accountType = AccountType.MAIN;
 
       final XEM_ID = Uint64.fromHex('D525AD41D95FCF29');
       final mosaics = <Mosaic>[Mosaic(MosaicId.fromId(XEM_ID), Uint64(987654321))];
 
       // Create
       final accountInfo = new AccountInfo(address, addressHeight, publicKey, publicKeyHeight,
-          importance, importanceHeight, mosaics);
+          accountType, importance, importanceHeight, mosaics);
 
       // Assert
       expect(accountInfo.address.plain, equals('SBILTA367K2LX2FEXG5TFWAS7GEFYAGY7QLFBYKC'));
