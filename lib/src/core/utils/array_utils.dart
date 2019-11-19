@@ -62,7 +62,7 @@ class ArrayUtils {
 
     final int newLength = toIndex - fromIndex;
     if (newLength < 0) {
-      new ArgumentError('$fromIndex > $toIndex');
+      throw new ArgumentError('From index is larger than to index: $fromIndex > $toIndex');
     }
     List<int> result = List<int>(newLength);
     final int toCopy = min(original.length - fromIndex, newLength);

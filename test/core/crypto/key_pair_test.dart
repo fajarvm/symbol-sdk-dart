@@ -145,22 +145,22 @@ void main() {
     test('cannot extract a public key from an invalid private key seed', () {
       // null seed
       expect(
-          () => CryptoUtils.extractPublicKey(null, null),
+          () => KeyPair.extractPublicKey(null, null),
           throwsA(predicate(
               (e) => e is ArgumentError && e.message.toString().contains('Must not be null'))));
       // null schema
       expect(
-          () => CryptoUtils.extractPublicKey(Uint8List(32), null),
+          () => KeyPair.extractPublicKey(Uint8List(32), null),
           throwsA(predicate(
               (e) => e is ArgumentError && e.message.toString().contains('Must not be null'))));
 
       // incorrect length
       expect(
-          () => CryptoUtils.extractPublicKey(Uint8List(31), CAT_SCHEMA),
+          () => KeyPair.extractPublicKey(Uint8List(31), CAT_SCHEMA),
           throwsA(predicate(
               (e) => e is ArgumentError && e.message.toString().contains('Incorrect length'))));
       expect(
-          () => CryptoUtils.extractPublicKey(Uint8List(34), CAT_SCHEMA),
+          () => KeyPair.extractPublicKey(Uint8List(34), CAT_SCHEMA),
           throwsA(predicate(
               (e) => e is ArgumentError && e.message.toString().contains('Incorrect length'))));
     });
@@ -406,6 +406,19 @@ void main() {
           () => KeyPair.deriveSharedKey(keyPair, publicKey, salt, CAT_SCHEMA),
           throwsA(predicate((e) =>
               e is ArgumentError && e.message == 'Salt has unexpected size: ${salt.length}')));
+    });
+
+    test('fails if public key has the wrong size', () {
+      // Prepare: create a public key that is too long
+      final KeyPair keyPair = KeyPair.random(CAT_SCHEMA);
+      final Uint8List publicKey = CryptoUtils.getRandomBytes(CryptoUtils.KEY_SIZE +1);
+      final Uint8List salt = CryptoUtils.getRandomBytes(SALT_SIZE);
+
+      // Assert
+      expect(
+          () => KeyPair.deriveSharedKey(keyPair, publicKey, salt, CAT_SCHEMA),
+          throwsA(predicate((e) =>
+              e is ArgumentError && e.message == 'Public key has unexpected size: ${publicKey.length}')));
     });
 
     test('derives same shared key for both partners', () {

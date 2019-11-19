@@ -113,48 +113,69 @@ void main() {
   });
 
   group('copyOfRange()', () {
-    test('can copy specified range into a new array', (){
+    test('can copy specified range into a new array', () {
       List<int> source = [4, 2, 0];
 
-      List<int>  result = ArrayUtils.copyOfRange(source, 0, 2);
+      List<int> result = ArrayUtils.copyOfRange(source, 0, 2);
       expect(result.length, 2);
       expect(result[0], 4);
       expect(result[1], 2);
     });
 
-    test('can copy specified range from a specific index', (){
+    test('can copy specified range from a specific index', () {
       List<int> source = [4, 2, 0];
-      List<int>  result = ArrayUtils.copyOfRange(source, 1, 3);
+      List<int> result = ArrayUtils.copyOfRange(source, 1, 3);
       expect(result.length, 2);
       expect(result[0], 2);
       expect(result[1], 0);
     });
+
+    test('cannot copy range at negative value index', () {
+      List<int> source = [4, 2, 0];
+      expect(
+          () => ArrayUtils.copyOfRange(source, -1, 0),
+          throwsA(predicate(
+              (e) => e is ArgumentError && e.message.toString().contains('Negative value'))));
+      expect(
+          () => ArrayUtils.copyOfRange(source, 0, -1),
+          throwsA(predicate(
+              (e) => e is ArgumentError && e.message.toString().contains('Negative value'))));
+    });
+
+    test('cannot copy range from a large to small index', () {
+      List<int> source = [4, 2, 0];
+      expect(
+          () => ArrayUtils.copyOfRange(source, 1, 0),
+          throwsA(predicate((e) =>
+              e is ArgumentError &&
+              e.message.toString().contains('From index is larger than to index'))));
+    });
   });
 
   group('isZero()', () {
-    test('can determine that an array is zero filled', (){
-      List<int> array = [0,0,0,0,0];
+    test('can determine that an array is zero filled', () {
+      List<int> array = [0, 0, 0, 0, 0];
       bool isZeroFilled = ArrayUtils.isZero(array);
       expect(isZeroFilled, isTrue);
 
-      array = [0,0,0,1];
+      array = [0, 0, 0, 1];
       isZeroFilled = ArrayUtils.isZero(array);
       expect(isZeroFilled, isFalse);
 
-      array = [null,0,0,0];
+      array = [null, 0, 0, 0];
       isZeroFilled = ArrayUtils.isZero(array);
       expect(isZeroFilled, isFalse);
     });
   });
 
   group('deepEqual()', () {
-    test('compare two arrays', (){
-      List<int> array1 = [0,0,0,0,1];
-      List<int> array2 = [0,0,0,0,1];
+    test('compare two arrays', () {
+      List<int> array1 = [0, 0, 0, 0, 1];
+      List<int> array2 = [0, 0, 0, 0, 1];
       bool isEqual = ArrayUtils.deepEqual(array1, array2);
       expect(isEqual, isTrue);
 
-      array2 = [0,0,0,1,1];
+      array2 = [0, 0, 0, 1, 1];
       isEqual = ArrayUtils.deepEqual(array1, array2);
       expect(isEqual, isFalse);
 
@@ -163,13 +184,13 @@ void main() {
       expect(isEqual, isFalse);
     });
 
-    test('compare a number of elements between ', (){
-      List<int> array1 = [0,0,0,0,1];
-      List<int> array2 = [0,0,0,0,1];
+    test('compare a number of elements between ', () {
+      List<int> array1 = [0, 0, 0, 0, 1];
+      List<int> array2 = [0, 0, 0, 0, 1];
       bool isEqual = ArrayUtils.deepEqual(array1, array2, numElementsToCompare: 2);
       expect(isEqual, isTrue);
 
-      array2 = [0,0,1,1,1];
+      array2 = [0, 0, 1, 1, 1];
       isEqual = ArrayUtils.deepEqual(array1, array2, numElementsToCompare: 2);
       expect(isEqual, isTrue);
 
