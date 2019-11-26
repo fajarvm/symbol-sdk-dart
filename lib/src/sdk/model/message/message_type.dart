@@ -14,19 +14,26 @@
 // limitations under the License.
 //
 
-library nem2_sdk_dart.sdk.model.transaction.messages.message_type;
+library nem2_sdk_dart.sdk.model.message.message_type;
 
 /// The Message type.
 class MessageType {
   static const String UNKNOWN_MESSAGE_TYPE = 'unknown message type';
 
   /// Plain text or unencrypted message.
-  static const MessageType UNENCRYPTED = MessageType._(0x00);
+  static const MessageType PLAIN_MESSAGE = MessageType._(0x00); // 0
 
   /// Secured text or encrypted message.
-  static const MessageType ENCRYPTED = MessageType._(0x01);
+  static const MessageType ENCRYPTED_MESSAGE = MessageType._(0x01); // 1
 
-  static final List<MessageType> values = <MessageType>[UNENCRYPTED, ENCRYPTED];
+  /// Persistent harvesting delegation.
+  static const MessageType PERSISTENT_HARVESTING_DELEGATION_MESSAGE = MessageType._(0xFE); // 254
+
+  static final List<MessageType> values = <MessageType>[
+    PLAIN_MESSAGE,
+    ENCRYPTED_MESSAGE,
+    PERSISTENT_HARVESTING_DELEGATION_MESSAGE
+  ];
 
   /// The int value of this type.
   final int value;

@@ -97,6 +97,7 @@ void main() {
 
     test('invalid hex strings', () {
       final List<String> INPUTS = [
+        null, // null
         'abcdef012345G789ABCDEF', // invalid ('G') char
         'abcdef0123456789ABCDE' // invalid (odd) length
       ];

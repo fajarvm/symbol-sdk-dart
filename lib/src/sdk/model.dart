@@ -48,6 +48,12 @@ export 'model/common/uint64.dart';
 // Diagnostic
 export 'model/diagnostic/server_info.dart';
 
+// Message
+export 'model/message/encrypted_message.dart';
+export 'model/message/message.dart'; // abstract class
+export 'model/message/message_type.dart';
+export 'model/message/plain_message.dart';
+
 // Mosaic
 export 'model/mosaic/mosaic.dart';
 export 'model/mosaic/mosaic_id.dart';
@@ -94,10 +100,6 @@ export 'model/receipt/transaction_statement.dart';
 // Transaction
 export 'model/transaction/deadline.dart';
 export 'model/transaction/hash_type.dart';
-export 'model/transaction/messages/message.dart'; // abstract class
-export 'model/transaction/messages/message_type.dart';
-export 'model/transaction/messages/plain_message.dart';
-export 'model/transaction/messages/secure_message.dart';
 export 'model/transaction/signed_transaction.dart';
 export 'model/transaction/transaction.dart'; // abstract class
 export 'model/transaction/transaction_info.dart';

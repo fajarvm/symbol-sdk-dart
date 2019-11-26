@@ -21,8 +21,10 @@ import 'dart:typed_data' show Uint8List;
 import 'package:nem2_sdk_dart/core.dart' show HexUtils, KeyPair, SignSchema;
 
 import '../blockchain/network_type.dart';
+import '../message/encrypted_message.dart';
 import '../transaction/signed_transaction.dart';
 import '../transaction/transaction.dart';
+
 import 'public_account.dart';
 
 /// The account structure describes an account private key, public key, address and allows
@@ -101,14 +103,25 @@ class Account {
     return transaction.signWith(this, generationHash);
   }
 
+  // TODO: implement
+
   /// Sign transaction with cosignatories creating a new SignedTransaction.
-  void signTransactionWithCosignatories() {
-    // TODO: implement
-  }
+  void signTransactionWithCosignatories() {}
 
   /// Sign aggregate signature transaction.
-  void signCosignatureTransaction() {
-    // TODO: implement
+  void signCosignatureTransaction() {}
+
+  /// Creates a new encrypted message with this account as a sender.
+  EncryptedMessage encryptMessage(final String plainTextMessage,
+      final PublicAccount recipientPublicAccount, final NetworkType networkType) {
+    return EncryptedMessage.create(
+        plainTextMessage, this.privateKey, recipientPublicAccount.publicKey, networkType);
+  }
+
+  /// Decrypts an encrypted message sent for this account.
+  String decryptMessage(final EncryptedMessage encryptedMessage,
+      final PublicAccount senderPublicAccount, final NetworkType networkType) {
+    return encryptedMessage.decrypt(this.privateKey, senderPublicAccount.publicKey, networkType);
   }
 
   @override

@@ -20,7 +20,7 @@ import 'package:nem2_sdk_dart/core.dart';
 import 'package:test/test.dart';
 
 import 'package:nem2_sdk_dart/core.dart' show CryptoException, CryptoUtils;
-import 'package:nem2_sdk_dart/sdk.dart' show Account, NetworkType;
+import 'package:nem2_sdk_dart/sdk.dart' show Account, MessageType, NetworkType;
 
 void main() {
   const testAccount = {
@@ -101,6 +101,27 @@ void main() {
       final signedData = account.signData('0xAA');
 
       expect(publicAccount.verifySignature('0xAA', signedData), isTrue);
+    });
+  });
+
+  group('Account messaging', () {
+    test('Can encrypt and decrypt a message', () {
+      final testNetwork = NetworkType.MIJIN_TEST;
+      final sender = Account.fromPrivateKey(testAccount['privateKey'], testNetwork);
+      final recipient = Account.fromPrivateKey(
+          '2602F4236B199B3DF762B2AAB46FC3B77D8DDB214F0B62538D3827576C46C108', testNetwork);
+      const plainMessage = 'Catapult rocks!';
+
+      // encrypt
+      final encryptedMessage =
+          sender.encryptMessage(plainMessage, recipient.publicAccount, testNetwork);
+      expect(encryptedMessage.type, equals(MessageType.ENCRYPTED_MESSAGE));
+      expect(encryptedMessage.payload, isNotNull);
+
+      // decrypt
+      final decryptedMessage =
+          recipient.decryptMessage(encryptedMessage, sender.publicAccount, testNetwork);
+      expect(decryptedMessage, equals(plainMessage));
     });
   });
 }

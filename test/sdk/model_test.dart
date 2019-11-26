@@ -46,6 +46,11 @@ import 'model/common/uint64_test.dart' as uint64_test;
 // diagnostic
 import 'model/diagnostic/server_info_test.dart' as server_info_test;
 
+// message
+import 'model/message/encrypted_message_test.dart' as encrypted_message_test;
+import 'model/message/message_type_test.dart' as message_type_test;
+import 'model/message/plain_message_test.dart' as plain_message_test;
+
 // mosaic
 import 'model/mosaic/mosaic_id_test.dart' as mosaic_id_test;
 import 'model/mosaic/mosaic_info_test.dart' as mosaic_info_test;
@@ -90,9 +95,6 @@ import 'model/receipt/transaction_statement_test.dart' as transaction_statement_
 // transaction
 import 'model/transaction/deadline_test.dart' as deadline_test;
 import 'model/transaction/hash_type_test.dart' as hash_type_test;
-import 'model/transaction/messages/message_type_test.dart' as message_type_test;
-import 'model/transaction/messages/plain_message_test.dart' as plain_message_test;
-import 'model/transaction/messages/secure_message_test.dart' as secure_message_test;
 import 'model/transaction/signed_transaction_test.dart' as signed_transaction_test;
 import 'model/transaction/transaction_info_test.dart' as transaction_info_test;
 import 'model/transaction/transaction_test.dart' as transaction_test;
@@ -136,6 +138,13 @@ void main() {
   // diagnostic
   group('Diagnostic models:', () {
     server_info_test.main();
+  });
+
+  // message
+  group('Message:', (){
+    message_type_test.main();
+    plain_message_test.main();
+    encrypted_message_test.main();
   });
 
   // mosaic
@@ -191,9 +200,6 @@ void main() {
   group('Transaction:', () {
     deadline_test.main();
     hash_type_test.main();
-    message_type_test.main();
-    plain_message_test.main();
-    secure_message_test.main();
     signed_transaction_test.main();
     transaction_info_test.main();
     transaction_test.main();

@@ -14,9 +14,7 @@
 // limitations under the License.
 //
 
-library nem2_sdk_dart.sdk.model.transaction.messages.plain_message;
-
-import 'dart:typed_data' show Uint8List;
+library nem2_sdk_dart.sdk.model.message.plain_message;
 
 import 'package:nem2_sdk_dart/core.dart' show HexUtils;
 
@@ -27,27 +25,28 @@ import 'message_type.dart';
 ///
 /// When sending it to the network we transform the payload to hex-string.
 class PlainMessage extends Message {
-  static final PlainMessage EMPTY_MESSAGE = new PlainMessage(text: '');
+  static final PlainMessage EMPTY_MESSAGE = PlainMessage('');
 
   // private constructor
-  PlainMessage._(Uint8List payload) : super(MessageType.UNENCRYPTED, payload);
+  PlainMessage._(String payload) : super(MessageType.PLAIN_MESSAGE, payload);
 
-  factory PlainMessage({final Uint8List bytes, final String text}) {
-    if (text == null && bytes == null) {
-      throw new ArgumentError('The message payload must not be null');
+  factory PlainMessage(final String text) {
+    ArgumentError.checkNotNull(text);
+
+    return new PlainMessage._(text);
+  }
+
+  /// Creates a plain message object containing the given [message].
+  static Message create(String message) {
+    return PlainMessage(message);
+  }
+
+  /// Creates a plain message object from [payload]. The [payload] is a hex encoded string.
+  static Message fromPayload(String payload) {
+    if (!HexUtils.isHex(payload)) {
+      throw new ArgumentError('message payload is not a valid hex string');
     }
 
-    // Bytes as the payload
-    if (bytes != null && bytes.isNotEmpty) {
-      return new PlainMessage._(bytes);
-    }
-
-    // Hex string message payload
-    if (HexUtils.isHex(text)) {
-      return new PlainMessage._(HexUtils.getBytes(text));
-    }
-
-    // Text (UTF-8) message payload
-    return new PlainMessage._(HexUtils.getBytes(HexUtils.utf8ToHex(text)));
+    return PlainMessage(HexUtils.tryHexToUtf8(payload));
   }
 }

@@ -14,9 +14,7 @@
 // limitations under the License.
 //
 
-library nem2_sdk_dart.sdk.model.transaction.messages.message;
-
-import 'dart:typed_data' show Uint8List;
+library nem2_sdk_dart.sdk.model.message.message;
 
 import 'message_type.dart';
 
@@ -26,7 +24,7 @@ abstract class Message {
   final MessageType type;
 
   /// Message payload.
-  final Uint8List payload;
+  final String payload;
 
   Message(this.type, this.payload);
 }

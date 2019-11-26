@@ -14,21 +14,24 @@
 // limitations under the License.
 //
 
-library nem2_sdk_dart.test.sdk.model.transaction.messages.message_type_test;
+library nem2_sdk_dart.test.sdk.model.message.message_type_test;
+
+import 'package:test/test.dart';
 
 import 'package:nem2_sdk_dart/sdk.dart' show MessageType;
-import 'package:test/test.dart';
 
 void main() {
   group('MessageType', () {
     test('valid message types', () {
-      expect(MessageType.UNENCRYPTED.value, 0x00);
-      expect(MessageType.ENCRYPTED.value, 0x01);
+      expect(MessageType.PLAIN_MESSAGE.value, 0x00);
+      expect(MessageType.ENCRYPTED_MESSAGE.value, 0x01);
+      expect(MessageType.PERSISTENT_HARVESTING_DELEGATION_MESSAGE.value, 0xFE);
     });
 
     test('Can retrieve valid message types', () {
-      expect(MessageType.getType(0), MessageType.UNENCRYPTED);
-      expect(MessageType.getType(1), MessageType.ENCRYPTED);
+      expect(MessageType.getType(0), MessageType.PLAIN_MESSAGE);
+      expect(MessageType.getType(1), MessageType.ENCRYPTED_MESSAGE);
+      expect(MessageType.getType(254), MessageType.PERSISTENT_HARVESTING_DELEGATION_MESSAGE);
     });
 
     test('Trying to retrieve an invalid message type will throw an error', () {
