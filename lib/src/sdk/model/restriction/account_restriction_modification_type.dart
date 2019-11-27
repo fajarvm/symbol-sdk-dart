@@ -14,32 +14,32 @@
 // limitations under the License.
 //
 
-library nem2_sdk_dart.sdk.model.account.restriction_modification_type;
+library nem2_sdk_dart.sdk.model.restriction.account_restriction_modification_type;
 
-/// The type of modification to a restriction type.
-class RestrictionModificationType {
+/// Account restriction modification type.
+class AccountRestrictionModificationAction {
   static const String UNKNOWN_RESTRICTION_MODIFICATION_TYPE =
       'unknown restriction modification type';
 
   /// Addition.
-  static const RestrictionModificationType ADD = RestrictionModificationType._(0x00);
+  static const AccountRestrictionModificationAction ADD = AccountRestrictionModificationAction._(0x00);
 
   /// Deletion.
-  static const RestrictionModificationType DEL = RestrictionModificationType._(0x01);
+  static const AccountRestrictionModificationAction REMOVE = AccountRestrictionModificationAction._(0x01);
 
-  static final List<RestrictionModificationType> values = <RestrictionModificationType>[ADD, DEL];
+  static final List<AccountRestrictionModificationAction> values = <AccountRestrictionModificationAction>[ADD, REMOVE];
 
   /// The int value of this type.
   final int value;
 
   // constant constructor: makes this class available on runtime.
   // emulates an enum class with a value.
-  const RestrictionModificationType._(this.value);
+  const AccountRestrictionModificationAction._(this.value);
 
-  /// Returns a [RestrictionModificationType] for the given int value.
+  /// Returns a [AccountRestrictionModificationAction] for the given int value.
   ///
   /// Throws an error when the type is unknown.
-  static RestrictionModificationType fromInt(final int value) {
+  static AccountRestrictionModificationAction fromInt(final int value) {
     for (var type in values) {
       if (type.value == value) {
         return type;

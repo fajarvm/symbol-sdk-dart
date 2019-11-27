@@ -14,33 +14,33 @@
 // limitations under the License.
 //
 
-library nem2_sdk_dart.test.sdk.model.account.restriction_modificatoin_type_test;
+library nem2_sdk_dart.test.sdk.model.restriction.account_restriction_modification_type_test;
 
-import 'package:nem2_sdk_dart/sdk.dart' show RestrictionModificationType;
+import 'package:nem2_sdk_dart/sdk.dart' show AccountRestrictionModificationAction;
 import 'package:test/test.dart';
 
 void main() {
-  group('RestrictionModificationType', () {
+  group('AccountRestrictionModificationType', () {
     test('valid types', () {
-      expect(RestrictionModificationType.ADD.value, 0x00);
-      expect(RestrictionModificationType.DEL.value, 0x01);
+      expect(AccountRestrictionModificationAction.ADD.value, 0x00);
+      expect(AccountRestrictionModificationAction.REMOVE.value, 0x01);
     });
 
     test('Can retrieve a valid restriction modification type', () {
       // Account filters
-      expect(RestrictionModificationType.fromInt(0x00), RestrictionModificationType.ADD);
-      expect(RestrictionModificationType.fromInt(0x01), RestrictionModificationType.DEL);
+      expect(AccountRestrictionModificationAction.fromInt(0x00), AccountRestrictionModificationAction.ADD);
+      expect(AccountRestrictionModificationAction.fromInt(0x01), AccountRestrictionModificationAction.REMOVE);
     });
 
     test('Trying to retrieve an invalid restriction type will throw an error', () {
-      String errorMessage = RestrictionModificationType.UNKNOWN_RESTRICTION_MODIFICATION_TYPE;
+      String errorMessage = AccountRestrictionModificationAction.UNKNOWN_RESTRICTION_MODIFICATION_TYPE;
       expect(errorMessage, equals('unknown restriction modification type'));
 
-      expect(() => RestrictionModificationType.fromInt(null),
+      expect(() => AccountRestrictionModificationAction.fromInt(null),
           throwsA(predicate((e) => e is ArgumentError && e.message == errorMessage)));
-      expect(() => RestrictionModificationType.fromInt(-1),
+      expect(() => AccountRestrictionModificationAction.fromInt(-1),
           throwsA(predicate((e) => e is ArgumentError && e.message == errorMessage)));
-      expect(() => RestrictionModificationType.fromInt(2),
+      expect(() => AccountRestrictionModificationAction.fromInt(2),
           throwsA(predicate((e) => e is ArgumentError && e.message == errorMessage)));
     });
   });

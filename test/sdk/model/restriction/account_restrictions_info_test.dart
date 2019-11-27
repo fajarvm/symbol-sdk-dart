@@ -14,10 +14,10 @@
 // limitations under the License.
 //
 
-library nem2_sdk_dart.test.sdk.model.account.account_restrictions_info_test;
+library nem2_sdk_dart.test.sdk.model.restriction.account_restrictions_info_test;
 
 import 'package:nem2_sdk_dart/sdk.dart'
-    show AccountRestriction, AccountRestrictions, AccountRestrictionsInfo, Address, RestrictionType;
+    show AccountRestriction, AccountRestrictions, AccountRestrictionsInfo, Address, AccountRestrictionType;
 import 'package:test/test.dart';
 
 void main() {
@@ -26,7 +26,7 @@ void main() {
       const metaId = '12345';
       final address = Address.fromEncoded('9050B9837EFAB4BBE8A4B9BB32D812F9885C00D8FC1650E142');
       final accountRestriction = new AccountRestriction(
-          RestrictionType.ALLOW_ADDRESS, ['SDUP5PLHDXKBX3UU5Q52LAY4WYEKGEWC6IB3VBFM']);
+          AccountRestrictionType.ADDRESS, ['SDUP5PLHDXKBX3UU5Q52LAY4WYEKGEWC6IB3VBFM']);
       final accountRestrictions = new AccountRestrictions(address, [accountRestriction]);
 
       // create
@@ -37,7 +37,7 @@ void main() {
       expect(accountRestrictionsInfo.accountRestrictions.address, equals(address));
       expect(accountRestrictionsInfo.accountRestrictions.restrictions.length, 1);
       expect(accountRestrictionsInfo.accountRestrictions.restrictions[0].restrictionType,
-          RestrictionType.ALLOW_ADDRESS);
+          AccountRestrictionType.ADDRESS);
     });
   });
 }

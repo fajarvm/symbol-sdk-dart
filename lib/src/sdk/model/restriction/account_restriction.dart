@@ -14,18 +14,17 @@
 // limitations under the License.
 //
 
-library nem2_sdk_dart.sdk.model.account.account_restrictions;
+library nem2_sdk_dart.sdk.model.restriction.account_restriction;
 
-import 'account_restriction.dart';
-import 'address.dart';
+import 'account_restriction_type.dart';
 
-/// Account restrictions structure describes restriction information for an account.
-class AccountRestrictions {
-  /// Account address.
-  final Address address;
+/// Account restriction structure describes restriction information.
+class AccountRestriction {
+  /// Account restriction type.
+  final AccountRestrictionType restrictionType;
 
-  /// Account restrictions.
-  final List<AccountRestriction> restrictions;
+  /// Restriction values.
+  final List<Object> values;
 
-  AccountRestrictions(this.address, this.restrictions);
+  AccountRestriction(this.restrictionType, this.values);
 }

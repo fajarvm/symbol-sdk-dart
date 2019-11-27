@@ -14,7 +14,7 @@
 // limitations under the License.
 //
 
-library nem2_sdk_dart.sdk.model.account.account_restrictions_info;
+library nem2_sdk_dart.sdk.model.restriction.account_restrictions_info;
 
 import 'account_restrictions.dart';
 

@@ -14,27 +14,27 @@
 // limitations under the License.
 //
 
-library nem2_sdk_dart.test.sdk.model.account.account_restriction_test;
+library nem2_sdk_dart.test.sdk.model.restriction.account_restriction_test;
 
 import 'package:test/test.dart';
 
 import 'package:nem2_sdk_dart/core.dart' show ArrayUtils;
 import 'package:nem2_sdk_dart/sdk.dart'
-    show AccountRestriction, RestrictionModificationType, RestrictionType;
+    show AccountRestriction, AccountRestrictionModificationAction, AccountRestrictionType;
 
 void main() {
   group('AccountRestriction', () {
     test('Can create an AccountRestriction object', () {
       const values = [
         {
-          'modificationType': RestrictionModificationType.ADD,
+          'modificationType': AccountRestrictionModificationAction.ADD,
           'value': 'SDUP5PLHDXKBX3UU5Q52LAY4WYEKGEWC6IB3VBFM'
         }
       ];
-      final accountRestriction = new AccountRestriction(RestrictionType.ALLOW_ADDRESS, values);
+      final accountRestriction = new AccountRestriction(AccountRestrictionType.ADDRESS, values);
 
       // Assert
-      expect(accountRestriction.restrictionType, equals(RestrictionType.ALLOW_ADDRESS));
+      expect(accountRestriction.restrictionType, equals(AccountRestrictionType.ADDRESS));
       expect(accountRestriction.values.length, equals(values.length));
       expect(ArrayUtils.deepEqual(accountRestriction.values, values), isTrue);
     });

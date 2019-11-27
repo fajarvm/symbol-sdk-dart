@@ -20,16 +20,11 @@ library nem2_sdk_dart.sdk.model;
 export 'model/account/account.dart';
 export 'model/account/account_info.dart';
 export 'model/account/account_names.dart';
-export 'model/account/account_restriction.dart';
-export 'model/account/account_restrictions.dart';
-export 'model/account/account_restrictions_info.dart';
 export 'model/account/account_type.dart';
 export 'model/account/address.dart';
 export 'model/account/multisig_account_graph_info.dart';
 export 'model/account/multisig_account_info.dart';
 export 'model/account/public_account.dart';
-export 'model/account/restriction_modification_type.dart';
-export 'model/account/restriction_type.dart';
 
 // Blockchain
 export 'model/blockchain/block_info.dart';
@@ -96,6 +91,14 @@ export 'model/receipt/resolution_statement.dart';
 export 'model/receipt/resolution_type.dart';
 export 'model/receipt/statement.dart';
 export 'model/receipt/transaction_statement.dart';
+
+// Restriction
+export 'model/restriction/account_restriction.dart';
+export 'model/restriction/account_restriction_flags.dart';
+export 'model/restriction/account_restriction_modification_type.dart';
+export 'model/restriction/account_restriction_type.dart';
+export 'model/restriction/account_restrictions.dart';
+export 'model/restriction/account_restrictions_info.dart';
 
 // Transaction
 export 'model/transaction/deadline.dart';

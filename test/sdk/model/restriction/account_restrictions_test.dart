@@ -14,7 +14,7 @@
 // limitations under the License.
 //
 
-library nem2_sdk_dart.test.sdk.model.account.account_restrictions_test;
+library nem2_sdk_dart.test.sdk.model.restriction.account_restrictions_test;
 
 import 'package:test/test.dart';
 
@@ -24,16 +24,16 @@ import 'package:nem2_sdk_dart/sdk.dart'
         AccountRestriction,
         AccountRestrictions,
         Address,
-        RestrictionModificationType,
-        RestrictionType;
+        AccountRestrictionModificationAction,
+        AccountRestrictionType;
 
 void main() {
   group('AccountRestrictions', () {
     test('Can create an AccountRestrictions object', () {
       final address = Address.fromEncoded('9050B9837EFAB4BBE8A4B9BB32D812F9885C00D8FC1650E142');
-      final restriction = new AccountRestriction(RestrictionType.ALLOW_ADDRESS, [
+      final restriction = new AccountRestriction(AccountRestrictionType.ADDRESS, [
         {
-          'modificationType': RestrictionModificationType.ADD,
+          'modificationType': AccountRestrictionModificationAction.ADD,
           'value': 'SDUP5PLHDXKBX3UU5Q52LAY4WYEKGEWC6IB3VBFM',
         }
       ]);
