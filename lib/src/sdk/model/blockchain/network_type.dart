@@ -57,12 +57,19 @@ class NetworkType {
     throw new ArgumentError(UNKNOWN_NETWORK_TYPE);
   }
 
+  /// Checks if the given [networkType] is valid.
+  ///
+  /// Throws an error if network type is invalid and when the parameter [throwError] is set to true.
+  static bool isValid(final NetworkType networkType, [final bool throwError = false]) {
+    return NetworkType.isValidValue(networkType.value, throwError);
+  }
+
   /// Checks if the given int value is of a valid network type.
   ///
-  /// Throws an error if when the parameter [throwError] is set to true.
-  static bool isValid(final int networkType, [final bool throwError = false]) {
+  /// Throws an error if network type is invalid and when the parameter [throwError] is set to true.
+  static bool isValidValue(final int networkTypeInt, [final bool throwError = false]) {
     try {
-      if (fromInt(networkType) != null) {
+      if (fromInt(networkTypeInt) != null) {
         return true;
       }
     } catch (e) {
@@ -77,7 +84,14 @@ class NetworkType {
   }
 
   /// Resolve signature schema from given network type.
-  static SignSchema resolveSignSchema(final NetworkType networkType) {
+  ///
+  /// Throws an error if network type is invalid and when the parameter [throwError] is set to true.
+  static SignSchema resolveSignSchema(final NetworkType networkType,
+      [final bool throwError = false]) {
+    if (throwError) {
+      ArgumentError.checkNotNull(networkType);
+    }
+
     if (NetworkType.MAIN_NET == networkType || NetworkType.TEST_NET == networkType) {
       return SignSchema.KECCAK;
     }

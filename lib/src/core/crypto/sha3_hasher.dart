@@ -26,6 +26,9 @@ import 'sign_schema.dart';
 /// This class creates a cryptographic SHA-3 / Keccak hasher based on the given [SignSchema]
 /// and hash size (32 byte or 256-bit, 64 byte or 512-bit).
 class SHA3Hasher {
+  // private constructor
+  const SHA3Hasher._();
+
   /// Creates and validates the correct SHA-3 hasher for the given [signSchema] and [hashSize].
   ///
   /// Default value for [hashSize] is 64 bytes. Acceptable [hashSize] is either 32 or 64 bytes.

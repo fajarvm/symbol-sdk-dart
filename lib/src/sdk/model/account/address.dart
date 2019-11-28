@@ -18,20 +18,12 @@ library nem2_sdk_dart.sdk.model.account.address;
 
 import 'dart:typed_data' show Uint8List;
 
-import 'package:nem2_sdk_dart/core.dart' show ArrayUtils, Base32, CryptoUtils, HexUtils, SHA3DigestNist;
-import 'package:pointycastle/export.dart' show RIPEMD160Digest;
+import 'package:nem2_sdk_dart/core.dart' show HexUtils, RawAddress;
 
 import '../blockchain/network_type.dart';
 
 /// The address structure describes an address with its network.
 class Address {
-  static const int RIPEMD_160_SIZE = 20;
-  static const int ADDRESS_DECODED_SIZE = 25;
-  static const int ADDRESS_ENCODED_SIZE = 40;
-  static const int KEY_SIZE = 32;
-  static const int CHECKSUM_SIZE = 4;
-  static const int START_CHECKSUM_SIZE = 21; // ADDRESS_DECODED_SIZE - CHECKSUM_SIZE
-
   static const String PREFIX_MIJIN_TEST = 'S';
   static const String PREFIX_MIJIN = 'M';
   static const String PREFIX_TEST_NET = 'T';
@@ -50,12 +42,17 @@ class Address {
   // private constructor
   const Address._(this.address, this.networkType);
 
-  /// Get the address in plain format.
+  /// Get the address in an encoded format.
+  ///
+  /// For example: 9085215E4620D383C2DF70235B9EF7607F6A28EF6D16FD7B9C
+  String get encoded => HexUtils.getString(RawAddress.stringToAddress(address));
+
+  /// Get the address in a plain format.
   ///
   /// For example: SB3KUBHATFCPV7UZQLWAQ2EUR6SIHBSBEOEDDDF3.
   String get plain => address;
 
-  /// Get address in pretty format.
+  /// Get address in a pretty format.
   ///
   /// For example: SB3KUB-HATFCP-V7UZQL-WAQ2EU-R6SIHB-SBEOED-DDF3.
   String get pretty => prettify(address);
@@ -74,16 +71,16 @@ class Address {
   /// Creates an [Address] from a given [publicKey] string for the given [networkType].
   static Address fromPublicKey(final String publicKey, final NetworkType networkType) {
     ArgumentError.checkNotNull(networkType);
-    NetworkType.isValid(networkType.value, true);
+    NetworkType.isValid(networkType, true);
 
     final Uint8List publicKeyByte = HexUtils.getBytes(publicKey);
-    final Uint8List addressByte = publicKeyToAddress(publicKeyByte, networkType);
-    final String addressString = addressToString(addressByte);
+    final Uint8List addressByte = RawAddress.publicKeyToAddress(publicKeyByte, networkType);
+    final String addressString = RawAddress.addressToString(addressByte);
 
     return new Address._(addressString, networkType);
   }
 
-  /// Creates an [Address] from a given string of [rawAddress].
+  /// Creates an [Address] from a given [rawAddress] string.
   ///
   /// A raw address string looks like:
   /// SB3KUBHATFCPV7UZQLWAQ2EUR6SIHBSBEOEDDDF3 or SB3KUB-HATFCP-V7UZQL-WAQ2EU-R6SIHB-SBEOED-DDF3.
@@ -91,9 +88,9 @@ class Address {
     final String networkIdentifier =
         rawAddress.trim().toUpperCase().replaceAll(REGEX_DASH, EMPTY_STRING);
 
-    if (networkIdentifier.length != ADDRESS_ENCODED_SIZE) {
+    if (networkIdentifier.length != RawAddress.ADDRESS_ENCODED_SIZE) {
       throw new ArgumentError(
-          'Address $networkIdentifier has to be $ADDRESS_ENCODED_SIZE characters long');
+          'Address $networkIdentifier has to be ${RawAddress.ADDRESS_ENCODED_SIZE} characters long');
     }
 
     switch (networkIdentifier[0]) {
@@ -112,68 +109,8 @@ class Address {
 
   /// Create an [Address] from the given [encoded] address.
   static Address fromEncoded(final String encoded) {
-    final String rawAddress = addressToString(HexUtils.getBytes(encoded));
+    final String rawAddress = RawAddress.addressToString(HexUtils.getBytes(encoded));
     return Address.fromRawAddress(rawAddress);
-  }
-
-  /// Converts a `Base32` [encodedAddress] string to decoded address bytes.
-  static Uint8List stringToAddress(final String encodedAddress) {
-    if (ADDRESS_ENCODED_SIZE != encodedAddress.length) {
-      throw ArgumentError(
-          'The encoded address $encodedAddress does not represent a valid encoded address');
-    }
-
-    return Base32.decode(encodedAddress);
-  }
-
-  /// Converts a [decodedAddress] bytes to a `Base32` encoded address string.
-  static String addressToString(final Uint8List decodedAddress) {
-    final String hexAddress = HexUtils.getString(decodedAddress);
-    if (ADDRESS_DECODED_SIZE != decodedAddress.length) {
-      throw ArgumentError('The Address $hexAddress does not represent a valid decoded address');
-    }
-
-    return Base32.encode(decodedAddress);
-  }
-
-  /// Converts a [publicKey] to decoded address byte for a specific [networkType].
-  static Uint8List publicKeyToAddress(final Uint8List publicKey, final NetworkType networkType) {
-    // Step 1: create a SHA3-256 hash of the public key
-    final SHA3DigestNist digest = CryptoUtils.createSha3Digest(length: CryptoUtils.KEY_SIZE);
-    final Uint8List stepOne = new Uint8List(KEY_SIZE);
-    digest.update(publicKey, 0, KEY_SIZE);
-    digest.doFinal(stepOne, 0);
-
-    // Step 2: perform a RIPEMD160 on previous step
-    final RIPEMD160Digest rm160Digest = new RIPEMD160Digest();
-    final Uint8List stepTwo = new Uint8List(RIPEMD_160_SIZE);
-    rm160Digest.update(stepOne, 0, KEY_SIZE);
-    rm160Digest.doFinal(stepTwo, 0);
-
-    // Step 3: prepend network type
-    final Uint8List decodedAddress = new Uint8List(ADDRESS_DECODED_SIZE);
-    decodedAddress[0] = networkType.value;
-    ArrayUtils.copy(decodedAddress, stepTwo, numOfElements: RIPEMD_160_SIZE, destOffset: 1);
-
-    // Step 4: perform SHA3-256 on previous step
-    final Uint8List stepFour = new Uint8List(KEY_SIZE);
-    const int rm160Length = RIPEMD_160_SIZE + 1;
-    digest.update(decodedAddress, 0, rm160Length);
-    digest.doFinal(stepFour, 0);
-
-    // Step 5: retrieve checksum
-    final Uint8List stepFive = new Uint8List(CHECKSUM_SIZE);
-    ArrayUtils.copy(stepFive, stepFour, numOfElements: CHECKSUM_SIZE);
-
-    // Step 6: append stepFive to result of stepThree
-    final Uint8List stepSix = new Uint8List(ADDRESS_DECODED_SIZE);
-    ArrayUtils.copy(stepSix, decodedAddress, numOfElements: rm160Length);
-    ArrayUtils.copy(stepSix, stepFive, numOfElements: CHECKSUM_SIZE, destOffset: rm160Length);
-
-    // Step 7: return base 32 encoded address
-    // String base32EncodedAddress = Base32.encode(stepSix);
-
-    return stepSix;
   }
 
   /// Converts an [address] String into a more readable/pretty format.
@@ -181,8 +118,9 @@ class Address {
   /// Before: SB3KUBHATFCPV7UZQLWAQ2EUR6SIHBSBEOEDDDF3
   /// After: SB3KUB-HATFCP-V7UZQL-WAQ2EU-R6SIHB-SBEOED-DDF3
   static String prettify(final String address) {
-    if (address.length != ADDRESS_ENCODED_SIZE) {
-      throw new ArgumentError('Address $address has to be $ADDRESS_ENCODED_SIZE characters long');
+    if (address.length != RawAddress.ADDRESS_ENCODED_SIZE) {
+      throw new ArgumentError(
+          'Address $address has to be ${RawAddress.ADDRESS_ENCODED_SIZE} characters long');
     }
 
     final StringBuffer sb = new StringBuffer();
@@ -200,23 +138,25 @@ class Address {
     return sb.toString();
   }
 
-  /// Determines the validity of the given [decodedAddress].
-  static bool isValidAddress(final Uint8List decodedAddress) {
-    final SHA3DigestNist digest = CryptoUtils.createSha3Digest(length: CryptoUtils.KEY_SIZE);
-    final Uint8List hash = digest.process(decodedAddress.sublist(0, START_CHECKSUM_SIZE));
-    final Uint8List checksum = hash.buffer.asUint8List(0, CHECKSUM_SIZE);
-    return ArrayUtils.deepEqual(checksum, decodedAddress.sublist(START_CHECKSUM_SIZE));
-  }
-
-  /// Determines the validity of the given [encodedAddress].
-  static bool isValidEncodedAddress(final String encodedAddress) {
-    if (ADDRESS_ENCODED_SIZE != encodedAddress.length) {
+  /// Determines the validity of the given [rawAddress] for a specific [networkType].
+  ///
+  /// An example of a raw address string is: SCHCZBZ6QVJAHGJTKYVPW5FBSO2IXXJQBPV5XE6P
+  static bool isValidRawAddress(final String rawAddress, final NetworkType networkType) {
+    try {
+      final Uint8List decoded = RawAddress.stringToAddress(rawAddress);
+      return RawAddress.isValidAddress(decoded, networkType);
+    } catch (e) {
       return false;
     }
+  }
 
+  /// Determines the validity of the given [encodedAddress] for a specific [networkType].
+  ///
+  /// An example of an encoded address string is: 9085215E4620D383C2DF70235B9EF7607F6A28EF6D16FD7B9C
+  static bool isValidEncodedAddress(final String encodedAddress, final NetworkType networkType) {
     try {
-      final Uint8List decoded = stringToAddress(encodedAddress);
-      return isValidAddress(decoded);
+      final Uint8List decoded = HexUtils.getBytes(encodedAddress);
+      return RawAddress.isValidAddress(decoded, networkType);
     } catch (e) {
       return false;
     }

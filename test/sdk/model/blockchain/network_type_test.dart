@@ -60,25 +60,25 @@ void main() {
     });
 
     test('Can identify that a network tye is valid/supported', () {
-      expect(NetworkType.isValid(NetworkType.MAIN_NET.value), isTrue);
-      expect(NetworkType.isValid(0x68), isTrue);
-      expect(NetworkType.isValid(104), isTrue);
-      expect(NetworkType.isValid(NetworkType.TEST_NET.value), isTrue);
-      expect(NetworkType.isValid(0x98), isTrue);
-      expect(NetworkType.isValid(152), isTrue);
-      expect(NetworkType.isValid(NetworkType.MIJIN.value), isTrue);
-      expect(NetworkType.isValid(0x60), isTrue);
-      expect(NetworkType.isValid(96), isTrue);
-      expect(NetworkType.isValid(NetworkType.MIJIN_TEST.value), isTrue);
-      expect(NetworkType.isValid(0x90), isTrue);
-      expect(NetworkType.isValid(144), isTrue);
+      expect(NetworkType.isValid(NetworkType.MAIN_NET), isTrue);
+      expect(NetworkType.isValidValue(0x68), isTrue);
+      expect(NetworkType.isValidValue(104), isTrue);
+      expect(NetworkType.isValid(NetworkType.TEST_NET), isTrue);
+      expect(NetworkType.isValidValue(0x98), isTrue);
+      expect(NetworkType.isValidValue(152), isTrue);
+      expect(NetworkType.isValid(NetworkType.MIJIN), isTrue);
+      expect(NetworkType.isValidValue(0x60), isTrue);
+      expect(NetworkType.isValidValue(96), isTrue);
+      expect(NetworkType.isValid(NetworkType.MIJIN_TEST), isTrue);
+      expect(NetworkType.isValidValue(0x90), isTrue);
+      expect(NetworkType.isValidValue(144), isTrue);
     });
 
     test('Can identify that a network tye is invalid or is unknown', () {
-      expect(NetworkType.isValid(0), isFalse);
-      expect(NetworkType.isValid(0x00), isFalse);
-      expect(NetworkType.isValid(0xFF), isFalse);
-      expect(NetworkType.isValid(103), isFalse);
+      expect(NetworkType.isValidValue(0), isFalse);
+      expect(NetworkType.isValidValue(0x00), isFalse);
+      expect(NetworkType.isValidValue(0xFF), isFalse);
+      expect(NetworkType.isValidValue(103), isFalse);
     });
 
     test('Can resolve sign schema for the given network type', () {
@@ -86,6 +86,11 @@ void main() {
       expect(NetworkType.resolveSignSchema(NetworkType.TEST_NET), equals(SignSchema.KECCAK));
       expect(NetworkType.resolveSignSchema(NetworkType.MIJIN), equals(SignSchema.SHA3));
       expect(NetworkType.resolveSignSchema(NetworkType.MIJIN_TEST), equals(SignSchema.SHA3));
+    });
+
+    test('Failed to resolve sign schema for the given network type should throw an error', () {
+      expect(() => NetworkType.resolveSignSchema(null, true),
+          throwsA(predicate((e) => e is ArgumentError && e.message.contains('Must not be null'))));
     });
   });
 }

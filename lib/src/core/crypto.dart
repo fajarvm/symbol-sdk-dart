@@ -22,6 +22,7 @@ export 'crypto/crypto_exception.dart';
 // implementations
 export 'crypto/crypto_utils.dart';
 export 'crypto/key_pair.dart';
+export 'crypto/raw_address.dart';
 export 'crypto/sha3_hasher.dart';
 export 'crypto/sha3nist.dart';
 export 'crypto/sign_schema.dart';

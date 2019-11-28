@@ -45,6 +45,9 @@ class Account {
   /// The private key string of this account.
   String get privateKey => HexUtils.getString(keyPair.privateKey);
 
+  /// The encoded address of this account.
+  String get encodedAddress => publicAccount.address.encoded;
+
   /// The plain text address of this account.
   String get plainAddress => publicAccount.address.plain;
 

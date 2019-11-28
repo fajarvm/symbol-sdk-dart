@@ -28,6 +28,9 @@ import 'package:fixnum/fixnum.dart';
 
 /// This class contains a selected collection of TweetNaCl cryptographic related operations.
 class TweetNaclFast {
+  // private constructor
+  const TweetNaclFast._();
+
   // public static vars
   static var secureRandom = Random.secure();
   static final Int64List K = Int64List.fromList([

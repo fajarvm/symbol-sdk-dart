@@ -106,7 +106,7 @@ void main() {
 
   group('Account messaging', () {
     test('Can encrypt and decrypt a message', () {
-      final testNetwork = NetworkType.MIJIN_TEST;
+      const testNetwork = NetworkType.MIJIN_TEST;
       final sender = Account.fromPrivateKey(testAccount['privateKey'], testNetwork);
       final recipient = Account.fromPrivateKey(
           '2602F4236B199B3DF762B2AAB46FC3B77D8DDB214F0B62538D3827576C46C108', testNetwork);
