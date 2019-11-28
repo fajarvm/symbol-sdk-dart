@@ -3,8 +3,8 @@ dart:
   - '2.6.1'
 notifications: {email: false}
 install:
-  - pub global activate coveralls
-  - pub global activate coverage
+  - pub global activate coveralls 5.6.0
+  - pub global activate coverage 0.13.3
 script:
   - set -e
   - pub get
