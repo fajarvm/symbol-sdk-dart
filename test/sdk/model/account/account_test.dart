@@ -121,7 +121,8 @@ void main() {
       // decrypt
       final decryptedMessage =
           recipient.decryptMessage(encryptedMessage, sender.publicAccount, testNetwork);
-      expect(decryptedMessage, equals(plainMessage));
+      expect(decryptedMessage.type, equals(MessageType.PLAIN_MESSAGE));
+      expect(decryptedMessage.payload, equals(plainMessage));
     });
   });
 }

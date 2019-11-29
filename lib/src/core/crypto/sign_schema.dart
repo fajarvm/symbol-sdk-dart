@@ -67,4 +67,9 @@ class SignSchema {
     return values.contains(signSchema) &&
         (HASH_SIZE_32_BYTES == hashSize || HASH_SIZE_64_BYTES == hashSize);
   }
+
+  @override
+  String toString() {
+    return 'SignSchema{value: $value}';
+  }
 }

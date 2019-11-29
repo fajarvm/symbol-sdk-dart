@@ -14,20 +14,9 @@
 // limitations under the License.
 //
 
-library nem2_sdk_dart.sdk.model.diagnostic.server_info;
+library nem2_sdk_dart.sdk.model.message.message_marker;
 
-/// Describes technical information of the server.
-class ServerInfo {
-  /// The version of the REST API that this server is using.
-  final String restVersion;
-
-  /// The version of the SDK that this server is using.
-  final String sdkVersion;
-
-  ServerInfo(this.restVersion, this.sdkVersion);
-
-  @override
-  String toString() {
-    return 'ServerInfo{restVersion: $restVersion, sdkVersion: $sdkVersion}';
-  }
+class MessageMarker {
+  /// 8-byte marker: FE CC 71 C7 64 BF E5 98 for PersistentDelegationRequestTransaction message
+  static const String PERSISTENT_DELEGATION_UNLOCK = 'FECC71C764BFE598';
 }

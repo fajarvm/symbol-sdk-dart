@@ -36,4 +36,9 @@ class Alias {
   final MosaicId mosaicId;
 
   Alias._(this.type, [this.address, this.mosaicId]);
+
+  @override
+  String toString() {
+    return 'Alias{type: $type, address: $address, mosaicId: $mosaicId}';
+  }
 }

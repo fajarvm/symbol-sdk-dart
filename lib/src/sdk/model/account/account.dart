@@ -22,6 +22,7 @@ import 'package:nem2_sdk_dart/core.dart' show HexUtils, KeyPair, SignSchema;
 
 import '../blockchain/network_type.dart';
 import '../message/encrypted_message.dart';
+import '../message/plain_message.dart';
 import '../transaction/signed_transaction.dart';
 import '../transaction/transaction.dart';
 
@@ -89,6 +90,20 @@ class Account {
     return fromPrivateKey(HexUtils.getString(random.privateKey), networkType);
   }
 
+  /// Creates a new encrypted message with this account as a sender.
+  EncryptedMessage encryptMessage(final String plainTextMessage,
+      final PublicAccount recipientPublicAccount, final NetworkType networkType) {
+    return EncryptedMessage.create(
+        plainTextMessage, this.privateKey, recipientPublicAccount.publicKey, networkType);
+  }
+
+  /// Decrypts an encrypted message sent for this account.
+  PlainMessage decryptMessage(final EncryptedMessage encryptedMessage,
+      final PublicAccount senderPublicAccount, final NetworkType networkType) {
+    return EncryptedMessage.decrypt(
+        encryptedMessage, this.privateKey, senderPublicAccount.publicKey, networkType);
+  }
+
   /// Signs raw data.
   String signData(final String rawData) {
     final String hex = HexUtils.utf8ToHex(rawData);
@@ -114,18 +129,6 @@ class Account {
   /// Sign aggregate signature transaction.
   void signCosignatureTransaction() {}
 
-  /// Creates a new encrypted message with this account as a sender.
-  EncryptedMessage encryptMessage(final String plainTextMessage,
-      final PublicAccount recipientPublicAccount, final NetworkType networkType) {
-    return EncryptedMessage.create(
-        plainTextMessage, this.privateKey, recipientPublicAccount.publicKey, networkType);
-  }
-
-  /// Decrypts an encrypted message sent for this account.
-  String decryptMessage(final EncryptedMessage encryptedMessage,
-      final PublicAccount senderPublicAccount, final NetworkType networkType) {
-    return encryptedMessage.decrypt(this.privateKey, senderPublicAccount.publicKey, networkType);
-  }
 
   @override
   String toString() {

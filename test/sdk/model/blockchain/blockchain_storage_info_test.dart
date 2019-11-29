@@ -25,9 +25,9 @@ void main() {
     test('Can create a BlockchainStorageInfo object', () {
       final blockchainStorageInfo = BlockchainStorageInfo(1, 2, 3);
 
-      expect(blockchainStorageInfo.numAccounts, 1);
-      expect(blockchainStorageInfo.numBlocks, 2);
-      expect(blockchainStorageInfo.numTransactions, 3);
+      expect(blockchainStorageInfo.numBlocks, 1);
+      expect(blockchainStorageInfo.numTransactions, 2);
+      expect(blockchainStorageInfo.numAccounts, 3);
     });
   });
 }

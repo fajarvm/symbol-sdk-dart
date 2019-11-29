@@ -48,4 +48,9 @@ class RoleType {
 
     throw new ArgumentError(UNKNOWN_ROLE_TYPE);
   }
+
+  @override
+  String toString() {
+    return 'RoleType{value: $value}';
+  }
 }

@@ -51,4 +51,9 @@ class AliasType {
 
     throw new ArgumentError(UNKNOWN_ALIAS_TYPE);
   }
+
+  @override
+  String toString() {
+    return 'AliasType{value: $value}';
+  }
 }

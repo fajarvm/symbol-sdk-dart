@@ -143,7 +143,6 @@ void main() {
 
   group('prettify', () {
     test('can convert an address into a pretty format address', () {
-      const validHex = '6823BB7C3C089D996585466380EDBDC19D4959184893E38CA6';
       const expected = 'NAR3W7B4BCOZSZMFIZRYB3N5YGOUSWIYJCJ6HDFG';
 
       expect(Address.prettify(expected), equals('NAR3W7-B4BCOZ-SZMFIZ-RYB3N5-YGOUSW-IYJCJ6-HDFG'));

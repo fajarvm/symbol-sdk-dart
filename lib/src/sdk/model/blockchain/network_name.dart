@@ -14,20 +14,20 @@
 // limitations under the License.
 //
 
-library nem2_sdk_dart.sdk.model.diagnostic.server_info;
+library nem2_sdk_dart.sdk.model.blockchain.network_name;
 
-/// Describes technical information of the server.
-class ServerInfo {
-  /// The version of the REST API that this server is using.
-  final String restVersion;
+/// Describes the name and description of the network.
+class NetworkName {
+  /// The name of this network.
+  final String name;
 
-  /// The version of the SDK that this server is using.
-  final String sdkVersion;
+  /// The description of this network.
+  final String description;
 
-  ServerInfo(this.restVersion, this.sdkVersion);
+  NetworkName(this.name, this.description);
 
   @override
   String toString() {
-    return 'ServerInfo{restVersion: $restVersion, sdkVersion: $sdkVersion}';
+    return 'NetworkName{name: $name, description: $description}';
   }
 }

@@ -99,4 +99,9 @@ class AccountRestrictionFlags {
 
     throw new ArgumentError(UNKNOWN_ACCOUNT_RESTRICTION_FLAG);
   }
+
+  @override
+  String toString() {
+    return 'AccountRestrictionFlags{value: $value}';
+  }
 }

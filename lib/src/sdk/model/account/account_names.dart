@@ -28,4 +28,9 @@ class AccountNames {
   final List<NamespaceName> names;
 
   AccountNames(this.address, this.names);
+
+  @override
+  String toString() {
+    return 'AccountNames{address: $address, names: $names}';
+  }
 }

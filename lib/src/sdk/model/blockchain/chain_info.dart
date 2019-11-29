@@ -30,4 +30,9 @@ class ChainInfo {
   final Uint64 scoreLow;
 
   ChainInfo(this.numberOfBlocks, this.scoreHigh, this.scoreLow);
+
+  @override
+  String toString() {
+    return 'ChainInfo{numberOfBlocks: $numberOfBlocks, scoreHigh: $scoreHigh, scoreLow: $scoreLow}';
+  }
 }

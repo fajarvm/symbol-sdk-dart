@@ -48,4 +48,9 @@ class ResolutionType {
 
     throw new ArgumentError(UNKNOWN_RESOLUTION_TYPE);
   }
+
+  @override
+  String toString() {
+    return 'ResolutionType{value: $value}';
+  }
 }

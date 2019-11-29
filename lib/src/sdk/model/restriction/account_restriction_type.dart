@@ -70,4 +70,9 @@ class AccountRestrictionType {
 
     throw new ArgumentError(UNKNOWN_ACCOUNT_RESTRICTION_TYPE);
   }
+
+  @override
+  String toString() {
+    return 'AccountRestrictionType{value: $value}';
+  }
 }

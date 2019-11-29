@@ -48,4 +48,9 @@ class MosaicSupplyType {
 
     throw new ArgumentError(UNKNOWN_MOSAIC_SUPPLY_TYPE);
   }
+
+  @override
+  String toString() {
+    return 'MosaicSupplyType{value: $value}';
+  }
 }

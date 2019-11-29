@@ -27,4 +27,9 @@ class BlockchainScore {
   final Uint64 scoreHigh;
 
   BlockchainScore(this.scoreLow, this.scoreHigh);
+
+  @override
+  String toString() {
+    return 'BlockchainScore{scoreLow: $scoreLow, scoreHigh: $scoreHigh}';
+  }
 }

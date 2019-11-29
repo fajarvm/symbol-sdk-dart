@@ -178,4 +178,9 @@ class TransactionType {
   static bool isAggregateType(final TransactionType type) {
     return aggregate.contains(type);
   }
+
+  @override
+  String toString() {
+    return 'TransactionType{value: $value}';
+  }
 }

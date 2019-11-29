@@ -43,6 +43,8 @@ import 'model/diagnostic/server_info_test.dart' as server_info_test;
 // message
 import 'model/message/encrypted_message_test.dart' as encrypted_message_test;
 import 'model/message/message_type_test.dart' as message_type_test;
+import 'model/message/persistent_harvesting_delegation_message_test.dart'
+    as persistent_harvesting_delegation_message_test;
 import 'model/message/plain_message_test.dart' as plain_message_test;
 
 // mosaic
@@ -88,7 +90,7 @@ import 'model/receipt/transaction_statement_test.dart' as transaction_statement_
 
 // restriction
 import 'model/restriction/account_restriction_modification_type_test.dart'
-as account_restriction_modification_type_test;
+    as account_restriction_modification_type_test;
 import 'model/restriction/account_restriction_test.dart' as account_restriction_test;
 import 'model/restriction/account_restriction_type_test.dart' as account_restriction_type_test;
 import 'model/restriction/account_restrictions_info_test.dart' as account_restrictions_info_test;
@@ -138,10 +140,11 @@ void main() {
   });
 
   // message
-  group('Message:', (){
+  group('Message:', () {
     message_type_test.main();
     plain_message_test.main();
     encrypted_message_test.main();
+    persistent_harvesting_delegation_message_test.main();
   });
 
   // mosaic
@@ -193,7 +196,7 @@ void main() {
     transaction_statement_test.main();
   });
 
-  group('Restriction:', (){
+  group('Restriction:', () {
     account_restriction_modification_type_test.main();
     account_restriction_test.main();
     account_restriction_type_test.main();

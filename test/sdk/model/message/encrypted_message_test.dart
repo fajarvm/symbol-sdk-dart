@@ -19,7 +19,8 @@ library nem2_sdk_dart.test.sdk.model.message.encrypted_message_test;
 import 'package:test/test.dart';
 
 import 'package:nem2_sdk_dart/core.dart' show HexUtils;
-import 'package:nem2_sdk_dart/sdk.dart' show Account, EncryptedMessage, MessageType, NetworkType;
+import 'package:nem2_sdk_dart/sdk.dart'
+    show Account, EncryptedMessage, MessageType, NetworkType, PlainMessage;
 
 void main() {
   group('EncryptedMessage', () {
@@ -33,11 +34,6 @@ void main() {
     final Account sender_nis = Account.fromPrivateKey(senderPrivateKey, NetworkType.TEST_NET);
     final Account recipient_nis = Account.fromPrivateKey(recipientPrivateKey, NetworkType.TEST_NET);
 
-    test('Valid constants', () {
-      expect(EncryptedMessage.KEY_SIZE, 32);
-      expect(EncryptedMessage.BLOCK_SIZE, 16);
-    });
-
     test('Can create an encrypted message from a payload', () {
       const message = 'test';
       final messageHex = HexUtils.utf8ToHex(message);
@@ -46,7 +42,7 @@ void main() {
       expect(encryptedMessage.payload, equals(messageHex));
     });
 
-    test('Cannot create an encrypted message from a payload', () {
+    test('Should throw an error when creating an encrypted message from am invalid payload', () {
       expect(
           () => EncryptedMessage.fromPayload(null),
           throwsA(predicate(
@@ -57,54 +53,51 @@ void main() {
               (e) => e is ArgumentError && e.message.contains('payload is not a valid'))));
     });
 
-    test('Can create an encrypted message', () {
-      final encryptedMessage = EncryptedMessage.create(
-          'Hello', sender.privateKey, recipient.publicAccount.publicKey, NetworkType.MIJIN_TEST);
+    test('Can encrypt and decrypt a message (Catapult Schema)', () {
+      const message = 'Testing simple transfer';
 
+      // encrypt
+      final encryptedMessage = EncryptedMessage.create(
+          message, sender.privateKey, recipient.publicAccount.publicKey, NetworkType.MIJIN_TEST);
       expect(encryptedMessage.payload, isNotNull);
       expect(encryptedMessage.type, equals(MessageType.ENCRYPTED_MESSAGE));
 
-      final decrypted = encryptedMessage.decrypt(
-          sender.privateKey, recipient.publicAccount.publicKey, NetworkType.MIJIN_TEST);
-      expect(decrypted, equals('Hello'));
+      // decrypt
+      final PlainMessage decrypted = EncryptedMessage.decrypt(encryptedMessage,
+          recipient.privateKey, sender.publicAccount.publicKey, NetworkType.MIJIN_TEST);
+      expect(decrypted.type, equals(MessageType.PLAIN_MESSAGE));
+      expect(decrypted.payload, equals(message));
     });
 
-    test('Can create an encrypted message using NIS1 schema', () {
+    test('Can encrypt and decrypt a message (NIS1 Schema)', () {
       final encryptedMessage = EncryptedMessage.create('Hello', sender_nis.privateKey,
           recipient_nis.publicAccount.publicKey, NetworkType.TEST_NET);
 
       expect(encryptedMessage.payload, isNotNull);
       expect(encryptedMessage.type, equals(MessageType.ENCRYPTED_MESSAGE));
 
-      final decrypted = encryptedMessage.decrypt(
-          sender_nis.privateKey, recipient_nis.publicAccount.publicKey, NetworkType.TEST_NET);
-      expect(decrypted, equals('Hello'));
+      final PlainMessage decrypted = EncryptedMessage.decrypt(encryptedMessage,
+          recipient_nis.privateKey, sender_nis.publicAccount.publicKey, NetworkType.TEST_NET);
+      expect(decrypted.payload, equals('Hello'));
+      expect(decrypted.type, equals(MessageType.PLAIN_MESSAGE));
     });
 
-    test('Cannot create an encrypted message without the message payload', () {
+    test('Should fail when creating an encrypted message with null', () {
       expect(
           () => EncryptedMessage.create(
               null, sender.privateKey, recipient.publicAccount.publicKey, NetworkType.MIJIN_TEST),
           throwsA(predicate((e) => e is ArgumentError && e.message.contains('Must not be null'))));
     });
 
-    test('Cannot create an encrypted message without private/public key', () {
+    test('Should fail when creating an encrypted message without private/public key', () {
       expect(
           () => EncryptedMessage.create(
               'Hello', null, recipient.publicAccount.publicKey, NetworkType.MIJIN_TEST),
-          throwsA(predicate((e) =>
-              e is ArgumentError &&
-              e.message.contains('Sender private key and recipient public key are required'))));
-      expect(
-          () => EncryptedMessage.create('Hello', senderPrivateKey, null, NetworkType.MIJIN_TEST),
-          throwsA(predicate((e) =>
-              e is ArgumentError &&
-              e.message.contains('Sender private key and recipient public key are required'))));
-      expect(
-          () => EncryptedMessage.create('Hello', null, null, NetworkType.MIJIN_TEST),
-          throwsA(predicate((e) =>
-              e is ArgumentError &&
-              e.message.contains('Sender private key and recipient public key are required'))));
+          throwsA(predicate((e) => e is ArgumentError && e.message.contains('Must not be null'))));
+      expect(() => EncryptedMessage.create('Hello', senderPrivateKey, null, NetworkType.MIJIN_TEST),
+          throwsA(predicate((e) => e is ArgumentError && e.message.contains('Must not be null'))));
+      expect(() => EncryptedMessage.create('Hello', null, null, NetworkType.MIJIN_TEST),
+          throwsA(predicate((e) => e is ArgumentError && e.message.contains('Must not be null'))));
     });
   });
 }

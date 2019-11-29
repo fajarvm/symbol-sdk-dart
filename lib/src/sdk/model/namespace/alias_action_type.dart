@@ -48,4 +48,9 @@ class AliasActionType {
 
     throw new ArgumentError(UNKNOWN_ALIAS_ACTION_TYPE);
   }
+
+  @override
+  String toString() {
+    return 'AliasActionType{value: $value}';
+  }
 }

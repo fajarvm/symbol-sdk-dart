@@ -63,4 +63,14 @@ class MultisigAccountInfo {
   /// Checks if this account is a cosignatory of the given [multisigAccount].
   bool isCosignerOf(final PublicAccount multisigAccount) =>
       multisigAccounts.contains(multisigAccount);
+  @override
+  String toString() {
+    return 'MultisigAccountInfo{'
+        'account: $account, '
+        'minApproval: $minApproval, '
+        'minRemoval: $minRemoval, '
+        'cosignatories: $cosignatories, '
+        'multisigAccounts: $multisigAccounts'
+        '}';
+  }
 }

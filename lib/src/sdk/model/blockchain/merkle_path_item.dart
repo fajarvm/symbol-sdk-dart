@@ -25,4 +25,9 @@ class MerklePathItem {
   final String hash;
 
   MerklePathItem(this.position, this.hash);
+
+  @override
+  String toString() {
+    return 'MerklePathItem{position: $position, hash: $hash}';
+  }
 }

@@ -97,4 +97,9 @@ class NetworkType {
     }
     return SignSchema.SHA3;
   }
+
+  @override
+  String toString() {
+    return 'NetworkType{value: $value}';
+  }
 }

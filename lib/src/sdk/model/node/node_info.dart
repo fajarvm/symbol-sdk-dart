@@ -44,4 +44,17 @@ class NodeInfo {
 
   NodeInfo(this.publicKey, this.port, this.networkIdentifier, this.version, this.role, this.host,
       this.friendlyName);
+
+  @override
+  String toString() {
+    return 'NodeInfo{'
+        'publicKey: $publicKey, '
+        'port: $port, '
+        'networkIdentifier: $networkIdentifier, '
+        'version: $version, '
+        'role: $role, '
+        'host: $host, '
+        'friendlyName: $friendlyName'
+        '}';
+  }
 }

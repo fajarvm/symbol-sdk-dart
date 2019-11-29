@@ -40,4 +40,9 @@ class MultisigAccountGraphInfo {
 
     return new MultisigAccountGraphInfo._(multisigAccounts);
   }
+
+  @override
+  String toString() {
+    return 'MultisigAccountGraphInfo{multisigAccounts: $multisigAccounts}';
+  }
 }

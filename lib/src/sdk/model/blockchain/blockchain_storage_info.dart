@@ -18,14 +18,23 @@ library nem2_sdk_dart.sdk.model.blockchain.blockchain_storage_info;
 
 /// The blockchain storage info structure describes stored data.
 class BlockchainStorageInfo {
-  /// The number of accounts published in the blockchain.
-  final int numAccounts;
-
   /// The number of confirmed blocks.
   final int numBlocks;
 
   /// The number of confirmed transactions.
   final int numTransactions;
 
-  BlockchainStorageInfo(this.numAccounts, this.numBlocks, this.numTransactions);
+  /// The number of accounts published in the blockchain.
+  final int numAccounts;
+
+  BlockchainStorageInfo(this.numBlocks, this.numTransactions, this.numAccounts);
+
+  @override
+  String toString() {
+    return 'BlockchainStorageInfo{'
+        'numBlocks: $numBlocks, '
+        'numTransactions: $numTransactions, '
+        'numAccounts: $numAccounts'
+        '}';
+  }
 }

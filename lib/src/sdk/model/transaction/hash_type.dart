@@ -84,4 +84,9 @@ class HashType {
 
     return false;
   }
+
+  @override
+  String toString() {
+    return 'HashType{value: $value}';
+  }
 }

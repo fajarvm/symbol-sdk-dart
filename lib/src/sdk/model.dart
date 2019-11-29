@@ -33,6 +33,7 @@ export 'model/blockchain/blockchain_storage_info.dart';
 export 'model/blockchain/chain_info.dart';
 export 'model/blockchain/merkle_path_item.dart';
 export 'model/blockchain/merkle_proof_info.dart';
+export 'model/blockchain/network_name.dart';
 export 'model/blockchain/network_type.dart';
 
 // Common models
@@ -46,7 +47,9 @@ export 'model/diagnostic/server_info.dart';
 // Message
 export 'model/message/encrypted_message.dart';
 export 'model/message/message.dart'; // abstract class
+export 'model/message/message_marker.dart';
 export 'model/message/message_type.dart';
+export 'model/message/persistent_harvesting_delegation_message.dart';
 export 'model/message/plain_message.dart';
 
 // Mosaic

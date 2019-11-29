@@ -54,4 +54,9 @@ class MessageType {
 
     throw new ArgumentError(UNKNOWN_MESSAGE_TYPE);
   }
+
+  @override
+  String toString() {
+    return 'MessageType{value: $value}';
+  }
 }

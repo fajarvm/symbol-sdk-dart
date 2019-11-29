@@ -18,12 +18,15 @@ library nem2_sdk_dart.sdk.model.blockchain.merkle_proof_info;
 
 import 'merkle_path_item.dart';
 
+/// The block merkle proof info.
 class MerkleProofInfo {
-  /// A list of [MerklePathItem] as the payload.
-  final List<MerklePathItem> payload;
+  /// A list of [MerklePathItem].
+  final List<MerklePathItem> merklePath;
 
-  /// The merkle proof type.
-  final String type;
+  MerkleProofInfo(this.merklePath);
 
-  MerkleProofInfo(this.payload, this.type);
+  @override
+  String toString() {
+    return 'MerkleProofInfo{merklePath: $merklePath}';
+  }
 }

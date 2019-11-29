@@ -27,4 +27,9 @@ abstract class Message {
   final String payload;
 
   Message(this.type, this.payload);
+
+  @override
+  String toString() {
+    return 'Message{type: $type, payload: $payload}';
+  }
 }

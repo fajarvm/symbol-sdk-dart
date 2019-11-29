@@ -18,8 +18,12 @@ library nem2_sdk_dart.core.crypto.ed25519;
 
 import 'dart:typed_data' show Int64List, Uint8List;
 
-import 'package:nem2_sdk_dart/src/core/utils.dart' show ArrayUtils;
+import 'package:encrypt/encrypt.dart';
 import 'package:pointycastle/export.dart' show Digest, RIPEMD160Digest, SHA256Digest, SHA3Digest;
+
+import 'package:nem2_sdk_dart/src/core/utils.dart' show ArrayUtils;
+
+import '../utils/hex_utils.dart';
 
 import 'crypto_exception.dart';
 import 'sha3_hasher.dart';
@@ -29,11 +33,97 @@ import 'tweetnacl.dart';
 
 /// A utility class that provides various custom cryptographic operations.
 class CryptoUtils {
+  static const int BLOCK_SIZE = 16;
   static const int KEY_SIZE = 32;
   static const int SIGNATURE_SIZE = 64;
   static const int HALF_SIGNATURE_SIZE = 32;
   static const int HASH_SIZE = 64;
   static const int HALF_HASH_SIZE = 32;
+
+  /// Encrypts a [message] with a shared key derived from [senderPrivateKey] and
+  /// [recipientPublicKey]using the given [signSchema].
+  ///
+  /// By default, the [message] is considered a UTF-8 plain text.
+  static String encryptMessage(final String message, final String senderPrivateKey,
+      final String recipientPublicKey, final SignSchema signSchema,
+      [final bool isHexMessage = false]) {
+    ArgumentError.checkNotNull(message);
+    ArgumentError.checkNotNull(senderPrivateKey);
+    ArgumentError.checkNotNull(recipientPublicKey);
+    ArgumentError.checkNotNull(signSchema);
+
+    String payloadString = isHexMessage ? message : HexUtils.utf8ToHex(message);
+
+    // AES encrypts
+    final Uint8List salt = CryptoUtils.getRandomBytes(KEY_SIZE);
+    final iv = IV(CryptoUtils.getRandomBytes(BLOCK_SIZE));
+    final Uint8List senderByte = HexUtils.getBytes(senderPrivateKey);
+    final Uint8List recipientByte = HexUtils.getBytes(recipientPublicKey);
+    final Uint8List sharedKey =
+        CryptoUtils.deriveSharedKey(salt, senderByte, recipientByte, signSchema);
+    final Encrypter encrypter = Encrypter(AES(Key(sharedKey), mode: AESMode.cbc));
+    final Uint8List payload = HexUtils.getBytes(payloadString);
+    final encryptedMessage = encrypter.algo.encrypt(payload, iv: iv);
+
+    // Creates a concatenated byte array as the encrypted payload
+    // final Uint8List encryptedPayload = Uint8List.fromList(salt + iv.bytes + encryptedMessage.bytes);
+    // final String result = HexUtils.bytesToHex(encryptedPayload);
+
+    final result = HexUtils.bytesToHex(salt) +
+        HexUtils.bytesToHex(iv.bytes) +
+        HexUtils.bytesToHex(encryptedMessage.bytes);
+
+    return result;
+  }
+
+  /// Decrypts an [encryptedMessage] with a shared key derived from [recipientPrivateKey] and
+  /// [senderPublicKey] using the given [signSchema].
+  ///
+  /// Throws a [CryptoException] when decryption process fails.
+  /// By default, the [message] is considered a UTF-8 plain text.
+  static String decryptMessage(final String encryptedMessage, final String recipientPrivateKey,
+      final String senderPublicKey, final SignSchema signSchema,
+      [final bool isHexMessage = false]) {
+    ArgumentError.checkNotNull(encryptedMessage);
+    ArgumentError.checkNotNull(recipientPrivateKey);
+    ArgumentError.checkNotNull(senderPublicKey);
+    ArgumentError.checkNotNull(signSchema);
+
+    if (encryptedMessage.length < (KEY_SIZE + BLOCK_SIZE)) {
+      throw new ArgumentError('the encrypted payload has an incorrect size');
+    }
+
+    final Uint8List payloadBytes = HexUtils.getBytes(encryptedMessage);
+    final Uint8List recipientByte = HexUtils.getBytes(recipientPrivateKey);
+    final Uint8List senderByte = HexUtils.getBytes(senderPublicKey);
+    final Uint8List salt = Uint8List.fromList(payloadBytes.take(KEY_SIZE).toList());
+    final Uint8List iv = Uint8List.fromList(payloadBytes.skip(KEY_SIZE).take(BLOCK_SIZE).toList());
+
+    final Uint8List encrypted = Uint8List.fromList(payloadBytes
+        .skip(KEY_SIZE + BLOCK_SIZE)
+        .take(payloadBytes.length - (KEY_SIZE + BLOCK_SIZE))
+        .toList());
+
+    try {
+      final Uint8List sharedKey =
+          CryptoUtils.deriveSharedKey(salt, recipientByte, senderByte, signSchema);
+
+      final Encrypter encrypter = Encrypter(AES(Key(sharedKey), mode: AESMode.cbc));
+
+      final encryptedValue = Encrypted(encrypted);
+      final ivValue = IV(iv);
+      final decryptBytes = encrypter.decryptBytes(encryptedValue, iv: ivValue);
+      final String decrypted = HexUtils.getString(decryptBytes);
+
+      // dev note: Use HexUtils for converting hex instead of using the hex converter from
+      // encrypt lib or any third party converter libs.
+      final String result = isHexMessage ? decrypted : HexUtils.tryHexToUtf8(decrypted);
+
+      return result;
+    } catch (e) {
+      throw new CryptoException('Failed to decrypt message');
+    }
+  }
 
   /// Extracts a public key from the given [privateKeySeed] using the given [signSchema].
   static Uint8List extractPublicKey(final Uint8List privateKeySeed, final SignSchema signSchema) {

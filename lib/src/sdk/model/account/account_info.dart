@@ -53,4 +53,18 @@ class AccountInfo {
 
   /// Returns the public account of this account.
   PublicAccount get publicAccount => PublicAccount.fromPublicKey(publicKey, address.networkType);
+
+  @override
+  String toString() {
+    return 'AccountInfo{'
+        'address: $address, '
+        'addressHeight: $addressHeight, '
+        'publicKey: $publicKey, '
+        'publicKeyHeight: $publicKeyHeight, '
+        'accountType: $accountType, '
+        'importance: $importance, '
+        'importanceHeight: $importanceHeight, '
+        'mosaics: $mosaics'
+        '}';
+  }
 }

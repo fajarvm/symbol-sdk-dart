@@ -120,4 +120,9 @@ class TransactionVersion {
   // constant constructor: makes this class available on runtime.
   // emulates an enum class with a value.
   const TransactionVersion._(this.value);
+
+  @override
+  String toString() {
+    return 'TransactionVersion{value: $value}';
+  }
 }

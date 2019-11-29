@@ -48,4 +48,9 @@ class NamespaceType {
 
     throw new ArgumentError(UNKNOWN_NAMESPACE_TYPE);
   }
+
+  @override
+  String toString() {
+    return 'NamespaceType{value: $value}';
+  }
 }

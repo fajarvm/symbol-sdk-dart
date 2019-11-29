@@ -60,4 +60,9 @@ class AccountType {
 
     throw new ArgumentError(UNKNOWN_ACCOUNT_TYPE);
   }
+
+  @override
+  String toString() {
+    return 'AccountType{value: $value}';
+  }
 }
