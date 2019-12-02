@@ -47,6 +47,12 @@ import 'model/message/persistent_harvesting_delegation_message_test.dart'
     as persistent_harvesting_delegation_message_test;
 import 'model/message/plain_message_test.dart' as plain_message_test;
 
+
+// metadata
+import 'model/metadata/metadata_entry_test.dart' as metadata_entry_test;
+import 'model/metadata/metadata_test.dart' as metadata_test;
+import 'model/metadata/metadata_type_test.dart' as metadata_type_test;
+
 // mosaic
 import 'model/mosaic/mosaic_id_test.dart' as mosaic_id_test;
 import 'model/mosaic/mosaic_info_test.dart' as mosaic_info_test;
@@ -145,6 +151,13 @@ void main() {
     plain_message_test.main();
     encrypted_message_test.main();
     persistent_harvesting_delegation_message_test.main();
+  });
+
+  // metadata
+  group('Metadata:', (){
+    metadata_type_test.main();
+    metadata_entry_test.main();
+    metadata_test.main();
   });
 
   // mosaic

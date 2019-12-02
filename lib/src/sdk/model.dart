@@ -52,6 +52,11 @@ export 'model/message/message_type.dart';
 export 'model/message/persistent_harvesting_delegation_message.dart';
 export 'model/message/plain_message.dart';
 
+// Metadata
+export 'model/metadata/metadata.dart';
+export 'model/metadata/metadata_entry.dart';
+export 'model/metadata/metadata_type.dart';
+
 // Mosaic
 export 'model/mosaic/mosaic.dart';
 export 'model/mosaic/mosaic_id.dart';

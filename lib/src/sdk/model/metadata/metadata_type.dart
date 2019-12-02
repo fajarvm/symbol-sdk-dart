@@ -14,49 +14,43 @@
 // limitations under the License.
 //
 
-library nem2_sdk_dart.sdk.model.message.message_type;
+library nem2_sdk_dart.sdk.model.metadata.metadata_type;
 
-/// The message type.
-class MessageType {
-  static const String UNKNOWN_MESSAGE_TYPE = 'unknown message type';
-
-  /// Plain text or unencrypted message.
-  static const MessageType PLAIN_MESSAGE = MessageType._(0x00); // 0
-
-  /// Secured text or encrypted message.
-  static const MessageType ENCRYPTED_MESSAGE = MessageType._(0x01); // 1
+/// The metadata type.
+class MetadataType {
+  static const String UNKNOWN_METADATA_TYPE = 'unknown metadata type';
 
   /// Persistent harvesting delegation.
-  static const MessageType PERSISTENT_HARVESTING_DELEGATION_MESSAGE = MessageType._(0xFE); // 254
+  static const MetadataType ACCOUNT = MetadataType._(0);
 
-  static final List<MessageType> values = <MessageType>[
-    PLAIN_MESSAGE,
-    ENCRYPTED_MESSAGE,
-    PERSISTENT_HARVESTING_DELEGATION_MESSAGE
-  ];
+  static const MetadataType MOSAIC = MetadataType._(1);
+
+  static const MetadataType NAMESPACE = MetadataType._(2);
+
+  static final List<MetadataType> values = <MetadataType>[ACCOUNT, MOSAIC, NAMESPACE];
 
   /// The int value of this type.
   final int value;
 
   // constant constructor: makes this class available on runtime.
   // emulates an enum class with a value.
-  const MessageType._(this.value);
+  const MetadataType._(this.value);
 
-  /// Returns a [MessageType] for the given int value.
+  /// Returns a [MetadataType] for the given int value.
   ///
   /// Throws an error when the type is unknown.
-  static MessageType getType(final int value) {
+  static MetadataType getType(final int value) {
     for (var type in values) {
       if (type.value == value) {
         return type;
       }
     }
 
-    throw new ArgumentError(UNKNOWN_MESSAGE_TYPE);
+    throw new ArgumentError(UNKNOWN_METADATA_TYPE);
   }
 
   @override
   String toString() {
-    return 'MessageType{value: $value}';
+    return 'MetadataType{value: $value}';
   }
 }
