@@ -48,4 +48,9 @@ class AccountRestrictionModificationAction {
 
     throw new ArgumentError(UNKNOWN_RESTRICTION_MODIFICATION_TYPE);
   }
+
+  @override
+  String toString() {
+    return 'AccountRestrictionModificationAction{value: $value}';
+  }
 }

@@ -27,6 +27,8 @@ void main() {
       ServerInfo serverInfo = new ServerInfo(restVersion, sdkVersion);
       expect(serverInfo.restVersion, equals(restVersion));
       expect(serverInfo.sdkVersion, equals(sdkVersion));
+      expect(serverInfo.toString(),
+          equals('ServerInfo{restVersion: $restVersion, sdkVersion: $sdkVersion}'));
     });
   });
 }

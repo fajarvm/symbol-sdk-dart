@@ -64,6 +64,9 @@ void main() {
       expect(TransactionType.METADATA_ACCOUNT.value, 0x4144);
       expect(TransactionType.METADATA_MOSAIC.value, 0x4244);
       expect(TransactionType.METADATA_NAMESPACE.value, 0x4344);
+
+      expect(TransactionType.TRANSFER.toString(),
+          equals('TransactionType{value: ${TransactionType.TRANSFER.value}}'));
     });
 
     test('Can retrieve a valid transaction types', () {

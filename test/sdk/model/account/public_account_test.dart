@@ -16,9 +16,8 @@
 
 library nem2_sdk_dart.test.sdk.model.account.public_account_test;
 
-import 'package:test/test.dart';
-
 import 'package:nem2_sdk_dart/sdk.dart' show Address, NetworkType, PublicAccount;
+import 'package:test/test.dart';
 
 void main() {
   group('PublicAccount', () {
@@ -31,6 +30,9 @@ void main() {
       expect(publicAccount.address, equals(address));
       expect(publicAccount.plainAddress, equals('SARNASAS2BIAB6LMFA3FPMGBPGIJGK6IJETM3ZSP'));
       expect(publicAccount.hashCode, isNotNull);
+
+      expect(publicAccount.toString(),
+          equals('PublicAccount{address= ${publicAccount.plainAddress}, publicKey= $publicKey}'));
     });
 
     test('can create a public account from a public key', () {

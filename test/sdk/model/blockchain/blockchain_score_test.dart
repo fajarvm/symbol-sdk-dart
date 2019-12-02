@@ -16,9 +16,8 @@
 
 library nem2_sdk_dart.test.sdk.model.blockchain.blockchain_score_test;
 
-import 'package:test/test.dart';
-
 import 'package:nem2_sdk_dart/sdk.dart' show BlockchainScore, Uint64;
+import 'package:test/test.dart';
 
 void main() {
   group('BlockchainScore', () {
@@ -27,6 +26,11 @@ void main() {
 
       expect(blockchainScore.scoreLow.value, BigInt.from(1000));
       expect(blockchainScore.scoreHigh.value, BigInt.from(9999));
+
+      expect(
+          blockchainScore.toString(),
+          equals('BlockchainScore{scoreLow: ${blockchainScore.scoreLow.value}, '
+              'scoreHigh: ${blockchainScore.scoreHigh.value}}'));
     });
   });
 }

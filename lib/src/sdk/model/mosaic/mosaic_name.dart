@@ -31,4 +31,9 @@ class MosaicName {
   final NamespaceId parentId;
 
   MosaicName(this.mosaicId, this.name, this.parentId);
+
+  @override
+  String toString() {
+    return 'MosaicName{mosaicId: $mosaicId, name: $name, parentId: $parentId}';
+  }
 }

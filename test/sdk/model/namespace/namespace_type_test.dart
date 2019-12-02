@@ -24,6 +24,9 @@ void main() {
     test('valid namespace types', () {
       expect(NamespaceType.ROOT_NAMESPACE.value, 0);
       expect(NamespaceType.SUB_NAMESPACE.value, 1);
+
+      expect(NamespaceType.ROOT_NAMESPACE.toString(),
+          equals('NamespaceType{value: ${NamespaceType.ROOT_NAMESPACE.value}}'));
     });
 
     test('Can retrieve a valid namespace type', () {

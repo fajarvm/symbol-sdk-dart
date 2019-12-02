@@ -16,9 +16,8 @@
 
 library nem2_sdk_dart.test.sdk.model.mosaic.mosaic_test;
 
-import 'package:test/test.dart';
-
 import 'package:nem2_sdk_dart/sdk.dart' show Mosaic, MosaicId, Uint64;
+import 'package:test/test.dart';
 
 void main() {
   group('Mosaic', () {
@@ -31,6 +30,8 @@ void main() {
       expect(mosaic.id, equals(mosaicId));
       expect(mosaic.amount, equals(amount));
       expect(mosaic.amount.value.toInt(), equals(9999999999));
+
+      expect(mosaic.toString(), equals('Mosaic{id: $mosaicId, amount: $amount}'));
     });
   });
 }

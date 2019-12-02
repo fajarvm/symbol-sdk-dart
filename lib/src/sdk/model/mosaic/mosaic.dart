@@ -33,4 +33,9 @@ class Mosaic {
   /// The quantity is always given in smallest units for the mosaic. For example, if it has a
   /// divisibility of 3 the quantity is given in millis.
   Mosaic(this.id, this.amount);
+
+  @override
+  String toString() {
+    return 'Mosaic{id: $id, amount: $amount}';
+  }
 }

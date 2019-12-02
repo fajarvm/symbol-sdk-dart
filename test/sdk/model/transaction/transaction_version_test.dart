@@ -64,6 +64,9 @@ void main() {
       expect(TransactionVersion.METADATA_ACCOUNT.value, 1);
       expect(TransactionVersion.METADATA_MOSAIC.value, 1);
       expect(TransactionVersion.METADATA_NAMESPACE.value, 1);
+
+      expect(TransactionVersion.TRANSFER.toString(),
+          equals('TransactionVersion{value: ${TransactionVersion.TRANSFER.value}}'));
     });
   });
 }

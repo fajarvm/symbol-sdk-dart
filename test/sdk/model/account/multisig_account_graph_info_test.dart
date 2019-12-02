@@ -69,6 +69,10 @@ void main() {
           ArrayUtils.deepEqual(
               multisigAccountInfoGraph.multisigAccounts[2][0].multisigAccounts, multisigs),
           isTrue);
+
+      expect(multisigAccountInfoGraph.toString(), equals(
+        'MultisigAccountGraphInfo{multisigAccounts: $multisigAccounts}'
+      ));
     });
   });
 }

@@ -16,9 +16,8 @@
 
 library nem2_sdk_dart.test.sdk.model.namespace.namespace_name_test;
 
-import 'package:test/test.dart';
-
 import 'package:nem2_sdk_dart/sdk.dart' show NamespaceId, NamespaceName, Uint64;
+import 'package:test/test.dart';
 
 void main() {
   group('NamespaceName', () {
@@ -32,6 +31,10 @@ void main() {
       expect(namespaceName.namespaceId, equals(namespaceId));
       expect(namespaceName.name, equals('nem'));
       expect(namespaceName.parentId, equals(parentId));
+      expect(
+          namespaceName.toString(),
+          equals(
+              'NamespaceName{namespaceId: $namespaceId, name: ${namespaceName.name}, parentId: $parentId}'));
     });
   });
 }

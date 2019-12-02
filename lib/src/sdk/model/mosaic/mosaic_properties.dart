@@ -72,4 +72,13 @@ class MosaicProperties {
   static MosaicProperties create([Uint64 duration]) {
     return new MosaicProperties(duration: duration);
   }
+
+  @override
+  String toString() {
+    return 'MosaicProperties{'
+        'supplyMutable: $supplyMutable, '
+        'transferable: $transferable, '
+        'divisibility: $divisibility, '
+        'duration: $duration}';
+  }
 }

@@ -93,6 +93,9 @@ void main() {
               AccountRestrictionType.BLOCK.value +
               AccountRestrictionType.OUTGOING.value),
           AccountRestrictionFlags.BLOCK_OUTGOING_TRANSACTION_TYPE);
+
+      expect(AccountRestrictionType.ADDRESS.toString(),
+          equals('AccountRestrictionType{value: ${AccountRestrictionType.ADDRESS.value}}'));
     });
 
     test('Trying to retrieve an unknown restriction flag will throw an error', () {

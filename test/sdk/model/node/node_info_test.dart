@@ -34,6 +34,17 @@ void main() {
       expect(nodeInfo.networkIdentifier, equals(NetworkType.MIJIN_TEST));
       expect(nodeInfo.role, equals(RoleType.API_NODE));
       expect(nodeInfo.publicKey, equals(account.publicKey));
+      expect(
+          nodeInfo.toString(),
+          equals('NodeInfo{'
+              'publicKey: ${nodeInfo.publicKey}, '
+              'port: ${nodeInfo.port}, '
+              'networkIdentifier: ${nodeInfo.networkIdentifier}, '
+              'version: ${nodeInfo.version}, '
+              'role: ${nodeInfo.role}, '
+              'host: ${nodeInfo.host}, '
+              'friendlyName: ${nodeInfo.friendlyName}'
+              '}'));
     });
   });
 }

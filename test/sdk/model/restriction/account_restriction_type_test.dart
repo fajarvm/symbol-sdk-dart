@@ -27,6 +27,10 @@ void main() {
       expect(AccountRestrictionType.TRANSACTION_TYPE.value, 0x0004);
       expect(AccountRestrictionType.OUTGOING.value, 0x4000);
       expect(AccountRestrictionType.BLOCK.value, 0x8000);
+
+      expect(AccountRestrictionType.BLOCK.toString(), equals(
+          'AccountRestrictionType{value: ${AccountRestrictionType.BLOCK.value}}'
+      ));
     });
 
     test('Can retrieve a valid restriction type', () {

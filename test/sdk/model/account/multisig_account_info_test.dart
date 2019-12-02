@@ -16,9 +16,8 @@
 
 library nem2_sdk_dart.test.sdk.model.account.multisig_account_info_test;
 
-import 'package:test/test.dart';
-
 import 'package:nem2_sdk_dart/sdk.dart' show MultisigAccountInfo, NetworkType, PublicAccount;
+import 'package:test/test.dart';
 
 void main() {
   // Test accounts
@@ -45,6 +44,16 @@ void main() {
       expect(actual.minRemoval, 3);
       expect(actual.cosignatories, equals(cosignatories));
       expect(actual.multisigAccounts, equals(multisigs));
+
+      expect(
+          actual.toString(),
+          equals('MultisigAccountInfo{'
+              'account: $account, '
+              'minApproval: 3, '
+              'minRemoval: 3, '
+              'cosignatories: $cosignatories, '
+              'multisigAccounts: $multisigs'
+              '}'));
     });
 
     test('Cannot crete with invalid parameter values', () {

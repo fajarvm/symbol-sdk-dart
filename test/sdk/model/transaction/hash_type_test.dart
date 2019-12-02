@@ -29,6 +29,8 @@ void main() {
       expect(HashType.KECCAK_256.value, 1);
       expect(HashType.RIPEMD_160.value, 2);
       expect(HashType.SHA_256.value, 3);
+
+      expect(HashType.SHA_256.toString(), equals('HashType{value: ${HashType.SHA_256.value}}'));
     });
 
     test('Can retrieve valid hash types', () {

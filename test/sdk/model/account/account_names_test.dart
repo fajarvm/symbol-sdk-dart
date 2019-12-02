@@ -33,6 +33,10 @@ void main() {
       expect(accountNames.address.plain, equals('SDGLFWDSHILTIUHGIBH5UGX2VYF5VNJEKCCDBR26'));
       expect(accountNames.names[0].name, equals('alias1'));
       expect(accountNames.names[1].name, equals('alias2'));
+
+      // toString()
+      final toString = 'AccountNames{address: $address, names: $names}';
+      expect(accountNames.toString(), equals(toString));
     });
   });
 }

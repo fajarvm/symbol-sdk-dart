@@ -27,4 +27,9 @@ class NodeTime {
   final Uint64 receiveTimeStamp;
 
   NodeTime(this.sendTimeStamp, this.receiveTimeStamp);
+
+  @override
+  String toString() {
+    return 'NodeTime{sendTimeStamp: $sendTimeStamp, receiveTimeStamp: $receiveTimeStamp}';
+  }
 }

@@ -34,6 +34,13 @@ void main() {
       expect(properties.transferable, isFalse);
       expect(properties.divisibility, equals(5));
       expect(properties.duration.value.toInt(), equals(1000));
+      expect(properties.toString(), equals(
+          'MosaicProperties{'
+              'supplyMutable: ${properties.supplyMutable}, '
+              'transferable: ${properties.transferable}, '
+              'divisibility: ${properties.divisibility}, '
+              'duration: ${properties.duration}}'
+      ));
     });
 
     test('Can create via static method create()', () {

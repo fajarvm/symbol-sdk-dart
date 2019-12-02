@@ -24,6 +24,9 @@ void main() {
     test('valid mosaic supply types', () {
       expect(MosaicSupplyType.DECREASE.value, 0);
       expect(MosaicSupplyType.INCREASE.value, 1);
+
+      expect(MosaicSupplyType.DECREASE.toString(),
+          equals('MosaicSupplyType{value: ${MosaicSupplyType.DECREASE.value}}'));
     });
 
     test('Can retrieve a valid mosaic supply type', () {

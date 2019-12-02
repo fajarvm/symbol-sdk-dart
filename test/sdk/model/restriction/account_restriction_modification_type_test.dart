@@ -24,16 +24,25 @@ void main() {
     test('valid types', () {
       expect(AccountRestrictionModificationAction.ADD.value, 0x00);
       expect(AccountRestrictionModificationAction.REMOVE.value, 0x01);
+
+      expect(
+          AccountRestrictionModificationAction.ADD.toString(),
+          equals('AccountRestrictionModificationAction{'
+              'value: ${AccountRestrictionModificationAction.ADD.value}'
+              '}'));
     });
 
     test('Can retrieve a valid restriction modification type', () {
       // Account filters
-      expect(AccountRestrictionModificationAction.fromInt(0x00), AccountRestrictionModificationAction.ADD);
-      expect(AccountRestrictionModificationAction.fromInt(0x01), AccountRestrictionModificationAction.REMOVE);
+      expect(AccountRestrictionModificationAction.fromInt(0x00),
+          AccountRestrictionModificationAction.ADD);
+      expect(AccountRestrictionModificationAction.fromInt(0x01),
+          AccountRestrictionModificationAction.REMOVE);
     });
 
     test('Trying to retrieve an invalid restriction type will throw an error', () {
-      String errorMessage = AccountRestrictionModificationAction.UNKNOWN_RESTRICTION_MODIFICATION_TYPE;
+      String errorMessage =
+          AccountRestrictionModificationAction.UNKNOWN_RESTRICTION_MODIFICATION_TYPE;
       expect(errorMessage, equals('unknown restriction modification type'));
 
       expect(() => AccountRestrictionModificationAction.fromInt(null),

@@ -16,10 +16,9 @@
 
 library nem2_sdk_dart.test.sdk.model.blockchain.network_type_test;
 
-import 'package:test/test.dart';
-
 import 'package:nem2_sdk_dart/core.dart' show SignSchema;
 import 'package:nem2_sdk_dart/sdk.dart' show NetworkType;
+import 'package:test/test.dart';
 
 void main() {
   group('NetworkType', () {
@@ -36,6 +35,9 @@ void main() {
       // Mijin test net
       expect(NetworkType.MIJIN_TEST.value, 0x90);
       expect(NetworkType.MIJIN_TEST.value, 144);
+
+      expect(NetworkType.MAIN_NET.toString(),
+          equals('NetworkType{value: ${NetworkType.MAIN_NET.value}}'));
     });
 
     test('Can retrieve a valid network type', () {

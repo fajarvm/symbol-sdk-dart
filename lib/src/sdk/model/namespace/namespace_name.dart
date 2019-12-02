@@ -30,4 +30,9 @@ class NamespaceName {
   final NamespaceId parentId;
 
   NamespaceName(this.namespaceId, this.name, [this.parentId]);
+
+  @override
+  String toString() {
+    return 'NamespaceName{namespaceId: $namespaceId, name: $name, parentId: $parentId}';
+  }
 }

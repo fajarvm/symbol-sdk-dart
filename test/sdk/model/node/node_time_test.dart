@@ -27,6 +27,9 @@ void main() {
       NodeTime nodeTime = new NodeTime(send, receive);
       expect(nodeTime.sendTimeStamp.value.toInt(), equals(1234567890));
       expect(nodeTime.receiveTimeStamp.value.toInt(), equals(987654321));
+
+      expect(nodeTime.toString(),
+          equals('NodeTime{sendTimeStamp: $send, receiveTimeStamp: $receive}'));
     });
   });
 }

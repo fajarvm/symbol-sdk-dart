@@ -24,6 +24,8 @@ void main() {
     test('Valid role types', () {
       expect(RoleType.PEER_NODE.value, 1);
       expect(RoleType.API_NODE.value, 2);
+
+      expect(RoleType.PEER_NODE.toString(), equals('RoleType{value: ${RoleType.PEER_NODE.value}}'));
     });
 
     test('Can retrieve a valid role type', () {

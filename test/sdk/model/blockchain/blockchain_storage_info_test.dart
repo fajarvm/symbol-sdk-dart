@@ -16,9 +16,8 @@
 
 library nem2_sdk_dart.test.sdk.model.blockchain.blockchain_storage_info_test;
 
-import 'package:test/test.dart';
-
 import 'package:nem2_sdk_dart/sdk.dart' show BlockchainStorageInfo;
+import 'package:test/test.dart';
 
 void main() {
   group('BlockchainStorageInfo', () {
@@ -28,6 +27,14 @@ void main() {
       expect(blockchainStorageInfo.numBlocks, 1);
       expect(blockchainStorageInfo.numTransactions, 2);
       expect(blockchainStorageInfo.numAccounts, 3);
+
+      expect(
+          blockchainStorageInfo.toString(),
+          equals('BlockchainStorageInfo{'
+              'numBlocks: ${blockchainStorageInfo.numBlocks}, '
+              'numTransactions: ${blockchainStorageInfo.numTransactions}, '
+              'numAccounts: ${blockchainStorageInfo.numAccounts}'
+              '}'));
     });
   });
 }

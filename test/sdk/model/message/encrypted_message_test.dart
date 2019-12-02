@@ -16,11 +16,10 @@
 
 library nem2_sdk_dart.test.sdk.model.message.encrypted_message_test;
 
-import 'package:test/test.dart';
-
 import 'package:nem2_sdk_dart/core.dart' show HexUtils;
 import 'package:nem2_sdk_dart/sdk.dart'
     show Account, EncryptedMessage, MessageType, NetworkType, PlainMessage;
+import 'package:test/test.dart';
 
 void main() {
   group('EncryptedMessage', () {
@@ -40,6 +39,9 @@ void main() {
       final encryptedMessage = EncryptedMessage.fromPayload(messageHex);
 
       expect(encryptedMessage.payload, equals(messageHex));
+
+      expect(encryptedMessage.toString(),
+          equals('Message{type: ${encryptedMessage.type}, payload: ${encryptedMessage.payload}}'));
     });
 
     test('Should throw an error when creating an encrypted message from am invalid payload', () {

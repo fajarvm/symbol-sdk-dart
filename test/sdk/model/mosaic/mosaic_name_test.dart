@@ -29,6 +29,10 @@ void main() {
       expect(mosaicName.mosaicId, equals(mosaicId));
       expect(mosaicName.name, equals('xem'));
       expect(mosaicName.parentId, equals(namespaceId));
+      expect(
+          mosaicName.toString(),
+          equals(
+              'MosaicName{mosaicId: $mosaicId, name: ${mosaicName.name}, parentId: $namespaceId}'));
     });
   });
 }

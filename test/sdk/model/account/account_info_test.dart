@@ -16,10 +16,9 @@
 
 library nem2_sdk_dart.test.sdk.model.account.account_info_test;
 
-import 'package:test/test.dart';
-
 import 'package:nem2_sdk_dart/sdk.dart'
     show AccountInfo, AccountType, Address, Mosaic, MosaicId, NetworkType, PublicAccount, Uint64;
+import 'package:test/test.dart';
 
 void main() {
   group('AccountInfo', () {
@@ -50,6 +49,19 @@ void main() {
       expect(accountInfo.importanceHeight.value.toInt(), 50);
       final PublicAccount expected = PublicAccount.fromPublicKey(publicKey, NetworkType.MIJIN_TEST);
       expect(accountInfo.publicAccount, equals(expected));
+
+      // toString()
+      final toString = 'AccountInfo{'
+          'address: $address, '
+          'addressHeight: $addressHeight, '
+          'publicKey: $publicKey, '
+          'publicKeyHeight: $publicKeyHeight, '
+          'accountType: $accountType, '
+          'importance: $importance, '
+          'importanceHeight: $importanceHeight, '
+          'mosaics: $mosaics'
+          '}';
+      expect(accountInfo.toString(), equals(toString));
     });
   });
 }

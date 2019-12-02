@@ -16,9 +16,8 @@
 
 library nem2_sdk_dart.test.sdk.model.account.account_type_test;
 
-import 'package:test/test.dart';
-
 import 'package:nem2_sdk_dart/sdk.dart' show AccountType;
+import 'package:test/test.dart';
 
 void main() {
   group('AccountType', () {
@@ -27,6 +26,9 @@ void main() {
       expect(AccountType.MAIN.value, 1);
       expect(AccountType.REMOTE.value, 2);
       expect(AccountType.REMOTE_UNLINKED.value, 3);
+
+      expect(AccountType.UNLINKED.toString(),
+          equals('AccountType{value: ${AccountType.UNLINKED.value}}'));
     });
 
     test('Can retrieve a valid account type', () {

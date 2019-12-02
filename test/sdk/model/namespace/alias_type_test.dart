@@ -25,6 +25,8 @@ void main() {
       expect(AliasType.NONE.value, 0);
       expect(AliasType.MOSAIC.value, 1);
       expect(AliasType.ADDRESS.value, 2);
+
+      expect(AliasType.NONE.toString(), equals('AliasType{value: ${AliasType.NONE.value}}'));
     });
 
     test('Can retrieve a valid alias type', () {

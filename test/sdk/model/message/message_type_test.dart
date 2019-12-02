@@ -16,9 +16,8 @@
 
 library nem2_sdk_dart.test.sdk.model.message.message_type_test;
 
-import 'package:test/test.dart';
-
 import 'package:nem2_sdk_dart/sdk.dart' show MessageType;
+import 'package:test/test.dart';
 
 void main() {
   group('MessageType', () {
@@ -26,6 +25,9 @@ void main() {
       expect(MessageType.PLAIN_MESSAGE.value, 0x00);
       expect(MessageType.ENCRYPTED_MESSAGE.value, 0x01);
       expect(MessageType.PERSISTENT_HARVESTING_DELEGATION_MESSAGE.value, 0xFE);
+
+      expect(MessageType.PLAIN_MESSAGE.toString(),
+          equals('MessageType{value: ${MessageType.PLAIN_MESSAGE.value}}'));
     });
 
     test('Can retrieve valid message types', () {
