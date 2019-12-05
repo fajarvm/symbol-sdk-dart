@@ -23,7 +23,7 @@ import 'package:nem2_sdk_dart/sdk.dart'
         MosaicId,
         NamespaceId,
         NamespaceInfo,
-        NamespaceType,
+        NamespaceRegistrationType,
         NetworkType,
         PublicAccount,
         Uint64;
@@ -50,7 +50,7 @@ void main() {
           isActive,
           index,
           metaId,
-          NamespaceType.ROOT_NAMESPACE,
+          NamespaceRegistrationType.ROOT_NAMESPACE,
           1,
           [level1, level2],
           new NamespaceId(id: Uint64(0)),
@@ -62,7 +62,7 @@ void main() {
       expect(namespaceInfo.active, isTrue);
       expect(namespaceInfo.index, 0);
       expect(namespaceInfo.metaId, equals(metaId));
-      expect(namespaceInfo.type, equals(NamespaceType.ROOT_NAMESPACE));
+      expect(namespaceInfo.registrationType, equals(NamespaceRegistrationType.ROOT_NAMESPACE));
       expect(namespaceInfo.depth, 1);
       expect(namespaceInfo.levels.length, 2);
       expect(namespaceInfo.levels[0], equals(level1));
@@ -86,22 +86,22 @@ void main() {
     test('Cannot create with invalid index, depth or levels', () {
       expect(
           () => new NamespaceInfo(
-              true, -1, '', NamespaceType.ROOT_NAMESPACE, 1, null, null, null, null, null, null),
+              true, -1, '', NamespaceRegistrationType.ROOT_NAMESPACE, 1, null, null, null, null, null, null),
           throwsA(
               predicate((e) => e is ArgumentError && e.message == 'index must not be negative')));
       expect(
           () => new NamespaceInfo(
-              true, 0, '', NamespaceType.ROOT_NAMESPACE, -1, null, null, null, null, null, null),
+              true, 0, '', NamespaceRegistrationType.ROOT_NAMESPACE, -1, null, null, null, null, null, null),
           throwsA(
               predicate((e) => e is ArgumentError && e.message == 'depth must not be negative')));
       expect(
           () => new NamespaceInfo(
-              true, 0, '', NamespaceType.ROOT_NAMESPACE, 1, null, null, null, null, null, null),
+              true, 0, '', NamespaceRegistrationType.ROOT_NAMESPACE, 1, null, null, null, null, null, null),
           throwsA(predicate(
               (e) => e is ArgumentError && e.message == 'levels must not be null or empty')));
       expect(
           () => new NamespaceInfo(
-              true, 0, '', NamespaceType.ROOT_NAMESPACE, 1, [], null, null, null, null, null),
+              true, 0, '', NamespaceRegistrationType.ROOT_NAMESPACE, 1, [], null, null, null, null, null),
           throwsA(predicate(
               (e) => e is ArgumentError && e.message == 'levels must not be null or empty')));
     });

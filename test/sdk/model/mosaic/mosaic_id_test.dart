@@ -26,6 +26,7 @@ import 'package:nem2_sdk_dart/sdk.dart'
 void main() {
   const testPublicKey = 'b4f12e7c9f6946091e2cb8b6d3a12b50d17ccbbf646386ea27ce2946a7423dcf';
   const testHex = '85BBEA6CC462B244'; // 15358872602548358953
+  const testInts = [3294802500, 2243684972];
   final testId = Uint64.fromHex(testHex);
 
   group('Create MosaicId via constructor', () {
@@ -47,7 +48,7 @@ void main() {
     });
   });
 
-  group('Create MosaicId via helper methods', () {
+  group('Create MosaicId via static methods', () {
     test('fromId()', () {
       final mosaicId = MosaicId.fromId(testId);
 
@@ -78,6 +79,15 @@ void main() {
       final expected = Uint64.fromHex('0dc67fbe1cad29e3');
       expect(mosaicId.id, equals(expected));
       expect(mosaicId.id.toHex(), equals(expected.toHex()));
+    });
+
+    test('fromInts()', () {
+      final mosaicId = MosaicId.fromInts(testInts[0], testInts[1]);
+
+      expect(mosaicId.id, equals(testId));
+      expect(mosaicId.id.toHex().toUpperCase(), equals(testHex));
+      expect(mosaicId.id.toIntArray()[0], equals(testInts[0]));
+      expect(mosaicId.id.toIntArray()[1], equals(testInts[1]));
     });
   });
 

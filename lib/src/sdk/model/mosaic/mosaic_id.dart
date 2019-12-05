@@ -67,15 +67,18 @@ class MosaicId extends Id {
     return new MosaicId(id);
   }
 
+  /// Creates a new [MosaicId] from a pair of 32-bit integers.
+  static MosaicId fromInts(final int lower, final int higher) {
+    return new MosaicId(Uint64.fromInts(lower, higher));
+  }
+
   @override
   int get hashCode => 'MosaicId'.hashCode ^ id.hashCode;
 
   @override
   bool operator ==(final other) =>
       identical(this, other) ||
-      other is MosaicId &&
-          this.runtimeType == other.runtimeType &&
-          this.id == other.id;
+      other is MosaicId && this.runtimeType == other.runtimeType && this.id == other.id;
 
   @override
   String toString() => 'MosaicId(id:$id)';

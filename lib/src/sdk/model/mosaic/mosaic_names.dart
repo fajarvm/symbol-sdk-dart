@@ -14,26 +14,23 @@
 // limitations under the License.
 //
 
-library nem2_sdk_dart.sdk.model.mosaic.mosaic_name;
+library nem2_sdk_dart.sdk.model.mosaic.mosaic_names;
 
-import '../namespace/namespace_id.dart';
+import '../namespace/namespace_name.dart';
 import 'mosaic_id.dart';
 
-/// The mosaic name info structure describes basic information of a mosaic and name.
-class MosaicName {
+/// The friendly names of one mosaic. The names are namespaces linked using mosaic aliases.
+class MosaicNames {
   /// The mosaic identifier.
   final MosaicId mosaicId;
 
-  /// The mosaic name.
-  final String name;
+  /// The linked namespace names.
+  final List<NamespaceName> names;
 
-  /// The namespace identifier this mosaic belongs to.
-  final NamespaceId parentId;
-
-  MosaicName(this.mosaicId, this.name, this.parentId);
+  MosaicNames(this.mosaicId, this.names);
 
   @override
   String toString() {
-    return 'MosaicName{mosaicId: $mosaicId, name: $name, parentId: $parentId}';
+    return 'MosaicNames{mosaicId: $mosaicId, names: $names}';
   }
 }

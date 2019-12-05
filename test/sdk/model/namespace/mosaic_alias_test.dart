@@ -18,7 +18,7 @@ library nem2_sdk_dart.test.sdk.model.namespace.mosaic_alias_test;
 
 import 'package:test/test.dart';
 
-import 'package:nem2_sdk_dart/sdk.dart' show AliasType, MosaicAlias, MosaicId;
+import 'package:nem2_sdk_dart/sdk.dart' show AliasType, MosaicAlias, MosaicId, Uint64;
 
 void main() {
   final MosaicId mosaicId = MosaicId.fromHex('85bbea6cc462b244');
@@ -34,7 +34,7 @@ void main() {
       expect(alias.toHex(), equals('85bbea6cc462b244'));
     });
 
-    test('Can compare adresses in AddressAlias', () {
+    test('Can compare MosaicAliases', () {
       final alias1 = new MosaicAlias(mosaicId);
       final alias2 = new MosaicAlias(mosaicId);
 
@@ -43,6 +43,9 @@ void main() {
 
       expect((alias1 == alias2), isTrue);
       expect((alias1 == alias3), isFalse);
+
+      final testId = MosaicId(Uint64.fromInts(481110498, 231112637));
+      expect(testId.toHex(), equals('0dc67fbd1cad29e2'));
     });
   });
 }

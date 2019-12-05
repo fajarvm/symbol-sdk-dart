@@ -59,11 +59,11 @@ export 'model/metadata/metadata_type.dart';
 
 // Mosaic
 export 'model/mosaic/mosaic.dart';
+export 'model/mosaic/mosaic_flags.dart';
 export 'model/mosaic/mosaic_id.dart';
 export 'model/mosaic/mosaic_info.dart';
-export 'model/mosaic/mosaic_name.dart';
+export 'model/mosaic/mosaic_names.dart';
 export 'model/mosaic/mosaic_nonce.dart';
-export 'model/mosaic/mosaic_properties.dart';
 export 'model/mosaic/mosaic_supply_type.dart';
 export 'model/mosaic/network_currency_mosaic.dart';
 export 'model/mosaic/network_harvest_mosaic.dart';
@@ -78,7 +78,7 @@ export 'model/namespace/mosaic_alias.dart';
 export 'model/namespace/namespace_id.dart';
 export 'model/namespace/namespace_info.dart';
 export 'model/namespace/namespace_name.dart';
-export 'model/namespace/namespace_type.dart';
+export 'model/namespace/namespace_registration_type.dart';
 
 // Node
 export 'model/node/node_info.dart';

@@ -17,7 +17,7 @@
 library nem2_sdk_dart.test.sdk.model.mosaic.mosaic_info_test;
 
 import 'package:nem2_sdk_dart/sdk.dart'
-    show MosaicId, MosaicInfo, MosaicProperties, NetworkType, PublicAccount, Uint64;
+    show MosaicFlags, MosaicId, MosaicInfo, NetworkType, PublicAccount, Uint64;
 import 'package:test/test.dart';
 
 void main() {
@@ -28,39 +28,41 @@ void main() {
 
     test('Can create via constructor', () {
       // Mosaic info parameters and properties
-      const metaId = '59FDA0733F17CF0001772CBC';
       final mosaicId = MosaicId(XEM_ID);
       final supply = Uint64(9999999999);
       final height = Uint64(1);
       final owner = PublicAccount.fromPublicKey(publicKey, NetworkType.MIJIN_TEST);
       const int revision = 1;
-
-      final properties = MosaicProperties.create(Uint64(9000));
+      const int divisibility = 3;
+      final flags = MosaicFlags.fromByteValue(7);
+      final duration = Uint64(1000);
 
       // Create MosaicInfo
       final MosaicInfo mosaicInfo =
-          new MosaicInfo(metaId, mosaicId, supply, height, owner, revision, properties);
+          new MosaicInfo(mosaicId, supply, height, owner, revision, flags, divisibility, duration);
 
       // Assert
-      expect(mosaicInfo.metaId, equals(metaId));
       expect(mosaicInfo.mosaicId, equals(mosaicId));
       expect(mosaicInfo.supply.value.toInt(), 9999999999);
       expect(mosaicInfo.height.value.toInt(), 1);
       expect(mosaicInfo.owner.publicKey, equals(publicKey));
-      expect(mosaicInfo.revision, 1);
-      expect(mosaicInfo.isSupplyMutable, isFalse);
+      expect(mosaicInfo.revision, revision);
+      expect(mosaicInfo.isSupplyMutable, isTrue);
       expect(mosaicInfo.isTransferable, isTrue);
-      expect(mosaicInfo.divisibility, 0);
-      expect(mosaicInfo.duration.value.toInt(), 9000);
-
-
+      expect(mosaicInfo.isRestrictable, isTrue);
+      expect(mosaicInfo.divisibility, divisibility);
+      expect(mosaicInfo.duration.value.toInt(), 1000);
     });
 
     test('Cannot create with invalid revision', () {
       expect(
-          () => new MosaicInfo(null, null, null, null, null, -1, null),
+          () => new MosaicInfo(null, null, null, null, -1, null, 0, null),
           throwsA(predicate(
               (e) => e is ArgumentError && e.message == 'revision must not be negative')));
+      expect(
+          () => new MosaicInfo(null, null, null, null, 0, null, -1, null),
+          throwsA(predicate(
+              (e) => e is ArgumentError && e.message == 'divisibility must not be negative')));
     });
   });
 }

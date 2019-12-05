@@ -18,14 +18,12 @@ library nem2_sdk_dart.sdk.model.mosaic.mosaic_info;
 
 import '../account/public_account.dart';
 import '../common/uint64.dart';
+
+import 'mosaic_flags.dart';
 import 'mosaic_id.dart';
-import 'mosaic_properties.dart';
 
 /// Contains information about a mosaic.
 class MosaicInfo {
-  /// The meta ID.
-  final String metaId;
-
   /// The mosaic ID.
   final MosaicId mosaicId;
 
@@ -41,36 +39,45 @@ class MosaicInfo {
   /// The mosaic revision.
   final int revision;
 
-  /// The properties of the mosaic.
-  final MosaicProperties properties;
+  /// The mosaic flags.
+  final MosaicFlags flags;
 
-  MosaicInfo._(this.metaId, this.mosaicId, this.supply, this.height, this.owner, this.revision,
-      this.properties);
+  /// The divisibility determines the decimal place the mosaic can be divided into.
+  final int divisibility;
+
+  /// The duration in blocks a mosaic will become available.
+  final Uint64 duration;
+
+  MosaicInfo._(this.mosaicId, this.supply, this.height, this.owner, this.revision, this.flags,
+      this.divisibility, this.duration);
 
   factory MosaicInfo(
-      final String metaId,
-      final MosaicId mosaicId,
-      final Uint64 supply,
-      final Uint64 height,
-      final PublicAccount owner,
-      final int revision,
-      final MosaicProperties properties) {
+    final MosaicId mosaicId,
+    final Uint64 supply,
+    final Uint64 height,
+    final PublicAccount owner,
+    final int revision,
+    final MosaicFlags flags,
+    final int divisibility,
+    final Uint64 duration,
+  ) {
     if (0 > revision) {
       throw new ArgumentError('revision must not be negative');
     }
+    if (0 > divisibility) {
+      throw new ArgumentError('divisibility must not be negative');
+    }
 
-    return new MosaicInfo._(metaId, mosaicId, supply, height, owner, revision, properties);
+    return new MosaicInfo._(
+        mosaicId, supply, height, owner, revision, flags, divisibility, duration);
   }
 
-  /// Returns the mosaic divisibility.
-  int get divisibility => properties.divisibility;
-
-  /// Returns the mosaic duration.
-  Uint64 get duration => properties.duration;
-
   /// Returns the mosaic supply mutability.
-  bool get isSupplyMutable => properties.supplyMutable;
+  bool get isSupplyMutable => flags.supplyMutable;
 
   /// Returns the mosaic transferability.
-  bool get isTransferable => properties.transferable;
+  bool get isTransferable => flags.transferable;
+
+  /// Returns the mosaic restrictability.
+  bool get isRestrictable => flags.restrictable;
 }

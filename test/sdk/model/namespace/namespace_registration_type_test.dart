@@ -14,33 +14,33 @@
 // limitations under the License.
 //
 
-library nem2_sdk_dart.test.sdk.model.namespace.namespace_type_test;
+library nem2_sdk_dart.test.sdk.model.namespace.namespace_registration_type_test;
 
-import 'package:nem2_sdk_dart/sdk.dart' show NamespaceType;
+import 'package:nem2_sdk_dart/sdk.dart' show NamespaceRegistrationType;
 import 'package:test/test.dart';
 
 void main() {
-  group('NamespaceType', () {
+  group('NamespaceRegistrationType', () {
     test('valid namespace types', () {
-      expect(NamespaceType.ROOT_NAMESPACE.value, 0);
-      expect(NamespaceType.SUB_NAMESPACE.value, 1);
+      expect(NamespaceRegistrationType.ROOT_NAMESPACE.value, 0);
+      expect(NamespaceRegistrationType.SUB_NAMESPACE.value, 1);
 
-      expect(NamespaceType.ROOT_NAMESPACE.toString(),
-          equals('NamespaceType{value: ${NamespaceType.ROOT_NAMESPACE.value}}'));
+      expect(NamespaceRegistrationType.ROOT_NAMESPACE.toString(),
+          equals('NamespaceRegistrationType{value: ${NamespaceRegistrationType.ROOT_NAMESPACE.value}}'));
     });
 
     test('Can retrieve a valid namespace type', () {
-      expect(NamespaceType.fromInt(0), NamespaceType.ROOT_NAMESPACE);
-      expect(NamespaceType.fromInt(1), NamespaceType.SUB_NAMESPACE);
+      expect(NamespaceRegistrationType.fromInt(0), NamespaceRegistrationType.ROOT_NAMESPACE);
+      expect(NamespaceRegistrationType.fromInt(1), NamespaceRegistrationType.SUB_NAMESPACE);
     });
 
     test('Trying to retrieve an invalid namespace type will throw an error', () {
-      String errorMessage = NamespaceType.UNKNOWN_NAMESPACE_TYPE;
-      expect(() => NamespaceType.fromInt(null),
+      String errorMessage = NamespaceRegistrationType.UNKNOWN_NAMESPACE_REGISTRATION_TYPE;
+      expect(() => NamespaceRegistrationType.fromInt(null),
           throwsA(predicate((e) => e is ArgumentError && e.message == errorMessage)));
-      expect(() => NamespaceType.fromInt(-1),
+      expect(() => NamespaceRegistrationType.fromInt(-1),
           throwsA(predicate((e) => e is ArgumentError && e.message == errorMessage)));
-      expect(() => NamespaceType.fromInt(2),
+      expect(() => NamespaceRegistrationType.fromInt(2),
           throwsA(predicate((e) => e is ArgumentError && e.message == errorMessage)));
     });
   });

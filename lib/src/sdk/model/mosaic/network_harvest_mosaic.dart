@@ -31,10 +31,10 @@ class NetworkHarvestMosaic extends Mosaic {
   /// The namespaceId of this mosaic.
   static final Id NAMESPACE_ID = new NamespaceId(fullName: 'cat.harvest');
 
-  /// Divisibility of 6.
+  /// The divisibility of this mosaic.
   static const int DIVISIBILITY = 3;
 
-  /// Initial supply.
+  /// The initial supply of this mosaic.
   static const int INITIAL_SUPPLY = 15000000;
 
   /// This mosaic is transferable.

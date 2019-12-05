@@ -34,7 +34,7 @@ void main() {
       expect(alias.hashCode, isNotNull);
     });
 
-    test('Can compare adresses in AddressAlias', () {
+    test('Can compare AddressAliases', () {
       final alias1 = new AddressAlias(address);
       final alias2 = new AddressAlias(address);
       final alias3 = new AddressAlias(address2);

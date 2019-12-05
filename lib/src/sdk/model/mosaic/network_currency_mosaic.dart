@@ -31,10 +31,10 @@ class NetworkCurrencyMosaic extends Mosaic {
   /// The namespaceId of this mosaic.
   static final Id NAMESPACE_ID = new NamespaceId(fullName: 'cat.currency');
 
-  /// Divisibility of 6.
+  /// The divisibility of this mosaic.
   static const int DIVISIBILITY = 6;
 
-  /// Initial supply.
+  /// The initial supply of this mosaic.
   static const int INITIAL_SUPPLY = 8999999999;
 
   /// This mosaic is transferable.
@@ -55,10 +55,10 @@ class NetworkCurrencyMosaic extends Mosaic {
         Uint64.fromBigInt(amount.value * BigInt.from(pow(10, NetworkCurrencyMosaic.DIVISIBILITY))));
   }
 
-  /// Creates NetworkCurrencyMosaic with using micro XEM as unit.
+  /// Creates NetworkCurrencyMosaic with using micro NetworkCurrencyMosaicM as unit.
   ///
   /// 1 NetworkCurrencyMosaic = 1000000 micro NetworkCurrencyMosaic.
-  static NetworkCurrencyMosaic createAbsolute(final Uint64 microXemAmount) {
-    return new NetworkCurrencyMosaic._(microXemAmount);
+  static NetworkCurrencyMosaic createAbsolute(final Uint64 microAmount) {
+    return new NetworkCurrencyMosaic._(microAmount);
   }
 }

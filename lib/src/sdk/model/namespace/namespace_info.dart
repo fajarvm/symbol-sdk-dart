@@ -22,7 +22,7 @@ import '../common/uint64.dart';
 import 'alias.dart';
 import 'alias_type.dart';
 import 'namespace_id.dart';
-import 'namespace_type.dart';
+import 'namespace_registration_type.dart';
 
 /// Contains information about a namespace
 class NamespaceInfo {
@@ -35,8 +35,8 @@ class NamespaceInfo {
   /// The meta ID.
   final String metaId;
 
-  /// The namespace type, namespace and sub namespace.
-  final NamespaceType type;
+  /// The namespace registration type, namespace and sub namespace.
+  final NamespaceRegistrationType registrationType;
 
   /// The level of namespace.
   final int depth;
@@ -59,14 +59,14 @@ class NamespaceInfo {
   /// The alias linked to a namespace.
   final Alias alias;
 
-  NamespaceInfo._(this.active, this.index, this.metaId, this.type, this.depth, this.levels,
-      this.parentId, this.owner, this.startHeight, this.endHeight, this.alias);
+  NamespaceInfo._(this.active, this.index, this.metaId, this.registrationType, this.depth,
+      this.levels, this.parentId, this.owner, this.startHeight, this.endHeight, this.alias);
 
   factory NamespaceInfo(
       final bool isActive,
       final int index,
       final String metaId,
-      final NamespaceType type,
+      final NamespaceRegistrationType registrationType,
       final int depth,
       final List<NamespaceId> levels,
       final NamespaceId parentId,
@@ -85,8 +85,8 @@ class NamespaceInfo {
       throw new ArgumentError('levels must not be null or empty');
     }
 
-    return NamespaceInfo._(isActive, index, metaId, type, depth, levels, parentId, owner,
-        startHeight, endHeight, alias);
+    return NamespaceInfo._(isActive, index, metaId, registrationType, depth, levels, parentId,
+        owner, startHeight, endHeight, alias);
   }
 
   /// Retrieves the namespace id.
@@ -94,12 +94,12 @@ class NamespaceInfo {
 
   /// Determines if this is a namespace root.
   bool isRoot() {
-    return NamespaceType.ROOT_NAMESPACE == this.type;
+    return NamespaceRegistrationType.ROOT_NAMESPACE == this.registrationType;
   }
 
   /// Determines if this is a sub namespace.
   bool isSubnamespace() {
-    return NamespaceType.SUB_NAMESPACE == this.type;
+    return NamespaceRegistrationType.SUB_NAMESPACE == this.registrationType;
   }
 
   bool hasAlias() {

@@ -86,6 +86,11 @@ class NamespaceId extends Id {
     return new NamespaceId(id: Uint64.fromHex(hex));
   }
 
+  /// Creates a new [NamespaceId] from a pair of 32-bit integers.
+  static NamespaceId fromInts(final int lower, final int higher) {
+    return new NamespaceId(id: Uint64.fromInts(lower, higher));
+  }
+
   @override
   int get hashCode => 'NamespaceId'.hashCode ^ id.hashCode;
 

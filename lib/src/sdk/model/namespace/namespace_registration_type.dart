@@ -14,43 +14,43 @@
 // limitations under the License.
 //
 
-library nem2_sdk_dart.sdk.model.namespace.namespace_type;
+library nem2_sdk_dart.sdk.model.namespace.namespace_registration_type;
 
-/// The namespace type.
-class NamespaceType {
-  static const String UNKNOWN_NAMESPACE_TYPE = 'unknown namespace type';
+/// The namespace registration type.
+class NamespaceRegistrationType {
+  static const String UNKNOWN_NAMESPACE_REGISTRATION_TYPE = 'unknown namespace registration type';
 
   /// Indicates a root namespace.
-  static const NamespaceType ROOT_NAMESPACE = NamespaceType._(0);
+  static const NamespaceRegistrationType ROOT_NAMESPACE = NamespaceRegistrationType._(0);
 
   /// Indicates a sub namespace.
-  static const NamespaceType SUB_NAMESPACE = NamespaceType._(1);
+  static const NamespaceRegistrationType SUB_NAMESPACE = NamespaceRegistrationType._(1);
 
   /// Supported namespace types.
-  static final List<NamespaceType> values = <NamespaceType>[ROOT_NAMESPACE, SUB_NAMESPACE];
+  static final List<NamespaceRegistrationType> values = <NamespaceRegistrationType>[ROOT_NAMESPACE, SUB_NAMESPACE];
 
   /// The int value of this type.
   final int value;
 
   // constant constructor: makes this class available on runtime.
   // emulates an enum class with a value.
-  const NamespaceType._(this.value);
+  const NamespaceRegistrationType._(this.value);
 
-  /// Returns a [NamespaceType] for the given int value.
+  /// Returns a [NamespaceRegistrationType] for the given int value.
   ///
   /// Throws an error when the type is unknown.
-  static NamespaceType fromInt(final int value) {
+  static NamespaceRegistrationType fromInt(final int value) {
     for (var type in values) {
       if (type.value == value) {
         return type;
       }
     }
 
-    throw new ArgumentError(UNKNOWN_NAMESPACE_TYPE);
+    throw new ArgumentError(UNKNOWN_NAMESPACE_REGISTRATION_TYPE);
   }
 
   @override
   String toString() {
-    return 'NamespaceType{value: $value}';
+    return 'NamespaceRegistrationType{value: $value}';
   }
 }
