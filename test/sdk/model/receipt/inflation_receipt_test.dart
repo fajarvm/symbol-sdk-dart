@@ -16,6 +16,7 @@
 
 library nem2_sdk_dart.test.sdk.model.receipt.inflation_receipt_test;
 
+import 'package:nem2_sdk_dart/core.dart' show HexUtils;
 import 'package:nem2_sdk_dart/sdk.dart'
     show InflationReceipt, MosaicId, ReceiptType, ReceiptVersion, Uint64;
 import 'package:test/test.dart';
@@ -35,6 +36,8 @@ void main() {
       expect(receipt.mosaicId.toHex(), equals('85bbea6cc462b244'));
       expect(receipt.amount, equals(amount));
       expect(receipt.size, isNull);
+      String hex = HexUtils.bytesToHex(receipt.serialize());
+      expect(hex, equals('0100435144b262c46ceabb850a00000000000000'));
     });
 
     test('Can create inflation receipt with size', () {
@@ -46,6 +49,8 @@ void main() {
       expect(receipt.mosaicId.toHex(), equals('85bbea6cc462b244'));
       expect(receipt.amount, equals(amount));
       expect(receipt.size, 100);
+      String hex = HexUtils.bytesToHex(receipt.serialize());
+      expect(hex, equals('0100435144b262c46ceabb850a00000000000000'));
     });
 
     test('Should throw an exception when creating a receipt with bad parameter values', () {

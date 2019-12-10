@@ -16,13 +16,15 @@
 
 library nem2_sdk_dart.test.sdk.model.receipt.balance_transfer_receipt_test;
 
+import 'dart:typed_data' show Uint8List;
+
 import 'package:nem2_sdk_dart/sdk.dart'
     show
         Account,
         Address,
-        AddressAlias,
         BalanceTransferReceipt,
         MosaicId,
+        NamespaceId,
         NetworkType,
         PublicAccount,
         ReceiptType,
@@ -40,7 +42,7 @@ void main() {
     final Uint64 amount = Uint64.fromBigInt(BigInt.from(10));
     final Address testAddress =
         Address.fromRawAddress('SDGLFW-DSHILT-IUHGIB-H5UGX2-VYF5VN-JEKCCD-BR26');
-    final AddressAlias testAlias = new AddressAlias(testAddress);
+    final NamespaceId testNamespaceId = NamespaceId.fromInts(3646934825, 3576016193);
 
     // helper methods
     BalanceTransferReceipt _newBalanceTransferReceipt(
@@ -57,14 +59,16 @@ void main() {
       if (recipient is Address) {
         expect((receipt.recipient as Address).pretty, equals(testAddress.pretty));
       }
-      if (recipient is AddressAlias) {
-        expect((receipt.recipient as AddressAlias), equals(testAlias));
+      if (recipient is NamespaceId) {
+        expect((receipt.recipient as NamespaceId), equals(testNamespaceId));
       }
       expect(receipt.mosaicId.toHex(), equals('85bbea6cc462b244'));
       expect(receipt.amount.value, equals(amount.value));
       expect(receipt.type, equals(type));
       expect(receipt.version, equals(ReceiptVersion.BALANCE_TRANSFER));
       expect(receipt.size, isNull);
+      Uint8List receiptByte = receipt.serialize();
+      expect(receiptByte.length, equals(52 + receipt.getRecipientBytes().length));
     }
 
     test('Check the number of receipts with type BalanceTransfer', () {
@@ -76,9 +80,9 @@ void main() {
       test('Can create balance transfer receipt using address and type #$count: ${type.name}', () {
         _createAndAssertReceipt(type, testAddress);
       });
-      test('Can create balance transfer receipt using address alias and type #$count: ${type.name}',
+      test('Can create balance transfer receipt using namespaceId and type #$count: ${type.name}',
           () {
-        _createAndAssertReceipt(type, testAlias);
+        _createAndAssertReceipt(type, testNamespaceId);
       });
       count++;
     }

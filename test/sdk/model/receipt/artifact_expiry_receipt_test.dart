@@ -16,6 +16,7 @@
 
 library nem2_sdk_dart.test.sdk.model.receipt.artifact_expiry_receipt_test;
 
+import 'package:nem2_sdk_dart/core.dart' show HexUtils;
 import 'package:nem2_sdk_dart/sdk.dart'
     show ArtifactExpiryReceipt, MosaicId, NamespaceId, ReceiptType, ReceiptVersion;
 import 'package:test/test.dart';
@@ -24,36 +25,31 @@ void main() {
   group('ArtifactExpiryReceipt', () {
     test('Can create Mosaic expiry receipt', () {
       MosaicId id = MosaicId.fromHex('85bbea6cc462b244');
-      ArtifactExpiryReceipt<MosaicId> mosaicExpiryReceipt =
-          new ArtifactExpiryReceipt(id, ReceiptType.MOSAIC_EXPIRED, ReceiptVersion.ARTIFACT_EXPIRY);
-
-      expect(mosaicExpiryReceipt.type, equals(ReceiptType.MOSAIC_EXPIRED));
-      expect(mosaicExpiryReceipt.version, equals(ReceiptVersion.ARTIFACT_EXPIRY));
-      expect(mosaicExpiryReceipt.artifactId.toHex(), equals('85bbea6cc462b244'));
-      expect(mosaicExpiryReceipt.size, isNull);
-    });
-
-    test('Can create Namespace expiry receipt', () {
-      // Namespace fullName: nem, hex: 84b3552d375ffa4b
-      NamespaceId id = NamespaceId.fromHex('84b3552d375ffa4b');
-      ArtifactExpiryReceipt<NamespaceId> mosaicExpiryReceipt = new ArtifactExpiryReceipt(
-          id, ReceiptType.NAMESPACE_EXPIRED, ReceiptVersion.ARTIFACT_EXPIRY);
-
-      expect(mosaicExpiryReceipt.type, equals(ReceiptType.NAMESPACE_EXPIRED));
-      expect(mosaicExpiryReceipt.version, equals(ReceiptVersion.ARTIFACT_EXPIRY));
-      expect(mosaicExpiryReceipt.artifactId.toHex(), equals('84b3552d375ffa4b'));
-      expect(mosaicExpiryReceipt.size, isNull);
-    });
-
-    test('Can create Mosaic expiry receipt with size', () {
-      MosaicId id = MosaicId.fromHex('85bbea6cc462b244');
       ArtifactExpiryReceipt<MosaicId> mosaicExpiryReceipt = new ArtifactExpiryReceipt(
           id, ReceiptType.MOSAIC_EXPIRED, ReceiptVersion.ARTIFACT_EXPIRY, 100);
 
       expect(mosaicExpiryReceipt.type, equals(ReceiptType.MOSAIC_EXPIRED));
       expect(mosaicExpiryReceipt.version, equals(ReceiptVersion.ARTIFACT_EXPIRY));
       expect(mosaicExpiryReceipt.artifactId.toHex(), equals('85bbea6cc462b244'));
-      expect(mosaicExpiryReceipt.size, 100);
+      expect(mosaicExpiryReceipt.getArtifactIdValue().toHex(), equals('85bbea6cc462b244'));
+      expect(mosaicExpiryReceipt.size, equals(100));
+      String hex = HexUtils.bytesToHex(mosaicExpiryReceipt.serialize());
+      expect(hex, equals('01004d4144b262c46ceabb85'));
+    });
+
+    test('Can create Namespace expiry receipt', () {
+      // Namespace fullName: nem, hex: 84b3552d375ffa4b
+      NamespaceId id = NamespaceId.fromHex('84b3552d375ffa4b');
+      ArtifactExpiryReceipt<NamespaceId> namespaceExpiryReceipt = new ArtifactExpiryReceipt(
+          id, ReceiptType.NAMESPACE_EXPIRED, ReceiptVersion.ARTIFACT_EXPIRY, 100);
+
+      expect(namespaceExpiryReceipt.type, equals(ReceiptType.NAMESPACE_EXPIRED));
+      expect(namespaceExpiryReceipt.version, equals(ReceiptVersion.ARTIFACT_EXPIRY));
+      expect(namespaceExpiryReceipt.artifactId.toHex(), equals('84b3552d375ffa4b'));
+      expect(namespaceExpiryReceipt.getArtifactIdValue().toHex(), equals('84b3552d375ffa4b'));
+      expect(namespaceExpiryReceipt.size, equals(100));
+      String hex = HexUtils.bytesToHex(namespaceExpiryReceipt.serialize());
+      expect(hex, equals('01004e414bfa5f372d55b384'));
     });
 
     test('Should throw an exception when creating a receipt with bad parameter values', () {

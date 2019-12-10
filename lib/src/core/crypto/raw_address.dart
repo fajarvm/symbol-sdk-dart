@@ -18,9 +18,8 @@ library nem2_sdk_dart.core.crypto.raw_address;
 
 import 'dart:typed_data' show Uint8List;
 
-import 'package:pointycastle/export.dart' show Digest;
-
 import 'package:nem2_sdk_dart/nem2_sdk_dart.dart' show NetworkType;
+import 'package:pointycastle/export.dart' show Digest;
 
 import '../utils/array_utils.dart';
 import '../utils/base32.dart';
@@ -41,6 +40,19 @@ class RawAddress {
 
   // private constructor
   const RawAddress._();
+
+  /// Format an [namespaceId] alias for a specific [networkType] into a valid recipient.
+  static Uint8List aliasToRecipient(final Uint8List namespaceId, final NetworkType networkType) {
+    // network type byte
+    final Uint8List networkByte = Uint8List.fromList([networkType.value | 0x01]);
+
+    // 0x91 | namespaceId on 8 bytes | 16 bytes 0-pad = 25 bytes
+    final padded = Uint8List(1 + 8 + 16);
+    padded.setAll(0, networkByte);
+    padded.setAll(1, namespaceId.reversed);
+    padded.setAll(9, HexUtils.getBytes(''.padRight(16, '00')));
+    return padded;
+  }
 
   /// Converts a `Base32` [encodedAddress] string to decoded address bytes.
   static Uint8List stringToAddress(final String encodedAddress) {

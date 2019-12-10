@@ -16,6 +16,7 @@
 
 library nem2_sdk_dart.test.sdk.model.receipt.balance_change_receipt_test;
 
+import 'package:nem2_sdk_dart/core.dart' show HexUtils;
 import 'package:nem2_sdk_dart/sdk.dart'
     show
         Account,
@@ -52,6 +53,50 @@ void main() {
       expect(receipt.version, equals(ReceiptVersion.BALANCE_CHANGE));
       expect(receipt.amount.value, equals(amount.value));
       expect(receipt.size, isNull);
+
+      String hex = HexUtils.bytesToHex(receipt.serialize());
+      if (ReceiptType.HARVEST_FEE == receipt.type) {
+        expect(
+            hex,
+            equals(
+                '0100432144b262c46ceabb850a000000000000001026d70e1954775749c6811084d6450a3184d977383f0e4282cd47118af37755'));
+      }
+      if (ReceiptType.LOCKHASH_CREATED == receipt.type) {
+        expect(
+            hex,
+            equals(
+                '0100483144b262c46ceabb850a000000000000001026d70e1954775749c6811084d6450a3184d977383f0e4282cd47118af37755'));
+      }
+      if (ReceiptType.LOCKHASH_EXPIRED == receipt.type) {
+        expect(
+            hex,
+            equals(
+                '0100482344b262c46ceabb850a000000000000001026d70e1954775749c6811084d6450a3184d977383f0e4282cd47118af37755'));
+      }
+      if (ReceiptType.LOCKHASH_COMPLETED == receipt.type) {
+        expect(
+            hex,
+            equals(
+                '0100482244b262c46ceabb850a000000000000001026d70e1954775749c6811084d6450a3184d977383f0e4282cd47118af37755'));
+      }
+      if (ReceiptType.LOCKSECRET_CREATED == receipt.type) {
+        expect(
+            hex,
+            equals(
+                '0100523144b262c46ceabb850a000000000000001026d70e1954775749c6811084d6450a3184d977383f0e4282cd47118af37755'));
+      }
+      if (ReceiptType.LOCKSECRET_EXPIRED == receipt.type) {
+        expect(
+            hex,
+            equals(
+                '0100522344b262c46ceabb850a000000000000001026d70e1954775749c6811084d6450a3184d977383f0e4282cd47118af37755'));
+      }
+      if (ReceiptType.LOCKSECRET_COMPLETED == receipt.type) {
+        expect(
+            hex,
+            equals(
+                '0100522244b262c46ceabb850a000000000000001026d70e1954775749c6811084d6450a3184d977383f0e4282cd47118af37755'));
+      }
     }
 
     test('Check the number of receipts with type BalanceChange', () {

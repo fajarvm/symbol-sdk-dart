@@ -16,9 +16,10 @@
 
 library nem2_sdk_dart.test.core.crypto.raw_address_test;
 
-import 'package:nem2_sdk_dart/nem2_sdk_dart.dart' show NetworkType;
+import 'dart:typed_data' show Uint8List;
 
 import 'package:nem2_sdk_dart/core.dart' show ArrayUtils, HexUtils, RawAddress;
+import 'package:nem2_sdk_dart/nem2_sdk_dart.dart' show NamespaceId, NetworkType;
 import 'package:test/test.dart';
 
 void main() {
@@ -31,6 +32,22 @@ void main() {
         expect(RawAddress.KEY_SIZE, 32);
         expect(RawAddress.CHECKSUM_SIZE, 4);
         expect(RawAddress.START_CHECKSUM_SIZE, 21);
+      });
+    });
+
+    group('aliasToRecipient', () {
+      test('can convert a namespaceId alias into recipient', () {
+        final namespaceId = NamespaceId.fromHex('9550CA3FC9B41FC5');
+        final namespaceIdByte = HexUtils.getBytes(namespaceId.toHex());
+
+        final Uint8List result =
+            RawAddress.aliasToRecipient(namespaceIdByte, NetworkType.MIJIN_TEST);
+
+        const expectedHex = '91c51fb4c93fca509500000000000000000000000000000000';
+        expect(HexUtils.bytesToHex(result), equals(expectedHex));
+
+        final expectedByte = (NetworkType.MIJIN_TEST.value | 1);
+        expect(result[0], equals(expectedByte));
       });
     });
 

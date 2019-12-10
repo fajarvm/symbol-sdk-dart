@@ -30,6 +30,8 @@ import 'model/account/public_account_test.dart' as public_account_test;
 import 'model/blockchain/block_info_test.dart' as block_info_test;
 import 'model/blockchain/blockchain_score_test.dart' as blockchain_score_test;
 import 'model/blockchain/blockchain_storage_info_test.dart' as blockchain_storage_info_test;
+import 'model/blockchain/merkle_path_item_test.dart' as merkle_path_item_test;
+import 'model/blockchain/network_name_test.dart' as network_name_test;
 import 'model/blockchain/network_type_test.dart' as network_type_test;
 
 // common
@@ -130,6 +132,8 @@ void main() {
     block_info_test.main();
     blockchain_score_test.main();
     blockchain_storage_info_test.main();
+    merkle_path_item_test.main();
+    network_name_test.main();
     network_type_test.main();
   });
 
