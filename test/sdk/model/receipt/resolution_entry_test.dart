@@ -16,66 +16,52 @@
 
 library nem2_sdk_dart.test.sdk.model.receipt.resolution_entry_test;
 
-import 'package:nem2_sdk_dart/sdk.dart'
-    show Address, AddressAlias, MosaicAlias, MosaicId, ReceiptSource, ReceiptType, ResolutionEntry;
+import 'package:nem2_sdk_dart/sdk.dart' show Address, MosaicId, ReceiptSource, ResolutionEntry;
 import 'package:test/test.dart';
 
 void main() {
   group('ResolutionEntry', () {
     // setup
     const String plainAddress = 'SDGLFW-DSHILT-IUHGIB-H5UGX2-VYF5VN-JEKCCD-BR26';
-    final Address testAddress = Address.fromRawAddress(plainAddress);
-    final AddressAlias addressAlias = new AddressAlias(testAddress);
-    final MosaicId mosaicId = MosaicId.fromHex('85bbea6cc462b244');
-    final MosaicAlias mosaicAlias = new MosaicAlias(mosaicId);
+    final Address address = Address.fromRawAddress(plainAddress);
+    const String mosaicHex = '85bbea6cc462b244';
+    final MosaicId mosaicId = MosaicId.fromHex(mosaicHex);
     final ReceiptSource receiptSource = new ReceiptSource(1, 2);
 
-    test('Can create address resolution entry', () {
-      ResolutionEntry resolutionEntry =
-          new ResolutionEntry(addressAlias, receiptSource, ReceiptType.ADDRESS_ALIAS_RESOLUTION);
+    test('Can create an address resolution entry', () {
+      ResolutionEntry resolutionEntry = new ResolutionEntry(address, receiptSource);
       expect(resolutionEntry.receiptSource, equals(receiptSource));
-      expect(resolutionEntry.receiptType, ReceiptType.ADDRESS_ALIAS_RESOLUTION);
-      expect(resolutionEntry.resolved, equals(addressAlias));
+      expect(resolutionEntry.resolved is Address, isTrue);
+      expect(resolutionEntry.resolved, equals(address));
+      expect((resolutionEntry.resolved as Address).pretty, equals(plainAddress));
     });
 
-    test('Can create mosaic resolution entry', () {
-      ResolutionEntry resolutionEntry =
-          new ResolutionEntry(mosaicAlias, receiptSource, ReceiptType.MOSAIC_ALIAS_RESOLUTION);
+    test('Can create a mosaic resolution entry', () {
+      ResolutionEntry resolutionEntry = new ResolutionEntry(mosaicId, receiptSource);
       expect(resolutionEntry.receiptSource, equals(receiptSource));
-      expect(resolutionEntry.receiptType, ReceiptType.MOSAIC_ALIAS_RESOLUTION);
-      expect(resolutionEntry.resolved, equals(mosaicAlias));
+      expect(resolutionEntry.resolved is MosaicId, isTrue);
+      expect(resolutionEntry.resolved, equals(mosaicId));
+      expect((resolutionEntry.resolved as MosaicId).toHex(), equals(mosaicHex));
     });
 
     test('Should throw an exception when creating an entry with invalid parameter values', () {
       // null resolved object
       expect(
-          () => new ResolutionEntry(null, receiptSource, ReceiptType.ADDRESS_ALIAS_RESOLUTION),
+          () => new ResolutionEntry(null, receiptSource),
           throwsA(predicate(
               (e) => e is ArgumentError && e.message.toString().contains('Must not be null'))));
 
       // null source
       expect(
-          () => new ResolutionEntry(addressAlias, null, ReceiptType.ADDRESS_ALIAS_RESOLUTION),
-          throwsA(predicate(
-              (e) => e is ArgumentError && e.message.toString().contains('Must not be null'))));
-
-      // null receipt type
-      expect(
-          () => new ResolutionEntry(addressAlias, receiptSource, null),
+          () => new ResolutionEntry(address, null),
           throwsA(predicate(
               (e) => e is ArgumentError && e.message.toString().contains('Must not be null'))));
 
       // invalid resolved object type
       expect(
-          () => new ResolutionEntry('', receiptSource, ReceiptType.ADDRESS_ALIAS_RESOLUTION),
-          throwsA(predicate(
-              (e) => e is ArgumentError && e.message.toString().contains('Invalid ResolutionEntry'))));
-
-      // invalid receipt type
-      expect(
-          () => new ResolutionEntry(mosaicAlias, receiptSource, ReceiptType.MOSAIC_RENTAL_FEE),
-          throwsA(predicate(
-              (e) => e is ArgumentError && e.message.toString().contains('Invalid ResolutionEntry'))));
+          () => new ResolutionEntry('', receiptSource),
+          throwsA(predicate((e) =>
+              e is ArgumentError && e.message.toString().contains('Invalid ResolutionEntry'))));
     });
   });
 }

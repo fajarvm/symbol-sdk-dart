@@ -16,48 +16,28 @@
 
 library nem2_sdk_dart.sdk.model.receipt.resolution_entry;
 
-import '../namespace/address_alias.dart';
-import '../namespace/mosaic_alias.dart';
+import '../account/address.dart';
+import '../mosaic/mosaic_id.dart';
 import 'receipt_source.dart';
-import 'receipt_type.dart';
 
 /// The resolution entry object.
 class ResolutionEntry<T> {
-  /// The resolved object. It must either be an [AddressAlias] or a [MosaicAlias].
+  /// The resolved object. It must either be an [Address] or a [MosaicId].
   final T resolved;
 
   /// The receipt source.
   final ReceiptSource receiptSource;
 
-  /// The receipt type.
-  final ReceiptType receiptType;
+  ResolutionEntry._(this.resolved, this.receiptSource);
 
-  ResolutionEntry._(this.resolved, this.receiptSource, this.receiptType);
-
-  factory ResolutionEntry(T resolved, ReceiptSource source, ReceiptType type) {
+  factory ResolutionEntry(T resolved, ReceiptSource source) {
     ArgumentError.checkNotNull(resolved);
     ArgumentError.checkNotNull(source);
-    ArgumentError.checkNotNull(type);
 
-    _validate(resolved, type);
-
-    return ResolutionEntry._(resolved, source, type);
-  }
-
-  /// Validates the resolved object and receipt type.
-  ///
-  /// The input [object] must either be an [AddressAlias] or a [MosaicAlias].
-  static void _validate(final dynamic object, final ReceiptType type) {
-    if (object is AddressAlias || object is MosaicAlias) {
-      if (ReceiptType.ResolutionStatement.contains(type)) {
-        // OK. Match found.
-        return;
-      }
+    if (resolved is! Address && resolved is! MosaicId) {
+      throw new ArgumentError('Invalid ResolutionEntry: [resolved="$resolved"]');
     }
 
-    throw new ArgumentError('Invalid ResolutionEntry: ['
-        'resolved="$object",'
-        'receiptType="$type",'
-        ']');
+    return ResolutionEntry._(resolved, source);
   }
 }

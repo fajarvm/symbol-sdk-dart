@@ -61,7 +61,7 @@ class ArtifactExpiryReceipt<T> extends Receipt {
   }
 
   Uint64 getArtifactIdValue() {
-    if (!(artifactId is Id)) {
+    if (artifactId is! Id) {
       throw new StateError('artifactId should be a valid Id object');
     }
 
@@ -71,8 +71,8 @@ class ArtifactExpiryReceipt<T> extends Receipt {
   @override
   Uint8List serialize() {
     ByteData data = new ByteData(12);
-    data.setUint16(0, version.value, Endian.little);  // version part
-    data.setUint16(2, type.value, Endian.little);     // type part
+    data.setUint16(0, version.value, Endian.little); // version part
+    data.setUint16(2, type.value, Endian.little); // type part
     // artifactId part
     final Uint64 artifactIdValue = getArtifactIdValue();
     final ByteData idData = ByteData.view(artifactIdValue.toBytes().buffer);

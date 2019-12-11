@@ -89,7 +89,7 @@ export 'model/node/role_type.dart';
 export 'model/receipt/artifact_expiry_receipt.dart';
 export 'model/receipt/balance_change_receipt.dart';
 export 'model/receipt/balance_transfer_receipt.dart';
-export 'model/receipt/inlation_receipt.dart';
+export 'model/receipt/inflation_receipt.dart';
 export 'model/receipt/receipt.dart'; // abstract class
 export 'model/receipt/receipt_source.dart';
 export 'model/receipt/receipt_type.dart';

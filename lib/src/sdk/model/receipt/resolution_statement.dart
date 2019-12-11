@@ -19,11 +19,17 @@ library nem2_sdk_dart.sdk.model.receipt.resolution_statement;
 import '../account/address.dart';
 import '../common/uint64.dart';
 import '../mosaic/mosaic_id.dart';
-import 'receipt_type.dart';
 import 'resolution_entry.dart';
+import 'resolution_type.dart';
 
-/// The receipt source object.
+///  When a transaction includes an alias, a so called resolution statement reflects the
+///  resolved value for that block:
+/// - Address Resolution: An account alias was used in the block.
+/// - Mosaic Resolution: A mosaic alias was used in the block.
 class ResolutionStatement<T> {
+  /// The type of this resolution.
+  final ResolutionType resolutionType;
+
   /// The block height.
   final Uint64 height;
 
@@ -34,37 +40,55 @@ class ResolutionStatement<T> {
   final List<ResolutionEntry> resolutionEntries;
 
   // private constructor
-  ResolutionStatement._(this.height, this.unresolved, this.resolutionEntries);
+  ResolutionStatement._(this.resolutionType, this.height, this.unresolved, this.resolutionEntries);
 
-  factory ResolutionStatement(Uint64 height, T unresolved, List<ResolutionEntry> entries) {
-    if (!_isValid(unresolved, entries)) {
+  factory ResolutionStatement(
+      ResolutionType resolutionType, Uint64 height, T unresolved, List<ResolutionEntry> entries) {
+    ArgumentError.checkNotNull(resolutionType);
+    ArgumentError.checkNotNull(unresolved);
+
+    if (!_isValid(resolutionType, unresolved, entries)) {
       throw new ArgumentError('Invalid ResolutionStatement: ['
+          'resolutionType="$resolutionType",'
           'unresolvedObject="$unresolved",'
           'resolutionEntries="$entries",'
           ']');
     }
-    return ResolutionStatement._(height, unresolved, entries);
+    return ResolutionStatement._(resolutionType, height, unresolved, entries);
   }
 
   /// Validates an unresolved object against a list of resolution entry.
   ///
-  /// The [unresolved] object must either be an [AddressAlias] or a [MosaicAlias].
-  static bool _isValid(dynamic unresolved, List<ResolutionEntry> entries) {
-    if (unresolved is! MosaicId && unresolved is! Address) {
+  /// The [unresolved] object must either be an [Address] or a [MosaicId].
+  static bool _isValid(
+      ResolutionType resolutionType, dynamic unresolved, List<ResolutionEntry> entries) {
+    final bool isUnresolvedAddress = unresolved is Address ? true : false;
+    final bool isUnresolvedMosaic = unresolved is MosaicId ? true : false;
+
+    if (!isUnresolvedAddress && !isUnresolvedMosaic) {
+      return false;
+    }
+
+    if (ResolutionType.ADDRESS == resolutionType && !isUnresolvedAddress) {
+      return false;
+    }
+
+    if (ResolutionType.MOSAIC == resolutionType && !isUnresolvedMosaic) {
       return false;
     }
 
     for (var entry in entries) {
-      if (unresolved is Address && ReceiptType.ADDRESS_ALIAS_RESOLUTION == entry.receiptType) {
+      if (isUnresolvedAddress && entry.resolved is Address) {
         // OK. Match found.
         return true;
       }
-      if (unresolved is MosaicId && ReceiptType.MOSAIC_ALIAS_RESOLUTION == entry.receiptType) {
+      if (isUnresolvedMosaic && entry.resolved is MosaicId) {
         // OK. Match found.
         return true;
       }
     }
 
+    // No match found.
     return false;
   }
 }

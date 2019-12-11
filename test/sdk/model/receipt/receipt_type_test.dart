@@ -24,7 +24,7 @@ void main() {
     group('All types', () {
       test('Check all types', () {
         // check collection size
-        expect(ReceiptType.values.length, 16);
+        expect(ReceiptType.values.length, 17);
         // check values
         expect(ReceiptType.HARVEST_FEE.value, 0x2143);
         expect(ReceiptType.ADDRESS_ALIAS_RESOLUTION.value, 0xF143);
@@ -35,6 +35,7 @@ void main() {
         expect(ReceiptType.MOSAIC_RENTAL_FEE.value, 0x134D);
         expect(ReceiptType.NAMESPACE_EXPIRED.value, 0x414E);
         expect(ReceiptType.NAMESPACE_RENTAL_FEE.value, 0x124E);
+        expect(ReceiptType.NAMESPACE_DELETED.value, 0x424E);
         expect(ReceiptType.LOCKHASH_CREATED.value, 0x3148);
         expect(ReceiptType.LOCKHASH_COMPLETED.value, 0x2248);
         expect(ReceiptType.LOCKHASH_EXPIRED.value, 0x2348);
@@ -52,6 +53,7 @@ void main() {
         expect(ReceiptType.MOSAIC_RENTAL_FEE.name, 'MOSAIC_RENTAL_FEE');
         expect(ReceiptType.NAMESPACE_EXPIRED.name, 'NAMESPACE_EXPIRED');
         expect(ReceiptType.NAMESPACE_RENTAL_FEE.name, 'NAMESPACE_RENTAL_FEE');
+        expect(ReceiptType.NAMESPACE_DELETED.name, 'NAMESPACE_DELETED');
         expect(ReceiptType.LOCKHASH_CREATED.name, 'LOCKHASH_CREATED');
         expect(ReceiptType.LOCKHASH_COMPLETED.name, 'LOCKHASH_COMPLETED');
         expect(ReceiptType.LOCKHASH_EXPIRED.name, 'LOCKHASH_EXPIRED');
@@ -76,6 +78,7 @@ void main() {
         expect(ReceiptType.fromInt(0x134D), ReceiptType.MOSAIC_RENTAL_FEE);
         expect(ReceiptType.fromInt(0x414E), ReceiptType.NAMESPACE_EXPIRED);
         expect(ReceiptType.fromInt(0x124E), ReceiptType.NAMESPACE_RENTAL_FEE);
+        expect(ReceiptType.fromInt(0x424E), ReceiptType.NAMESPACE_DELETED);
         expect(ReceiptType.fromInt(0x3148), ReceiptType.LOCKHASH_CREATED);
         expect(ReceiptType.fromInt(0x2248), ReceiptType.LOCKHASH_COMPLETED);
         expect(ReceiptType.fromInt(0x2348), ReceiptType.LOCKHASH_EXPIRED);
@@ -99,11 +102,12 @@ void main() {
     group('Categorized types', () {
       test('ArtifactExpiry collection', () {
         // check collection size
-        expect(ReceiptType.ArtifactExpiry.length, 2);
+        expect(ReceiptType.ArtifactExpiry.length, 3);
 
         // check collection values
         expect(ReceiptType.ArtifactExpiry.contains(ReceiptType.MOSAIC_EXPIRED), isTrue);
         expect(ReceiptType.ArtifactExpiry.contains(ReceiptType.NAMESPACE_EXPIRED), isTrue);
+        expect(ReceiptType.ArtifactExpiry.contains(ReceiptType.NAMESPACE_DELETED), isTrue);
 
         expect(ReceiptType.ArtifactExpiry.contains(ReceiptType.HARVEST_FEE), isFalse);
       });

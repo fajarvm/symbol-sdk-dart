@@ -56,6 +56,10 @@ class ReceiptType {
   /// namespace. It is recorded when a namespace is registered or its duration is extended.
   static const ReceiptType NAMESPACE_RENTAL_FEE = ReceiptType._(0x124E, 'NAMESPACE_RENTAL_FEE');
 
+  /// The identifier of the namespace deleted in this block. It is recorded when the namespace
+  /// grace period elapses.
+  static const ReceiptType NAMESPACE_DELETED = ReceiptType._(0x424E, 'NAMESPACE_DELETED');
+
   /// The lockhash sender, mosaicId and amount locked. It is recorded when a valid
   /// HashLockTransaction is announced.
   static const ReceiptType LOCKHASH_CREATED = ReceiptType._(0x3148, 'LOCKHASH_CREATED');
@@ -95,6 +99,7 @@ class ReceiptType {
     MOSAIC_RENTAL_FEE,
     NAMESPACE_EXPIRED,
     NAMESPACE_RENTAL_FEE,
+    NAMESPACE_DELETED,
     LOCKHASH_CREATED,
     LOCKHASH_COMPLETED,
     LOCKHASH_EXPIRED,
@@ -108,6 +113,7 @@ class ReceiptType {
   static final List<ReceiptType> ArtifactExpiry = <ReceiptType>[
     MOSAIC_EXPIRED,
     NAMESPACE_EXPIRED,
+    NAMESPACE_DELETED
   ];
 
   /// Balance change type set.
