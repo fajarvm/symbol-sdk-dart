@@ -19,11 +19,9 @@ library nem2_sdk_dart.core.crypto.raw_address;
 import 'dart:typed_data' show Uint8List;
 
 import 'package:nem2_sdk_dart/nem2_sdk_dart.dart' show NetworkType;
+import 'package:nem2_sdk_dart/src/core/utils.dart';
 import 'package:pointycastle/export.dart' show Digest;
 
-import '../utils/array_utils.dart';
-import '../utils/base32.dart';
-import '../utils/hex_utils.dart';
 import 'crypto_utils.dart';
 import 'sha3_hasher.dart';
 import 'sign_schema.dart';

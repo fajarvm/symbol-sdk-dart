@@ -20,7 +20,6 @@ import 'crypto/crypto_exception_test.dart' as crypto_exception_test;
 import 'crypto/key_pair_test.dart' as keypair_test;
 import 'crypto/raw_address_test.dart' as raw_address_test;
 import 'crypto/sha3_hasher_test.dart' as sha3_hasher_test;
-import 'crypto/sha3nist_test.dart' as sha3nist_test;
 import 'crypto/sign_schema_test.dart' as sign_schema_test;
 import 'crypto/tweetnacl_test.dart' as tweetnacl_test;
 
@@ -30,7 +29,6 @@ void main() {
     keypair_test.main();
     raw_address_test.main();
     sha3_hasher_test.main();
-    sha3nist_test.main();
     sign_schema_test.main();
     tweetnacl_test.main();
   });

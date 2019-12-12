@@ -19,15 +19,11 @@ library nem2_sdk_dart.core.crypto.ed25519;
 import 'dart:typed_data' show Int64List, Uint8List;
 
 import 'package:encrypt/encrypt.dart';
+import 'package:nem2_sdk_dart/src/core/utils.dart';
 import 'package:pointycastle/export.dart' show Digest, RIPEMD160Digest, SHA256Digest, SHA3Digest;
-
-import 'package:nem2_sdk_dart/src/core/utils.dart' show ArrayUtils;
-
-import '../utils/hex_utils.dart';
 
 import 'crypto_exception.dart';
 import 'sha3_hasher.dart';
-import 'sha3nist.dart';
 import 'sign_schema.dart';
 import 'tweetnacl.dart';
 
@@ -285,16 +281,16 @@ class CryptoUtils {
     }
   }
 
-  /// Creates a SHA3 256/512 digest based on the given bit [length].
+  /// Creates a non-Keccak SHA3 256/512 digest based on the given bit [length].
   ///
-  /// Providing bit length 32 returns the SHA3-256.
-  /// Providing bit length 64 returns the SHA3-512. (Default return value)
-  static SHA3DigestNist createSha3Digest({final int length = 64}) {
+  /// Providing bit length 32 returns the non-Keccak SHA3-256.
+  /// Providing bit length 64 returns the non-Keccak SHA3-512. (Default return value)
+  static SHA3Digest createSha3Digest({final int length = 64}) {
     if (length != 64 && length != 32) {
       throw ArgumentError('Cannot create SHA3 hasher. Unexpected length: $length');
     }
 
-    return 64 == length ? new SHA3DigestNist(512) : new SHA3DigestNist(256);
+    return 64 == length ? new SHA3Digest(512, false) : new SHA3Digest(256, false);
   }
 
   /// Creates a Keccak 256/512 digest based on the given bit [length].

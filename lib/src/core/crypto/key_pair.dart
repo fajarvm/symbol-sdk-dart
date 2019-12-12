@@ -18,7 +18,7 @@ library nem2_sdk_dart.core.crypto.key_pair;
 
 import 'dart:typed_data' show Uint8List;
 
-import 'package:nem2_sdk_dart/src/core/utils.dart' show ArrayUtils, HexUtils;
+import 'package:nem2_sdk_dart/src/core/utils.dart';
 
 import 'package:pointycastle/api.dart' show Digest;
 
@@ -119,7 +119,8 @@ class KeyPair {
   }
 
   /// Signs the [data] with the given [keyPair] according to the [signSchema].
-  static Uint8List signData(final KeyPair keyPair, final Uint8List data, final SignSchema signSchema) {
+  static Uint8List signData(
+      final KeyPair keyPair, final Uint8List data, final SignSchema signSchema) {
     return CryptoUtils.signData(data, keyPair.publicKey, keyPair.privateKey, signSchema);
   }
 }

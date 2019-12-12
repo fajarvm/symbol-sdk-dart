@@ -18,33 +18,32 @@ library nem2_sdk_dart.test.core.crypto.sha3_hasher_test;
 
 import 'dart:typed_data';
 
-import 'package:pointycastle/export.dart' show Digest;
-
 import 'package:nem2_sdk_dart/core.dart' show HexUtils, SHA3Hasher, SignSchema;
+import 'package:pointycastle/export.dart' show Digest;
 import 'package:test/test.dart';
 
 void main() {
   group('SHA3Hasher', () {
     group('create()', () {
-      test('SHA3 (NIST) - 256', () {
+      test('SHA3 (non-Keccak) - 256', () {
         final Digest hasher =
             SHA3Hasher.create(SignSchema.SHA3, hashSize: SignSchema.HASH_SIZE_32_BYTES);
-        expect(hasher.algorithmName, equals('SHA-3-NIST/256'));
+        expect(hasher.algorithmName, equals('SHA-3/256'));
       });
 
-      test('SHA3 (NIST) - 512', () {
+      test('SHA3 (non-Keccak) - 512', () {
         final Digest hasher =
             SHA3Hasher.create(SignSchema.SHA3, hashSize: SignSchema.HASH_SIZE_64_BYTES);
-        expect(hasher.algorithmName, equals('SHA-3-NIST/512'));
+        expect(hasher.algorithmName, equals('SHA-3/512'));
       });
 
-      test('SHA3 (KECCAK) - 256', () {
+      test('SHA3 (Keccak) - 256', () {
         final Digest hasher =
             SHA3Hasher.create(SignSchema.KECCAK, hashSize: SignSchema.HASH_SIZE_32_BYTES);
         expect(hasher.algorithmName, equals('SHA-3/256'));
       });
 
-      test('SHA3 (KECCAK) - 512', () {
+      test('SHA3 (Keccak) - 512', () {
         final Digest hasher =
             SHA3Hasher.create(SignSchema.KECCAK, hashSize: SignSchema.HASH_SIZE_64_BYTES);
         expect(hasher.algorithmName, equals('SHA-3/512'));
@@ -98,8 +97,7 @@ void main() {
       test('SHA3 (KECCAK) - 256', () {
         // test #1
         Uint8List input = HexUtils.getBytes('227F');
-        Uint8List output =
-            SHA3Hasher.hash(input, SignSchema.KECCAK, SignSchema.HASH_SIZE_32_BYTES);
+        Uint8List output = SHA3Hasher.hash(input, SignSchema.KECCAK, SignSchema.HASH_SIZE_32_BYTES);
         String expected = '8b768bd38b5ff80edb8a9aeb460606a682580616d512ff566d0176b1c8fc1034';
         expect(HexUtils.getString(output), equals(expected));
 
@@ -119,8 +117,7 @@ void main() {
       test('KECCAK - 512', () {
         // test #1
         Uint8List input = HexUtils.getBytes('227F');
-        Uint8List output =
-            SHA3Hasher.hash(input, SignSchema.KECCAK, SignSchema.HASH_SIZE_64_BYTES);
+        Uint8List output = SHA3Hasher.hash(input, SignSchema.KECCAK, SignSchema.HASH_SIZE_64_BYTES);
         String expected = '764011e5b78404847b0a0a55f3a19c3db5401889ff438fc950537797baf42d7724ed681'
             '857bfe632cf5a132fa43dd881dbf15e4d11f518acb7fd03cacb81177a';
         expect(HexUtils.getString(output), equals(expected));
