@@ -1,6 +1,6 @@
 language: dart
 dart:
-  - '2.6.1'
+  - '2.7.0'
 notifications: {email: false}
 install:
   - pub global activate coveralls 5.6.0
