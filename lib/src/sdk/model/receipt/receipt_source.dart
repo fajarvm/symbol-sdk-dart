@@ -16,6 +16,8 @@
 
 library nem2_sdk_dart.sdk.model.receipt.receipt_source;
 
+import 'dart:typed_data' show ByteData, Endian, Uint8List;
+
 /// The Receipt Source class.
 class ReceiptSource {
   /// The transaction primary source (e.g. index within block).
@@ -25,4 +27,13 @@ class ReceiptSource {
   final int secondaryId;
 
   ReceiptSource(this.primaryId, this.secondaryId);
+
+  /// Serializes this receipt and returns receipt bytes.
+  Uint8List serialize() {
+    ByteData data = new ByteData(8);
+    data.setUint32(0, primaryId, Endian.little);
+    data.setUint32(4, secondaryId, Endian.little);
+
+    return data.buffer.asUint8List();
+  }
 }

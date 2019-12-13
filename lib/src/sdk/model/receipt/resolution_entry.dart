@@ -16,7 +16,12 @@
 
 library nem2_sdk_dart.sdk.model.receipt.resolution_entry;
 
+import 'dart:typed_data' show Uint8List;
+
+import 'package:nem2_sdk_dart/core.dart' show RawAddress;
+
 import '../account/address.dart';
+import '../common/uint64.dart';
 import '../mosaic/mosaic_id.dart';
 import 'receipt_source.dart';
 
@@ -39,5 +44,23 @@ class ResolutionEntry<T> {
     }
 
     return ResolutionEntry._(resolved, source);
+  }
+
+  /// Serializes this resolution entry and returns bytes.
+  Uint8List serialize() {
+    final Uint8List resolvedByte = _getResolvedBytes();
+
+    final Uint8List result = Uint8List(8 + resolvedByte.length);
+    result.setAll(0, resolvedByte);
+    result.setAll(resolvedByte.length, receiptSource.serialize());
+    return result;
+  }
+
+  Uint8List _getResolvedBytes() {
+    if (resolved is Address) {
+      return RawAddress.stringToAddress((resolved as Address).plain);
+    } else {
+      return Uint64.fromHex((resolved as MosaicId).toHex()).toBytes();
+    }
   }
 }

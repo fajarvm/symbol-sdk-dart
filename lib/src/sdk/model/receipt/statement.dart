@@ -17,7 +17,9 @@
 library nem2_sdk_dart.sdk.model.receipt.statement;
 
 import '../account/address.dart';
+import '../mosaic/mosaic.dart';
 import '../mosaic/mosaic_id.dart';
+import '../namespace/namespace_id.dart';
 import 'resolution_statement.dart';
 import 'transaction_statement.dart';
 
@@ -34,4 +36,46 @@ class Statement {
 
   Statement(this.transactionStatements, this.addressResolutionStatements,
       this.mosaicResolutionStatements);
+
+  /// Resolves an [unresolved] object using the given block [height], [transactionIndex] and
+  /// optionally [aggregateTransactionIndex]. Default value for [aggregateTransactionIndex] is 0.
+  ///
+  /// The [unresolved] object can either be an [Address], a [Mosaic], [MosaicId] or a
+  /// [NamespaceId]. The type of the object returned corresponds to the type of the given
+  /// [unresolved] object.
+  dynamic resolve(
+      {dynamic unresolved,
+      String height,
+      int transactionIndex,
+      int aggregateTransactionIndex = 0}) {
+    // Determines which resolution statements we look into
+    List<ResolutionStatement> resolutionStatements;
+    if (unresolved is Address) {
+      resolutionStatements = addressResolutionStatements;
+    } else if (unresolved is Mosaic || unresolved is MosaicId || unresolved is NamespaceId) {
+      resolutionStatements = mosaicResolutionStatements;
+    } else {
+      throw new ArgumentError('unsupported unresolved object: $unresolved');
+    }
+
+    // Attempt to find a resolution statement
+    var resolved;
+    resolutionStatements.forEach((statement) {
+      if (statement.height.toString() == height && statement.unresolved == unresolved) {
+        if (statement.resolutionEntries.length == 1) {
+          resolved = statement.resolutionEntries[0].resolved;
+        }
+
+        statement.resolutionEntries.forEach((entry) {
+          // TODO: find most recent resolution entry
+        });
+      }
+    });
+
+    // Can't find any resolution
+    if (resolved == null) {
+      throw new ArgumentError(
+          'No resolution entry found on block: $height for unresolved: $unresolved');
+    }
+  }
 }
