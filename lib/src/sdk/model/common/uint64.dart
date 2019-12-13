@@ -99,6 +99,16 @@ class Uint64 implements Comparable<Uint64> {
   @override
   bool operator ==(final other) => other is Uint64 && this.value == other.value;
 
+  /// Addition operator.
+  Uint64 operator +(final Uint64 other) {
+    return Uint64.fromBigInt(this.value + other.value);
+  }
+
+  /// Subtraction operator.
+  Uint64 operator -(final Uint64 other) {
+    return Uint64.fromBigInt(this.value - other.value);
+  }
+
   @override
   int compareTo(final Uint64 other) => this.value.compareTo(other.value);
 

@@ -152,16 +152,6 @@ void main() {
       expect(actual.value, equals(Uint64.MAX_VALUE));
     });
 
-    test('Equals', () {
-      for (var hexString in HEX_TEST_CASES) {
-        final actual = Uint64.fromHex(hexString);
-
-        final BigInt bigInt = BigInt.parse(hexString, radix: 16);
-        final expected = Uint64.fromBigInt(bigInt);
-        expect(actual == expected, isTrue);
-      }
-    });
-
     test('compareTo()', () {
       final zero = Uint64.fromBigInt(BigInt.zero);
       final one = Uint64.fromBigInt(BigInt.one);
@@ -237,6 +227,58 @@ void main() {
       // max value
       actual = Uint64.fromBigInt(BigInt.parse('FFFFFFFFFFFFFFFF', radix: 16));
       expect(actual.toIntArray(), equals([0xFFFFFFFF, 0xFFFFFFFF]));
+    });
+
+    group('Operation', () {
+      test('Equals', () {
+        for (var hexString in HEX_TEST_CASES) {
+          final actual = Uint64.fromHex(hexString);
+
+          final BigInt bigInt = BigInt.parse(hexString, radix: 16);
+          final expected = Uint64.fromBigInt(bigInt);
+          expect(actual == expected, isTrue);
+        }
+      });
+
+      test('Addition', () {
+        // zero values
+        Uint64 value = Uint64(0);
+        Uint64 other = Uint64(0);
+        Uint64 result = value + other;
+
+        expect(result, equals(Uint64(0)));
+        expect(result.value.toInt(), equals(0));
+
+        // non-zero values
+        value = Uint64(100);
+        other = Uint64(1);
+        result = value + other;
+
+        expect(result, equals(Uint64(101)));
+        expect(result.value.toInt(), equals(101));
+      });
+
+      test('Subtraction', () {
+        // zero values
+        Uint64 value = Uint64(0);
+        Uint64 other = Uint64(0);
+        Uint64 result = value - other;
+
+        expect(result, equals(Uint64(0)));
+        expect(result.value.toInt(), equals(0));
+
+        // non-zero values
+        value = Uint64(100);
+        other = Uint64(1);
+        result = value - other;
+
+        expect(result, equals(Uint64(99)));
+        expect(result.value.toInt(), equals(99));
+
+        // negative value
+        expect(() => (other - value),
+            throwsA(predicate((e) => e is ArgumentError && e.message == 'Value out of range')));
+      });
     });
   });
 }
