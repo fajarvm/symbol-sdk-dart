@@ -14,31 +14,31 @@
 // limitations under the License.
 //
 
-library nem2_sdk_dart.test.core.crypto.tweetnacl_test;
+library nem2_sdk_dart.test.core.crypto.catapultnacl_test;
 
 import 'dart:typed_data' show Uint8List;
 
-import 'package:nem2_sdk_dart/core.dart' show HexUtils, TweetNaclFast;
+import 'package:nem2_sdk_dart/core.dart' show HexUtils, CatapultNacl;
 import 'package:test/test.dart';
 
 void main() {
-  group('TweetNaclFast', () {
+  group('CatapultNacl', () {
     test('hex encode/decode', () {
       String plainMessage = 'Hello NEM';
       String hexEncoded = HexUtils.utf8ToHex(plainMessage);
       expect(hexEncoded, equals('48656c6c6f204e454d'));
 
-      List<int> decoded = TweetNaclFast.hexDecode(hexEncoded);
+      List<int> decoded = CatapultNacl.hexDecode(hexEncoded);
 
-      String expected = TweetNaclFast.hexEncodeToString(Uint8List.fromList(decoded));
+      String expected = CatapultNacl.hexEncodeToString(Uint8List.fromList(decoded));
       expect(expected, equals(hexEncoded.toUpperCase()));
     });
 
     test('create random bytes', () {
-      Uint8List randomBytes = TweetNaclFast.secureRandomBytes(8);
+      Uint8List randomBytes = CatapultNacl.secureRandomBytes(8);
       expect(randomBytes.lengthInBytes, 8);
 
-      randomBytes = TweetNaclFast.secureRandomBytes(32);
+      randomBytes = CatapultNacl.secureRandomBytes(32);
       expect(randomBytes.lengthInBytes, 32);
     });
   });

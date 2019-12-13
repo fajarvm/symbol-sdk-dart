@@ -14,9 +14,10 @@ environment:
 
 dependencies:
   convert: ^2.1.1
+  encrypt: ^3.3.1
   fixnum: ^0.10.11
   pointycastle: ^1.0.2
-  encrypt: ^3.3.1
+  tweetnacl: 0.3.2
 
 dev_dependencies:
   test: ^1.9.4

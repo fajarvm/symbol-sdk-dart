@@ -22,10 +22,10 @@ import 'package:encrypt/encrypt.dart';
 import 'package:nem2_sdk_dart/src/core/utils.dart';
 import 'package:pointycastle/export.dart' show Digest, RIPEMD160Digest, SHA256Digest, SHA3Digest;
 
+import 'catapultnacl.dart';
 import 'crypto_exception.dart';
 import 'sha3_hasher.dart';
 import 'sign_schema.dart';
-import 'tweetnacl.dart';
 
 /// A utility class that provides various custom cryptographic operations.
 class CryptoUtils {
@@ -133,8 +133,9 @@ class CryptoUtils {
     final Uint8List d = prepareForScalarMult(privateKeySeed, signSchema);
     final List<Int64List> p = [_gf(), _gf(), _gf(), _gf()];
     final Uint8List pk = new Uint8List(KEY_SIZE);
-    TweetNaclFast.scalarBase(p, d, 0);
-    TweetNaclFast.pack(pk, p);
+
+    CatapultNacl.scalarBase(p, d, 0);
+    CatapultNacl.pack(pk, p);
 
     return pk;
   }
@@ -159,9 +160,9 @@ class CryptoUtils {
     final List<Int64List> p = [_gf(), _gf(), _gf(), _gf()];
     final Uint8List signature = new Uint8List(SIGNATURE_SIZE);
 
-    TweetNaclFast.reduce(r);
-    TweetNaclFast.scalarBase(p, r, 0);
-    TweetNaclFast.pack(signature, p);
+    CatapultNacl.reduce(r);
+    CatapultNacl.scalarBase(p, r, 0);
+    CatapultNacl.pack(signature, p);
 
     final Uint8List h = new Uint8List(HASH_SIZE); // result
     hasher.reset();
@@ -170,7 +171,7 @@ class CryptoUtils {
     hasher.update(message, 0, message.length);
     hasher.doFinal(h, 0);
 
-    TweetNaclFast.reduce(h);
+    CatapultNacl.reduce(h);
 
     // muladd
     final Int64List x = new Int64List(HASH_SIZE);
@@ -182,7 +183,7 @@ class CryptoUtils {
       }
     }
 
-    TweetNaclFast.modL(signature, 32, x);
+    CatapultNacl.modL(signature, 32, x);
 
     // validate S part of Signature
     if (!_validateEncodedSPart(signature.sublist(HALF_SIGNATURE_SIZE))) {
@@ -207,7 +208,7 @@ class CryptoUtils {
 
     final List<Int64List> q = [_gf(), _gf(), _gf(), _gf()];
 
-    if (0 != TweetNaclFast.unpackNeg(q, publicKey)) {
+    if (0 != CatapultNacl.unpackNeg(q, publicKey)) {
       return false;
     }
 
@@ -221,15 +222,15 @@ class CryptoUtils {
     hasher.doFinal(h, 0);
 
     final List<Int64List> p = [_gf(), _gf(), _gf(), _gf()];
-    TweetNaclFast.reduce(h);
-    TweetNaclFast.scalarMult(p, q, h, 0);
+    CatapultNacl.reduce(h);
+    CatapultNacl.scalarMult(p, q, h, 0);
 
     final Uint8List t = new Uint8List(SIGNATURE_SIZE);
-    TweetNaclFast.scalarBase(q, signature.sublist(HALF_SIGNATURE_SIZE), 0);
-    TweetNaclFast.add(p, q);
-    TweetNaclFast.pack(t, p);
+    CatapultNacl.scalarBase(q, signature.sublist(HALF_SIGNATURE_SIZE), 0);
+    CatapultNacl.add(p, q);
+    CatapultNacl.pack(t, p);
 
-    final int result = TweetNaclFast.cryptoVerify32(signature, t);
+    final int result = CatapultNacl.cryptoVerify32(signature, t);
     return result == 0;
   }
 
@@ -250,9 +251,9 @@ class CryptoUtils {
     final List<Int64List> q = [_gf(), _gf(), _gf(), _gf()];
     final List<Int64List> p = [_gf(), _gf(), _gf(), _gf()];
     final Uint8List sharedKey = new Uint8List(KEY_SIZE);
-    TweetNaclFast.unpackNeg(q, publicKey);
-    TweetNaclFast.scalarMult(p, q, d, 0);
-    TweetNaclFast.pack(sharedKey, p);
+    CatapultNacl.unpackNeg(q, publicKey);
+    CatapultNacl.scalarMult(p, q, d, 0);
+    CatapultNacl.pack(sharedKey, p);
 
     // salt the shared key
     for (int i = 0; i < KEY_SIZE; i++) {
@@ -265,7 +266,7 @@ class CryptoUtils {
   }
 
   /// Creates random bytes with the given size.
-  static Uint8List getRandomBytes(int size) => TweetNaclFast.secureRandomBytes(size);
+  static Uint8List getRandomBytes(int size) => CatapultNacl.secureRandomBytes(size);
 
   /// Computes the hash of a [secretKey] using the given [signSchema].
   static Uint8List prepareForScalarMult(final Uint8List secretKey, final SignSchema signSchema) {
@@ -337,7 +338,7 @@ class CryptoUtils {
     final Uint8List copy = new Uint8List(SIGNATURE_SIZE);
     ArrayUtils.copy(copy, input, numOfElements: HALF_SIGNATURE_SIZE);
 
-    TweetNaclFast.reduce(copy);
+    CatapultNacl.reduce(copy);
     return ArrayUtils.deepEqual(input, copy, numElementsToCompare: HALF_SIGNATURE_SIZE);
   }
 
