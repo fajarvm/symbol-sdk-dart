@@ -14,7 +14,7 @@
 // limitations under the License.
 //
 
-library nem2_sdk_dart.sdk.model.common.unresolved_address;
+library nem2_sdk_dart.sdk.model.common.unresolved_utils;
 
 import 'dart:typed_data' show Uint8List;
 
@@ -25,7 +25,7 @@ import '../blockchain/network_type.dart';
 import '../namespace/namespace_id.dart';
 
 /// A utility class for internal use.
-class UnresolvedAddress {
+class UnresolvedUtils {
   /// Returns the bytes of an [unresolvedAddress]. The [unresolvedAddress] must either be
   /// a [NamespaceId] or an [Address].
   ///

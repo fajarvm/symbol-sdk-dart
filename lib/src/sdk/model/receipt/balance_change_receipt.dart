@@ -27,7 +27,8 @@ import 'receipt.dart';
 import 'receipt_type.dart';
 import 'receipt_version.dart';
 
-/// Balance Change: A mosaic credit or debit was triggered.
+/// A receipt that is created when there is an invisible state change triggered by a change to mosaic
+/// balance of the account.
 class BalanceChangeReceipt extends Receipt {
   /// The target account public account.
   final PublicAccount account;

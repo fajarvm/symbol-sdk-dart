@@ -23,14 +23,15 @@ import 'package:nem2_sdk_dart/core.dart' show HexUtils;
 import '../account/address.dart';
 import '../account/public_account.dart';
 import '../common/uint64.dart';
-import '../common/unresolved_address.dart';
+import '../common/unresolved_utils.dart';
 import '../mosaic/mosaic_id.dart';
 import '../namespace/namespace_id.dart';
 import 'receipt.dart';
 import 'receipt_type.dart';
 import 'receipt_version.dart';
 
-/// Balance Transfer: A mosaic transfer was triggered.
+/// A receipt that is created when there is an invisible state change triggered by a mosaic
+/// transfer.
 class BalanceTransferReceipt<T> extends Receipt {
   /// The sender's public account.
   final PublicAccount sender;
@@ -78,7 +79,7 @@ class BalanceTransferReceipt<T> extends Receipt {
 
   /// Returns the recipient bytes of this receipt.
   Uint8List getRecipientBytes() {
-    return UnresolvedAddress.toUnresolvedAddressBytes(recipient, sender.address.networkType);
+    return UnresolvedUtils.toUnresolvedAddressBytes(recipient, sender.address.networkType);
   }
 
   @override

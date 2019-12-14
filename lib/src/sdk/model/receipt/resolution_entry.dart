@@ -30,7 +30,7 @@ class ResolutionEntry<T> {
   /// The resolved object. It must either be an [Address] or a [MosaicId].
   final T resolved;
 
-  /// The receipt source.
+  /// Information about the transaction that triggered the receipt.
   final ReceiptSource receiptSource;
 
   ResolutionEntry._(this.resolved, this.receiptSource);

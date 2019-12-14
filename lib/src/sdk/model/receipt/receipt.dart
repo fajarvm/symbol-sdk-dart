@@ -21,7 +21,10 @@ import 'dart:typed_data' show Uint8List;
 import 'receipt_type.dart';
 import 'receipt_version.dart';
 
-/// An abstract transaction class that serves as the base class of all receipts.
+/// A Receipt provides proof for a conditional state change in the background as a result of a
+/// complex or hidden transaction.
+///
+/// This is an abstract class that serves as the base class of all receipts.
 abstract class Receipt {
   /// The receipt type.
   final ReceiptType type;

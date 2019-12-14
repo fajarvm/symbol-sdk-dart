@@ -27,6 +27,11 @@ void main() {
       // check values
       expect(ResolutionType.ADDRESS.value, 0);
       expect(ResolutionType.MOSAIC.value, 1);
+
+      expect(ResolutionType.ADDRESS.isAddress, isTrue);
+      expect(ResolutionType.ADDRESS.isMosaic, isFalse);
+      expect(ResolutionType.MOSAIC.isAddress, isFalse);
+      expect(ResolutionType.MOSAIC.isMosaic, isTrue);
     });
 
     test('Can retrieve a valid type from an int value', () {

@@ -20,13 +20,20 @@ import '../common/uint64.dart';
 import 'receipt.dart';
 import 'receipt_source.dart';
 
-/// A transaction statement is a collection of receipts linked with a transaction in a
-/// particular block.
+/// A transaction statement is a collection of receipts linked with a transaction in a particular
+/// block.
+///
+/// Statements can include receipts with the following basic types:
+/// * Balance Transfer: The invisible state change triggered a mosaic transfer.
+/// * Balance Change: The invisible state change altered an account balance.
+/// * Mosaic Expiry: A mosaic expired.
+/// * Namespace Expiry: A namespace expired.
+/// * Inflation: Native currency mosaics were created due to inflation.
 class TransactionStatement {
   /// The block height.
   final Uint64 height;
 
-  /// The receipt source of this statement.
+  /// The transaction that triggered the creation of the receipt.
   final ReceiptSource receiptSource;
 
   /// A collection of receipts.

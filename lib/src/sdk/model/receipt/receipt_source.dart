@@ -18,12 +18,14 @@ library nem2_sdk_dart.sdk.model.receipt.receipt_source;
 
 import 'dart:typed_data' show ByteData, Endian, Uint8List;
 
-/// The Receipt Source class.
+/// This class defines the transaction that triggers the creation of a receipt.
 class ReceiptSource {
   /// The transaction primary source (e.g. index within block).
   final int primaryId;
 
   /// The transaction secondary source (e.g. index within aggregate).
+  ///
+  /// If the transaction is not an inner transaction, then the secondary identifier is set to 0.
   final int secondaryId;
 
   ReceiptSource(this.primaryId, this.secondaryId);

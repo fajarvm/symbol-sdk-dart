@@ -26,7 +26,7 @@ import 'receipt.dart';
 import 'receipt_type.dart';
 import 'receipt_version.dart';
 
-/// Artifact Expiry: An artifact (e.g. namespace, mosaic) expired.
+/// A receipt that is created when an artifact (e.g. namespace, mosaic) is expired.
 class ArtifactExpiryReceipt<T> extends Receipt {
   /// The artifact id. It must either be a [MosaicId] or a [NamespaceId].
   final T artifactId;
@@ -60,6 +60,7 @@ class ArtifactExpiryReceipt<T> extends Receipt {
         ']');
   }
 
+  /// Returns the artifactId value as [Uint64].
   Uint64 getArtifactIdValue() {
     if (artifactId is! Id) {
       throw new StateError('artifactId should be a valid Id object');

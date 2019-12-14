@@ -39,7 +39,7 @@ export 'model/blockchain/network_type.dart';
 export 'model/common/id.dart';
 export 'model/common/id_generator.dart';
 export 'model/common/uint64.dart';
-export 'model/common/unresolved_address.dart';
+export 'model/common/unresolved_utils.dart';
 
 // Diagnostic
 export 'model/diagnostic/server_info.dart';

@@ -723,7 +723,6 @@ class CatapultNacl {
   }
 
   static int crypto_secretbox(Uint8List c, Uint8List m, int d, Uint8List n, Uint8List k) {
-    int i;
     if (d < 32) return -1;
     crypto_stream_xor(c, 0, m, 0, d, n, k);
     _crypto_onetimeauth(c, 16, c, 32, d - 32, c);
@@ -733,7 +732,6 @@ class CatapultNacl {
   }
 
   static int crypto_secretbox_open(Uint8List m, Uint8List c, int d, Uint8List n, Uint8List k) {
-    int i;
     Uint8List x = Uint8List(32);
     if (d < 32) return -1;
     crypto_stream(x, 0, 32, n, k);

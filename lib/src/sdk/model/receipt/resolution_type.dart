@@ -20,10 +20,10 @@ library nem2_sdk_dart.sdk.model.receipt.resolution_type;
 class ResolutionType {
   static const String UNKNOWN_RESOLUTION_TYPE = 'unknown resolution type';
 
-  /// Address resolution type
+  /// Address resolution type.
   static const ResolutionType ADDRESS = ResolutionType._(0);
 
-  /// Mosaic resolution type
+  /// Mosaic resolution type.
   static const ResolutionType MOSAIC = ResolutionType._(1);
 
   /// All supported types.
@@ -31,6 +31,12 @@ class ResolutionType {
 
   /// The int value of this type.
   final int value;
+
+  /// Returns true of this type is an address resolution type.
+  bool get isAddress => ADDRESS == this;
+
+  /// Returns true of this type is a mosaic resolution type.
+  bool get isMosaic => MOSAIC == this;
 
   // constant constructor: makes this class available on runtime.
   // emulates an enum class with a value.

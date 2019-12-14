@@ -256,6 +256,10 @@ void main() {
 
         expect(result, equals(Uint64(101)));
         expect(result.value.toInt(), equals(101));
+
+        // greater than max value
+        expect(() => (Uint64.fromBigInt(Uint64.MAX_VALUE) + Uint64(1)),
+            throwsA(predicate((e) => e is ArgumentError && e.message == 'Value out of range')));
       });
 
       test('Subtraction', () {

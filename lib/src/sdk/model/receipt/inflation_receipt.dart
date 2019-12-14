@@ -24,7 +24,8 @@ import 'receipt.dart';
 import 'receipt_type.dart';
 import 'receipt_version.dart';
 
-/// Balance Change: A mosaic credit or debit was triggered.
+/// A receipt that is created when there is an increase to the native currency supply due to
+/// inflation.
 class InflationReceipt extends Receipt {
   /// The mosaic id.
   final MosaicId mosaicId;

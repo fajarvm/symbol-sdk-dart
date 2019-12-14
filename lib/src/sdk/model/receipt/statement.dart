@@ -59,7 +59,7 @@ class Statement {
     }
 
     // Attempt to find a resolution statement
-    var resolved;
+    dynamic resolved;
     resolutionStatements.forEach((statement) {
       if (statement.height.toString() == height && statement.unresolved == unresolved) {
         if (statement.resolutionEntries.length == 1) {
