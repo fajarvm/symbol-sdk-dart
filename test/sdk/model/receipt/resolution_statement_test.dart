@@ -21,6 +21,7 @@ import 'package:nem2_sdk_dart/sdk.dart'
     show
         Address,
         MosaicId,
+        NetworkType,
         ReceiptSource,
         ReceiptType,
         ResolutionEntry,
@@ -48,8 +49,7 @@ void main() {
     });
 
     test('Can create address resolution statement', () {
-      List<ResolutionEntry<Address>> entries = <ResolutionEntry<Address>>[];
-      entries.add(addressEntry);
+      List<ResolutionEntry<Address>> entries = <ResolutionEntry<Address>>[addressEntry];
 
       ResolutionStatement statement =
           new ResolutionStatement(ResolutionType.ADDRESS, height, address, entries);
@@ -60,8 +60,7 @@ void main() {
     });
 
     test('Can create mosaic resolution statement', () {
-      List<ResolutionEntry<MosaicId>> entries = <ResolutionEntry<MosaicId>>[];
-      entries.add(mosaicEntry);
+      List<ResolutionEntry<MosaicId>> entries = <ResolutionEntry<MosaicId>>[mosaicEntry];
 
       ResolutionStatement statement =
           new ResolutionStatement(ResolutionType.MOSAIC, height, mosaicId, entries);
@@ -79,12 +78,22 @@ void main() {
               e is ArgumentError && e.message.toString().contains('Invalid ResolutionStatement'))));
 
       // invalid resolution entries
-      List<ResolutionEntry<MosaicId>> entries = <ResolutionEntry<MosaicId>>[];
-      entries.add(mosaicEntry);
+      List<ResolutionEntry<MosaicId>> entries = <ResolutionEntry<MosaicId>>[mosaicEntry];
       expect(
           () => new ResolutionStatement(ResolutionType.MOSAIC, height, address, entries),
           throwsA(predicate((e) =>
               e is ArgumentError && e.message.toString().contains('Invalid ResolutionStatement'))));
+    });
+
+    test('Can generate hash', () {
+      List<ResolutionEntry<MosaicId>> entries = <ResolutionEntry<MosaicId>>[mosaicEntry];
+      ResolutionStatement statement =
+          new ResolutionStatement(ResolutionType.MOSAIC, Uint64(10), mosaicId, entries);
+
+      String hash = statement.generateHash(NetworkType.MIJIN_TEST);
+
+      expect(hash.isNotEmpty, isTrue);
+      expect(hash, equals('F9641458615C9AAC4CEED5FABCA96809746368C2C62B4902D9809FC8B03CA531'));
     });
   });
 }

@@ -16,6 +16,7 @@
 
 library nem2_sdk_dart.sdk.model.receipt.resolution_statement;
 
+import 'dart:math' show max;
 import 'dart:typed_data' show ByteData, Endian, Uint8List;
 
 import 'package:nem2_sdk_dart/core.dart' show HexUtils, SHA3Hasher, SignSchema;
@@ -75,32 +76,108 @@ class ResolutionStatement<T> {
 
   /// Generates the receipt hash for a given [networkType].
   String generateHash(final NetworkType networkType) {
-    ByteData data = new ByteData(12);
-    // version part
-    data.setUint16(0, ReceiptVersion.RESOLUTION_STATEMENT.value, Endian.little);
+    // version
+    ByteData versionData = ByteData(2);
+    versionData.setUint16(0, ReceiptVersion.RESOLUTION_STATEMENT.value, Endian.little);
+    final Uint8List versionBytes = versionData.buffer.asUint8List();
 
-    // type part
-    final ReceiptType receiptType = resolutionType.isAddress
+    // type
+    final ReceiptType type = resolutionType.isAddress
         ? ReceiptType.ADDRESS_ALIAS_RESOLUTION
         : ReceiptType.MOSAIC_ALIAS_RESOLUTION;
-    data.setUint16(2, receiptType.value, Endian.little);
+    ByteData typeData = ByteData(2);
+    typeData.setUint16(0, type.value, Endian.little);
+    final Uint8List typeBytes = typeData.buffer.asUint8List();
 
     // unresolved part
-    final Uint8List unresolvedBytes = _getResolvedBytes(networkType);
-    final ByteData idData = ByteData.view(unresolvedBytes.buffer);
-    data.setUint64(4, idData.getUint64(0));
+    final Uint8List unresolvedBytes = _getUnresolvedBytes(networkType);
 
     // entry bytes
-    List<int> input;
+    List<int> results = [];
+    results.addAll(versionBytes.toList());
+    results.addAll(typeBytes.toList());
+    results.addAll(unresolvedBytes.toList());
+
     resolutionEntries.forEach((entry) {
       final Uint8List bytes = entry.serialize();
-      input.addAll(bytes.toList());
+      results.addAll(bytes.toList());
     });
+    final resultsBytes = Uint8List.fromList(results);
 
-    // hash SHA3-256
     final Uint8List hash =
-        SHA3Hasher.hash(Uint8List.fromList(input), SignSchema.SHA3, SignSchema.HASH_SIZE_32_BYTES);
+        SHA3Hasher.hash(resultsBytes, SignSchema.SHA3, SignSchema.HASH_SIZE_32_BYTES);
     return HexUtils.bytesToHex(hash).toUpperCase();
+  }
+
+  /// Returns a resolution entry for given [primaryId] and [secondaryId].
+  ///
+  /// May return null when no matched entry can be found.
+  ResolutionEntry getResolutionEntryById(int primaryId, int secondaryId) {
+    // Primary id and secondary id do not specifically map to the exact transaction index on
+    // the same block. The ids are just the order of the resolution reflecting on the order of
+    // transactions (ordered by index).
+    // E.g. 1 - Bob -> 1 random.token -> Alice
+    //      2 - Carol -> 1 random.token > Denis
+    // Based on above example, 2 transactions (index 0 & 1) are created on the same block, however,
+    // only 1 resolution entry get generated for both.
+    final int resolvedPrimaryId = _getMaxAvailablePrimaryId(primaryId);
+
+    // If no primaryId found, it means there's no resolution entry available for the process.
+    // Invalid entry.
+    // E.g. Given:
+    // Entries: [{P:2, S:0}, {P:5, S:6}]
+    // Transaction: [Inx:1(0+1), AggInx:0]
+    // It should return Entry: null
+    if (resolvedPrimaryId == 0) {
+      return null;
+    } else if (primaryId > resolvedPrimaryId) {
+      // If the transaction index is greater than the overall most recent source primary id.
+      // Use the most recent resolution entry (Max.PrimaryId + Max.SecondaryId)
+      //
+      // e.g. Given:
+      // Entries: [{P:1, S:0}, {P:2, S:0}, {P:4, S:2}, {P:4, S:4} {P:7, S:6}]
+      // Transaction: [Inx:5(4+1), AggInx:0]
+      //  It should return Entry: {P:4, S:4}
+      //
+      // e.g. Given:
+      // Entries: [{P:1, S:0}, {P:2, S:0}, {P:4, S:2}, {P:4, S:4}, {P:7, S:6}]
+      // Transaction: [Inx:3(2+1), AggInx:0]
+      // It should return Entry: {P:2, S:0}
+      return resolutionEntries.firstWhere((entry) =>
+          entry.source.primaryId == resolvedPrimaryId &&
+          entry.source.secondaryId == _getMaxSecondaryIdByPrimaryId(resolvedPrimaryId));
+    }
+
+    // When transaction index matches a primaryId, get the most recent secondaryId
+    // (resolvedPrimaryId can only <= primaryId)
+    final int resolvedSecondaryId =
+        _getMaxSecondaryIdByPrimaryIdAndSecondaryId(resolvedPrimaryId, secondaryId);
+
+    // If no most recent secondaryId matched transaction index, find previous resolution entry
+    // (most recent). This means the resolution entry for the specific inner transaction (inside
+    // Aggregate) was generated previously outside the aggregate. It should return the previous
+    // entry (previous primaryId)
+    //
+    // e.g. Given:
+    // Entries: [{P:1, S:0}, {P:2, S:0}, {P:5, S:6}]
+    // Transaction: [Inx:5(4+1), AggInx:3(2+1)]
+    // It should return Entry: {P:2, S:0}
+    if (resolvedSecondaryId == 0 && resolvedSecondaryId != secondaryId) {
+      final int lastPrimaryId = _getMaxAvailablePrimaryId(resolvedPrimaryId - 1);
+      return resolutionEntries.firstWhere((entry) =>
+          entry.source.primaryId == lastPrimaryId &&
+          entry.source.secondaryId == _getMaxSecondaryIdByPrimaryId(lastPrimaryId));
+    }
+
+    // Found a matched resolution entry on both primaryId and secondaryId
+    //
+    // e.g. Given:
+    // Entries: [{P:1, S:0}, {P:2, S:0}, {P:5, S:6}]
+    // Transaction: [Inx:5(4+1), AggInx:6(2+1)]
+    // It should return Entry: {P:5, S:6}
+    return this.resolutionEntries.firstWhere((entry) =>
+        entry.source.primaryId == resolvedPrimaryId &&
+        entry.source.secondaryId == resolvedSecondaryId);
   }
 
   // ------------------------------ private / protected functions ------------------------------ //
@@ -146,11 +223,11 @@ class ResolutionStatement<T> {
       throw new StateError('unresolved should be a valid artifactId');
     }
 
-    return Uint64.fromHex((unresolved as Id).toHex());
+    return (unresolved as Id).id;
   }
 
   /// Generates unresolved bytes for a given [networkType].
-  Uint8List _getResolvedBytes(final NetworkType networkType) {
+  Uint8List _getUnresolvedBytes(final NetworkType networkType) {
     // address resolution
     if (resolutionType.isAddress) {
       return UnresolvedUtils.toUnresolvedAddressBytes(unresolved, networkType);
@@ -164,5 +241,30 @@ class ResolutionStatement<T> {
     data.setUint64(0, idData.getUint64(0));
 
     return data.buffer.asUint8List();
+  }
+
+  /// Get most `recent` primary source id by a given id (transaction index) as PrimaryId might not
+  /// be the same as block transaction index.
+  int _getMaxAvailablePrimaryId(int primaryId) {
+    return resolutionEntries
+        .map((entry) => primaryId >= entry.source.primaryId ? entry.source.primaryId : 0)
+        .reduce(max);
+  }
+
+  /// Get max secondary id by a given [primaryId].
+  int _getMaxSecondaryIdByPrimaryId(int primaryId) {
+    return resolutionEntries
+        .where((entry) => entry.source.primaryId == primaryId)
+        .map((filtered) => filtered.source.secondaryId)
+        .reduce(max);
+  }
+
+  /// Get most `recent` available secondary id by a given primaryId.
+  int _getMaxSecondaryIdByPrimaryIdAndSecondaryId(int primaryId, int secondaryId) {
+    return resolutionEntries
+        .where((entry) => entry.source.primaryId == primaryId)
+        .map((filtered) =>
+            secondaryId >= filtered.source.secondaryId ? filtered.source.secondaryId : 0)
+        .reduce(max);
   }
 }

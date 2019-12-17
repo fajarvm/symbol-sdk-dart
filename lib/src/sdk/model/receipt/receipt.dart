@@ -16,7 +16,7 @@
 
 library nem2_sdk_dart.sdk.model.receipt.receipt;
 
-import 'dart:typed_data' show Uint8List;
+import 'dart:typed_data' show ByteData, Endian, Uint8List;
 
 import 'receipt_type.dart';
 import 'receipt_version.dart';
@@ -38,5 +38,11 @@ abstract class Receipt {
   Receipt(this.type, this.version, this.size) : assert(type != null && version != null);
 
   /// Serializes this receipt and returns receipt bytes.
-  Uint8List serialize();
+  Uint8List serialize() {
+    // default binary layout for this receipt is: version + type
+    ByteData data = new ByteData(8);
+    data.setUint16(0, version.value, Endian.little);
+    data.setUint16(2, type.value, Endian.little);
+    return data.buffer.asUint8List();
+  }
 }

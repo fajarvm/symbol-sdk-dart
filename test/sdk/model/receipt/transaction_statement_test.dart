@@ -70,7 +70,7 @@ void main() {
       TransactionStatement transactionStatement =
           new TransactionStatement(height, receiptSource, testReceipts);
       expect(transactionStatement.height, equals(height));
-      expect(transactionStatement.receiptSource, equals(receiptSource));
+      expect(transactionStatement.source, equals(receiptSource));
       expect(ArrayUtils.deepEqual(transactionStatement.receipts, testReceipts), isTrue);
     });
   });

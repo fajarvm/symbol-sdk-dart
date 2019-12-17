@@ -21,7 +21,6 @@ import 'dart:typed_data' show Uint8List;
 import 'package:nem2_sdk_dart/core.dart' show RawAddress;
 
 import '../account/address.dart';
-import '../common/uint64.dart';
 import '../mosaic/mosaic_id.dart';
 import 'receipt_source.dart';
 
@@ -30,10 +29,10 @@ class ResolutionEntry<T> {
   /// The resolved object. It must either be an [Address] or a [MosaicId].
   final T resolved;
 
-  /// Information about the transaction that triggered the receipt.
-  final ReceiptSource receiptSource;
+  /// The receipt source. The transaction that triggered the receipt.
+  final ReceiptSource source;
 
-  ResolutionEntry._(this.resolved, this.receiptSource);
+  ResolutionEntry._(this.resolved, this.source);
 
   factory ResolutionEntry(T resolved, ReceiptSource source) {
     ArgumentError.checkNotNull(resolved);
@@ -49,18 +48,15 @@ class ResolutionEntry<T> {
   /// Serializes this resolution entry and returns bytes.
   Uint8List serialize() {
     final Uint8List resolvedByte = _getResolvedBytes();
-
-    final Uint8List result = Uint8List(8 + resolvedByte.length);
-    result.setAll(0, resolvedByte);
-    result.setAll(resolvedByte.length, receiptSource.serialize());
-    return result;
+    final Uint8List sourceByte = source.serialize();
+    return Uint8List.fromList(resolvedByte.toList() + sourceByte.toList());
   }
 
   Uint8List _getResolvedBytes() {
     if (resolved is Address) {
       return RawAddress.stringToAddress((resolved as Address).plain);
     } else {
-      return Uint64.fromHex((resolved as MosaicId).toHex()).toBytes();
+      return (resolved as MosaicId).id.toBytes();
     }
   }
 }

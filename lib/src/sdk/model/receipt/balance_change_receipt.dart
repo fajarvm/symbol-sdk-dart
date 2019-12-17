@@ -16,7 +16,7 @@
 
 library nem2_sdk_dart.sdk.model.receipt.balance_change_receipt;
 
-import 'dart:typed_data' show ByteData, Endian, Uint8List;
+import 'dart:typed_data' show Uint8List;
 
 import 'package:nem2_sdk_dart/core.dart' show HexUtils;
 
@@ -63,25 +63,15 @@ class BalanceChangeReceipt extends Receipt {
 
   @override
   Uint8List serialize() {
-    ByteData data = new ByteData(20);
-    data.setUint16(0, version.value, Endian.little); // version part
-    data.setUint16(2, type.value, Endian.little); // type part
+    final Uint8List result = Uint8List(52);
+    // version and type part
+    result.setAll(0, super.serialize());
     // mosaic part
-    final Uint64 mosaicValue = Uint64.fromHex(mosaicId.toHex());
-    final ByteData mosaicData = ByteData.view(mosaicValue.toBytes().buffer);
-    data.setUint64(4, mosaicData.getUint64(0));
+    result.setAll(4, mosaicId.id.toBytes());
     // amount part
-    final Uint64 amountValue = Uint64.fromHex(amount.toHex());
-    final ByteData amountData = ByteData.view(amountValue.toBytes().buffer);
-    data.setUint64(12, amountData.getUint64(0));
-
-    final Uint8List firstParts = data.buffer.asUint8List();
-
+    result.setAll(12, amount.toBytes());
     // public account part
     final Uint8List accountBytes = HexUtils.getBytes(account.publicKey);
-
-    final Uint8List result = Uint8List(52);
-    result.setAll(0, firstParts);
     result.setAll(20, accountBytes);
     return result;
   }

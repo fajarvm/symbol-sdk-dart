@@ -24,15 +24,14 @@ void main() {
     group('All types', () {
       test('Check all types', () {
         // check collection size
-        expect(ReceiptType.values.length, 17);
+        expect(ReceiptType.values.length, 16);
         // check values
         expect(ReceiptType.HARVEST_FEE.value, 0x2143);
         expect(ReceiptType.ADDRESS_ALIAS_RESOLUTION.value, 0xF143);
         expect(ReceiptType.MOSAIC_ALIAS_RESOLUTION.value, 0xF243);
         expect(ReceiptType.TRANSACTION_GROUP.value, 0xE143);
         expect(ReceiptType.MOSAIC_EXPIRED.value, 0x414D);
-        expect(ReceiptType.MOSAIC_LEVY.value, 0x124D);
-        expect(ReceiptType.MOSAIC_RENTAL_FEE.value, 0x134D);
+        expect(ReceiptType.MOSAIC_RENTAL_FEE.value, 0x124D);
         expect(ReceiptType.NAMESPACE_EXPIRED.value, 0x414E);
         expect(ReceiptType.NAMESPACE_RENTAL_FEE.value, 0x124E);
         expect(ReceiptType.NAMESPACE_DELETED.value, 0x424E);
@@ -49,7 +48,6 @@ void main() {
         expect(ReceiptType.MOSAIC_ALIAS_RESOLUTION.name, 'MOSAIC_ALIAS_RESOLUTION');
         expect(ReceiptType.TRANSACTION_GROUP.name, 'TRANSACTION_GROUP');
         expect(ReceiptType.MOSAIC_EXPIRED.name, 'MOSAIC_EXPIRED');
-        expect(ReceiptType.MOSAIC_LEVY.name, 'MOSAIC_LEVY');
         expect(ReceiptType.MOSAIC_RENTAL_FEE.name, 'MOSAIC_RENTAL_FEE');
         expect(ReceiptType.NAMESPACE_EXPIRED.name, 'NAMESPACE_EXPIRED');
         expect(ReceiptType.NAMESPACE_RENTAL_FEE.name, 'NAMESPACE_RENTAL_FEE');
@@ -74,8 +72,7 @@ void main() {
         expect(ReceiptType.fromInt(0xF243), ReceiptType.MOSAIC_ALIAS_RESOLUTION);
         expect(ReceiptType.fromInt(0xE143), ReceiptType.TRANSACTION_GROUP);
         expect(ReceiptType.fromInt(0x414D), ReceiptType.MOSAIC_EXPIRED);
-        expect(ReceiptType.fromInt(0x124D), ReceiptType.MOSAIC_LEVY);
-        expect(ReceiptType.fromInt(0x134D), ReceiptType.MOSAIC_RENTAL_FEE);
+        expect(ReceiptType.fromInt(0x124D), ReceiptType.MOSAIC_RENTAL_FEE);
         expect(ReceiptType.fromInt(0x414E), ReceiptType.NAMESPACE_EXPIRED);
         expect(ReceiptType.fromInt(0x124E), ReceiptType.NAMESPACE_RENTAL_FEE);
         expect(ReceiptType.fromInt(0x424E), ReceiptType.NAMESPACE_DELETED);

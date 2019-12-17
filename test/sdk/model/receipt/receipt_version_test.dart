@@ -21,7 +21,7 @@ import 'package:test/test.dart';
 
 void main() {
   group('ReceiptVersion', () {
-    test('All types', () {
+    test('All versions', () {
       expect(ReceiptVersion.BALANCE_TRANSFER.value, 1);
       expect(ReceiptVersion.BALANCE_CHANGE.value, 1);
       expect(ReceiptVersion.ARTIFACT_EXPIRY.value, 1);

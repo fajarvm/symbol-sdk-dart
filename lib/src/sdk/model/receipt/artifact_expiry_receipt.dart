@@ -16,10 +16,9 @@
 
 library nem2_sdk_dart.sdk.model.receipt.artifact_expiry_receipt;
 
-import 'dart:typed_data' show ByteData, Endian, Uint8List;
+import 'dart:typed_data' show Uint8List;
 
 import '../common/id.dart';
-import '../common/uint64.dart';
 import '../mosaic/mosaic_id.dart';
 import '../namespace/namespace_id.dart';
 import 'receipt.dart';
@@ -43,6 +42,18 @@ class ArtifactExpiryReceipt<T> extends Receipt {
     return ArtifactExpiryReceipt._(artifactId, type, version, size);
   }
 
+  @override
+  Uint8List serialize() {
+    final Uint8List result = Uint8List(12);
+    // version and type part
+    result.setAll(0, super.serialize());
+    // artifactId part
+    result.setAll(4, (artifactId as Id).id.toBytes());
+    return result;
+  }
+
+  // ------------------------------ private / protected functions ------------------------------ //
+
   /// Validates the artifact id and receipt type.
   ///
   /// The [artifactId] must either be a [MosaicId] or a [NamespaceId].
@@ -58,27 +69,5 @@ class ArtifactExpiryReceipt<T> extends Receipt {
         'artifactId="$artifactId",'
         'receiptType="$type",'
         ']');
-  }
-
-  /// Returns the artifactId value as [Uint64].
-  Uint64 getArtifactIdValue() {
-    if (artifactId is! Id) {
-      throw new StateError('artifactId should be a valid Id object');
-    }
-
-    return Uint64.fromHex((artifactId as Id).toHex());
-  }
-
-  @override
-  Uint8List serialize() {
-    ByteData data = new ByteData(12);
-    data.setUint16(0, version.value, Endian.little); // version part
-    data.setUint16(2, type.value, Endian.little); // type part
-    // artifactId part
-    final Uint64 artifactIdValue = getArtifactIdValue();
-    final ByteData idData = ByteData.view(artifactIdValue.toBytes().buffer);
-    data.setUint64(4, idData.getUint64(0));
-
-    return data.buffer.asUint8List();
   }
 }

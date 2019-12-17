@@ -18,6 +18,7 @@ library nem2_sdk_dart.test.sdk.model.receipt.balance_transfer_receipt_test;
 
 import 'dart:typed_data' show Uint8List;
 
+import 'package:nem2_sdk_dart/core.dart' show HexUtils;
 import 'package:nem2_sdk_dart/sdk.dart'
     show
         Account,
@@ -35,8 +36,9 @@ import 'package:test/test.dart';
 void main() {
   group('BalanceTransferReceipt', () {
     // setup
+    final NetworkType networkType = NetworkType.MIJIN_TEST;
     final Account testAccount = Account.fromPrivateKey(
-        '787225aaff3d2c71f4ffa32d4f19ec4922f3cd869747f267378f81f8e3fcb12d', NetworkType.MIJIN_TEST);
+        '787225aaff3d2c71f4ffa32d4f19ec4922f3cd869747f267378f81f8e3fcb12d', networkType);
     final PublicAccount sender = testAccount.publicAccount;
     final MosaicId mosaicId = MosaicId.fromHex('85bbea6cc462b244');
     final Uint64 amount = Uint64.fromBigInt(BigInt.from(10));
@@ -86,6 +88,26 @@ void main() {
       });
       count++;
     }
+
+    test('serialize() result should be the same as that produced by other SDKs', () {
+      // Test result from TypeScript SDK
+      BalanceTransferReceipt balanceTransferReceipt = new BalanceTransferReceipt(
+          Account.fromPrivateKey(
+                  'D242FB34C2C4DD36E995B9C865F93940065E326661BA5A4A247331D211FE3A3D', networkType)
+              .publicAccount,
+          Address.fromEncoded('9103B60AAF2762688300000000000000000000000000000000'),
+          MosaicId.fromHex('941299B2B7E1291C'),
+          Uint64(1000),
+          ReceiptType.MOSAIC_RENTAL_FEE,
+          ReceiptVersion.BALANCE_TRANSFER);
+
+      Uint8List serialized = balanceTransferReceipt.serialize();
+      String hex = HexUtils.bytesToHex(serialized);
+      expect(
+          '01004D121C29E1B7B2991294E8030000000000002FC3872A792933617D70E02AFF8FBDE152821'
+          'A0DF0CA5FB04CB56FC3D21C88639103B60AAF2762688300000000000000000000000000000000',
+          equals(hex.toUpperCase()));
+    });
 
     test('Should throw an exception when creating a receipt with bad parameter values', () {
       // null sender

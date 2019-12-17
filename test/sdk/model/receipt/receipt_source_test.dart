@@ -21,10 +21,18 @@ import 'package:test/test.dart';
 
 void main() {
   group('ReceiptSource', () {
+    // setup
+    ReceiptSource receiptSource = new ReceiptSource(1, 2);
+
     test('Can create a receipt source object', () {
-      ReceiptSource receiptSource = new ReceiptSource(1, 2);
       expect(receiptSource.primaryId, 1);
       expect(receiptSource.secondaryId, 2);
+    });
+
+    test('serialize()', () {
+      final serialized = receiptSource.serialize();
+      expect(serialized, isNotNull);
+      expect(serialized.lengthInBytes, 8);
     });
   });
 }

@@ -20,6 +20,7 @@ import '../account/address.dart';
 import '../mosaic/mosaic.dart';
 import '../mosaic/mosaic_id.dart';
 import '../namespace/namespace_id.dart';
+import 'resolution_entry.dart';
 import 'resolution_statement.dart';
 import 'transaction_statement.dart';
 
@@ -58,24 +59,32 @@ class Statement {
       throw new ArgumentError('unsupported unresolved object: $unresolved');
     }
 
-    // Attempt to find a resolution statement
-    dynamic resolved;
-    resolutionStatements.forEach((statement) {
-      if (statement.height.toString() == height && statement.unresolved == unresolved) {
-        if (statement.resolutionEntries.length == 1) {
-          resolved = statement.resolutionEntries[0].resolved;
-        }
+    // Filter resolution statements by height and unresolved type
+    final ResolutionStatement resolutionStatement = resolutionStatements
+        .firstWhere((e) => e.height.toString() == height && e.unresolved == unresolved);
 
-        statement.resolutionEntries.forEach((entry) {
-          // TODO: find most recent resolution entry
-        });
-      }
-    });
+    if (resolutionStatement == null) {
+      throw new ArgumentError(
+          'No resolution statement found on block: $height for unresolved: $unresolved');
+    }
+
+    // Returns the only entry exist on the list
+    if (resolutionStatement.resolutionEntries.length == 1) {
+      return resolutionStatement.resolutionEntries[0].resolved;
+    }
+
+    // Otherwise, find the most recent resolution entry
+    final ResolutionEntry resolutionEntry = resolutionStatement.getResolutionEntryById(
+      aggregateTransactionIndex == null ? transactionIndex + 1 : aggregateTransactionIndex + 1,
+      aggregateTransactionIndex == null ? 0 : transactionIndex + 1,
+    );
 
     // Can't find any resolution
-    if (resolved == null) {
+    if (resolutionEntry == null) {
       throw new ArgumentError(
           'No resolution entry found on block: $height for unresolved: $unresolved');
     }
+
+    return resolutionEntry.resolved;
   }
 }

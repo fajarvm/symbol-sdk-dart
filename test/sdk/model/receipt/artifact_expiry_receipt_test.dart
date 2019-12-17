@@ -31,7 +31,6 @@ void main() {
       expect(mosaicExpiryReceipt.type, equals(ReceiptType.MOSAIC_EXPIRED));
       expect(mosaicExpiryReceipt.version, equals(ReceiptVersion.ARTIFACT_EXPIRY));
       expect(mosaicExpiryReceipt.artifactId.toHex(), equals('85bbea6cc462b244'));
-      expect(mosaicExpiryReceipt.getArtifactIdValue().toHex(), equals('85bbea6cc462b244'));
       expect(mosaicExpiryReceipt.size, equals(100));
       String hex = HexUtils.bytesToHex(mosaicExpiryReceipt.serialize());
       expect(hex, equals('01004d4144b262c46ceabb85'));
@@ -46,7 +45,6 @@ void main() {
       expect(namespaceExpiryReceipt.type, equals(ReceiptType.NAMESPACE_EXPIRED));
       expect(namespaceExpiryReceipt.version, equals(ReceiptVersion.ARTIFACT_EXPIRY));
       expect(namespaceExpiryReceipt.artifactId.toHex(), equals('84b3552d375ffa4b'));
-      expect(namespaceExpiryReceipt.getArtifactIdValue().toHex(), equals('84b3552d375ffa4b'));
       expect(namespaceExpiryReceipt.size, equals(100));
       String hex = HexUtils.bytesToHex(namespaceExpiryReceipt.serialize());
       expect(hex, equals('01004e414bfa5f372d55b384'));

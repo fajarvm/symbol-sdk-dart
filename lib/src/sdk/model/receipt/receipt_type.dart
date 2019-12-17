@@ -41,13 +41,9 @@ class ReceiptType {
   /// The mosaicId expiring in this block. It is recorded when a mosaic expires.
   static const ReceiptType MOSAIC_EXPIRED = ReceiptType._(0x414D, 'MOSAIC_EXPIRED');
 
-  /// The sender and recipient of the levied mosaic, the mosaicId and amount. It is recorded when a
-  /// transaction has a levied mosaic.
-  static const ReceiptType MOSAIC_LEVY = ReceiptType._(0x124D, 'MOSAIC_LEVY');
-
   /// The sender and recipient of the mosaicId and amount representing the cost of registering the
   /// mosaic. It is recorded when a mosaic is registered.
-  static const ReceiptType MOSAIC_RENTAL_FEE = ReceiptType._(0x134D, 'MOSAIC_RENTAL_FEE');
+  static const ReceiptType MOSAIC_RENTAL_FEE = ReceiptType._(0x124D, 'MOSAIC_RENTAL_FEE');
 
   /// The namespaceId expiring in this block. It is recorded when a namespace expires.
   static const ReceiptType NAMESPACE_EXPIRED = ReceiptType._(0x414E, 'NAMESPACE_EXPIRED');
@@ -95,7 +91,6 @@ class ReceiptType {
     MOSAIC_ALIAS_RESOLUTION,
     TRANSACTION_GROUP,
     MOSAIC_EXPIRED,
-    MOSAIC_LEVY,
     MOSAIC_RENTAL_FEE,
     NAMESPACE_EXPIRED,
     NAMESPACE_RENTAL_FEE,

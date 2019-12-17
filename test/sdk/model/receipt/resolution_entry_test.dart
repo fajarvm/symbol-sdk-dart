@@ -16,6 +16,9 @@
 
 library nem2_sdk_dart.test.sdk.model.receipt.resolution_entry_test;
 
+import 'dart:typed_data' show Uint8List;
+
+import 'package:nem2_sdk_dart/core.dart' show HexUtils;
 import 'package:nem2_sdk_dart/sdk.dart' show Address, MosaicId, ReceiptSource, ResolutionEntry;
 import 'package:test/test.dart';
 
@@ -30,7 +33,7 @@ void main() {
 
     test('Can create an address resolution entry', () {
       ResolutionEntry resolutionEntry = new ResolutionEntry(address, receiptSource);
-      expect(resolutionEntry.receiptSource, equals(receiptSource));
+      expect(resolutionEntry.source, equals(receiptSource));
       expect(resolutionEntry.resolved is Address, isTrue);
       expect(resolutionEntry.resolved, equals(address));
       expect((resolutionEntry.resolved as Address).pretty, equals(plainAddress));
@@ -38,10 +41,18 @@ void main() {
 
     test('Can create a mosaic resolution entry', () {
       ResolutionEntry resolutionEntry = new ResolutionEntry(mosaicId, receiptSource);
-      expect(resolutionEntry.receiptSource, equals(receiptSource));
+      expect(resolutionEntry.source, equals(receiptSource));
       expect(resolutionEntry.resolved is MosaicId, isTrue);
       expect(resolutionEntry.resolved, equals(mosaicId));
       expect((resolutionEntry.resolved as MosaicId).toHex(), equals(mosaicHex));
+    });
+
+    test('serialize()', () {
+      ResolutionEntry resolutionEntry = new ResolutionEntry(address, receiptSource);
+
+      Uint8List entryBytes = resolutionEntry.serialize();
+      final String entryHex = HexUtils.bytesToHex(entryBytes);
+      expect(entryHex, '90ccb2d8723a173450e6404fda1afaae0bdab524508430c75e0100000002000000');
     });
 
     test('Should throw an exception when creating an entry with invalid parameter values', () {
