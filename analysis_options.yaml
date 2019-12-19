@@ -4,7 +4,7 @@
 # include: package:pedantic/analysis_options.1.8.0.yaml # Don't forget to add pedantic as dependency.
 analyzer:
   exclude:
-    - lib/src/core/crypto/tweetnacl.dart
+    - lib/src/core/crypto/catapultnacl.dart
     - lib/src/infrastructure/model/**
 
 # Lint rules and documentation, see http://dart-lang.github.io/linter/lints
