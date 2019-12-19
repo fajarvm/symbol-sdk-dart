@@ -36,42 +36,46 @@ import 'package:test/test.dart';
 
 void main() {
   group('TransactionStatement', () {
+    // setup
+    const privateKey = 'D242FB34C2C4DD36E995B9C865F93940065E326661BA5A4A247331D211FE3A3D';
+    final testAccount = Account.fromPrivateKey(privateKey, NetworkType.MIJIN_TEST);
+    const addressString = 'SDGLFW-DSHILT-IUHGIB-H5UGX2-VYF5VN-JEKCCD-BR26';
+    final recipientAddress = Address.fromRawAddress(addressString);
+    final mosaicId = MosaicId.fromHex('85bbea6cc462b244');
+    final receiptSource = new ReceiptSource(0, 0);
+    final height = Uint64.fromBigInt(BigInt.from(52));
+    final amount = Uint64.fromBigInt(BigInt.from(1000));
+
+    // Create receipts
+    final mosaicExpiryReceipt = new ArtifactExpiryReceipt(
+        mosaicId, ReceiptType.MOSAIC_EXPIRED, ReceiptVersion.ARTIFACT_EXPIRY);
+    final balanceChangeReceipt = new BalanceChangeReceipt(testAccount.publicAccount, mosaicId,
+        amount, ReceiptType.HARVEST_FEE, ReceiptVersion.BALANCE_CHANGE);
+    final balanceTransferReceipt = new BalanceTransferReceipt(
+        testAccount.publicAccount,
+        recipientAddress,
+        mosaicId,
+        amount,
+        ReceiptType.MOSAIC_RENTAL_FEE,
+        ReceiptVersion.BALANCE_TRANSFER);
+
+    final receipts = <Receipt>[mosaicExpiryReceipt, balanceChangeReceipt, balanceTransferReceipt];
+
     test('Can create a transaction statement object', () {
-      // setup
-      const privateKey = '787225aaff3d2c71f4ffa32d4f19ec4922f3cd869747f267378f81f8e3fcb12d';
-      final testAccount = Account.fromPrivateKey(privateKey, NetworkType.MIJIN_TEST);
-      const addressString = 'SDGLFW-DSHILT-IUHGIB-H5UGX2-VYF5VN-JEKCCD-BR26';
-      final recipientAddress = Address.fromRawAddress(addressString);
-      final mosaicId = MosaicId.fromHex('85bbea6cc462b244');
-      final receiptSource = new ReceiptSource(1, 2);
-      final height = Uint64.fromBigInt(BigInt.from(10));
-      final amount = Uint64.fromBigInt(BigInt.from(100));
-
-      // Create receipts
-      final mosaicExpiryReceipt = new ArtifactExpiryReceipt<MosaicId>(
-          mosaicId, ReceiptType.MOSAIC_EXPIRED, ReceiptVersion.ARTIFACT_EXPIRY);
-      final balanceChangeReceipt = new BalanceChangeReceipt(testAccount.publicAccount, mosaicId,
-          amount, ReceiptType.LOCKSECRET_EXPIRED, ReceiptVersion.BALANCE_CHANGE);
-      final balanceTransferReceipt = new BalanceTransferReceipt<Address>(
-          testAccount.publicAccount,
-          recipientAddress,
-          mosaicId,
-          amount,
-          ReceiptType.MOSAIC_RENTAL_FEE,
-          ReceiptVersion.BALANCE_TRANSFER);
-
-      final testReceipts = <Receipt>[
-        mosaicExpiryReceipt,
-        balanceChangeReceipt,
-        balanceTransferReceipt
-      ];
-
       // Create a new transaction statement
-      TransactionStatement transactionStatement =
-          new TransactionStatement(height, receiptSource, testReceipts);
+      final transactionStatement = new TransactionStatement(height, receiptSource, receipts);
       expect(transactionStatement.height, equals(height));
       expect(transactionStatement.source, equals(receiptSource));
-      expect(ArrayUtils.deepEqual(transactionStatement.receipts, testReceipts), isTrue);
+      expect(ArrayUtils.deepEqual(transactionStatement.receipts, receipts), isTrue);
+    });
+
+    test('Can generate hash', () {
+      final List<Receipt> receipts = [balanceChangeReceipt];
+      final transactionStatement = new TransactionStatement(height, receiptSource, receipts);
+      final hash = transactionStatement.generateHash();
+
+      expect(hash.isNotEmpty, isTrue);
+      expect(hash, equals('78E5F66EC55D1331646528F9BF7EC247C68F58E651223E7F05CBD4FBF0BF88FA'));
     });
   });
 }

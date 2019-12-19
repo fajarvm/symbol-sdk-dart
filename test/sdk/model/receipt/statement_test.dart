@@ -16,12 +16,14 @@
 
 library nem2_sdk_dart.test.sdk.model.receipt.statement_test;
 
-import 'package:nem2_sdk_dart/core.dart' show ArrayUtils;
 import 'package:nem2_sdk_dart/sdk.dart'
     show
+        Account,
         Address,
         ArtifactExpiryReceipt,
         MosaicId,
+        NamespaceId,
+        NetworkType,
         Receipt,
         ReceiptSource,
         ReceiptType,
@@ -31,51 +33,81 @@ import 'package:nem2_sdk_dart/sdk.dart'
         ResolutionType,
         Statement,
         TransactionStatement,
-        Uint64;
+        Uint64,
+        UnresolvedUtils;
 import 'package:test/test.dart';
 
 void main() {
   group('Statement', () {
+    // setup
+    final Uint64 height = Uint64(1473);
+    final Uint64 height2 = Uint64(1500);
+    NetworkType networkType = NetworkType.MIJIN_TEST;
+    MosaicId mosaicId1 = MosaicId.fromHex('AAAAAAAAAAAAAAA1');
+    MosaicId mosaicId2 = MosaicId.fromHex('AAAAAAAAAAAAAAA2');
+    MosaicId mosaicId3 = MosaicId.fromHex('AAAAAAAAAAAAAAA3');
+    MosaicId mosaicId4 = MosaicId.fromHex('AAAAAAAAAAAAAAA4');
+    NamespaceId mosaicNamespace1 = NamespaceId.fromFullName('mosaicnamespace1');
+    NamespaceId mosaicNamespace3 = NamespaceId.fromFullName('mosaicnamespace3');
+    NamespaceId mosaicNamespace4 = NamespaceId.fromFullName('mosaicnamespace4');
+    Address address1 = Account.generate(networkType).publicAccount.address;
+    NamespaceId addressNamespace1 = NamespaceId.fromFullName('addressnamespace1');
+
+    // setup statement
+    Account account = Account.fromPrivateKey(
+        '81C18245507F9C15B61BDEDAFA2C10D9DC2C4E401E573A10935D45AA2A461FD5', networkType);
+
+    // Resolution entries
+    final addressEntries = <ResolutionEntry>[ResolutionEntry(address1, ReceiptSource(1, 0))];
+    final mosaicEntries = <ResolutionEntry>[
+      ResolutionEntry(mosaicId1, ReceiptSource(1, 0)),
+      ResolutionEntry(mosaicId2, ReceiptSource(3, 5))
+    ];
+    final mosaicEntries2 = <ResolutionEntry>[ResolutionEntry(mosaicId3, ReceiptSource(3, 1))];
+    final mosaicEntries3 = <ResolutionEntry>[
+      ResolutionEntry(mosaicId1, ReceiptSource(1, 1)),
+      ResolutionEntry(mosaicId2, ReceiptSource(1, 4)),
+      ResolutionEntry(mosaicId3, ReceiptSource(1, 7)),
+      ResolutionEntry(mosaicId3, ReceiptSource(2, 4))
+    ];
+
+    // Statements
+    final transactionStatements = <TransactionStatement>[];
+
+    final addressResolutionStatements = <ResolutionStatement>[
+      new ResolutionStatement(ResolutionType.ADDRESS, height, addressNamespace1, addressEntries)
+    ];
+
+    final mosaicResolutionStatements = <ResolutionStatement>[
+      new ResolutionStatement(ResolutionType.MOSAIC, height, mosaicNamespace1, mosaicEntries),
+      new ResolutionStatement(ResolutionType.MOSAIC, height, mosaicNamespace3, mosaicEntries2),
+      new ResolutionStatement(ResolutionType.MOSAIC, height2, mosaicNamespace4, mosaicEntries3),
+    ];
+
+    // Create a new statement
+    Statement statement = new Statement(
+        transactionStatements, addressResolutionStatements, mosaicResolutionStatements);
+
     test('Can create a statement object', () {
-      // setup
-      const plainAddress = 'SDGLFW-DSHILT-IUHGIB-H5UGX2-VYF5VN-JEKCCD-BR26';
-      final address = Address.fromRawAddress(plainAddress);
-      final mosaicId = MosaicId.fromHex('85bbea6cc462b244');
-      final receiptSource = new ReceiptSource(1, 2);
-      final height = Uint64.fromBigInt(BigInt.from(10));
-
-      // Resolution entries
-      final addressEntry = new ResolutionEntry<Address>(address, receiptSource);
-      final mosaicEntry = new ResolutionEntry<MosaicId>(mosaicId, receiptSource);
-      final addressEntries = <ResolutionEntry<Address>>[addressEntry];
-      final mosaicEntries = <ResolutionEntry<MosaicId>>[mosaicEntry];
-
-      // artifact receipt
-      final mosaicExpiryReceipt = new ArtifactExpiryReceipt<MosaicId>(
-          mosaicId, ReceiptType.MOSAIC_EXPIRED, ReceiptVersion.ARTIFACT_EXPIRY);
-      final receipts = <Receipt>[mosaicExpiryReceipt];
-
-      // Statements
-      final List<TransactionStatement> transactionStatements = <TransactionStatement>[];
-      transactionStatements.add(new TransactionStatement(height, receiptSource, receipts));
-      final List<ResolutionStatement<Address>> addressResolutionStatements =
-          <ResolutionStatement<Address>>[];
-      addressResolutionStatements
-          .add(new ResolutionStatement(ResolutionType.ADDRESS, height, address, addressEntries));
-      final List<ResolutionStatement<MosaicId>> mosaicResolutionStatements =
-          <ResolutionStatement<MosaicId>>[];
-      mosaicResolutionStatements
-          .add(new ResolutionStatement(ResolutionType.MOSAIC, height, mosaicId, mosaicEntries));
-
-      // Create a new statement
-      Statement statement = new Statement(
-          transactionStatements, addressResolutionStatements, mosaicResolutionStatements);
-      expect(ArrayUtils.deepEqual(statement.transactionStatements, transactionStatements), isTrue);
-      expect(
-          ArrayUtils.deepEqual(statement.addressResolutionStatements, addressResolutionStatements),
-          isTrue);
-      expect(ArrayUtils.deepEqual(statement.mosaicResolutionStatements, mosaicResolutionStatements),
-          isTrue);
+      expect(statement, isNotNull);
+      expect(statement.transactionStatements.length, 0);
+      expect(statement.addressResolutionStatements.length, 1);
+      expect(statement.mosaicResolutionStatements.length, 3);
     });
+
+    // TODO: complete test
+    test('Can get resolved entry when primaryId > maxMosaicId', () {
+//      final resolved = statement.resolve(
+//          unresolved: mosaicNamespace1,
+//          type: ResolutionType.MOSAIC,
+//          height: '1473',
+//          transactionIndex: 4,
+//          aggregateTransactionIndex: 0);
+//      expect(resolved, isNotNull);
+//      expect(resolved, equals(mosaicId2));
+    });
+
+    test('Can resolve an address from receipt', () {});
+    test('Can resolve a mosaic from receipt', () {});
   });
 }

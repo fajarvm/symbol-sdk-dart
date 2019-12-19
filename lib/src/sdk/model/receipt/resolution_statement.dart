@@ -40,7 +40,7 @@ import 'resolution_type.dart';
 /// value for that block:
 /// - Address Resolution: An account alias was used in the block.
 /// - Mosaic Resolution: A mosaic alias was used in the block.
-class ResolutionStatement<T> {
+class ResolutionStatement {
   /// The type of this resolution.
   final ResolutionType resolutionType;
 
@@ -48,7 +48,7 @@ class ResolutionStatement<T> {
   final Uint64 height;
 
   /// The unresolved object. It must be either an [Address], a [MosaicId] or a [NamespaceId].
-  final T unresolved;
+  final dynamic unresolved;
 
   /// A list of resolution entries linked to the unresolved object.
   ///
@@ -59,8 +59,8 @@ class ResolutionStatement<T> {
   // private constructor
   ResolutionStatement._(this.resolutionType, this.height, this.unresolved, this.resolutionEntries);
 
-  factory ResolutionStatement(
-      ResolutionType resolutionType, Uint64 height, T unresolved, List<ResolutionEntry> entries) {
+  factory ResolutionStatement(final ResolutionType resolutionType, final Uint64 height,
+      final dynamic unresolved, final List<ResolutionEntry> entries) {
     ArgumentError.checkNotNull(resolutionType);
     ArgumentError.checkNotNull(unresolved);
 
@@ -187,8 +187,10 @@ class ResolutionStatement<T> {
   /// The [unresolved] object must either be an [Address], a [MosaicId] or a [NamespaceId].
   static bool _isValid(
       ResolutionType resolutionType, dynamic unresolved, List<ResolutionEntry> entries) {
-    final bool isUnresolvedAddress = unresolved is Address ? true : false;
-    final bool isUnresolvedMosaic = unresolved is MosaicId ? true : false;
+    final bool isUnresolvedAddress =
+        unresolved is Address || unresolved is NamespaceId ? true : false;
+    final bool isUnresolvedMosaic =
+        unresolved is MosaicId || unresolved is NamespaceId ? true : false;
 
     if (!isUnresolvedAddress && !isUnresolvedMosaic) {
       return false;

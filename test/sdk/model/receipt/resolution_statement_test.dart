@@ -37,8 +37,8 @@ void main() {
     final Address address = Address.fromRawAddress(plainAddress);
     final MosaicId mosaicId = MosaicId.fromHex('85bbea6cc462b244');
     final ReceiptSource receiptSource = new ReceiptSource(1, 2);
-    final ResolutionEntry<Address> addressEntry = new ResolutionEntry(address, receiptSource);
-    final ResolutionEntry<MosaicId> mosaicEntry = new ResolutionEntry(mosaicId, receiptSource);
+    final ResolutionEntry addressEntry = new ResolutionEntry(address, receiptSource);
+    final ResolutionEntry mosaicEntry = new ResolutionEntry(mosaicId, receiptSource);
     final Uint64 height = Uint64.fromBigInt(BigInt.from(10));
 
     test('Check the ResolutionStatement collection', () {
@@ -49,7 +49,7 @@ void main() {
     });
 
     test('Can create address resolution statement', () {
-      List<ResolutionEntry<Address>> entries = <ResolutionEntry<Address>>[addressEntry];
+      List<ResolutionEntry> entries = <ResolutionEntry>[addressEntry];
 
       ResolutionStatement statement =
           new ResolutionStatement(ResolutionType.ADDRESS, height, address, entries);
@@ -60,7 +60,7 @@ void main() {
     });
 
     test('Can create mosaic resolution statement', () {
-      List<ResolutionEntry<MosaicId>> entries = <ResolutionEntry<MosaicId>>[mosaicEntry];
+      List<ResolutionEntry> entries = <ResolutionEntry>[mosaicEntry];
 
       ResolutionStatement statement =
           new ResolutionStatement(ResolutionType.MOSAIC, height, mosaicId, entries);
@@ -78,7 +78,7 @@ void main() {
               e is ArgumentError && e.message.toString().contains('Invalid ResolutionStatement'))));
 
       // invalid resolution entries
-      List<ResolutionEntry<MosaicId>> entries = <ResolutionEntry<MosaicId>>[mosaicEntry];
+      List<ResolutionEntry> entries = <ResolutionEntry>[mosaicEntry];
       expect(
           () => new ResolutionStatement(ResolutionType.MOSAIC, height, address, entries),
           throwsA(predicate((e) =>
@@ -86,7 +86,7 @@ void main() {
     });
 
     test('Can generate hash', () {
-      List<ResolutionEntry<MosaicId>> entries = <ResolutionEntry<MosaicId>>[mosaicEntry];
+      List<ResolutionEntry> entries = <ResolutionEntry>[mosaicEntry];
       ResolutionStatement statement =
           new ResolutionStatement(ResolutionType.MOSAIC, Uint64(10), mosaicId, entries);
 

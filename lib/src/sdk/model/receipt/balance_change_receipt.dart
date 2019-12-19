@@ -43,8 +43,8 @@ class BalanceChangeReceipt extends Receipt {
       this.account, this.mosaicId, this.amount, ReceiptType type, ReceiptVersion version, int size)
       : super(type, version, size);
 
-  factory BalanceChangeReceipt(PublicAccount account, MosaicId mosaicId, Uint64 amount,
-      ReceiptType type, ReceiptVersion version,
+  factory BalanceChangeReceipt(final PublicAccount account, final MosaicId mosaicId,
+      final Uint64 amount, final ReceiptType type, final ReceiptVersion version,
       [int size]) {
     ArgumentError.checkNotNull(account);
     ArgumentError.checkNotNull(mosaicId);

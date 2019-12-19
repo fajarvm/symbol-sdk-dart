@@ -22,6 +22,7 @@ import '../mosaic/mosaic_id.dart';
 import '../namespace/namespace_id.dart';
 import 'resolution_entry.dart';
 import 'resolution_statement.dart';
+import 'resolution_type.dart';
 import 'transaction_statement.dart';
 
 /// This class hold multiple lists of statements.
@@ -30,38 +31,57 @@ class Statement {
   final List<TransactionStatement> transactionStatements;
 
   /// A collection of address resolution statements.
-  final List<ResolutionStatement<Address>> addressResolutionStatements;
+  final List<ResolutionStatement> addressResolutionStatements;
 
   /// A collection of mosaic resolution statements.
-  final List<ResolutionStatement<MosaicId>> mosaicResolutionStatements;
+  final List<ResolutionStatement> mosaicResolutionStatements;
 
   Statement(this.transactionStatements, this.addressResolutionStatements,
       this.mosaicResolutionStatements);
 
-  /// Resolves an [unresolved] object using the given block [height], [transactionIndex] and
-  /// optionally [aggregateTransactionIndex]. Default value for [aggregateTransactionIndex] is 0.
+  /// Resolves an [unresolved] object of the given [type] using the given block [height],
+  /// [transactionIndex] and optionally [aggregateTransactionIndex]. The Default value for
+  /// [aggregateTransactionIndex] is 0.
   ///
   /// The [unresolved] object can either be an [Address], a [Mosaic], [MosaicId] or a
   /// [NamespaceId]. The type of the object returned corresponds to the type of the given
   /// [unresolved] object.
   dynamic resolve(
-      {dynamic unresolved,
+      {ResolutionType type,
+      dynamic unresolved,
       String height,
       int transactionIndex,
       int aggregateTransactionIndex = 0}) {
-    // Determines which resolution statements we look into
-    List<ResolutionStatement> resolutionStatements;
-    if (unresolved is Address) {
-      resolutionStatements = addressResolutionStatements;
-    } else if (unresolved is Mosaic || unresolved is MosaicId || unresolved is NamespaceId) {
-      resolutionStatements = mosaicResolutionStatements;
-    } else {
+    ArgumentError.checkNotNull(type);
+    ArgumentError.checkNotNull(unresolved);
+    ArgumentError.checkNotNull(height);
+
+    if (_isValidUnresolvedObject(unresolved) == false) {
       throw new ArgumentError('unsupported unresolved object: $unresolved');
     }
 
+    // Determines which resolution statements we look into
+    List<ResolutionStatement> resolutionStatements;
+    if (ResolutionType.ADDRESS == type) {
+      resolutionStatements = addressResolutionStatements;
+    } else if (ResolutionType.MOSAIC == type) {
+      resolutionStatements = mosaicResolutionStatements;
+    } else {
+      throw new ArgumentError('unsupported resolution type: $type');
+    }
+
     // Filter resolution statements by height and unresolved type
-    final ResolutionStatement resolutionStatement = resolutionStatements
-        .firstWhere((e) => e.height.toString() == height && e.unresolved == unresolved);
+    final ResolutionStatement resolutionStatement = resolutionStatements.firstWhere((e) {
+      if (e.height.toString() == height) {
+        if (e.unresolved is Address && unresolved is Address) {
+          return e.unresolved as Address == unresolved;
+        } else if (e.unresolved is NamespaceId && unresolved is NamespaceId) {
+          return e.unresolved as NamespaceId == unresolved;
+        }
+      }
+
+      return false;
+    });
 
     if (resolutionStatement == null) {
       throw new ArgumentError(
@@ -86,5 +106,12 @@ class Statement {
     }
 
     return resolutionEntry.resolved;
+  }
+
+  bool _isValidUnresolvedObject(final dynamic unresolved) {
+    return unresolved is NamespaceId ||
+        unresolved is MosaicId ||
+        unresolved is NamespaceId ||
+        unresolved is Address;
   }
 }

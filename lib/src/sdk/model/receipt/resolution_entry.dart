@@ -25,16 +25,16 @@ import '../mosaic/mosaic_id.dart';
 import 'receipt_source.dart';
 
 /// The resolution entry object.
-class ResolutionEntry<T> {
+class ResolutionEntry {
   /// The resolved object. It must either be an [Address] or a [MosaicId].
-  final T resolved;
+  final dynamic resolved;
 
   /// The receipt source. The transaction that triggered the receipt.
   final ReceiptSource source;
 
   ResolutionEntry._(this.resolved, this.source);
 
-  factory ResolutionEntry(T resolved, ReceiptSource source) {
+  factory ResolutionEntry(final dynamic resolved, final ReceiptSource source) {
     ArgumentError.checkNotNull(resolved);
     ArgumentError.checkNotNull(source);
 

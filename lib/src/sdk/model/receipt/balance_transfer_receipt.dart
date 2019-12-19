@@ -32,12 +32,12 @@ import 'receipt_version.dart';
 
 /// A receipt that is created when there is an invisible state change triggered by a mosaic
 /// transfer.
-class BalanceTransferReceipt<T> extends Receipt {
+class BalanceTransferReceipt extends Receipt {
   /// The sender's public account.
   final PublicAccount sender;
 
   /// The recipient. Must either be an [Address] or a [NamespaceId].
-  final T recipient;
+  final dynamic recipient;
 
   /// The mosaic id.
   final MosaicId mosaicId;
@@ -49,8 +49,13 @@ class BalanceTransferReceipt<T> extends Receipt {
       ReceiptType type, ReceiptVersion version, int size)
       : super(type, version, size);
 
-  factory BalanceTransferReceipt(PublicAccount sender, dynamic recipient, MosaicId mosaicId,
-      Uint64 amount, ReceiptType type, ReceiptVersion version,
+  factory BalanceTransferReceipt(
+      final PublicAccount sender,
+      final dynamic recipient,
+      final MosaicId mosaicId,
+      final Uint64 amount,
+      final ReceiptType type,
+      final ReceiptVersion version,
       [int size]) {
     ArgumentError.checkNotNull(sender);
     ArgumentError.checkNotNull(recipient);

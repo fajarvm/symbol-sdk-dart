@@ -26,14 +26,15 @@ import 'receipt_type.dart';
 import 'receipt_version.dart';
 
 /// A receipt that is created when an artifact (e.g. namespace, mosaic) is expired.
-class ArtifactExpiryReceipt<T> extends Receipt {
+class ArtifactExpiryReceipt extends Receipt {
   /// The artifact id. It must either be a [MosaicId] or a [NamespaceId].
-  final T artifactId;
+  final dynamic artifactId;
 
   ArtifactExpiryReceipt._(this.artifactId, ReceiptType type, ReceiptVersion version, int size)
       : super(type, version, size);
 
-  factory ArtifactExpiryReceipt(T artifactId, ReceiptType type, ReceiptVersion version,
+  factory ArtifactExpiryReceipt(
+      final dynamic artifactId, final ReceiptType type, final ReceiptVersion version,
       [int size]) {
     ArgumentError.checkNotNull(artifactId);
     ArgumentError.checkNotNull(type);

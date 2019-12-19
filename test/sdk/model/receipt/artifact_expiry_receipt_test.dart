@@ -25,7 +25,7 @@ void main() {
   group('ArtifactExpiryReceipt', () {
     test('Can create Mosaic expiry receipt', () {
       MosaicId id = MosaicId.fromHex('85bbea6cc462b244');
-      ArtifactExpiryReceipt<MosaicId> mosaicExpiryReceipt = new ArtifactExpiryReceipt(
+      ArtifactExpiryReceipt mosaicExpiryReceipt = new ArtifactExpiryReceipt(
           id, ReceiptType.MOSAIC_EXPIRED, ReceiptVersion.ARTIFACT_EXPIRY, 100);
 
       expect(mosaicExpiryReceipt.type, equals(ReceiptType.MOSAIC_EXPIRED));
@@ -39,7 +39,7 @@ void main() {
     test('Can create Namespace expiry receipt', () {
       // Namespace fullName: nem, hex: 84b3552d375ffa4b
       NamespaceId id = NamespaceId.fromHex('84b3552d375ffa4b');
-      ArtifactExpiryReceipt<NamespaceId> namespaceExpiryReceipt = new ArtifactExpiryReceipt(
+      ArtifactExpiryReceipt namespaceExpiryReceipt = new ArtifactExpiryReceipt(
           id, ReceiptType.NAMESPACE_EXPIRED, ReceiptVersion.ARTIFACT_EXPIRY, 100);
 
       expect(namespaceExpiryReceipt.type, equals(ReceiptType.NAMESPACE_EXPIRED));

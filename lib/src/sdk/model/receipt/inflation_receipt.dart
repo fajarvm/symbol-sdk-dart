@@ -36,8 +36,8 @@ class InflationReceipt extends Receipt {
   InflationReceipt._(this.mosaicId, this.amount, ReceiptType type, ReceiptVersion version, int size)
       : super(type, version, size);
 
-  factory InflationReceipt(
-      MosaicId mosaicId, Uint64 amount, ReceiptType type, ReceiptVersion version,
+  factory InflationReceipt(final MosaicId mosaicId, final Uint64 amount, final ReceiptType type,
+      final ReceiptVersion version,
       [int size]) {
     ArgumentError.checkNotNull(mosaicId);
     ArgumentError.checkNotNull(type);
