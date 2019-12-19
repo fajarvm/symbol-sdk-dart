@@ -38,6 +38,7 @@ import 'model/blockchain/network_type_test.dart' as network_type_test;
 import 'model/common/id_generator_test.dart' as id_generator_test;
 import 'model/common/id_test.dart' as id_test;
 import 'model/common/uint64_test.dart' as uint64_test;
+import 'model/common/unresolved_utils_test.dart' as unresolved_utils_test;
 
 // diagnostic
 import 'model/diagnostic/server_info_test.dart' as server_info_test;
@@ -142,6 +143,7 @@ void main() {
     id_test.main();
     id_generator_test.main();
     uint64_test.main();
+    unresolved_utils_test.main();
   });
 
   // diagnostic
