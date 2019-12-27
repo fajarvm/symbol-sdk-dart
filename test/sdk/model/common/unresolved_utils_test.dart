@@ -27,7 +27,6 @@ void main() {
   group('UnresolvedUtils', () {
     // setup
     const mosaicHex = '11F4B1B3AC033DB5';
-    final mosaicId = MosaicId.fromHex(mosaicHex);
     const namespaceHex = '9550CA3FC9B41FC5';
     final namespaceId = NamespaceId.fromHex(namespaceHex);
     const rawAddress = 'MCTVW23D2MN5VE4AQ4TZIDZENGNOZXPRPR72DYSX';

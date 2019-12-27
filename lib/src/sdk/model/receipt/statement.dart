@@ -39,26 +39,89 @@ class Statement {
   Statement(this.transactionStatements, this.addressResolutionStatements,
       this.mosaicResolutionStatements);
 
-  /// Resolves an [unresolved] object of the given [type] using the given block [height],
+  /// Resolve an [unresolvedAddress] from a statement object.
+  dynamic resolveAddress(final dynamic unresolvedAddress, String height, int transactionIndex,
+      [int aggregateTransactionIndex = 0]) {
+    if (unresolvedAddress is Address) {
+      // return as it is
+      return unresolvedAddress;
+    }
+
+    if (unresolvedAddress is NamespaceId) {
+      // resolve the unresolved address object
+      return _resolve(
+          type: ResolutionType.ADDRESS,
+          height: height,
+          unresolved: unresolvedAddress,
+          transactionIndex: transactionIndex,
+          aggregateTransactionIndex: aggregateTransactionIndex) as Address;
+    }
+
+    throw new StateError('Invalid type of unresolvedAddress. '
+        'An Address or NamespaceId is expected. '
+        'Received: $unresolvedAddress');
+  }
+
+  /// Resolve an [unresolvedMosaicId] from a statement object.
+  dynamic resolveMosaicId(final dynamic unresolvedMosaicId, String height, int transactionIndex,
+      [int aggregateTransactionIndex = 0]) {
+    if (unresolvedMosaicId is MosaicId) {
+      // return as it is
+      return unresolvedMosaicId;
+    }
+
+    if (unresolvedMosaicId is NamespaceId) {
+      // resolve the unresolved mosaic object
+      return _resolve(
+          type: ResolutionType.MOSAIC,
+          height: height,
+          unresolved: unresolvedMosaicId,
+          transactionIndex: transactionIndex,
+          aggregateTransactionIndex: aggregateTransactionIndex) as MosaicId;
+    }
+
+    throw new StateError('Invalid type of unresolvedMosaicId. '
+        'A MosaicId or NamespaceId is expected. '
+        'Received: $unresolvedMosaicId');
+  }
+
+  /// Resolve an [unresolvedMosaic] from a statement object.
+  dynamic resolveMosaic(final Mosaic unresolvedMosaic, String height, int transactionIndex,
+      [int aggregateTransactionIndex = 0]) {
+    ArgumentError.checkNotNull(unresolvedMosaic);
+
+    MosaicId mosaicId;
+    if (unresolvedMosaic.id is MosaicId) {
+      mosaicId = unresolvedMosaic.id;
+    }
+
+    if (unresolvedMosaic.id is NamespaceId) {
+      // resolve the unresolved mosaic object
+      mosaicId = _resolve(
+          type: ResolutionType.MOSAIC,
+          height: height,
+          unresolved: unresolvedMosaic.id as NamespaceId,
+          transactionIndex: transactionIndex,
+          aggregateTransactionIndex: aggregateTransactionIndex) as MosaicId;
+    }
+
+    return new Mosaic(mosaicId, unresolvedMosaic.amount);
+  }
+
+  // ------------------------------ private / protected functions ------------------------------ //
+
+  /// Resolves an [unresolved] object of the given [type] with the given block [height],
   /// [transactionIndex] and optionally [aggregateTransactionIndex]. The Default value for
   /// [aggregateTransactionIndex] is 0.
-  ///
-  /// The [unresolved] object can either be an [Address], a [Mosaic], [MosaicId] or a
-  /// [NamespaceId]. The type of the object returned corresponds to the type of the given
-  /// [unresolved] object.
-  dynamic resolve(
+  dynamic _resolve(
       {ResolutionType type,
-      dynamic unresolved,
+      NamespaceId unresolved,
       String height,
       int transactionIndex,
-      int aggregateTransactionIndex = 0}) {
+      int aggregateTransactionIndex}) {
     ArgumentError.checkNotNull(type);
     ArgumentError.checkNotNull(unresolved);
     ArgumentError.checkNotNull(height);
-
-    if (_isValidUnresolvedObject(unresolved) == false) {
-      throw new ArgumentError('unsupported unresolved object: $unresolved');
-    }
 
     // Determines which resolution statements we look into
     List<ResolutionStatement> resolutionStatements;
@@ -70,48 +133,29 @@ class Statement {
       throw new ArgumentError('unsupported resolution type: $type');
     }
 
-    // Filter resolution statements by height and unresolved type
-    final ResolutionStatement resolutionStatement = resolutionStatements.firstWhere((e) {
-      if (e.height.toString() == height) {
-        if (e.unresolved is Address && unresolved is Address) {
-          return e.unresolved as Address == unresolved;
-        } else if (e.unresolved is NamespaceId && unresolved is NamespaceId) {
-          return e.unresolved as NamespaceId == unresolved;
-        }
-      }
+    final ResolutionStatement resolutionStatement = resolutionStatements.firstWhere(
+        (statement) =>
+            statement.resolutionType == type &&
+            statement.height.toString() == height &&
+            statement.unresolved is NamespaceId &&
+            statement.unresolved == unresolved,
+        orElse: () => throw new ArgumentError('No resolution statement found on block: $height '
+            'for unresolved: ${unresolved.toHex()}'));
 
-      return false;
-    });
-
-    if (resolutionStatement == null) {
-      throw new ArgumentError(
-          'No resolution statement found on block: $height for unresolved: $unresolved');
-    }
-
-    // Returns the only entry exist on the list
+    // If only one entry exists on the statement, just return
     if (resolutionStatement.resolutionEntries.length == 1) {
       return resolutionStatement.resolutionEntries[0].resolved;
     }
 
-    // Otherwise, find the most recent resolution entry
-    final ResolutionEntry resolutionEntry = resolutionStatement.getResolutionEntryById(
-      aggregateTransactionIndex == null ? transactionIndex + 1 : aggregateTransactionIndex + 1,
-      aggregateTransactionIndex == null ? 0 : transactionIndex + 1,
-    );
-
-    // Can't find any resolution
-    if (resolutionEntry == null) {
+    // Get the most recent resolution entry
+    final ResolutionEntry entry = resolutionStatement.getResolutionEntryById(
+        aggregateTransactionIndex == null ? transactionIndex + 1 : aggregateTransactionIndex + 1,
+        aggregateTransactionIndex == null ? 0 : transactionIndex + 1);
+    if (entry == null) {
       throw new ArgumentError(
-          'No resolution entry found on block: $height for unresolved: $unresolved');
+          'No resolution entry found on block: $height for unresolved: ${unresolved.toHex()}');
     }
 
-    return resolutionEntry.resolved;
-  }
-
-  bool _isValidUnresolvedObject(final dynamic unresolved) {
-    return unresolved is NamespaceId ||
-        unresolved is MosaicId ||
-        unresolved is NamespaceId ||
-        unresolved is Address;
+    return entry.resolved;
   }
 }

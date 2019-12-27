@@ -20,11 +20,11 @@ import 'package:nem2_sdk_dart/sdk.dart'
     show
         Account,
         Address,
-        ArtifactExpiryReceipt,
+        BalanceChangeReceipt,
+        Mosaic,
         MosaicId,
         NamespaceId,
         NetworkType,
-        Receipt,
         ReceiptSource,
         ReceiptType,
         ReceiptVersion,
@@ -40,48 +40,45 @@ import 'package:test/test.dart';
 void main() {
   group('Statement', () {
     // setup
-    final Uint64 height = Uint64(1473);
-    final Uint64 height2 = Uint64(1500);
     NetworkType networkType = NetworkType.MIJIN_TEST;
-    MosaicId mosaicId1 = MosaicId.fromHex('AAAAAAAAAAAAAAA1');
-    MosaicId mosaicId2 = MosaicId.fromHex('AAAAAAAAAAAAAAA2');
-    MosaicId mosaicId3 = MosaicId.fromHex('AAAAAAAAAAAAAAA3');
-    MosaicId mosaicId4 = MosaicId.fromHex('AAAAAAAAAAAAAAA4');
-    NamespaceId mosaicNamespace1 = NamespaceId.fromFullName('mosaicnamespace1');
-    NamespaceId mosaicNamespace3 = NamespaceId.fromFullName('mosaicnamespace3');
-    NamespaceId mosaicNamespace4 = NamespaceId.fromFullName('mosaicnamespace4');
-    Address address1 = Account.generate(networkType).publicAccount.address;
-    NamespaceId addressNamespace1 = NamespaceId.fromFullName('addressnamespace1');
-
-    // setup statement
     Account account = Account.fromPrivateKey(
         '81C18245507F9C15B61BDEDAFA2C10D9DC2C4E401E573A10935D45AA2A461FD5', networkType);
-
-    // Resolution entries
-    final addressEntries = <ResolutionEntry>[ResolutionEntry(address1, ReceiptSource(1, 0))];
-    final mosaicEntries = <ResolutionEntry>[
-      ResolutionEntry(mosaicId1, ReceiptSource(1, 0)),
-      ResolutionEntry(mosaicId2, ReceiptSource(3, 5))
-    ];
-    final mosaicEntries2 = <ResolutionEntry>[ResolutionEntry(mosaicId3, ReceiptSource(3, 1))];
-    final mosaicEntries3 = <ResolutionEntry>[
-      ResolutionEntry(mosaicId1, ReceiptSource(1, 1)),
-      ResolutionEntry(mosaicId2, ReceiptSource(1, 4)),
-      ResolutionEntry(mosaicId3, ReceiptSource(1, 7)),
-      ResolutionEntry(mosaicId3, ReceiptSource(2, 4))
-    ];
+    final Uint64 height = Uint64(1473);
 
     // Statements
-    final transactionStatements = <TransactionStatement>[];
-
-    final addressResolutionStatements = <ResolutionStatement>[
-      new ResolutionStatement(ResolutionType.ADDRESS, height, addressNamespace1, addressEntries)
+    // Transaction statements
+    Account targetAccount = Account.fromPrivateKey(
+        'B2708D49C46F8AB5CDBD7A09C959EEA12E4A782592F3D1D3D17D54622E655D7F', networkType);
+    final balanceChangeReceipt = new BalanceChangeReceipt(
+        targetAccount.publicAccount,
+        MosaicId.fromHex('504677C3281108DB'),
+        Uint64(0),
+        ReceiptType.HARVEST_FEE,
+        ReceiptVersion.BALANCE_CHANGE);
+    final transactionStatements = <TransactionStatement>[
+      new TransactionStatement(height, ReceiptSource(0, 0), [balanceChangeReceipt])
     ];
 
+    // Address statements
+    dynamic unresolvedAddress =
+        UnresolvedUtils.toUnresolvedAddress('9156258DE356F030A500000000000000000000000000000000');
+    Address resolvedAddress =
+        Address.fromEncoded('901D8D4741F80299E66BF7FEEB4F30943DA7B68E068B182319');
+    final addressResolutionStatements = <ResolutionStatement>[
+      new ResolutionStatement(ResolutionType.ADDRESS, height, unresolvedAddress,
+          [ResolutionEntry(resolvedAddress, ReceiptSource(1, 0))])
+    ];
+
+    // Mosaic statements
+    dynamic unresolvedMosaic1 = UnresolvedUtils.toUnresolvedMosaic('85BBEA6CC462B244');
+    dynamic unresolvedMosaic2 = UnresolvedUtils.toUnresolvedMosaic('E81F622A5B11A340');
+    final resolvedMosaic1 = MosaicId.fromHex('504677C3281108DB');
+    final resolvedMosaic2 = MosaicId.fromHex('756482FB80FD406C');
     final mosaicResolutionStatements = <ResolutionStatement>[
-      new ResolutionStatement(ResolutionType.MOSAIC, height, mosaicNamespace1, mosaicEntries),
-      new ResolutionStatement(ResolutionType.MOSAIC, height, mosaicNamespace3, mosaicEntries2),
-      new ResolutionStatement(ResolutionType.MOSAIC, height2, mosaicNamespace4, mosaicEntries3),
+      new ResolutionStatement(ResolutionType.MOSAIC, height, unresolvedMosaic1,
+          [ResolutionEntry(resolvedMosaic1, ReceiptSource(1, 0))]),
+      new ResolutionStatement(ResolutionType.MOSAIC, height, unresolvedMosaic2,
+          [ResolutionEntry(resolvedMosaic2, ReceiptSource(1, 0))]),
     ];
 
     // Create a new statement
@@ -90,24 +87,73 @@ void main() {
 
     test('Can create a statement object', () {
       expect(statement, isNotNull);
-      expect(statement.transactionStatements.length, 0);
+      expect(statement.transactionStatements.length, 1);
       expect(statement.addressResolutionStatements.length, 1);
-      expect(statement.mosaicResolutionStatements.length, 3);
+      expect(statement.mosaicResolutionStatements.length, 2);
     });
 
-    // TODO: complete test
-    test('Can get resolved entry when primaryId > maxMosaicId', () {
-//      final resolved = statement.resolve(
-//          unresolved: mosaicNamespace1,
-//          type: ResolutionType.MOSAIC,
-//          height: '1473',
-//          transactionIndex: 4,
-//          aggregateTransactionIndex: 0);
-//      expect(resolved, isNotNull);
-//      expect(resolved, equals(mosaicId2));
+    test('Should get resolved address', () {
+      final unresolvedAddress =
+          UnresolvedUtils.toUnresolvedAddress('9156258DE356F030A500000000000000000000000000000000');
+      final resolved = statement.resolveAddress(unresolvedAddress as NamespaceId, '1473', 0);
+
+      expect(resolved is Address, isTrue);
+      expect(resolved, equals(account.publicAccount.address));
     });
 
-    test('Can resolve an address from receipt', () {});
-    test('Can resolve a mosaic from receipt', () {});
+    test('Should get resolved mosaicId', () {
+      final unresolvedMosaic = UnresolvedUtils.toUnresolvedMosaic('E81F622A5B11A340');
+      final resolved = statement.resolveMosaicId(unresolvedMosaic as NamespaceId, '1473', 0);
+
+      expect(resolved is MosaicId, isTrue);
+
+      final expected = MosaicId.fromHex('756482FB80FD406C');
+      expect(resolved, equals(expected));
+    });
+
+    test('Should get resolved mosaic', () {
+      final expectedMosaicId = MosaicId.fromHex('756482FB80FD406C');
+      final expectedMosaic = Mosaic(expectedMosaicId, Uint64(1000));
+      final resolved = statement.resolveMosaic(expectedMosaic, '1473', 0);
+
+      expect(resolved is Mosaic, isTrue);
+      expect((resolved as Mosaic).id, equals(expectedMosaic.id));
+      expect((resolved as Mosaic).amount, equals(expectedMosaic.amount));
+    });
+
+    test('Should get resolved address without Harvesting Fee', () {
+      final testUnresolvedAddress =
+          UnresolvedUtils.toUnresolvedAddress('9156258DE356F030A500000000000000000000000000000000');
+      final testResolvedAddress =
+          Address.fromEncoded('901D8D4741F80299E66BF7FEEB4F30943DA7B68E068B182319');
+      final Statement statementWithoutHarvesting = new Statement([], [
+        new ResolutionStatement(ResolutionType.ADDRESS, height, testUnresolvedAddress,
+            [ResolutionEntry(testResolvedAddress, ReceiptSource(1, 0))])
+      ], []);
+
+      final resolved = statementWithoutHarvesting.resolveAddress(testUnresolvedAddress, '1473', 0);
+      expect(resolved is Address, isTrue);
+      expect(resolved, equals(account.publicAccount.address));
+    });
+
+    test('Should get resolved mosaic without Harvesting Fee', () {
+      final testUnresolvedMosaic1 = UnresolvedUtils.toUnresolvedMosaic('85BBEA6CC462B244');
+      final testUnresolvedMosaic2 = UnresolvedUtils.toUnresolvedMosaic('E81F622A5B11A340');
+      final resolvedMosaic1 = MosaicId.fromHex('504677C3281108DB');
+      final resolvedMosaic2 = MosaicId.fromHex('756482FB80FD406C');
+
+      final Statement statementWithoutHarvesting = new Statement([], [], [
+        new ResolutionStatement(ResolutionType.MOSAIC, height, testUnresolvedMosaic1,
+            [ResolutionEntry(resolvedMosaic1, ReceiptSource(1, 0))]),
+        new ResolutionStatement(ResolutionType.MOSAIC, height, testUnresolvedMosaic2,
+            [ResolutionEntry(resolvedMosaic2, ReceiptSource(1, 0))])
+      ]);
+
+      final resolved = statementWithoutHarvesting.resolveMosaicId(testUnresolvedMosaic2, '1473', 0);
+      expect(resolved is MosaicId, isTrue);
+
+      final expected = MosaicId.fromHex('756482FB80FD406C');
+      expect(resolved, equals(expected));
+    });
   });
 }

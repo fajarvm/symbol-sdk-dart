@@ -143,9 +143,11 @@ class ResolutionStatement {
       // Entries: [{P:1, S:0}, {P:2, S:0}, {P:4, S:2}, {P:4, S:4}, {P:7, S:6}]
       // Transaction: [Inx:3(2+1), AggInx:0]
       // It should return Entry: {P:2, S:0}
-      return resolutionEntries.firstWhere((entry) =>
-          entry.source.primaryId == resolvedPrimaryId &&
-          entry.source.secondaryId == _getMaxSecondaryIdByPrimaryId(resolvedPrimaryId));
+      return resolutionEntries.firstWhere(
+          (entry) =>
+              entry.source.primaryId == resolvedPrimaryId &&
+              entry.source.secondaryId == _getMaxSecondaryIdByPrimaryId(resolvedPrimaryId),
+          orElse: () => null);
     }
 
     // When transaction index matches a primaryId, get the most recent secondaryId
@@ -164,9 +166,11 @@ class ResolutionStatement {
     // It should return Entry: {P:2, S:0}
     if (resolvedSecondaryId == 0 && resolvedSecondaryId != secondaryId) {
       final int lastPrimaryId = _getMaxAvailablePrimaryId(resolvedPrimaryId - 1);
-      return resolutionEntries.firstWhere((entry) =>
-          entry.source.primaryId == lastPrimaryId &&
-          entry.source.secondaryId == _getMaxSecondaryIdByPrimaryId(lastPrimaryId));
+      return resolutionEntries.firstWhere(
+          (entry) =>
+              entry.source.primaryId == lastPrimaryId &&
+              entry.source.secondaryId == _getMaxSecondaryIdByPrimaryId(lastPrimaryId),
+          orElse: () => null);
     }
 
     // Found a matched resolution entry on both primaryId and secondaryId
@@ -175,9 +179,11 @@ class ResolutionStatement {
     // Entries: [{P:1, S:0}, {P:2, S:0}, {P:5, S:6}]
     // Transaction: [Inx:5(4+1), AggInx:6(2+1)]
     // It should return Entry: {P:5, S:6}
-    return this.resolutionEntries.firstWhere((entry) =>
-        entry.source.primaryId == resolvedPrimaryId &&
-        entry.source.secondaryId == resolvedSecondaryId);
+    return this.resolutionEntries.firstWhere(
+        (entry) =>
+            entry.source.primaryId == resolvedPrimaryId &&
+            entry.source.secondaryId == resolvedSecondaryId,
+        orElse: () => null);
   }
 
   // ------------------------------ private / protected functions ------------------------------ //
