@@ -16,27 +16,24 @@
 
 library nem2_sdk_dart.test.sdk.model.restriction.account_restriction_test;
 
+import 'package:nem2_sdk_dart/sdk.dart' show Address, AccountRestriction, AccountRestrictionFlags;
 import 'package:test/test.dart';
-
-import 'package:nem2_sdk_dart/core.dart' show ArrayUtils;
-import 'package:nem2_sdk_dart/sdk.dart'
-    show AccountRestriction, AccountRestrictionModificationAction, AccountRestrictionType;
 
 void main() {
   group('AccountRestriction', () {
     test('Can create an AccountRestriction object', () {
-      const values = [
-        {
-          'modificationType': AccountRestrictionModificationAction.ADD,
-          'value': 'SDUP5PLHDXKBX3UU5Q52LAY4WYEKGEWC6IB3VBFM'
-        }
-      ];
-      final accountRestriction = new AccountRestriction(AccountRestrictionType.ADDRESS, values);
+      const String encodedAddress = '906415867F121D037AF447E711B0F5E4D52EBBF066D96860EB';
+      const values = [encodedAddress];
+
+      final accountRestriction = new AccountRestriction(
+          AccountRestrictionFlags.ALLOW_INCOMING_ADDRESS,
+          List<Address>.generate(values.length, (i) => Address.fromEncoded(values[i])));
 
       // Assert
-      expect(accountRestriction.restrictionType, equals(AccountRestrictionType.ADDRESS));
+      expect(accountRestriction.restrictionFlags,
+          equals(AccountRestrictionFlags.ALLOW_INCOMING_ADDRESS));
       expect(accountRestriction.values.length, equals(values.length));
-      expect(ArrayUtils.deepEqual(accountRestriction.values, values), isTrue);
+      expect(accountRestriction.values[0], equals(Address.fromEncoded(encodedAddress)));
     });
   });
 }

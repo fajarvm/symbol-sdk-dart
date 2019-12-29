@@ -20,11 +20,11 @@ import 'account_restrictions.dart';
 
 /// Describes restriction information for an account.
 class AccountRestrictionsInfo {
-  /// The meta id.
-  final String metaId;
+  /// The meta.
+  final String meta;
 
   /// The account properties.
   final AccountRestrictions accountRestrictions;
 
-  AccountRestrictionsInfo(this.metaId, this.accountRestrictions);
+  AccountRestrictionsInfo(this.meta, this.accountRestrictions);
 }

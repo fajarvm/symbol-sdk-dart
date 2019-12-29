@@ -17,15 +17,14 @@
 library nem2_sdk_dart.sdk.model.restriction.account_restrictions;
 
 import '../account/address.dart';
-
 import 'account_restriction.dart';
 
 /// Account restrictions structure describes restriction information for an account.
 class AccountRestrictions {
-  /// Account address.
+  /// The address where the restrictions apply.
   final Address address;
 
-  /// Account restrictions.
+  /// The restrictions.
   final List<AccountRestriction> restrictions;
 
   AccountRestrictions(this.address, this.restrictions);

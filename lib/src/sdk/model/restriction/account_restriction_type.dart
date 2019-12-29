@@ -24,6 +24,9 @@ library nem2_sdk_dart.sdk.model.restriction.account_restriction_type;
 /// * 0x0004	Account restriction type is a transaction type.
 /// * 0x4000  Account restriction is interpreted as outgoing restriction.
 /// * 0x8000  Account restriction is interpreted as blocking operation.
+///
+/// Developer note:
+/// This enum will be deprecated once catbuffer code applied.
 class AccountRestrictionType {
   static const String UNKNOWN_ACCOUNT_RESTRICTION_TYPE = 'unknown account restriction type';
 

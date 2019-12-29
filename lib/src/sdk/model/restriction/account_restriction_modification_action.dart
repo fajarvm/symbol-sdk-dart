@@ -14,7 +14,7 @@
 // limitations under the License.
 //
 
-library nem2_sdk_dart.sdk.model.restriction.account_restriction_modification_type;
+library nem2_sdk_dart.sdk.model.restriction.account_restriction_modification_action;
 
 /// Account restriction modification type.
 class AccountRestrictionModificationAction {

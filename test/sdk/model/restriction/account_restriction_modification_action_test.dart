@@ -14,7 +14,7 @@
 // limitations under the License.
 //
 
-library nem2_sdk_dart.test.sdk.model.restriction.account_restriction_modification_type_test;
+library nem2_sdk_dart.test.sdk.model.restriction.account_restriction_modification_action_test;
 
 import 'package:nem2_sdk_dart/sdk.dart' show AccountRestrictionModificationAction;
 import 'package:test/test.dart';

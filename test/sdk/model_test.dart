@@ -98,12 +98,17 @@ import 'model/receipt/statement_test.dart' as statement_test;
 import 'model/receipt/transaction_statement_test.dart' as transaction_statement_test;
 
 // restriction
-import 'model/restriction/account_restriction_modification_type_test.dart'
-    as account_restriction_modification_type_test;
+import 'model/restriction/account_restriction_modification_action_test.dart'
+    as account_restriction_modification_action_test;
 import 'model/restriction/account_restriction_test.dart' as account_restriction_test;
 import 'model/restriction/account_restriction_type_test.dart' as account_restriction_type_test;
 import 'model/restriction/account_restrictions_info_test.dart' as account_restrictions_info_test;
 import 'model/restriction/account_restrictions_test.dart' as account_restrictions_test;
+import 'model/restriction/mosaic_address_restriction_test.dart' as mosaic_address_restriction_test;
+import 'model/restriction/mosaic_global_restriction_item_test.dart' as mosaic_global_restriction_item_test;
+import 'model/restriction/mosaic_global_restriction_test.dart' as mosaic_global_restriction_test;
+import 'model/restriction/mosaic_restriction_entry_type_test.dart' as mosaic_restriction_entry_type_test;
+import 'model/restriction/mosaic_restriction_type_test.dart' as mosaic_restriction_type_test;
 
 // transaction
 import 'model/transaction/deadline_test.dart' as deadline_test;
@@ -216,11 +221,16 @@ void main() {
   });
 
   group('Restriction:', () {
-    account_restriction_modification_type_test.main();
+    account_restriction_modification_action_test.main();
     account_restriction_test.main();
     account_restriction_type_test.main();
     account_restrictions_info_test.main();
     account_restrictions_test.main();
+    mosaic_address_restriction_test.main();
+    mosaic_global_restriction_item_test.main();
+    mosaic_global_restriction_test.main();
+    mosaic_restriction_entry_type_test.main();
+    mosaic_restriction_type_test.main();
   });
 
   // transaction

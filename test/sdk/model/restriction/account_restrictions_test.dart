@@ -16,22 +16,21 @@
 
 library nem2_sdk_dart.test.sdk.model.restriction.account_restrictions_test;
 
-import 'package:test/test.dart';
-
 import 'package:nem2_sdk_dart/core.dart' show ArrayUtils;
 import 'package:nem2_sdk_dart/sdk.dart'
     show
         AccountRestriction,
         AccountRestrictions,
         Address,
-        AccountRestrictionModificationAction,
-        AccountRestrictionType;
+        AccountRestrictionFlags,
+        AccountRestrictionModificationAction;
+import 'package:test/test.dart';
 
 void main() {
   group('AccountRestrictions', () {
     test('Can create an AccountRestrictions object', () {
       final address = Address.fromEncoded('9050B9837EFAB4BBE8A4B9BB32D812F9885C00D8FC1650E142');
-      final restriction = new AccountRestriction(AccountRestrictionType.ADDRESS, [
+      final restriction = new AccountRestriction(AccountRestrictionFlags.ALLOW_INCOMING_ADDRESS, [
         {
           'modificationType': AccountRestrictionModificationAction.ADD,
           'value': 'SDUP5PLHDXKBX3UU5Q52LAY4WYEKGEWC6IB3VBFM',

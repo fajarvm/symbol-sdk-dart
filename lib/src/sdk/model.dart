@@ -103,10 +103,15 @@ export 'model/receipt/transaction_statement.dart';
 // Restriction
 export 'model/restriction/account_restriction.dart';
 export 'model/restriction/account_restriction_flags.dart';
-export 'model/restriction/account_restriction_modification_type.dart';
+export 'model/restriction/account_restriction_modification_action.dart';
 export 'model/restriction/account_restriction_type.dart';
 export 'model/restriction/account_restrictions.dart';
 export 'model/restriction/account_restrictions_info.dart';
+export 'model/restriction/mosaic_address_restriction.dart';
+export 'model/restriction/mosaic_global_restriction.dart';
+export 'model/restriction/mosaic_global_restriction_item.dart';
+export 'model/restriction/mosaic_restriction_entry_type.dart';
+export 'model/restriction/mosaic_restriction_type.dart';
 
 // Transaction
 export 'model/transaction/deadline.dart';

@@ -14,17 +14,21 @@
 // limitations under the License.
 //
 
-library nem2_sdk_dart.sdk.model.restriction.account_restriction;
+library nem2_sdk_dart.sdk.model.restriction.mosaic_global_restriction_item;
 
-import 'account_restriction_flags.dart';
+import '../mosaic/mosaic_id.dart';
+import 'mosaic_restriction_type.dart';
 
-/// Account restriction structure describes restriction information.
-class AccountRestriction {
-  /// Account restriction type.
-  final AccountRestrictionFlags restrictionFlags;
+/// Mosaic global restriction structure describes mosaicId restriction information for a mosaic.
+class MosaicGlobalRestrictionItem {
+  /// Reference mosaic identifier.
+  final MosaicId referenceMosaicId;
 
-  /// Restriction values.
-  final List<Object> values;
+  /// The mosaic restriction value.
+  final String restrictionValue;
 
-  AccountRestriction(this.restrictionFlags, this.values);
+  /// Mosaic restriction type.
+  final MosaicRestrictionType restrictionType;
+
+  MosaicGlobalRestrictionItem(this.referenceMosaicId, this.restrictionValue, this.restrictionType);
 }
