@@ -98,8 +98,9 @@ import 'model/receipt/statement_test.dart' as statement_test;
 import 'model/receipt/transaction_statement_test.dart' as transaction_statement_test;
 
 // restriction
+import 'model/restriction/account_restriction_flags_test.dart' as account_restriction_flags_test;
 import 'model/restriction/account_restriction_modification_action_test.dart'
-    as account_restriction_modification_action_test;
+as account_restriction_modification_action_test;
 import 'model/restriction/account_restriction_test.dart' as account_restriction_test;
 import 'model/restriction/account_restriction_type_test.dart' as account_restriction_type_test;
 import 'model/restriction/account_restrictions_info_test.dart' as account_restrictions_info_test;
@@ -221,6 +222,7 @@ void main() {
   });
 
   group('Restriction:', () {
+    account_restriction_flags_test.main();
     account_restriction_modification_action_test.main();
     account_restriction_test.main();
     account_restriction_type_test.main();
