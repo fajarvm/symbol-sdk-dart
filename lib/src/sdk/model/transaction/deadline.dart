@@ -25,9 +25,9 @@ import '../common/uint64.dart';
 class Deadline {
   /// The timestamp of the nemesis block.
   ///
-  /// The date is 2016/04/01 00:00:00 UTC (1459468800000 milliseconds since the epoch time).
-  static final DateTime NEMESIS_BLOCK_DATETIME =
-      new DateTime.fromMillisecondsSinceEpoch(1459468800000, isUtc: true);
+  /// It is Mon, 11 Nov 2019 00:00:00 +0000 UTC (1573430400000 milliseconds since the epoch time).
+  static final DateTime TIMESTAMP_NEMESIS_BLOCK =
+      new DateTime.fromMillisecondsSinceEpoch(1573430400000, isUtc: true);
 
   /// The default duration set when creating a new deadline without parameters.
   static const Duration DEFAULT_DURATION = Duration(hours: 2);
@@ -38,6 +38,15 @@ class Deadline {
   /// The deadline value.
   final DateTime value;
 
+  /// The number of milliseconds elapsed since the creation of the nemesis block.
+  int get instant => value.millisecondsSinceEpoch - TIMESTAMP_NEMESIS_BLOCK.millisecondsSinceEpoch;
+
+  /// The deadline as local date time.
+  DateTime get localDateTime => value.toLocal();
+
+  /// The deadline as local date time in UTC.
+  DateTime get localDateTimeUTC => localDateTime.toUtc();
+
   // private constructor
   Deadline._(this.value);
 
@@ -45,18 +54,23 @@ class Deadline {
   ///
   /// Default value of the duration is 2 hours. Accepted deadline is between 0 and 24 hours.
   static Deadline create([final Duration duration]) {
+    final DateTime networkTime = DateTime.now();
+    final DateTime localTime = networkTime.toLocal();
     if (duration == null) {
-      return new Deadline._(new DateTime.now().add(DEFAULT_DURATION));
+      return new Deadline._(localTime.add(DEFAULT_DURATION));
     }
 
     if (duration.inMilliseconds <= 0) {
       throw new ArgumentError('deadline should be greater than 0');
     }
 
-    if (duration > MAX_DURATION) {
+    final deadlineTime = localTime.add(duration);
+    final maxTime = localTime.add(MAX_DURATION);
+    if (deadlineTime.isAfter(maxTime)) {
       throw new ArgumentError('deadline should be less than 24 hours');
     }
-    return new Deadline._(new DateTime.now().add(duration));
+
+    return new Deadline._(deadlineTime);
   }
 
   /// Create a new deadline from a [Uint64] integer value representing milliseconds since epoch.
@@ -66,7 +80,7 @@ class Deadline {
 
   /// Create a new deadline from milliseconds since epoch.
   static Deadline fromInt(final int millisecondsSinceEpoch) {
-    return new Deadline._(new DateTime.fromMillisecondsSinceEpoch(
-        millisecondsSinceEpoch + NEMESIS_BLOCK_DATETIME.millisecondsSinceEpoch));
+    return Deadline._(new DateTime.fromMillisecondsSinceEpoch(
+        millisecondsSinceEpoch + TIMESTAMP_NEMESIS_BLOCK.millisecondsSinceEpoch));
   }
 }

@@ -284,5 +284,17 @@ void main() {
             throwsA(predicate((e) => e is ArgumentError && e.message == 'Value out of range')));
       });
     });
+
+    group('Compact', () {
+      test('can compact 32-bit value', () {
+        final result = Uint64(0x12345678, 0x00000000).compact;
+        expect(result, equals(0x12345678));
+      });
+
+      test('can compact less than max safe integer', () {
+        final result = Uint64(0x00ABCDEF, 0x000FDFFF).compact;
+        expect(result, equals(0xFDFFF00ABCDEF));
+      });
+    });
   });
 }

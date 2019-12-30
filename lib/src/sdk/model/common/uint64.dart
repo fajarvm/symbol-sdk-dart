@@ -51,6 +51,21 @@ class Uint64 implements Comparable<Uint64> {
   /// The value of Uint64 is stored as BigInt.
   final BigInt value;
 
+  /// Tries to compact a this value into a simple numeric.
+  int get compact {
+    final intArray = this.toIntArray();
+    final int low = intArray[0];
+    final int high = intArray[1];
+
+    // don't compact if the value is >= 2^53
+    if (0x00200000 <= high) {
+      return this.value.toInt();
+    }
+
+    // multiply because javascript bit operations operate on 32bit values
+    return (high * 0x100000000) + low;
+  }
+
   @override
   int get hashCode => value.hashCode;
 

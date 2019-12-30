@@ -16,16 +16,15 @@
 
 library nem2_sdk_dart.test.sdk.model.transaction.deadline_test;
 
-import 'package:test/test.dart';
-
 import 'package:nem2_sdk_dart/sdk.dart' show Deadline;
+import 'package:test/test.dart';
 
 void main() {
   group('Deadline', () {
     test('Valid constants', () {
       expect(Deadline.DEFAULT_DURATION, equals(const Duration(hours: 2)));
-      expect(Deadline.NEMESIS_BLOCK_DATETIME,
-          equals(new DateTime.fromMillisecondsSinceEpoch(1459468800000, isUtc: true)));
+      expect(Deadline.TIMESTAMP_NEMESIS_BLOCK,
+          equals(DateTime.fromMillisecondsSinceEpoch(1573430400000, isUtc: true)));
     });
 
     test('Can create a deadline with default value', () {
@@ -45,6 +44,27 @@ void main() {
 
       // less than 24 hours
       expect(Deadline.create(const Duration(hours: 24)).value, isNotNull);
+    });
+
+    test('Should correctly create deadline two hours from now', () {
+      const twoHours = Duration(hours: 2);
+      final deadline = Deadline.create();
+
+      // avoid SYSTEM and UTC differences
+      final networkTimestamp = DateTime.now();
+      final localTimestamp = networkTimestamp.toLocal();
+      final reproduceDate = localTimestamp.add(twoHours);
+      expect(deadline.value.day, equals(reproduceDate.day));
+      expect(deadline.value.month, equals(reproduceDate.month));
+      expect(deadline.value.year, equals(reproduceDate.year));
+
+      // now is before deadline local time
+      expect(localTimestamp.isBefore(deadline.localDateTime), isTrue);
+
+      // now + 2 hours and 2 seconds is after deadline local time
+      expect(
+          localTimestamp.add(const Duration(hours: 2, seconds: 2)).isAfter(deadline.localDateTime),
+          isTrue);
     });
 
     test('Cannot create deadline outside the accepted duration', () {
