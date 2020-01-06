@@ -45,6 +45,8 @@ class HexUtils {
   }
 
   /// Converts byte array to a hex string.
+  ///
+  /// Used for converting UTF-8 encoded data from and to bytes.
   static String getString(final List<int> bytes) {
     final String encodedString = hex.encode(bytes);
     return byteToUtf8(encodedString.codeUnits);
@@ -99,7 +101,10 @@ class HexUtils {
     return utf8.decode(input);
   }
 
-  /// Convert a byte array [bytes] into a hex string
+  /// Convert a byte array [bytes] into a hex string.
+  ///
+  /// Used to get a hex string representation of raw bytes.
+  /// Should not be used for UTF-8 encoded data such as message encryption.
   static String bytesToHex(final List<int> bytes) {
     final StringBuffer result = new StringBuffer();
     for (var part in bytes) {

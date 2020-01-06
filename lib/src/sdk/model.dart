@@ -39,7 +39,6 @@ export 'model/blockchain/network_type.dart';
 export 'model/common/id.dart';
 export 'model/common/id_generator.dart';
 export 'model/common/uint64.dart';
-export 'model/common/unresolved_utils.dart';
 
 // Diagnostic
 export 'model/diagnostic/server_info.dart';
@@ -122,3 +121,6 @@ export 'model/transaction/transaction_info.dart';
 export 'model/transaction/transaction_type.dart';
 export 'model/transaction/transaction_version.dart';
 export 'model/transaction/verifiable_transaction.dart';
+
+// Utils
+export 'model/utils/unresolved_utils.dart';

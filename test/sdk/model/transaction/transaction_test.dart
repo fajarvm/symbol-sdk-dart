@@ -32,41 +32,8 @@ import 'package:test/test.dart';
 
 void main() {
   group('Transaction', () {
-    const generationHash = '57F7DA205008026C776CB6AED843393F04CD458E0AA2D9F1D5F31A402072B2D6';
-
-    group('createHash', () {
-      test('from a transfer transaction payload', () {
-        const payload =
-            'C7000000D0B190DFEEAB0378F943F79CDB7BC44453491890FAA70F5AA95B909E67487408407956BDE32AC'
-            '977D035FBBA575C11AA034B23402066C16FD6126893F3661B099A49366406ACA952B88BADF5F1E9BE6CE4'
-            '968141035A60BE503273EA65456B24039054410000000000000000A76541BE0C00000090E8FEBD671DD41'
-            'BEE94EC3BA5831CB608A312C2F203BA84AC03000300303064000000000000006400000000000000002F00'
-            'FA0DEDD9086400000000000000443F6D806C05543A6400000000000000';
-
-        final hash = Transaction.createHash(payload, generationHash, NetworkType.MIJIN_TEST);
-
-        const expected = 'BADC739882F2EE3D7D54A0DC3B62C2ADA50259CB32E99E012452C516C7BE94C6';
-        expect(hash, equals(expected.toLowerCase()));
-      });
-
-      test('from an aggregate transaction payload', () {
-        const payload =
-            'E9000000A37C8B0456474FB5E3E910E84B5929293C114E0AF97FEF0D940D3A2A2C337BAFA0C59538E5988'
-            '229B65A3065B4E9BD57B1AFAEC64DFBE2211B8AF6E742801E08C2F93346E27CE6AD1A9F8F5E3066F83265'
-            '93A406BDF357ACB041E2F9AB402EFE0390414100000000000000008EEAC2C80C0000006D0000006D00000'
-            '0C2F93346E27CE6AD1A9F8F5E3066F8326593A406BDF357ACB041E2F9AB402EFE0390554101020200B0F9'
-            '3CBEE49EEB9953C6F3985B15A4F238E205584D8F924C621CBE4D7AC6EC2400B1B5581FC81A6970DEE418D'
-            '2C2978F2724228B7B36C5C6DF71B0162BB04778B4';
-
-        final hash = Transaction.createHash(payload, generationHash, NetworkType.MIJIN_TEST);
-
-        const expected = 'EA67D29F3E3EE1F5107AB68E0E8BD5F1CF85901F8778AAF6FAF74316D973B30D';
-        expect(hash, equals(expected.toLowerCase()));
-      });
-    });
-
     group('isUnannounced', () {
-      test('returns true when there is no TransactionInfo vailable', () {
+      test('should return true when there is no TransactionInfo vailable', () {
         final tx = new MockTransaction(TransactionType.TRANSFER, NetworkType.MIJIN_TEST,
             TransactionVersion.TRANSFER, Deadline.create(), Uint64(0));
 
@@ -75,7 +42,7 @@ void main() {
     });
 
     group('isUnconfirmed', () {
-      test('returns true when height is 0', () {
+      test('should return true when height is 0', () {
         final txInfo = TransactionInfo.create(Uint64(0), 'hash', 'hash', index: 1, id: 'hash');
         final tx = new MockTransaction(TransactionType.TRANSFER, NetworkType.MIJIN_TEST,
             TransactionVersion.TRANSFER, Deadline.create(), Uint64(0),
@@ -84,7 +51,7 @@ void main() {
         expect(tx.isUnconfirmed(), isTrue);
       });
 
-      test('returns false when height is not 0', () {
+      test('should return false when height is not 0', () {
         final txInfo = TransactionInfo.create(Uint64(100), 'hash', 'hash', index: 1, id: 'hash');
         final tx = new MockTransaction(TransactionType.TRANSFER, NetworkType.MIJIN_TEST,
             TransactionVersion.TRANSFER, Deadline.create(), Uint64(0),
@@ -95,7 +62,7 @@ void main() {
     });
 
     group('isConfirmed', () {
-      test('returns true when height is not 0', () {
+      test('should return true when height is not 0', () {
         final txInfo = TransactionInfo.create(Uint64(100), 'hash', 'hash', index: 1, id: 'hash');
         final tx = new MockTransaction(TransactionType.TRANSFER, NetworkType.MIJIN_TEST,
             TransactionVersion.TRANSFER, Deadline.create(), Uint64(0),
@@ -106,13 +73,151 @@ void main() {
     });
 
     group('hasMissingSignatures', () {
-      test('returns true when height is 0 and the hash are different to the merkle hash', () {
+      test('should return true when height is 0 and hash is different to the merkle hash', () {
         final txInfo = TransactionInfo.create(Uint64(0), 'hash', 'hash_2', index: 1, id: 'hash');
         final tx = new MockTransaction(TransactionType.TRANSFER, NetworkType.MIJIN_TEST,
             TransactionVersion.TRANSFER, Deadline.create(), Uint64(0),
             transactionInfo: txInfo);
 
         expect(tx.hasMissingSignatures(), isTrue);
+      });
+    });
+
+    group('size', () {
+      test('should return 128 for base transaction size', () {
+        final transaction = new MockTransaction(TransactionType.TRANSFER, NetworkType.MIJIN_TEST,
+            TransactionVersion.TRANSFER, Deadline.create(), Uint64(0),
+            transactionInfo:
+                TransactionInfo.create(Uint64(100), 'hash', 'hash', id: 'id_hash', index: 1));
+
+        expect(transaction.size, equals(128));
+      });
+    });
+
+    group('version', () {
+      test('should return version in hex format', () {
+        final transaction = new MockTransaction(TransactionType.TRANSFER, NetworkType.MIJIN_TEST,
+            TransactionVersion.TRANSFER, Deadline.create(), Uint64(0),
+            transactionInfo:
+                TransactionInfo.create(Uint64(100), 'hash', 'hash', id: 'id_hash', index: 1));
+
+        expect(transaction.versionHex, equals('0x9001'));
+      });
+    });
+
+    group('createTransactionHash', () {
+      const payload = '970000000000000075DAC796D500CEFDFBD582BC6E0580401FE6DB02FBEA9367'
+          '3DF47844246CDEA93715EB700F295A459E59D96A2BC6B7E36C79016A96B9FA38'
+          '7E8B8937342FE30C6BE37B726EEE24C4B0E3C943E09A44691553759A89E92C4A'
+          '84BBC4AD9AF5D49C0000000001984E4140420F0000000000E4B580B11A000000'
+          'A0860100000000002AD8FC018D9A49E100056576696173';
+
+      const payloadAggregate = '0801000000000000AC1F3E0EE2C16F465CDC2E091DC44D6EB55F7FE3988A5F21'
+          '309DF479BE6D3F0033E155695FB1133EA0EA64A67C1EDC2B430CFAF9722AF36B'
+          'AE84DBDB1C8F1509C2F93346E27CE6AD1A9F8F5E3066F8326593A406BDF357AC'
+          'B041E2F9AB402EFE000000000190414200000000000000006BA50FB91A000000'
+          'EA8F8301E7EDFD701F62E1DC1601ABDE22E5FCD11C9C7E7A01B87F8DFB6B62B0'
+          '60000000000000005D00000000000000C2F93346E27CE6AD1A9F8F5E3066F832'
+          '6593A406BDF357ACB041E2F9AB402EFE00000000019054419050B9837EFAB4BB'
+          'E8A4B9BB32D812F9885C00D8FC1650E142000D000000000000746573742D6D65'
+          '7373616765000000';
+
+      // expected values
+      const knownHash_sha3 = '709373248659274C5933BEA2920942D6C7B48B9C2DA4BAEE233510E71495931F';
+      const generationHash = '988C4CDCE4D188013C13DE7914C7FD4D626169EF256722F61C52EFBE06BD5A2C';
+      const generationHash_mt = '17FA4747F5014B50413CCF968749604D728D7065DC504291EEE556899A534CBB';
+
+      test('create different hash given different signatures', () {
+        final networkType = NetworkType.MIJIN_TEST;
+        final hash1 = Transaction.createTransactionHash(payload, generationHash, networkType);
+
+        // modify the signature part of the payload
+        final modified = '${payload.substring(0, 16)}'
+            '12'
+            '${payload.substring(18)}';
+        final hash2 = Transaction.createTransactionHash(modified, generationHash, networkType);
+
+        // expect different hash
+        expect(hash1 != hash2, isTrue);
+      });
+
+      test('create different hash given different signer public key', () {
+        final networkType = NetworkType.MIJIN_TEST;
+        final hash1 = Transaction.createTransactionHash(payload, generationHash, networkType);
+
+        // modify the signer public key part of the payload
+        final modified = '${payload.substring(0, 16 + 128)}'
+            '12'
+            '${payload.substring(16 + 128 + 2)}';
+        final hash2 = Transaction.createTransactionHash(modified, generationHash, networkType);
+
+        // expect different hash
+        expect(hash1 != hash2, isTrue);
+      });
+
+      test('create different hash given different generation hash', () {
+        final networkType = NetworkType.MIJIN_TEST;
+        final hash1 = Transaction.createTransactionHash(payload, generationHash, networkType);
+        final hash2 = Transaction.createTransactionHash(payload, generationHash_mt, networkType);
+
+        // expect different hash
+        expect(hash1 != hash2, isTrue);
+      });
+
+      test('create different hash given different transaction body', () {
+        final networkType = NetworkType.MIJIN_TEST;
+        final hash1 = Transaction.createTransactionHash(payload, generationHash, networkType);
+
+        // modify the transaction body part of the payload
+        final modified = '${payloadAggregate.substring(0, Transaction.BODY_INDEX * 2)}'
+            '12'
+            '${payloadAggregate.substring(Transaction.BODY_INDEX * 2 + 2)}';
+        final hash2 = Transaction.createTransactionHash(modified, generationHash, networkType);
+
+        // expect different hash
+        expect(hash1 != hash2, isTrue);
+      });
+
+      test('create same hash given same payloads', () {
+        final networkType = NetworkType.MIJIN_TEST;
+        final hash1 = Transaction.createTransactionHash(payload, generationHash, networkType);
+        final hash2 = Transaction.createTransactionHash(payload, generationHash, networkType);
+
+        // expect same hash
+        expect(hash1, equals(hash2));
+      });
+
+      test('create correct SHA3 transaction hash given network type MIJIN or MIJIN_TEST', () {
+        final networkType = NetworkType.MIJIN_TEST;
+        final hash1 = Transaction.createTransactionHash(payload, generationHash, networkType);
+        final hash2 = Transaction.createTransactionHash(payload, generationHash, networkType);
+
+        expect(hash1.toUpperCase(), equals(knownHash_sha3));
+        expect(hash2.toUpperCase(), equals(knownHash_sha3));
+      });
+
+      test('hash only merkle transaction hash for aggregate transactions', () {
+        final networkType = NetworkType.MIJIN_TEST;
+        final hash1 =
+            Transaction.createTransactionHash(payloadAggregate, generationHash, networkType);
+
+        // modify the end of payload
+        // this MUST NOT affect produced transaction hash
+        // this test is valid only for Aggregate Transactions
+        final modifiedSize = '12${payloadAggregate.substring(2)}';
+        final hashModifiedBody =
+            Transaction.createTransactionHash(modifiedSize, generationHash, networkType);
+
+        // modify the merkle hash part of the payload
+        // this MUST affect produced transaction hash
+        final modifiedMerkle = '${payloadAggregate.substring(0, Transaction.BODY_INDEX * 2)}'
+            '12'
+            '${payloadAggregate.substring(Transaction.BODY_INDEX * 2 + 2)}';
+        final hashModifiedMerkle =
+            Transaction.createTransactionHash(modifiedMerkle, generationHash, networkType);
+
+        expect(hash1, equals(hashModifiedBody));
+        expect(hash1 != hashModifiedMerkle, isTrue);
       });
     });
   });

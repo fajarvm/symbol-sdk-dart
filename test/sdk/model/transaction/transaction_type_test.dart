@@ -121,10 +121,10 @@ void main() {
     });
 
     test('Can determine aggregate transaction types', () {
-      expect(TransactionType.isAggregateType(TransactionType.AGGREGATE_COMPLETE), isTrue);
-      expect(TransactionType.isAggregateType(TransactionType.AGGREGATE_BONDED), isTrue);
+      expect(TransactionType.isAggregate(TransactionType.AGGREGATE_COMPLETE), isTrue);
+      expect(TransactionType.isAggregate(TransactionType.AGGREGATE_BONDED), isTrue);
 
-      expect(TransactionType.isAggregateType(TransactionType.TRANSFER), isFalse);
+      expect(TransactionType.isAggregate(TransactionType.TRANSFER), isFalse);
     });
 
     test('Trying to retrieve an invalid transaction type will throw an error', () {

@@ -175,7 +175,7 @@ class TransactionType {
   }
 
   /// Returns true if the given [type] is of an aggregate transaction type.
-  static bool isAggregateType(final TransactionType type) {
+  static bool isAggregate(final TransactionType type) {
     return aggregate.contains(type);
   }
 

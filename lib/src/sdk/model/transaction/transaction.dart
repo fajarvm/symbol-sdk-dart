@@ -32,6 +32,22 @@ import 'transaction_version.dart';
 
 /// An abstract transaction class that serves as the base class of all NEM transactions.
 abstract class Transaction {
+  /// Transaction header size.
+  ///
+  /// Consists of `size`, `verifiableEntityHeader_Reserved1`, `signature`, `signerPublicKey` and
+  /// `entityBody_Reserved1`.
+  static const int HEADER_SIZE = 4 + 4 + 64 + 32 + 4;
+
+  /// Index of the transaction type.
+  ///
+  /// Consists of a transaction header, `version` and `network`.
+  static const int TYPE_INDEX = HEADER_SIZE + 1 + 1;
+
+  /// Index of the transaction body.
+  ///
+  /// Consists of a transaction header, transaction type, `type`, `maxFee` and `deadline`.
+  static const int BODY_INDEX = TYPE_INDEX + 2 + 8 + 8;
+
   /// The transaction type.
   final TransactionType type;
 
@@ -44,11 +60,11 @@ abstract class Transaction {
   /// The deadline for the transaction to be included in a block before it expires.
   final Deadline deadline;
 
-  /// The transaction fee.
+  /// The maximum fee allowed to be spent for this transaction.
   ///
   /// The higher the fee, the higher the priority of the transaction. Transactions with high
   /// priority get included in a block before transactions with lower priority.
-  final Uint64 fee;
+  final Uint64 maxFee;
 
   /// The transaction signature.
   ///
@@ -67,19 +83,27 @@ abstract class Transaction {
   /// The hex string representation of the transaction version.
   String get versionHex => '0x${versionDTO.toRadixString(16)}';
 
-  Transaction(this.type, this.networkType, this.version, this.deadline, this.fee,
+  /// Get the byte size of a transaction
+  int get size => BODY_INDEX;
+
+  Transaction(this.type, this.networkType, this.version, this.deadline, this.maxFee,
       [this.signature, this.signer, this.transactionInfo])
       : assert(type != null &&
             networkType != null &&
             version != null &&
             deadline != null &&
-            fee != null);
+            maxFee != null);
 
   /// An abstract method to generate the transaction bytes.
   Uint8List generateBytes();
 
   /// An abstract method to generate the embedded transaction bytes.
   Uint8List generateEmbeddedBytes();
+
+  /// Serialize this transaction object.
+  String serialize() {
+    return HexUtils.bytesToHex(generateBytes());
+  }
 
   /// Returns `true` if this transaction is included in a block.
   bool isConfirmed() {
@@ -115,52 +139,80 @@ abstract class Transaction {
     return generateEmbeddedBytes();
   }
 
-  /// Generates the transaction hash for a serialized transaction payload on a [networkType].
+  /// Generates the transaction hash of the serialized transaction payload on a [networkType].
   ///
-  /// The [generationHash] must either be an encoded hex [String] or a byte array ([Uint8List]).
-  static String createHash(
-      final String payload, final dynamic generationHash, final NetworkType networkType) {
-    ArgumentError.checkNotNull(payload);
+  /// @see https://github.com/nemtech/catapult-server/blob/master/src/catapult/model/EntityHasher.cpp#L32
+  /// @see https://github.com/nemtech/catapult-server/blob/master/src/catapult/model/EntityHasher.cpp#L35
+  /// @see https://github.com/nemtech/catapult-server/blob/master/sdk/src/extensions/TransactionExtensions.cpp#L46
+  static String createTransactionHash(
+      final String transactionPayload, final String generationHash, final NetworkType networkType) {
+    ArgumentError.checkNotNull(transactionPayload);
     ArgumentError.checkNotNull(generationHash);
     ArgumentError.checkNotNull(networkType);
 
-    final Uint8List generationHashBytes = _getGenerationHashBytes(generationHash);
+    // prepare
+    final Uint8List transactionBytes = HexUtils.getBytes(transactionPayload);
+    final Uint8List generationHashBytes = HexUtils.getBytes(generationHash);
 
-    final Uint8List bytes = HexUtils.getBytes(payload);
-    final List<int> signing = bytes.skip(4).take(32).toList();
-    final List<int> key = bytes.skip(4 + 64).take(32).toList();
-    final List<int> suffix = bytes.skip(100).take(bytes.length - 100).toList();
-    final Uint8List signingBytes = Uint8List.fromList(signing + key + generationHashBytes + suffix);
+    // read transaction bytes
+    const int typeIdx = Transaction.TYPE_INDEX;
+    final List<int> typeBytes = transactionBytes.sublist(typeIdx, typeIdx + 2).reversed.toList();
+    final String typeHex = HexUtils.bytesToHex(typeBytes);
+    final TransactionType entityType = TransactionType.fromInt(int.parse(typeHex, radix: 16));
+
+    // 1) take "R" part of a signature (first 32 bytes)
+    final List<int> signatureR = transactionBytes.skip(8).take(32).toList();
+
+    // 2) add public key to match sign/verify behavior (32 bytes)
+    final int pubKeyIdx = signatureR.length;
+    final List<int> publicKey = transactionBytes.skip(8 + 64).take(32).toList();
+
+    // 3) add generationHash (32 bytes)
+    final int generationHashIdx = pubKeyIdx + publicKey.length;
+
+    // 4) add transaction data without header (EntityDataBuffer)
+    // @link https://github.com/nemtech/catapult-server/blob/master/src/catapult/model/EntityHasher.cpp#L30
+    final int transactionBodyIdx = generationHashIdx + generationHashBytes.length;
+    // in case of aggregate transactions, we hash only the merkle transaction hash.
+    final List<int> transactionBody = TransactionType.isAggregate(entityType)
+        ? transactionBytes.sublist(HEADER_SIZE, BODY_INDEX + 32)
+        : transactionBytes.sublist(HEADER_SIZE);
+
+    // 5) concatenate binary hash parts
+    // layout: `signature_R || signerPublicKey || generationHash || EntityDataBuffer`
+    final Uint8List entityHashBytes = Uint8List(
+      signatureR.length + publicKey.length + generationHashBytes.length + transactionBody.length,
+    );
+    entityHashBytes.setAll(0, signatureR);
+    entityHashBytes.setAll(pubKeyIdx, publicKey);
+    entityHashBytes.setAll(generationHashIdx, generationHashBytes);
+    entityHashBytes.setAll(transactionBodyIdx, transactionBody);
+
+    // 6) create SHA3 hash of transaction data
+    // Note: Transaction hashing *always* uses SHA3
     final SignSchema signSchema = NetworkType.resolveSignSchema(networkType);
-
-    final Uint8List result = SHA3Hasher.create(signSchema, hashSize: 32).process(signingBytes);
-    final String hashHex = HexUtils.getString(result);
-
+    final Uint8List result = SHA3Hasher.create(signSchema, hashSize: 32).process(entityHashBytes);
+    final String hashHex = HexUtils.bytesToHex(result);
     return hashHex;
   }
 
   /// Serialize and sign transaction with the given [account] and network [generationHash] and
   /// create a new [SignedTransaction].
-  ///
-  /// The [generationHash] must either be an encoded hex [String] or a byte array ([Uint8List]).
-  SignedTransaction signWith(final Account account, final dynamic generationHash) {
-    final Uint8List generationHashBytes = _getGenerationHashBytes(generationHash);
+  SignedTransaction signWith(final Account account, final String generationHash) {
     final SignSchema signSchema = NetworkType.resolveSignSchema(account.networkType);
 
     final KeyPair keyPairEncoded = KeyPair.fromPrivateKey(account.privateKey, signSchema);
-    final String txSigned = sign(keyPairEncoded, generationHashBytes, signSchema);
-    final String txHash = createHash(txSigned, generationHashBytes, account.networkType);
+    final String txSigned = sign(keyPairEncoded, generationHash, signSchema);
+    final String txHash = createTransactionHash(txSigned, generationHash, account.networkType);
 
     return new SignedTransaction(txSigned, txHash, account.publicKey, type, networkType);
   }
 
   /// Sign this transaction with the given [keypair] and network [generationHash] and create
   /// a new signed transaction payload string.
-  ///
-  /// The [generationHash] must either be an encoded hex [String] or a byte array ([Uint8List]).
-  String sign(final KeyPair keypair, final dynamic generationHash, final SignSchema signSchema) {
+  String sign(final KeyPair keypair, final String generationHash, final SignSchema signSchema) {
     final Uint8List bytes = this.generateBytes();
-    final Uint8List generationHashBytes = _getGenerationHashBytes(generationHash);
+    final Uint8List generationHashBytes = HexUtils.getBytes(generationHash);
 
     // create signing byte
     final List<int> signingSuffix = bytes.take(4 + 64 + 32).toList();
@@ -175,13 +227,13 @@ abstract class Transaction {
     final List<int> suffix = bytes.skip(100).take(bytes.length - 100).toList();
     final Uint8List payload = Uint8List.fromList(tx + signature + publicKey + suffix);
 
-    return HexUtils.getString(payload);
+    return HexUtils.bytesToHex(payload);
   }
 
   // ------------------------------ private / protected functions ------------------------------ //
 
   void _validateAggregatedTransaction() {
-    if (TransactionType.isAggregateType(type)) {
+    if (TransactionType.isAggregate(type)) {
       throw new ArgumentError('Inner transaction cannot be an aggregated transaction.');
     }
   }
@@ -192,13 +244,5 @@ abstract class Transaction {
     }
 
     return BigInt.zero == transactionInfo.height.value;
-  }
-
-  static Uint8List _getGenerationHashBytes(final dynamic generationHash) {
-    if (generationHash is! String && generationHash is! Uint8List) {
-      throw new ArgumentError('Invalid data type for generation hash.');
-    }
-
-    return generationHash is String ? HexUtils.utf8ToByte(generationHash) : generationHash;
   }
 }
