@@ -18,7 +18,7 @@
 library nem2_sdk_dart.sdk;
 
 // infrastructure
-// export 'package:nem2_sdk_dart/src/sdk/model/infrastructure.dart';
+// export 'package:nem2_sdk_dart/src/sdk/infrastructure.dart';
 
 // model
 export 'package:nem2_sdk_dart/src/sdk/model.dart';
