@@ -1,5 +1,5 @@
 //
-// Copyright (c) 2019 Fajar van Megen
+// Copyright (c) 2020 Fajar van Megen
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -14,9 +14,9 @@
 // limitations under the License.
 //
 
-library nem2_sdk_dart.sdk.model.transaction.signed_transaction;
+library symbol_sdk_dart.sdk.model.transaction.signed_transaction;
 
-import 'package:nem2_sdk_dart/sdk.dart';
+import 'package:symbol_sdk_dart/sdk.dart';
 
 /// Used to transfer the transaction data and the signature to a nem server in order to
 /// initiate and broadcast a transaction.

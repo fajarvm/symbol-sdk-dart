@@ -14,12 +14,12 @@
 // limitations under the License.
 //
 
-library nem2_sdk_dart.test.sdk.model.utils.unresolved_utils_test;
+library symbol_sdk_dart.test.sdk.model.utils.unresolved_utils_test;
 
 import 'dart:typed_data' show Uint8List;
 
-import 'package:nem2_sdk_dart/core.dart' show HexUtils, RawAddress;
-import 'package:nem2_sdk_dart/sdk.dart'
+import 'package:symbol_sdk_dart/core.dart' show HexUtils, RawAddress;
+import 'package:symbol_sdk_dart/sdk.dart'
     show Address, MosaicId, NamespaceId, NetworkType, UnresolvedUtils;
 import 'package:test/test.dart';
 

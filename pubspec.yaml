@@ -1,13 +1,13 @@
-name: nem2_sdk_dart
+name: symbol_sdk_dart
 version: 0.1.0
 author: Fajar van Megen
 
-description: A NEM2 Software Development Kit (SDK) for building applications with Dart
-# TODO insert a link to homepage/docs/dart pub packages e.g. https://pub.dartlang.org/packages/nem2-sdk-dart
-# documentation: http://nem2-sdk-dart.github.io/docs/
-homepage: https://github.com/fajarvm/nem2-sdk-dart
-issue_tracker: https://github.com/fajarvm/nem2-sdk-dart/issues
-repository: https://github.com/fajarvm/nem2-sdk-dart
+description: A Software Development Kit (SDK) for Symbol blockchain to build applications with Dart
+# TODO insert a link to homepage/docs/dart pub packages e.g. https://pub.dartlang.org/packages/symbol-sdk-dart
+# documentation: http://symbol-sdk-dart.github.io/docs/
+homepage: https://github.com/fajarvm/symbol-sdk-dart
+issue_tracker: https://github.com/fajarvm/symbol-sdk-dart/issues
+repository: https://github.com/fajarvm/symbol-sdk-dart
 
 environment:
   sdk: '>=2.7.0 <3.0.0'
@@ -18,14 +18,9 @@ dependencies:
   fixnum: ^0.10.11
   pointycastle: ^1.0.2
   tweetnacl: 0.3.2
-  dio: ^3.0.8
-  built_value: ^7.0.9
-  built_collection: ^4.3.2
 
 dev_dependencies:
   test: ^1.12.0
-  built_value_generator: ^7.0.9
-  build_runner: ^1.7.4
   # Enable these dependencies when not using the global library
   # coveralls: ^5.7.0
-  # coverage: ^0.13.6
+  # coverage: ^0.13.8

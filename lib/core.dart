@@ -1,5 +1,5 @@
 //
-// Copyright (c) 2019 Fajar van Megen
+// Copyright (c) 2020 Fajar van Megen
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -14,8 +14,8 @@
 // limitations under the License.
 //
 
-// This the core specification library for the NEM2 SDK Dart project.
-library nem2_sdk_dart.core;
+// This the core specification library for the Symbol SDK Dart project.
+library symbol_sdk_dart.core;
 
-export 'package:nem2_sdk_dart/src/core/crypto.dart';
-export 'package:nem2_sdk_dart/src/core/utils.dart';
+export 'package:symbol_sdk_dart/src/core/crypto.dart';
+export 'package:symbol_sdk_dart/src/core/utils.dart';

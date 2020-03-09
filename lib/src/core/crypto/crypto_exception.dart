@@ -1,5 +1,5 @@
 //
-// Copyright (c) 2019 Fajar van Megen
+// Copyright (c) 2020 Fajar van Megen
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -14,7 +14,7 @@
 // limitations under the License.
 //
 
-library nem2_sdk_dart.core.crypto.crypto_exception;
+library symbol_sdk_dart.core.crypto.crypto_exception;
 
 /// Exception that is used when a cryptographic operation fails.
 class CryptoException implements Exception {

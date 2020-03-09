@@ -1,5 +1,5 @@
 //
-// Copyright (c) 2019 Fajar van Megen
+// Copyright (c) 2020 Fajar van Megen
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -14,13 +14,13 @@
 // limitations under the License.
 //
 
-library nem2_sdk_dart.test.sdk.model.common.uint64_test;
+library symbol_sdk_dart.test.sdk.model.common.uint64_test;
 
 import 'dart:typed_data' show Uint8List;
 
 import 'package:fixnum/fixnum.dart' show Int64;
-import 'package:nem2_sdk_dart/core.dart' show ArrayUtils;
-import 'package:nem2_sdk_dart/sdk.dart' show Uint64;
+import 'package:symbol_sdk_dart/core.dart' show ArrayUtils;
+import 'package:symbol_sdk_dart/sdk.dart' show Uint64;
 import 'package:test/test.dart';
 
 void main() {

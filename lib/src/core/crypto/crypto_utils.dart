@@ -1,5 +1,5 @@
 //
-// Copyright (c) 2019 Fajar van Megen
+// Copyright (c) 2020 Fajar van Megen
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -14,12 +14,12 @@
 // limitations under the License.
 //
 
-library nem2_sdk_dart.core.crypto.ed25519;
+library symbol_sdk_dart.core.crypto.ed25519;
 
 import 'dart:typed_data' show Int64List, Uint8List;
 
 import 'package:encrypt/encrypt.dart';
-import 'package:nem2_sdk_dart/src/core/utils.dart';
+import 'package:symbol_sdk_dart/src/core/utils.dart';
 import 'package:pointycastle/export.dart' show Digest, RIPEMD160Digest, SHA256Digest, SHA3Digest;
 
 import 'catapultnacl.dart';

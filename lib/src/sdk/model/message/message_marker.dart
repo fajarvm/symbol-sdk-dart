@@ -1,5 +1,5 @@
 //
-// Copyright (c) 2019 Fajar van Megen
+// Copyright (c) 2020 Fajar van Megen
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -14,7 +14,7 @@
 // limitations under the License.
 //
 
-library nem2_sdk_dart.sdk.model.message.message_marker;
+library symbol_sdk_dart.sdk.model.message.message_marker;
 
 class MessageMarker {
   /// 8-byte marker: FE CC 71 C7 64 BF E5 98 for PersistentDelegationRequestTransaction message

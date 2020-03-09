@@ -1,5 +1,5 @@
 //
-// Copyright (c) 2019 Fajar van Megen
+// Copyright (c) 2020 Fajar van Megen
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -14,11 +14,11 @@
 // limitations under the License.
 //
 
-library nem2_sdk_dart.core.crypto.key_pair;
+library symbol_sdk_dart.core.crypto.key_pair;
 
 import 'dart:typed_data' show Uint8List;
 
-import 'package:nem2_sdk_dart/src/core/utils.dart';
+import 'package:symbol_sdk_dart/src/core/utils.dart';
 
 import 'package:pointycastle/api.dart' show Digest;
 

@@ -14,11 +14,11 @@
 // limitations under the License.
 //
 
-library nem2_sdk_dart.sdk.model.utils.unresolved_utils;
+library symbol_sdk_dart.sdk.model.utils.unresolved_utils;
 
 import 'dart:typed_data' show Uint8List;
 
-import 'package:nem2_sdk_dart/core.dart' show HexUtils, RawAddress;
+import 'package:symbol_sdk_dart/core.dart' show HexUtils, RawAddress;
 
 import '../account/address.dart';
 import '../blockchain/network_type.dart';

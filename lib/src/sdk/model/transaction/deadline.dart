@@ -1,5 +1,5 @@
 //
-// Copyright (c) 2019 Fajar van Megen
+// Copyright (c) 2020 Fajar van Megen
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -14,7 +14,7 @@
 // limitations under the License.
 //
 
-library nem2_sdk_dart.sdk.model.transaction.deadline;
+library symbol_sdk_dart.sdk.model.transaction.deadline;
 
 import '../common/uint64.dart';
 
@@ -25,7 +25,7 @@ import '../common/uint64.dart';
 class Deadline {
   /// The timestamp of the nemesis block.
   ///
-  /// It is Mon, 11 Nov 2019 00:00:00 +0000 UTC (1573430400000 milliseconds since the epoch time).
+  /// It is Mon, 11 Nov 2020 00:00:00 +0000 UTC (1573430400000 milliseconds since the epoch time).
   static final DateTime TIMESTAMP_NEMESIS_BLOCK =
       new DateTime.fromMillisecondsSinceEpoch(1573430400000, isUtc: true);
 

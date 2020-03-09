@@ -1,5 +1,5 @@
 //
-// Copyright (c) 2019 Fajar van Megen
+// Copyright (c) 2020 Fajar van Megen
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -14,7 +14,7 @@
 // limitations under the License.
 //
 
-library nem2_sdk_dart.sdk.model;
+library symbol_sdk_dart.sdk.model;
 
 // Account
 export 'model/account/account.dart';
@@ -120,7 +120,6 @@ export 'model/transaction/transaction.dart'; // abstract class
 export 'model/transaction/transaction_info.dart';
 export 'model/transaction/transaction_type.dart';
 export 'model/transaction/transaction_version.dart';
-export 'model/transaction/verifiable_transaction.dart';
 
 // Utils
 export 'model/utils/unresolved_utils.dart';

@@ -1,5 +1,5 @@
 //
-// Copyright (c) 2019 Fajar van Megen
+// Copyright (c) 2020 Fajar van Megen
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -14,19 +14,9 @@
 // limitations under the License.
 //
 
-library nem2_sdk_dart.sdk.model.schema.array_attribute;
+// This the main library that exports all classes of the Symbol SDK Dart project.
+library symbol_sdk_dart.symbol_sdk_dart;
 
-import 'dart:typed_data' show Uint8List;
-
-import 'schema_attribute.dart';
-
-class ArrayAttribute extends SchemaAttribute {
-  final int typeSize;
-
-  ArrayAttribute(final String name, this.typeSize) : super(name);
-
-  @override
-  Uint8List serialize(final Uint8List buffer, final int position, [final int innerObjectPosition]) {
-    return findVector(innerObjectPosition, position, buffer, typeSize);
-  }
-}
+// Export any libraries intended for clients of this package.
+export 'package:symbol_sdk_dart/core.dart';
+export 'package:symbol_sdk_dart/sdk.dart';

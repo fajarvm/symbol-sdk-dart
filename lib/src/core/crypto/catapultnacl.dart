@@ -1,5 +1,5 @@
 //
-// Copyright (c) 2019 Fajar van Megen
+// Copyright (c) 2020 Fajar van Megen
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -17,7 +17,7 @@
 // The tweetnacl-dart library is licensed under MIT. Copyright (c) 2018 Jeff Lee.
 // For a complete library, refer to: github.com/jspschool/tweetnacl-dart
 
-library nem2_sdk_dart.core.crypto.catapultnacl;
+library symbol_sdk_dart.core.crypto.catapultnacl;
 
 import 'dart:core';
 import 'dart:math';

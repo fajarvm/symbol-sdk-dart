@@ -1,5 +1,5 @@
 //
-// Copyright (c) 2019 Fajar van Megen
+// Copyright (c) 2020 Fajar van Megen
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -14,13 +14,13 @@
 // limitations under the License.
 //
 
-library nem2_sdk_dart.test.core.utils.base32_test;
+library symbol_sdk_dart.test.core.utils.base32_test;
 
 import 'dart:typed_data' show Uint8List;
 
 import 'package:test/test.dart';
 
-import 'package:nem2_sdk_dart/core.dart' show Base32, HexUtils;
+import 'package:symbol_sdk_dart/core.dart' show Base32, HexUtils;
 
 void main() {
   const List<String> test_encoded = [

@@ -1,5 +1,5 @@
 //
-// Copyright (c) 2019 Fajar van Megen
+// Copyright (c) 2020 Fajar van Megen
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -20,7 +20,6 @@ import 'core/crypto_test.dart' as crypto_test;
 import 'core/utils_test.dart' as utils_test;
 
 import 'sdk/model_test.dart' as model_test;
-import 'sdk/schema_test.dart' as schema_test;
 
 void main() {
   // core tests
@@ -32,6 +31,5 @@ void main() {
   // sdk tests
   group('SDK:', () {
     model_test.main();
-    schema_test.main();
   });
 }

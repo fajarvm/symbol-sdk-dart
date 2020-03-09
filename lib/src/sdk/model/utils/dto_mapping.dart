@@ -14,7 +14,7 @@
 // limitations under the License.
 //
 
-library nem2_sdk_dart.sdk.model.utils.dto_mapping;
+library symbol_sdk_dart.sdk.model.utils.dto_mapping;
 
 import '../restriction/account_restrictions_info.dart';
 

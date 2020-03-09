@@ -1,5 +1,5 @@
 //
-// Copyright (c) 2019 Fajar van Megen
+// Copyright (c) 2020 Fajar van Megen
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -14,11 +14,11 @@
 // limitations under the License.
 //
 
-library nem2_sdk_dart.test.sdk.model.namespace.address_alias_test;
+library symbol_sdk_dart.test.sdk.model.namespace.address_alias_test;
 
 import 'package:test/test.dart';
 
-import 'package:nem2_sdk_dart/sdk.dart' show Address, AddressAlias, AliasType;
+import 'package:symbol_sdk_dart/sdk.dart' show Address, AddressAlias, AliasType;
 
 void main() {
   final Address address = Address.fromRawAddress('SCTVW23D2MN5VE4AQ4TZIDZENGNOZXPRPRLIKCF2');

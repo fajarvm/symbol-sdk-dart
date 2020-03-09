@@ -1,5 +1,5 @@
 //
-// Copyright (c) 2019 Fajar van Megen
+// Copyright (c) 2020 Fajar van Megen
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -118,7 +118,6 @@ import 'model/transaction/transaction_info_test.dart' as transaction_info_test;
 import 'model/transaction/transaction_test.dart' as transaction_test;
 import 'model/transaction/transaction_type_test.dart' as transaction_type_test;
 import 'model/transaction/transaction_version_test.dart' as transaction_version_test;
-import 'model/transaction/verifiable_transaction_test.dart' as verifiable_transaction_test;
 
 // utils
 import 'model/utils/unresolved_utils_test.dart' as unresolved_utils_test;
@@ -246,6 +245,5 @@ void main() {
     transaction_test.main();
     transaction_type_test.main();
     transaction_version_test.main();
-    verifiable_transaction_test.main();
   });
 }
