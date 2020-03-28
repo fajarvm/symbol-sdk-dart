@@ -14,43 +14,43 @@
 // limitations under the License.
 //
 
-library symbol_sdk_dart.sdk.model.mosaic.mosaic_supply_type;
+library symbol_sdk_dart.sdk.model.namespace.alias_action;
 
-/// The supply type of a mosaic.
-class MosaicSupplyType {
-  static const String UNKNOWN_MOSAIC_SUPPLY_TYPE = 'unknown mosaic supply type';
+/// The alias action type.
+class AliasAction {
+  static const String UNKNOWN_ALIAS_ACTION = 'unknown alias action';
 
-  /// Mosaic with this type can decrease in supply.
-  static const MosaicSupplyType DECREASE = MosaicSupplyType._(0);
+  /// Links an alias.
+  static const AliasAction LINK = AliasAction._(0);
 
-  /// Mosaic with this type can increase in supply.
-  static const MosaicSupplyType INCREASE = MosaicSupplyType._(1);
+  /// Unlinks an alias.
+  static const AliasAction UNLINK = AliasAction._(1);
 
-  /// Supported mosaic supply types.
-  static final List<MosaicSupplyType> values = <MosaicSupplyType>[DECREASE, INCREASE];
+  /// Supported alias action types.
+  static final List<AliasAction> values = <AliasAction>[LINK, UNLINK];
 
   /// The int value of this type.
   final int value;
 
   // constant constructor: makes this class available on runtime.
   // emulates an enum class with a value.
-  const MosaicSupplyType._(this.value);
+  const AliasAction._(this.value);
 
-  /// Returns a [MosaicSupplyType] for the given int value.
+  /// Returns a [AliasAction] for the given int value.
   ///
   /// Throws an error when the type is unknown.
-  static MosaicSupplyType fromInt(final int value) {
+  static AliasAction fromInt(final int value) {
     for (var type in values) {
       if (type.value == value) {
         return type;
       }
     }
 
-    throw new ArgumentError(UNKNOWN_MOSAIC_SUPPLY_TYPE);
+    throw new ArgumentError(UNKNOWN_ALIAS_ACTION);
   }
 
   @override
   String toString() {
-    return 'MosaicSupplyType{value: $value}';
+    return 'AliasAction{value: $value}';
   }
 }

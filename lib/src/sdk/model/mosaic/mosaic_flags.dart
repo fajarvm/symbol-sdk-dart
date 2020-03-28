@@ -60,6 +60,9 @@ class MosaicFlags {
     return MosaicFlags.create(bitArray[2] == '1', bitArray[1] == '1', bitArray[0] == '1');
   }
 
+  /// Returns the mosaic flag value in integer.
+  int get value => (this.supplyMutable ? 1 : 0) + (this.transferable ? 2 : 0) + (this.restrictable ? 4 : 0);
+
   @override
   String toString() {
     return 'MosaicFlags{'

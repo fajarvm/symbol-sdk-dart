@@ -20,11 +20,11 @@ import 'dart:typed_data' show Uint8List;
 
 import '../account/address.dart';
 import '../account/public_account.dart';
-import '../blockchain/network_type.dart';
 import '../common/uint64.dart';
 import '../message/message.dart';
 import '../mosaic/mosaic.dart';
 import '../namespace/namespace_id.dart';
+import '../network/network_type.dart';
 import 'deadline.dart';
 import 'transaction.dart';
 import 'transaction_info.dart';

@@ -21,6 +21,7 @@ import 'model/account/account_info_test.dart' as account_info_test;
 import 'model/account/account_names_test.dart' as account_names_test;
 import 'model/account/account_test.dart' as account_test;
 import 'model/account/account_type_test.dart' as account_type_test;
+import 'model/account/activity_bucket_test.dart' as activity_bucket_test;
 import 'model/account/address_test.dart' as address_test;
 import 'model/account/multisig_account_graph_info_test.dart' as multisig_account_graph_info_test;
 import 'model/account/multisig_account_info_test.dart' as multisig_account_info_test;
@@ -29,18 +30,13 @@ import 'model/account/public_account_test.dart' as public_account_test;
 // blockchain
 import 'model/blockchain/block_info_test.dart' as block_info_test;
 import 'model/blockchain/blockchain_score_test.dart' as blockchain_score_test;
-import 'model/blockchain/blockchain_storage_info_test.dart' as blockchain_storage_info_test;
 import 'model/blockchain/merkle_path_item_test.dart' as merkle_path_item_test;
-import 'model/blockchain/network_name_test.dart' as network_name_test;
-import 'model/blockchain/network_type_test.dart' as network_type_test;
+import 'model/blockchain/storage_info_test.dart' as storage_info_test;
 
 // common
 import 'model/common/id_generator_test.dart' as id_generator_test;
 import 'model/common/id_test.dart' as id_test;
 import 'model/common/uint64_test.dart' as uint64_test;
-
-// diagnostic
-import 'model/diagnostic/server_info_test.dart' as server_info_test;
 
 // message
 import 'model/message/encrypted_message_test.dart' as encrypted_message_test;
@@ -61,13 +57,15 @@ import 'model/mosaic/mosaic_id_test.dart' as mosaic_id_test;
 import 'model/mosaic/mosaic_info_test.dart' as mosaic_info_test;
 import 'model/mosaic/mosaic_names_test.dart' as mosaic_names_test;
 import 'model/mosaic/mosaic_nonce_test.dart' as mosaic_nonce_test;
-import 'model/mosaic/mosaic_supply_type_test.dart' as mosaic_supply_type_test;
+import 'model/mosaic/mosaic_supply_change_action_test.dart' as mosaic_supply_type_test;
 import 'model/mosaic/mosaic_test.dart' as mosaic_test;
-import 'model/mosaic/network_currency_mosaic_test.dart' as network_currency_mosaic_test;
-import 'model/mosaic/network_harvest_mosaic_test.dart' as network_harvest_mosaic_test;
+import 'model/mosaic/network_currency_local_test.dart' as network_currency_local_test;
+import 'model/mosaic/network_currency_public_test.dart' as network_currency_public_test;
+import 'model/mosaic/network_harvest_local_test.dart' as network_harvest_local_test;
 
 // namespace
 import 'model/namespace/address_alias_test.dart' as address_alias_test;
+import 'model/namespace/alias_action_test.dart' as alias_action_test;
 import 'model/namespace/alias_test.dart' as alias_test;
 import 'model/namespace/alias_type_test.dart' as alias_type_test;
 import 'model/namespace/empty_alias_test.dart' as empty_alias_test;
@@ -77,10 +75,15 @@ import 'model/namespace/namespace_info_test.dart' as namespace_info_test;
 import 'model/namespace/namespace_name_test.dart' as namespace_name_test;
 import 'model/namespace/namespace_registration_type_test.dart' as namespace_registration_type_test;
 
+// network
+import 'model/network/network_name_test.dart' as network_name_test;
+import 'model/network/network_type_test.dart' as network_type_test;
+
 // node
 import 'model/node/node_info_test.dart' as node_info_test;
 import 'model/node/node_time_test.dart' as node_time_test;
 import 'model/node/role_type_test.dart' as role_type_test;
+import 'model/node/server_info_test.dart' as server_info_test;
 
 // receipt
 import 'model/receipt/artifact_expiry_receipt_test.dart' as artifact_expiry_receipt_test;
@@ -128,6 +131,7 @@ void main() {
     account_info_test.main();
     account_names_test.main();
     account_test.main();
+    activity_bucket_test.main();
     address_test.main();
     account_type_test.main();
     multisig_account_graph_info_test.main();
@@ -139,10 +143,8 @@ void main() {
   group('Blockchain:', () {
     block_info_test.main();
     blockchain_score_test.main();
-    blockchain_storage_info_test.main();
+    storage_info_test.main();
     merkle_path_item_test.main();
-    network_name_test.main();
-    network_type_test.main();
   });
 
   // common
@@ -182,13 +184,15 @@ void main() {
     mosaic_nonce_test.main();
     mosaic_supply_type_test.main();
     mosaic_test.main();
-    network_currency_mosaic_test.main();
-    network_harvest_mosaic_test.main();
+    network_currency_local_test.main();
+    network_currency_public_test.main();
+    network_harvest_local_test.main();
   });
 
   // namespace
   group('Namespace:', () {
     address_alias_test.main();
+    alias_action_test.main();
     alias_test.main();
     alias_type_test.main();
     empty_alias_test.main();
@@ -197,6 +201,12 @@ void main() {
     namespace_info_test.main();
     namespace_name_test.main();
     namespace_registration_type_test.main();
+  });
+
+  // network
+  group('Network:', () {
+    network_name_test.main();
+    network_type_test.main();
   });
 
   // node

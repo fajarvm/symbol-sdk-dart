@@ -14,7 +14,7 @@
 // limitations under the License.
 //
 
-library symbol_sdk_dart.sdk.model.mosaic.network_currency_mosaic;
+library symbol_sdk_dart.sdk.model.mosaic.network_currency_public;
 
 import 'dart:math' show pow;
 
@@ -23,19 +23,19 @@ import '../common/uint64.dart';
 import '../namespace/namespace_id.dart';
 import 'mosaic.dart';
 
-/// The NetworkCurrencyMosaic mosaic.
+/// The NetworkCurrencyPublic mosaic for public test network.
 ///
-/// This mosaic represents the native currency of the network. The mosaicId of this mosaic is
-/// aliased with the namespace name `cat.currency`.
-class NetworkCurrencyMosaic extends Mosaic {
+/// This mosaic represents the pre-network currency mosaic. The mosaicId of this mosaic is
+/// aliased with the namespace name `symbol.xym`.
+class NetworkCurrencyPublic extends Mosaic {
   /// The namespaceId of this mosaic.
-  static final Id NAMESPACE_ID = new NamespaceId(fullName: 'cat.currency');
+  static final Id NAMESPACE_ID = new NamespaceId(fullName: 'symbol.xym');
 
   /// The divisibility of this mosaic.
   static const int DIVISIBILITY = 6;
 
   /// The initial supply of this mosaic.
-  static const int INITIAL_SUPPLY = 8999999999;
+  static const int INITIAL_SUPPLY = 8999999998;
 
   /// This mosaic is transferable.
   static const bool TRANSFERABLE = true;
@@ -44,21 +44,21 @@ class NetworkCurrencyMosaic extends Mosaic {
   static const SUPPLY_MUTABLE = false;
 
   // private constructor
-  NetworkCurrencyMosaic._(Uint64 amount) : super(NAMESPACE_ID, amount);
+  NetworkCurrencyPublic._(Uint64 amount) : super(NAMESPACE_ID, amount);
 
   @override
-  Id get id => NetworkCurrencyMosaic.NAMESPACE_ID;
+  Id get id => NetworkCurrencyPublic.NAMESPACE_ID;
 
-  /// Creates NetworkCurrencyMosaic with using NetworkCurrencyMosaic as unit.
-  static NetworkCurrencyMosaic createRelative(final Uint64 amount) {
-    return new NetworkCurrencyMosaic._(
-        Uint64.fromBigInt(amount.value * BigInt.from(pow(10, NetworkCurrencyMosaic.DIVISIBILITY))));
+  /// Creates NetworkCurrencyPublic with using NetworkCurrencyPublic as unit.
+  static NetworkCurrencyPublic createRelative(final Uint64 amount) {
+    return new NetworkCurrencyPublic._(
+        Uint64.fromBigInt(amount.value * BigInt.from(pow(10, NetworkCurrencyPublic.DIVISIBILITY))));
   }
 
-  /// Creates NetworkCurrencyMosaic with using micro NetworkCurrencyMosaicM as unit.
+  /// Creates NetworkCurrencyPublic with using micro NetworkCurrencyPublic as unit.
   ///
-  /// 1 NetworkCurrencyMosaic = 1000000 micro NetworkCurrencyMosaic.
-  static NetworkCurrencyMosaic createAbsolute(final Uint64 microAmount) {
-    return new NetworkCurrencyMosaic._(microAmount);
+  /// 1 NetworkCurrencyPublic = 1000000 micro NetworkCurrencyPublic.
+  static NetworkCurrencyPublic createAbsolute(final Uint64 microAmount) {
+    return new NetworkCurrencyPublic._(microAmount);
   }
 }

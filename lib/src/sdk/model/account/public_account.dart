@@ -18,9 +18,9 @@ library symbol_sdk_dart.sdk.model.account.public_account;
 
 import 'dart:typed_data' show Uint8List;
 
-import 'package:symbol_sdk_dart/core.dart' show HexUtils, KeyPair, SignSchema;
+import 'package:symbol_sdk_dart/core.dart' show ByteUtils, HexUtils, KeyPair;
 
-import '../blockchain/network_type.dart';
+import '../network/network_type.dart';
 import 'address.dart';
 
 /// The public account structure contains account's address and public key.
@@ -82,13 +82,13 @@ class PublicAccount {
       throw new ArgumentError('Signature must be hexadecimal');
     }
 
-    final Uint8List sigByte = HexUtils.getBytes(signature);
-    final String utf8Hex = HexUtils.utf8ToHex(data);
-    final Uint8List dataByte = HexUtils.getBytes(utf8Hex);
-    final Uint8List pkByte = HexUtils.getBytes(publicKey);
-    final SignSchema signSchema = NetworkType.resolveSignSchema(address.networkType);
+    final Uint8List pkByte = ByteUtils.hexToBytes(publicKey);
+    final Uint8List sigByte = ByteUtils.hexToBytes(signature);
+    // converts data to UTF-8 hex if needed
+    final String convertedData = HexUtils.isHex(data) ? data : HexUtils.utf8ToHex(data);
+    final Uint8List dataByte = HexUtils.getBytes(convertedData);
 
-    return KeyPair.verify(pkByte, dataByte, sigByte, signSchema);
+    return KeyPair.verify(pkByte, dataByte, sigByte);
   }
 
   @override

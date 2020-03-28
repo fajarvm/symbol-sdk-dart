@@ -14,33 +14,30 @@
 // limitations under the License.
 //
 
-library symbol_sdk_dart.test.sdk.model.mosaic.mosaic_supply_type_test;
+library symbol_sdk_dart.test.sdk.model.namespace.alias_action_test;
 
-import 'package:symbol_sdk_dart/sdk.dart' show MosaicSupplyType;
+import 'package:symbol_sdk_dart/sdk.dart' show AliasAction;
 import 'package:test/test.dart';
 
 void main() {
-  group('MosaicSupplyType', () {
-    test('valid mosaic supply types', () {
-      expect(MosaicSupplyType.DECREASE.value, 0);
-      expect(MosaicSupplyType.INCREASE.value, 1);
-
-      expect(MosaicSupplyType.DECREASE.toString(),
-          equals('MosaicSupplyType{value: ${MosaicSupplyType.DECREASE.value}}'));
+  group('AliasAction', () {
+    test('valid alias action', () {
+      expect(AliasAction.LINK.value, 0);
+      expect(AliasAction.UNLINK.value, 1);
     });
 
-    test('Can retrieve a valid mosaic supply type', () {
-      expect(MosaicSupplyType.fromInt(0), MosaicSupplyType.DECREASE);
-      expect(MosaicSupplyType.fromInt(1), MosaicSupplyType.INCREASE);
+    test('Can retrieve a valid action alias', () {
+      expect(AliasAction.fromInt(0), AliasAction.LINK);
+      expect(AliasAction.fromInt(1), AliasAction.UNLINK);
     });
 
-    test('Trying to retrieve an invalid supply type will throw an error', () {
-      String errorMessage = MosaicSupplyType.UNKNOWN_MOSAIC_SUPPLY_TYPE;
-      expect(() => MosaicSupplyType.fromInt(null),
+    test('Trying to retrieve an invalid alias action will throw an error', () {
+      String errorMessage = AliasAction.UNKNOWN_ALIAS_ACTION;
+      expect(() => AliasAction.fromInt(null),
           throwsA(predicate((e) => e is ArgumentError && e.message == errorMessage)));
-      expect(() => MosaicSupplyType.fromInt(-1),
+      expect(() => AliasAction.fromInt(-1),
           throwsA(predicate((e) => e is ArgumentError && e.message == errorMessage)));
-      expect(() => MosaicSupplyType.fromInt(2),
+      expect(() => AliasAction.fromInt(2),
           throwsA(predicate((e) => e is ArgumentError && e.message == errorMessage)));
     });
   });

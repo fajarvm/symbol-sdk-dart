@@ -52,48 +52,56 @@ void main() {
       expect(flags.supplyMutable, isFalse);
       expect(flags.transferable, isFalse);
       expect(flags.restrictable, isFalse);
+      expect(flags.value, equals(0));
 
       // 1 - true, false, false
       flags = MosaicFlags.fromByteValue(1);
       expect(flags.supplyMutable, isTrue);
       expect(flags.transferable, isFalse);
       expect(flags.restrictable, isFalse);
+      expect(flags.value, equals(1));
 
       // 2 - false, true, false
       flags = MosaicFlags.fromByteValue(2);
       expect(flags.supplyMutable, isFalse);
       expect(flags.transferable, isTrue);
       expect(flags.restrictable, isFalse);
+      expect(flags.value, equals(2));
 
       // 3 - true, true, false
       flags = MosaicFlags.fromByteValue(3);
       expect(flags.supplyMutable, isTrue);
       expect(flags.transferable, isTrue);
       expect(flags.restrictable, isFalse);
+      expect(flags.value, equals(3));
 
       // 4 - false, false, true
       flags = MosaicFlags.fromByteValue(4);
       expect(flags.supplyMutable, isFalse);
       expect(flags.transferable, isFalse);
       expect(flags.restrictable, isTrue);
+      expect(flags.value, equals(4));
 
       // 5 - true, false, true
       flags = MosaicFlags.fromByteValue(5);
       expect(flags.supplyMutable, isTrue);
       expect(flags.transferable, isFalse);
       expect(flags.restrictable, isTrue);
+      expect(flags.value, equals(5));
 
       // 6 - false, true, true
       flags = MosaicFlags.fromByteValue(6);
       expect(flags.supplyMutable, isFalse);
       expect(flags.transferable, isTrue);
       expect(flags.restrictable, isTrue);
+      expect(flags.value, equals(6));
 
       // 7 - true, true, true
       flags = MosaicFlags.fromByteValue(7);
       expect(flags.supplyMutable, isTrue);
       expect(flags.transferable, isTrue);
       expect(flags.restrictable, isTrue);
+      expect(flags.value, equals(7));
     });
   });
 }

@@ -24,7 +24,7 @@ import 'alias_type.dart';
 import 'namespace_id.dart';
 import 'namespace_registration_type.dart';
 
-/// Contains information about a namespace
+/// Contains information about a namespace.
 class NamespaceInfo {
   /// Determines if the namespace is active or not.
   final bool active;

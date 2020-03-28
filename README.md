@@ -21,7 +21,7 @@ Dart SDK v2.7.0 or above.
 
 ## License
 
-Copyright (c) 2019
+Copyright (c) 2020
 
 Licensed under the [Apache License 2.0](LICENSE)
 

@@ -74,22 +74,6 @@ void main() {
       expect(address4.hashCode, isNotNull);
     });
 
-    test('can create from public key using NIS1 Schema', () {
-      const NIS_PublicKey = 'c5f54ba980fcbb657dbaaa42700539b207873e134d2375efeab5f1ab52f87844';
-
-      final address1 = Address.fromPublicKey(NIS_PublicKey, NetworkType.MAIN_NET);
-      expect(address1.plain, equals('NDD2CT6LQLIYQ56KIXI3ENTM6EK3D44P5JFXJ4R4'));
-      expect(address1.pretty, equals('NDD2CT-6LQLIY-Q56KIX-I3ENTM-6EK3D4-4P5JFX-J4R4'));
-      expect(address1.networkType, equals(NetworkType.MAIN_NET));
-      expect(address1.hashCode, isNotNull);
-
-      final address2 = Address.fromPublicKey(NIS_PublicKey, NetworkType.TEST_NET);
-      expect(address2.plain, equals('TDD2CT6LQLIYQ56KIXI3ENTM6EK3D44P5KZPFMK2'));
-      expect(address2.pretty, equals('TDD2CT-6LQLIY-Q56KIX-I3ENTM-6EK3D4-4P5KZP-FMK2'));
-      expect(address2.networkType, equals(NetworkType.TEST_NET));
-      expect(address2.hashCode, isNotNull);
-    });
-
     test('cannot create for an invalid network type', () {
       String errorMessage = NetworkType.UNKNOWN_NETWORK_TYPE;
       expect(errorMessage, 'network type is unknown');
@@ -134,10 +118,11 @@ void main() {
 
   group('fromEncoded', () {
     test('can create from encoded address string', () {
-      const encodedString = '9050B9837EFAB4BBE8A4B9BB32D812F9885C00D8FC1650E142';
+      const encodedString = '917E7E29A01014C2F300000000000000000000000000000000';
       final address = Address.fromEncoded(encodedString);
 
-      expect(address.plain, equals('SBILTA367K2LX2FEXG5TFWAS7GEFYAGY7QLFBYKC'));
+      expect(address.encoded, equals(encodedString));
+      expect(address.plain, equals('SF7H4KNACAKMF4YAAAAAAAAAAAAAAAAAAAAAAAAA'));
     });
   });
 

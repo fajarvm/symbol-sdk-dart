@@ -14,9 +14,8 @@
 // limitations under the License.
 //
 
-library symbol_sdk_dart.test.sdk.model.blockchain.network_type_test;
+library symbol_sdk_dart.test.sdk.model.network.network_type_test;
 
-import 'package:symbol_sdk_dart/core.dart' show SignSchema;
 import 'package:symbol_sdk_dart/sdk.dart' show NetworkType;
 import 'package:test/test.dart';
 
@@ -81,18 +80,6 @@ void main() {
       expect(NetworkType.isValidValue(0x00), isFalse);
       expect(NetworkType.isValidValue(0xFF), isFalse);
       expect(NetworkType.isValidValue(103), isFalse);
-    });
-
-    test('Can resolve sign schema for the given network type', () {
-      expect(NetworkType.resolveSignSchema(NetworkType.MAIN_NET), equals(SignSchema.KECCAK));
-      expect(NetworkType.resolveSignSchema(NetworkType.TEST_NET), equals(SignSchema.KECCAK));
-      expect(NetworkType.resolveSignSchema(NetworkType.MIJIN), equals(SignSchema.SHA3));
-      expect(NetworkType.resolveSignSchema(NetworkType.MIJIN_TEST), equals(SignSchema.SHA3));
-    });
-
-    test('Failed to resolve sign schema for the given network type should throw an error', () {
-      expect(() => NetworkType.resolveSignSchema(null, true),
-          throwsA(predicate((e) => e is ArgumentError && e.message.contains('Must not be null'))));
     });
   });
 }

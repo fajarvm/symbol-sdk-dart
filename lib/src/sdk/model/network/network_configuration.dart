@@ -14,27 +14,27 @@
 // limitations under the License.
 //
 
-library symbol_sdk_dart.sdk.model.blockchain.blockchain_storage_info;
+library symbol_sdk_dart.sdk.model.network.network_configuration;
 
-/// The blockchain storage info structure describes stored data.
-class BlockchainStorageInfo {
-  /// The number of confirmed blocks.
-  final int numBlocks;
+import 'chain_properties.dart';
+import 'network_properties.dart';
+import 'plugin_properties.dart';
 
-  /// The number of confirmed transactions.
-  final int numTransactions;
+/// Network Configuration
+class NetworkConfiguration {
+  /// Network related configuration properties.
+  final NetworkProperties network;
 
-  /// The number of accounts published in the blockchain.
-  final int numAccounts;
+  /// Chain related configuration properties.
+  final ChainProperties chain;
 
-  BlockchainStorageInfo(this.numBlocks, this.numTransactions, this.numAccounts);
+  /// Plugins related configuration properties.
+  final PluginProperties plugins;
+
+  NetworkConfiguration(this.network, this.chain, this.plugins);
 
   @override
   String toString() {
-    return 'BlockchainStorageInfo{'
-        'numBlocks: $numBlocks, '
-        'numTransactions: $numTransactions, '
-        'numAccounts: $numAccounts'
-        '}';
+    return 'NetworkConfiguration{network: $network, chain: $chain, plugins: $plugins}';
   }
 }

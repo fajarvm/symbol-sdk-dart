@@ -14,20 +14,17 @@
 // limitations under the License.
 //
 
-library symbol_sdk_dart.sdk.model.diagnostic.server_info;
+library symbol_sdk_dart.sdk.model.network.transfer_network_properties;
 
-/// Describes technical information of the server.
-class ServerInfo {
-  /// The version of the REST API that this server is using.
-  final String restVersion;
+/// Value object for transfer network properties.
+class TransferNetworkProperties {
+  /// Maximum transaction message size.
+  final String maxMessageSize;
 
-  /// The version of the SDK that this server is using.
-  final String sdkVersion;
-
-  ServerInfo(this.restVersion, this.sdkVersion);
+  TransferNetworkProperties(this.maxMessageSize);
 
   @override
   String toString() {
-    return 'ServerInfo{restVersion: $restVersion, sdkVersion: $sdkVersion}';
+    return 'TransferNetworkProperties{maxMessageSize: $maxMessageSize}';
   }
 }

@@ -16,7 +16,7 @@
 
 library symbol_sdk_dart.sdk.model.node.node_info;
 
-import '../blockchain/network_type.dart';
+import '../network/network_type.dart';
 import 'role_type.dart';
 
 /// The node info structure describes basic information of a node.

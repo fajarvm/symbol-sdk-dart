@@ -33,7 +33,7 @@ void main() {
         expect(ReceiptType.MOSAIC_EXPIRED.value, 0x414D);
         expect(ReceiptType.MOSAIC_RENTAL_FEE.value, 0x124D);
         expect(ReceiptType.NAMESPACE_EXPIRED.value, 0x414E);
-        expect(ReceiptType.NAMESPACE_RENTAL_FEE.value, 0x124E);
+        expect(ReceiptType.NAMESPACE_RENTAL_FEE.value, 0x134E);
         expect(ReceiptType.NAMESPACE_DELETED.value, 0x424E);
         expect(ReceiptType.LOCKHASH_CREATED.value, 0x3148);
         expect(ReceiptType.LOCKHASH_COMPLETED.value, 0x2248);
@@ -74,7 +74,7 @@ void main() {
         expect(ReceiptType.fromInt(0x414D), ReceiptType.MOSAIC_EXPIRED);
         expect(ReceiptType.fromInt(0x124D), ReceiptType.MOSAIC_RENTAL_FEE);
         expect(ReceiptType.fromInt(0x414E), ReceiptType.NAMESPACE_EXPIRED);
-        expect(ReceiptType.fromInt(0x124E), ReceiptType.NAMESPACE_RENTAL_FEE);
+        expect(ReceiptType.fromInt(0x134E), ReceiptType.NAMESPACE_RENTAL_FEE);
         expect(ReceiptType.fromInt(0x424E), ReceiptType.NAMESPACE_DELETED);
         expect(ReceiptType.fromInt(0x3148), ReceiptType.LOCKHASH_CREATED);
         expect(ReceiptType.fromInt(0x2248), ReceiptType.LOCKHASH_COMPLETED);

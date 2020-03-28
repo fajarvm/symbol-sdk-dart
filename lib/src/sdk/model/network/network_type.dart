@@ -14,9 +14,7 @@
 // limitations under the License.
 //
 
-library symbol_sdk_dart.sdk.model.blockchain.network_type;
-
-import 'package:symbol_sdk_dart/core.dart' show SignSchema;
+library symbol_sdk_dart.sdk.model.network.network_type;
 
 /// This class is used to identify a network type.
 class NetworkType {
@@ -81,21 +79,6 @@ class NetworkType {
 
     // otherwise
     return false;
-  }
-
-  /// Resolve signature schema from given network type.
-  ///
-  /// Throws an error if network type is invalid and when the parameter [throwError] is set to true.
-  static SignSchema resolveSignSchema(final NetworkType networkType,
-      [final bool throwError = false]) {
-    if (throwError) {
-      ArgumentError.checkNotNull(networkType);
-    }
-
-    if (NetworkType.MAIN_NET == networkType || NetworkType.TEST_NET == networkType) {
-      return SignSchema.KECCAK;
-    }
-    return SignSchema.SHA3;
   }
 
   @override

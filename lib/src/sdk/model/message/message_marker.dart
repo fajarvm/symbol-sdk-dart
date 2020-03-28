@@ -17,6 +17,6 @@
 library symbol_sdk_dart.sdk.model.message.message_marker;
 
 class MessageMarker {
-  /// 8-byte marker: FE CC 71 C7 64 BF E5 98 for PersistentDelegationRequestTransaction message
-  static const String PERSISTENT_DELEGATION_UNLOCK = 'FECC71C764BFE598';
+  /// 8-byte marker: FE 2A 80 61 57 73 01 E2 for PersistentDelegationRequestTransaction message
+  static const String PERSISTENT_DELEGATION_UNLOCK = 'FE2A8061577301E2';
 }

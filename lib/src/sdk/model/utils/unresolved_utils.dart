@@ -18,12 +18,12 @@ library symbol_sdk_dart.sdk.model.utils.unresolved_utils;
 
 import 'dart:typed_data' show Uint8List;
 
-import 'package:symbol_sdk_dart/core.dart' show HexUtils, RawAddress;
+import 'package:symbol_sdk_dart/core.dart' show ByteUtils, HexUtils, RawAddress;
 
 import '../account/address.dart';
-import '../blockchain/network_type.dart';
 import '../mosaic/mosaic_id.dart';
 import '../namespace/namespace_id.dart';
+import '../network/network_type.dart';
 
 /// A utility class for internal use.
 class UnresolvedUtils {
@@ -56,7 +56,7 @@ class UnresolvedUtils {
 
     // If bit 0 of byte 0 is not set (like in 0x90), then it is a regular address.
     // Else (e.g. 0x91) it represents a namespace id which starts at byte 1.
-    final bit0 = HexUtils.getBytes(inputHex.substring(1, 3))[0];
+    final bit0 = ByteUtils.hexToBytes(inputHex.substring(1, 3))[0];
     if ((bit0 & 16) == 16) {
       // namespaceId encoded hexadecimal notation provided
       // only 8 bytes are relevant to resolve the NamespaceId

@@ -18,14 +18,13 @@ library symbol_sdk_dart.sdk.model.account.account;
 
 import 'dart:typed_data' show Uint8List;
 
-import 'package:symbol_sdk_dart/core.dart' show HexUtils, KeyPair, SignSchema;
+import 'package:symbol_sdk_dart/core.dart' show ByteUtils, HexUtils, KeyPair;
 
-import '../blockchain/network_type.dart';
 import '../message/encrypted_message.dart';
 import '../message/plain_message.dart';
+import '../network/network_type.dart';
 import '../transaction/signed_transaction.dart';
 import '../transaction/transaction.dart';
-
 import 'public_account.dart';
 
 /// The account structure describes an account private key, public key, address and allows
@@ -41,10 +40,10 @@ class Account {
   Account._(this.keyPair, this.publicAccount);
 
   /// The public key string of this account.
-  String get publicKey => HexUtils.getString(keyPair.publicKey);
+  String get publicKey => ByteUtils.bytesToHex(keyPair.publicKey);
 
   /// The private key string of this account.
-  String get privateKey => HexUtils.getString(keyPair.privateKey);
+  String get privateKey => ByteUtils.bytesToHex(keyPair.privateKey);
 
   /// The encoded address of this account.
   String get encodedAddress => publicAccount.address.encoded;
@@ -68,7 +67,7 @@ class Account {
 
   /// Creates an [Account] from a given [keyPair] for a specific [networkType].
   static Account fromKeyPair(final KeyPair keyPair, final NetworkType networkType) {
-    final String publicKey = HexUtils.getString(keyPair.publicKey);
+    final String publicKey = ByteUtils.bytesToHex(keyPair.publicKey);
     final PublicAccount publicAccount = PublicAccount.fromPublicKey(publicKey, networkType);
 
     return new Account._(keyPair, publicAccount);
@@ -77,40 +76,37 @@ class Account {
   /// Creates an [Account] from a given [privateKey] for a specific [networkType].
   static Account fromPrivateKey(final String privateKey, final NetworkType networkType) {
     ArgumentError.checkNotNull(privateKey);
-    final SignSchema signSchema = NetworkType.resolveSignSchema(networkType);
-    final KeyPair keyPair = KeyPair.fromPrivateKey(privateKey, signSchema);
+    final KeyPair keyPair = KeyPair.fromPrivateKey(privateKey);
 
     return fromKeyPair(keyPair, networkType);
   }
 
   /// Generates a new [Account] for the given [networkType].
   static Account generate(final NetworkType networkType) {
-    final SignSchema signSchema = NetworkType.resolveSignSchema(networkType);
-    final KeyPair random = KeyPair.random(signSchema);
+    final KeyPair random = KeyPair.random();
     return fromPrivateKey(HexUtils.getString(random.privateKey), networkType);
   }
 
-  /// Creates a new encrypted message with this account as a sender.
-  EncryptedMessage encryptMessage(final String plainTextMessage,
-      final PublicAccount recipientPublicAccount, final NetworkType networkType) {
+  /// Creates an encrypted message from this account to the [recipientPublicAccount].
+  EncryptedMessage encryptMessage(
+      final String plainTextMessage, final PublicAccount recipientPublicAccount) {
     return EncryptedMessage.create(
-        plainTextMessage, this.privateKey, recipientPublicAccount.publicKey, networkType);
+        plainTextMessage, this.privateKey, recipientPublicAccount.publicKey);
   }
 
-  /// Decrypts an encrypted message sent for this account.
-  PlainMessage decryptMessage(final EncryptedMessage encryptedMessage,
-      final PublicAccount senderPublicAccount, final NetworkType networkType) {
+  /// Decrypts an encrypted message received by this account from [senderPublicAccount].
+  PlainMessage decryptMessage(
+      final EncryptedMessage encryptedMessage, final PublicAccount senderPublicAccount) {
     return EncryptedMessage.decrypt(
-        encryptedMessage, this.privateKey, senderPublicAccount.publicKey, networkType);
+        encryptedMessage, this.privateKey, senderPublicAccount.publicKey);
   }
 
   /// Signs raw data.
   String signData(final String rawData) {
     final String hex = HexUtils.utf8ToHex(rawData);
-    final Uint8List data = HexUtils.getBytes(hex);
-    final SignSchema signSchema = NetworkType.resolveSignSchema(networkType);
-    final Uint8List signedData = KeyPair.signData(keyPair, data, signSchema);
-    return HexUtils.getString(signedData);
+    final Uint8List data = ByteUtils.hexToBytes(hex);
+    final Uint8List signedData = KeyPair.sign(keyPair, data);
+    return ByteUtils.bytesToHex(signedData);
   }
 
   /// Signs a [transaction].
@@ -128,7 +124,6 @@ class Account {
 
   /// Sign aggregate signature transaction.
   void signCosignatureTransaction() {}
-
 
   @override
   String toString() {

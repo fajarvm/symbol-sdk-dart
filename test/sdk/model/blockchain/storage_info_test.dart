@@ -14,20 +14,27 @@
 // limitations under the License.
 //
 
-library symbol_sdk_dart.test.sdk.model.blockchain.network_name_test;
+library symbol_sdk_dart.test.sdk.model.blockchain.storage_info_test;
 
-import 'package:symbol_sdk_dart/sdk.dart' show NetworkName;
+import 'package:symbol_sdk_dart/sdk.dart' show StorageInfo;
 import 'package:test/test.dart';
 
 void main() {
-  group('NetworkName', () {
-    test('Can create NetworkName object', () {
-      const name = 'big alice';
-      const description = 'This is the description of the network name big alice';
-      final networkName = new NetworkName(name, description);
-      expect(networkName.name, equals(name));
-      expect(networkName.description, equals(description));
-      expect(networkName.toString(), equals('NetworkName{name: $name, description: $description}'));
+  group('StorageInfo', () {
+    test('Can create a StorageInfo object', () {
+      final storageInfo = StorageInfo(1, 2, 3);
+
+      expect(storageInfo.numBlocks, 1);
+      expect(storageInfo.numTransactions, 2);
+      expect(storageInfo.numAccounts, 3);
+
+      expect(
+          storageInfo.toString(),
+          equals('StorageInfo{'
+              'numBlocks: ${storageInfo.numBlocks}, '
+              'numTransactions: ${storageInfo.numTransactions}, '
+              'numAccounts: ${storageInfo.numAccounts}'
+              '}'));
     });
   });
 }

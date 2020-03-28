@@ -18,9 +18,9 @@ library symbol_sdk_dart.sdk.model.account.address;
 
 import 'dart:typed_data' show Uint8List;
 
-import 'package:symbol_sdk_dart/core.dart' show HexUtils, RawAddress;
+import 'package:symbol_sdk_dart/core.dart' show ByteUtils, HexUtils, RawAddress;
 
-import '../blockchain/network_type.dart';
+import '../network/network_type.dart';
 
 /// The address structure describes an address with its network.
 class Address {
@@ -45,7 +45,7 @@ class Address {
   /// Get the address in an encoded format.
   ///
   /// For example: 9085215E4620D383C2DF70235B9EF7607F6A28EF6D16FD7B9C
-  String get encoded => HexUtils.getString(RawAddress.stringToAddress(address));
+  String get encoded => ByteUtils.bytesToHex(RawAddress.stringToAddress(address)).toUpperCase();
 
   /// Get the address in a plain format.
   ///

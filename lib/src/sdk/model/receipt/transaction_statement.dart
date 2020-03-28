@@ -18,7 +18,7 @@ library symbol_sdk_dart.sdk.model.receipt.transaction_statement;
 
 import 'dart:typed_data' show ByteData, Endian, Uint8List;
 
-import 'package:symbol_sdk_dart/core.dart' show HexUtils, SHA3Hasher, SignSchema;
+import 'package:symbol_sdk_dart/core.dart' show HexUtils, SHA3Hasher;
 
 import '../common/uint64.dart';
 import 'receipt.dart';
@@ -69,8 +69,8 @@ class TransactionStatement {
     });
 
     // hash SHA3-256
-    final Uint8List hash = SHA3Hasher.hash(
-        Uint8List.fromList(results), SignSchema.SHA3, SignSchema.HASH_SIZE_32_BYTES);
+    final Uint8List hash =
+        SHA3Hasher.hash(Uint8List.fromList(results), SHA3Hasher.HASH_SIZE_32_BYTES);
     return HexUtils.bytesToHex(hash).toUpperCase();
   }
 }

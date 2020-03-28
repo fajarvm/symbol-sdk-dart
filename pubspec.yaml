@@ -14,10 +14,12 @@ environment:
 
 dependencies:
   convert: ^2.1.1
-  encrypt: ^4.0.0
   fixnum: ^0.10.11
-  pointycastle: ^1.0.2
-  tweetnacl: 0.3.2
+  tweetnacl: ^0.3.2
+  pointycastle:
+    git: https://github.com/fajarvm/pc-dart.git
+  encrypt:
+    git: https://github.com/fajarvm/encrypt.git
 
 dev_dependencies:
   test: ^1.12.0

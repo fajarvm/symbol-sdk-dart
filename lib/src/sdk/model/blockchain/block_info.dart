@@ -18,7 +18,7 @@ library symbol_sdk_dart.sdk.model.blockchain.block_info;
 
 import '../account/public_account.dart';
 import '../common/uint64.dart';
-import 'network_type.dart';
+import '../network/network_type.dart';
 
 /// The block info structure describes basic information of a block.
 class BlockInfo {

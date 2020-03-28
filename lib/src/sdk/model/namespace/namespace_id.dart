@@ -24,7 +24,7 @@ import '../common/uint64.dart';
 
 /// The namespace id structure describes namespace id.
 class NamespaceId extends Id {
-  /// Namespace full name (Examples: `nem`, or `universe.milky_way.planet_earth`).
+  /// Namespace full name.
   ///
   /// The full name can be empty when the namespace id is created using only the [Uint64] id.
   final String fullName;

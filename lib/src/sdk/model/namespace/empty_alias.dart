@@ -16,6 +16,8 @@
 
 library symbol_sdk_dart.sdk.model.namespace.empty_alias;
 
+import 'dart:typed_data' show Uint8List;
+
 import '../account/address.dart';
 import '../mosaic/mosaic_id.dart';
 import 'alias.dart';
@@ -44,4 +46,9 @@ class EmptyAlias implements Alias {
 
   @override
   int get hashCode => 'EmptyAlias'.hashCode ^ type.hashCode;
+
+  /// Generates alias buffer.
+  Uint8List serialize() {
+    return new Uint8List(0);
+  }
 }

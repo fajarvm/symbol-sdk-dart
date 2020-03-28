@@ -14,23 +14,23 @@
 // limitations under the License.
 //
 
-library symbol_sdk_dart.test.sdk.model.mosaic.network_harvest_mosaic_test;
+library symbol_sdk_dart.test.sdk.model.mosaic.network_harvest_local_test;
 
 import 'package:test/test.dart';
 
-import 'package:symbol_sdk_dart/sdk.dart' show NamespaceId, Uint64, NetworkHarvestMosaic;
+import 'package:symbol_sdk_dart/sdk.dart' show NamespaceId, Uint64, NetworkHarvestLocal;
 
 void main() {
-  group('NetworkHarvestMosaic', () {
-    test('Can create a NetworkHarvestMosaic object using createRelative()', () {
-      final currency = NetworkHarvestMosaic.createRelative(Uint64(1000));
+  group('NetworkHarvestLocal', () {
+    test('Can create a NetworkHarvestLocal object using createRelative()', () {
+      final currency = NetworkHarvestLocal.createRelative(Uint64(1000));
 
       expect(currency.id.id.toHex(), equals('941299b2b7e1291c'));
       expect(currency.amount, equals(Uint64(1000 * 1000)));
     });
 
-    test('Can create a NetworkHarvestMosaic object using createAbsolute', () {
-      final currency = NetworkHarvestMosaic.createAbsolute(Uint64(1000));
+    test('Can create a NetworkHarvestLocal object using createAbsolute', () {
+      final currency = NetworkHarvestLocal.createAbsolute(Uint64(1000));
 
       expect(currency.id.id.toHex(), equals('941299b2b7e1291c'));
       expect(currency.amount, equals(Uint64(1000)));
@@ -40,10 +40,10 @@ void main() {
       final namespaceU64 = Uint64.fromHex('941299b2b7e1291c');
       final namespaceId = new NamespaceId(id: namespaceU64);
 
-      expect(NetworkHarvestMosaic.NAMESPACE_ID, namespaceId);
-      expect(NetworkHarvestMosaic.DIVISIBILITY, 3);
-      expect(NetworkHarvestMosaic.TRANSFERABLE, isTrue);
-      expect(NetworkHarvestMosaic.SUPPLY_MUTABLE, isTrue);
+      expect(NetworkHarvestLocal.NAMESPACE_ID, namespaceId);
+      expect(NetworkHarvestLocal.DIVISIBILITY, 3);
+      expect(NetworkHarvestLocal.TRANSFERABLE, isTrue);
+      expect(NetworkHarvestLocal.SUPPLY_MUTABLE, isTrue);
     });
   });
 }

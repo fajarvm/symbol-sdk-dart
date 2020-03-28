@@ -16,6 +16,10 @@
 
 library symbol_sdk_dart.sdk.model.namespace.address_alias;
 
+import 'dart:typed_data';
+
+import 'package:symbol_sdk_dart/core.dart';
+
 import '../account/address.dart';
 import '../mosaic/mosaic_id.dart';
 import 'alias.dart';
@@ -47,4 +51,9 @@ class AddressAlias implements Alias {
 
   @override
   int get hashCode => type.hashCode ^ address.hashCode;
+
+  /// Generates alias buffer.
+  Uint8List serialize() {
+    return RawAddress.stringToAddress(this.address.plain);
+  }
 }

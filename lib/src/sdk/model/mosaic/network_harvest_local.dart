@@ -14,7 +14,7 @@
 // limitations under the License.
 //
 
-library symbol_sdk_dart.sdk.model.mosaic.network_harvest_mosaic;
+library symbol_sdk_dart.sdk.model.mosaic.network_harvest_local;
 
 import 'dart:math' show pow;
 
@@ -23,11 +23,11 @@ import '../common/uint64.dart';
 import '../namespace/namespace_id.dart';
 import 'mosaic.dart';
 
-/// The NetworkHarvestMosaic mosaic.
+/// The NetworkHarvestLocal mosaic.
 ///
-/// This mosaic represents the harvesting currency of the network. The mosaicId of this mosaic is
+/// This mosaic represents the pre-network harvesting mosaic. The mosaicId of this mosaic is
 /// aliased with the namespace name `cat.harvest`.
-class NetworkHarvestMosaic extends Mosaic {
+class NetworkHarvestLocal extends Mosaic {
   /// The namespaceId of this mosaic.
   static final Id NAMESPACE_ID = new NamespaceId(fullName: 'cat.harvest');
 
@@ -44,21 +44,21 @@ class NetworkHarvestMosaic extends Mosaic {
   static const SUPPLY_MUTABLE = true;
 
   // private constructor
-  NetworkHarvestMosaic._(Uint64 amount) : super(NAMESPACE_ID, amount);
+  NetworkHarvestLocal._(Uint64 amount) : super(NAMESPACE_ID, amount);
 
   @override
-  Id get id => NetworkHarvestMosaic.NAMESPACE_ID;
+  Id get id => NetworkHarvestLocal.NAMESPACE_ID;
 
-  /// Creates NetworkHarvestMosaic with using NetworkHarvestMosaic as unit.
-  static NetworkHarvestMosaic createRelative(final Uint64 amount) {
-    return new NetworkHarvestMosaic._(
-        Uint64.fromBigInt(amount.value * BigInt.from(pow(10, NetworkHarvestMosaic.DIVISIBILITY))));
+  /// Creates NetworkHarvestLocal with using NetworkHarvestLocal as unit.
+  static NetworkHarvestLocal createRelative(final Uint64 amount) {
+    return new NetworkHarvestLocal._(
+        Uint64.fromBigInt(amount.value * BigInt.from(pow(10, NetworkHarvestLocal.DIVISIBILITY))));
   }
 
-  /// Creates NetworkHarvestMosaic with using micro XEM as unit.
+  /// Creates NetworkHarvestLocal with using micro NetworkHarvestLocal as unit.
   ///
-  /// 1 NetworkHarvestMosaic = 1000000 micro NetworkHarvestMosaic.
-  static NetworkHarvestMosaic createAbsolute(final Uint64 microXemAmount) {
-    return new NetworkHarvestMosaic._(microXemAmount);
+  /// 1 NetworkHarvestLocal = 1000000 micro NetworkHarvestLocal.
+  static NetworkHarvestLocal createAbsolute(final Uint64 microXemAmount) {
+    return new NetworkHarvestLocal._(microXemAmount);
   }
 }

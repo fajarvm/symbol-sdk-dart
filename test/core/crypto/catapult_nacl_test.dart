@@ -14,26 +14,15 @@
 // limitations under the License.
 //
 
-library symbol_sdk_dart.test.core.crypto.catapultnacl_test;
+library symbol_sdk_dart.test.core.crypto.catapult_nacl_test;
 
 import 'dart:typed_data' show Uint8List;
 
-import 'package:symbol_sdk_dart/core.dart' show HexUtils, CatapultNacl;
+import 'package:symbol_sdk_dart/core.dart' show CatapultNacl;
 import 'package:test/test.dart';
 
 void main() {
-  group('CatapultNacl', () {
-    test('hex encode/decode', () {
-      String plainMessage = 'Hello NEM';
-      String hexEncoded = HexUtils.utf8ToHex(plainMessage);
-      expect(hexEncoded, equals('48656c6c6f204e454d'));
-
-      List<int> decoded = CatapultNacl.hexDecode(hexEncoded);
-
-      String expected = CatapultNacl.hexEncodeToString(Uint8List.fromList(decoded));
-      expect(expected, equals(hexEncoded.toUpperCase()));
-    });
-
+  group('catapult_nacl', () {
     test('create random bytes', () {
       Uint8List randomBytes = CatapultNacl.secureRandomBytes(8);
       expect(randomBytes.lengthInBytes, 8);

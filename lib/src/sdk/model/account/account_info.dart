@@ -19,6 +19,7 @@ library symbol_sdk_dart.sdk.model.account.account_info;
 import '../common/uint64.dart';
 import '../mosaic/mosaic.dart';
 import 'account_type.dart';
+import 'activity_bucket.dart';
 import 'address.dart';
 import 'public_account.dart';
 
@@ -39,17 +40,32 @@ class AccountInfo {
   /// The account type.
   final AccountType accountType;
 
+  /// The linked account key.
+  final String linkedAccountKey;
+
+  /// The account activity bucket.
+  final List<ActivityBucket> activityBucket;
+
+  /// A collection of mosaics hold by the account.
+  final List<Mosaic> mosaics;
+
   /// The importance of the account.
   final Uint64 importance;
 
   /// The importance height of the account.
   final Uint64 importanceHeight;
 
-  /// A collection of mosaics hold by the account.
-  final List<Mosaic> mosaics;
-
-  AccountInfo(this.address, this.addressHeight, this.publicKey, this.publicKeyHeight,
-      this.accountType, this.importance, this.importanceHeight, this.mosaics);
+  AccountInfo(
+      this.address,
+      this.addressHeight,
+      this.publicKey,
+      this.publicKeyHeight,
+      this.accountType,
+      this.linkedAccountKey,
+      this.activityBucket,
+      this.mosaics,
+      this.importance,
+      this.importanceHeight);
 
   /// Returns the public account of this account.
   PublicAccount get publicAccount => PublicAccount.fromPublicKey(publicKey, address.networkType);
@@ -62,9 +78,11 @@ class AccountInfo {
         'publicKey: $publicKey, '
         'publicKeyHeight: $publicKeyHeight, '
         'accountType: $accountType, '
+        'linkedAccountKey: $linkedAccountKey, '
+        'activityBucket: $activityBucket, '
+        'mosaics: $mosaics, '
         'importance: $importance, '
-        'importanceHeight: $importanceHeight, '
-        'mosaics: $mosaics'
+        'importanceHeight: $importanceHeight'
         '}';
   }
 }

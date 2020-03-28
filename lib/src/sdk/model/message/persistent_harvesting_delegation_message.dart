@@ -16,9 +16,10 @@
 
 library symbol_sdk_dart.sdk.model.message.persistent_harvesting_delegation_message;
 
-import 'package:symbol_sdk_dart/core.dart' show CryptoUtils, HexUtils, SignSchema;
+import 'package:symbol_sdk_dart/core.dart' show CryptoUtils, HexUtils;
 
-import '../blockchain/network_type.dart';
+import '../account/account.dart';
+import '../network/network_type.dart';
 import 'message.dart';
 import 'message_marker.dart';
 import 'message_type.dart';
@@ -29,11 +30,8 @@ class PersistentHarvestingDelegationMessage extends Message {
       : super(MessageType.PERSISTENT_HARVESTING_DELEGATION_MESSAGE, encryptedPayload);
 
   /// Creates a persistent harvesting delegation message for the [networkType].
-  static PersistentHarvestingDelegationMessage create(
-      final String delegatedPrivateKey,
-      final String senderPrivateKey,
-      final String recipientPublicKey,
-      final NetworkType networkType) {
+  static PersistentHarvestingDelegationMessage create(final String delegatedPrivateKey,
+      final String recipientPublicKey, final NetworkType networkType) {
     ArgumentError.checkNotNull(delegatedPrivateKey);
     ArgumentError.checkNotNull(networkType);
 
@@ -41,12 +39,13 @@ class PersistentHarvestingDelegationMessage extends Message {
       throw new ArgumentError('delegatedPrivateKey is not a valid hex string');
     }
 
-    // Encrypts the message
-    final SignSchema signSchema = NetworkType.resolveSignSchema(networkType);
+    // Create an ephemeral keypair
+    final Account ephemeralAcc = Account.generate(networkType);
 
+    // Encrypts the message
     final String encryptedPayload = CryptoUtils.encryptMessage(
-        delegatedPrivateKey, senderPrivateKey, recipientPublicKey, signSchema, true);
-    final result = MessageMarker.PERSISTENT_DELEGATION_UNLOCK + encryptedPayload.toUpperCase();
+        delegatedPrivateKey, ephemeralAcc.privateKey, recipientPublicKey, true);
+    final result = MessageMarker.PERSISTENT_DELEGATION_UNLOCK + ephemeralAcc.publicKey + encryptedPayload.toUpperCase();
 
     return PersistentHarvestingDelegationMessage._(result);
   }
@@ -62,27 +61,27 @@ class PersistentHarvestingDelegationMessage extends Message {
     final String prefix =
         MessageType.PERSISTENT_HARVESTING_DELEGATION_MESSAGE.value.toRadixString(16);
 
-    return new PersistentHarvestingDelegationMessage._(prefix + payload);
+    return new PersistentHarvestingDelegationMessage._(
+        prefix.toUpperCase() + payload.toUpperCase());
   }
 
   /// Decrypts a persistent harvesting delegation message.
   ///
   /// Returns a hex formatted string.
-  static String decrypt(
-      final PersistentHarvestingDelegationMessage encryptedMessage,
-      final String recipientPrivateKey,
-      final String senderPublicKey,
-      final NetworkType networkType) {
+  static String decrypt(final PersistentHarvestingDelegationMessage encryptedMessage,
+      final String recipientPrivateKey, final NetworkType networkType) {
     ArgumentError.checkNotNull(encryptedMessage);
     ArgumentError.checkNotNull(encryptedMessage.payload);
     ArgumentError.checkNotNull(networkType);
 
-    final SignSchema signSchema = NetworkType.resolveSignSchema(networkType);
+    const int markerLength = MessageMarker.PERSISTENT_DELEGATION_UNLOCK.length;
+    final String ephemeralPublicKey =
+        encryptedMessage.payload.substring(markerLength, markerLength + 64);
     final String payload =
-        encryptedMessage.payload.substring(MessageMarker.PERSISTENT_DELEGATION_UNLOCK.length);
+        encryptedMessage.payload.substring(markerLength + ephemeralPublicKey.length);
     final String decrypted =
-        CryptoUtils.decryptMessage(payload, recipientPrivateKey, senderPublicKey, signSchema, true);
+        CryptoUtils.decryptMessage(payload, recipientPrivateKey, ephemeralPublicKey, true);
 
-    return decrypted;
+    return decrypted.toUpperCase();
   }
 }

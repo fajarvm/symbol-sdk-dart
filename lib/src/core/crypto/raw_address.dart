@@ -18,16 +18,14 @@ library symbol_sdk_dart.core.crypto.raw_address;
 
 import 'dart:typed_data' show Uint8List;
 
-import 'package:symbol_sdk_dart/symbol_sdk_dart.dart' show NetworkType;
-import 'package:symbol_sdk_dart/src/core/utils.dart';
 import 'package:pointycastle/export.dart' show Digest;
+import 'package:symbol_sdk_dart/src/core/utils.dart';
+import 'package:symbol_sdk_dart/symbol_sdk_dart.dart' show NetworkType;
 
 import 'crypto_utils.dart';
 import 'sha3_hasher.dart';
-import 'sign_schema.dart';
 
-/// Utility class that knows how to create an address based on a public key. It supports the
-/// different hashes algorithms defined in [SignSchema]
+/// Utility class that knows how to create an address based on a public key.
 class RawAddress {
   static const int RIPEMD_160_SIZE = 20;
   static const int ADDRESS_DECODED_SIZE = 25;
@@ -74,10 +72,8 @@ class RawAddress {
 
   /// Converts a [publicKey] to decoded address byte for a specific [networkType].
   static Uint8List publicKeyToAddress(final Uint8List publicKey, final NetworkType networkType) {
-    final SignSchema signSchema = NetworkType.resolveSignSchema(networkType, true);
-
     // Step 1: SHA3 hash of the public key
-    final Digest digest = SHA3Hasher.create(signSchema, hashSize: SignSchema.HASH_SIZE_32_BYTES);
+    final Digest digest = SHA3Hasher.create(SHA3Hasher.HASH_SIZE_32_BYTES);
     final Uint8List stepOne = new Uint8List(KEY_SIZE);
     digest.update(publicKey, 0, KEY_SIZE);
     digest.doFinal(stepOne, 0);
@@ -117,8 +113,7 @@ class RawAddress {
 
   /// Determines the validity of the given [decodedAddress] for a specific [networkType].
   static bool isValidAddress(final Uint8List decodedAddress, final NetworkType networkType) {
-    final SignSchema signSchema = NetworkType.resolveSignSchema(networkType, true);
-    final Digest digest = SHA3Hasher.create(signSchema, hashSize: SignSchema.HASH_SIZE_32_BYTES);
+    final Digest digest = SHA3Hasher.create(SHA3Hasher.HASH_SIZE_32_BYTES);
     final Uint8List hash = digest.process(decodedAddress.sublist(0, START_CHECKSUM_SIZE));
     final Uint8List checksum = hash.buffer.asUint8List(0, CHECKSUM_SIZE);
     return ArrayUtils.deepEqual(checksum, decodedAddress.sublist(START_CHECKSUM_SIZE));

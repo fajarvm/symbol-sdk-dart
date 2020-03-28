@@ -26,8 +26,11 @@ class RoleType {
   /// Indicates an API type node.
   static const RoleType API_NODE = RoleType._(2);
 
+  /// Indicates an dual (peer and API) type node.
+  static const RoleType DUAL_NODE = RoleType._(3);
+
   /// Supported role types.
-  static final List<RoleType> values = <RoleType>[PEER_NODE, API_NODE];
+  static final List<RoleType> values = <RoleType>[PEER_NODE, API_NODE, DUAL_NODE];
 
   /// The int value of this type.
   final int value;

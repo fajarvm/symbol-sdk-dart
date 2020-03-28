@@ -19,14 +19,14 @@ library symbol_sdk_dart.sdk.model.receipt.resolution_statement;
 import 'dart:math' show max;
 import 'dart:typed_data' show ByteData, Endian, Uint8List;
 
-import 'package:symbol_sdk_dart/core.dart' show HexUtils, SHA3Hasher, SignSchema;
+import 'package:symbol_sdk_dart/core.dart' show HexUtils, SHA3Hasher;
 
 import '../account/address.dart';
-import '../blockchain/network_type.dart';
 import '../common/id.dart';
 import '../common/uint64.dart';
 import '../mosaic/mosaic_id.dart';
 import '../namespace/namespace_id.dart';
+import '../network/network_type.dart';
 import '../utils/unresolved_utils.dart';
 import 'receipt_type.dart';
 import 'receipt_version.dart';
@@ -104,8 +104,7 @@ class ResolutionStatement {
     });
     final resultsBytes = Uint8List.fromList(results);
 
-    final Uint8List hash =
-        SHA3Hasher.hash(resultsBytes, SignSchema.SHA3, SignSchema.HASH_SIZE_32_BYTES);
+    final Uint8List hash = SHA3Hasher.hash(resultsBytes, SHA3Hasher.HASH_SIZE_32_BYTES);
     return HexUtils.bytesToHex(hash).toUpperCase();
   }
 

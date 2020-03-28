@@ -50,7 +50,7 @@ class ReceiptType {
 
   /// The sender and recipient of the mosaicId and amount representing the cost of extending the
   /// namespace. It is recorded when a namespace is registered or its duration is extended.
-  static const ReceiptType NAMESPACE_RENTAL_FEE = ReceiptType._(0x124E, 'NAMESPACE_RENTAL_FEE');
+  static const ReceiptType NAMESPACE_RENTAL_FEE = ReceiptType._(0x134E, 'NAMESPACE_RENTAL_FEE');
 
   /// The identifier of the namespace deleted in this block. It is recorded when the namespace
   /// grace period elapses.

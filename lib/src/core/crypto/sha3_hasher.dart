@@ -21,40 +21,34 @@ import 'dart:typed_data' show Uint8List;
 import 'package:pointycastle/api.dart' show Digest;
 
 import 'crypto_utils.dart';
-import 'sign_schema.dart';
 
-/// This class creates a cryptographic SHA-3 / Keccak hasher based on the given [SignSchema]
-/// and hash size (32 byte or 256-bit, 64 byte or 512-bit).
+/// This class creates a cryptographic SHA-3/Keccak hasher (32 byte or 256-bit, 64 byte or 512-bit).
 class SHA3Hasher {
+  /// Hash size: 32 bytes / 256 bits.
+  static const int HASH_SIZE_32_BYTES = 32;
+
+  /// Hash size: 64 bytes / 512 bits.
+  static const int HASH_SIZE_64_BYTES = 64;
+
   // private constructor
   const SHA3Hasher._();
 
-  /// Creates and validates the correct SHA-3 hasher for the given [signSchema] and [hashSize].
+  /// Creates and validates the correct SHA-3 hasher for the given [hashSize] (optional).
   ///
   /// Default value for [hashSize] is 64 bytes. Acceptable [hashSize] is either 32 or 64 bytes.
-  static Digest create(final SignSchema signSchema,
-      {final int hashSize = SignSchema.HASH_SIZE_64_BYTES}) {
-    _validate(signSchema, hashSize);
+  static Digest create([final int hashSize = HASH_SIZE_64_BYTES]) {
+    _validate(hashSize);
 
-    if (SignSchema.SHA3.value == signSchema.value) {
-      return CryptoUtils.createSha3Digest(length: hashSize);
-    }
-
-    if (SignSchema.KECCAK.value == signSchema.value) {
-      return CryptoUtils.createKeccakDigest(length: hashSize);
-    }
-
-    throw new StateError('should not reach here');
+    return CryptoUtils.createSha3Digest(length: hashSize);
   }
 
-  /// Hashes the [input] bytes using the given [signSchema] and [hashSize].
+  /// Hashes the [input] bytes using the given [hashSize] (optional).
   ///
   /// Default value for [hashSize] is 64 bytes. Acceptable [hashSize] is either 32 or 64 bytes.
-  static Uint8List hash(final Uint8List input, final SignSchema signSchema,
-      [final int hashSize = SignSchema.HASH_SIZE_64_BYTES]) {
-    _validate(signSchema, hashSize);
+  static Uint8List hash(final Uint8List input, [final int hashSize = HASH_SIZE_64_BYTES]) {
+    _validate(hashSize);
 
-    final Digest hasher = create(signSchema, hashSize: hashSize);
+    final Digest hasher = create(hashSize);
 
     // reverse the input here when necessary before processing it further
 
@@ -65,10 +59,9 @@ class SHA3Hasher {
 
   // ------------------------------- private / protected functions ------------------------------ //
 
-  static void _validate(final SignSchema signSchema, final int hashSize) {
-    if (!SignSchema.isValid(signSchema, hashSize)) {
-      throw new ArgumentError('Invalid sign schema and hash size combination. '
-          'Sign schema: $signSchema, Hash size: $hashSize');
+  static void _validate(final int hashSize) {
+    if (HASH_SIZE_32_BYTES != hashSize && HASH_SIZE_64_BYTES != hashSize) {
+      throw new ArgumentError('Invalid hash size: $hashSize');
     }
   }
 }

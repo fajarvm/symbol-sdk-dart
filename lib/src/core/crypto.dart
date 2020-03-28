@@ -16,10 +16,9 @@
 
 library symbol_sdk_dart.core.crypto;
 
-export 'crypto/catapultnacl.dart';
+export 'crypto/catapult_nacl.dart';
 export 'crypto/crypto_exception.dart';
 export 'crypto/crypto_utils.dart';
 export 'crypto/key_pair.dart';
 export 'crypto/raw_address.dart';
 export 'crypto/sha3_hasher.dart';
-export 'crypto/sign_schema.dart';

@@ -20,12 +20,9 @@ import 'dart:typed_data' show Uint8List;
 
 import 'package:symbol_sdk_dart/src/core/utils.dart';
 
-import 'package:pointycastle/api.dart' show Digest;
-
 import 'crypto_exception.dart';
 import 'crypto_utils.dart';
 import 'sha3_hasher.dart';
-import 'sign_schema.dart';
 
 /// Represents a key pair.
 class KeyPair {
@@ -61,27 +58,25 @@ class KeyPair {
           ArrayUtils.deepEqual(privateKey, other.privateKey) &&
           ArrayUtils.deepEqual(publicKey, other.publicKey);
 
-  /// Creates a key pair from a [hexEncodedPrivateKey] string using the given [signSchema].
+  /// Creates a key pair from a [hexEncodedPrivateKey].
   /// The public key is extracted from the private key.
   ///
   /// Throws a [CryptoException] when the private key has an invalid length.
-  static KeyPair fromPrivateKey(final String hexEncodedPrivateKey, final SignSchema signSchema) {
-    ArgumentError.checkNotNull(signSchema);
-
+  static KeyPair fromPrivateKey(final String hexEncodedPrivateKey) {
     final Uint8List privateKeySeed = HexUtils.getBytes(hexEncodedPrivateKey);
     if (CryptoUtils.KEY_SIZE != privateKeySeed.length) {
       throw new CryptoException('Private key has an unexpected size. '
           'Expected: ${CryptoUtils.KEY_SIZE}, Got: ${privateKeySeed.length}');
     }
 
-    final Uint8List publicKey = CryptoUtils.extractPublicKey(privateKeySeed, signSchema);
+    final Uint8List publicKey = CryptoUtils.extractPublicKey(privateKeySeed);
 
     return _create(privateKeySeed, publicKey);
   }
 
-  /// Extract a public key byte from a [privateKeySeed] using a given [signSchema].
-  static Uint8List extractPublicKey(final Uint8List privateKeySeed, final SignSchema signSchema) {
-    return CryptoUtils.extractPublicKey(privateKeySeed, signSchema);
+  /// Extract a public key byte from a [privateKeySeed].
+  static Uint8List extractPublicKey(final Uint8List privateKeySeed) {
+    return CryptoUtils.extractPublicKey(privateKeySeed);
   }
 
   /// Creates a random public key.
@@ -89,38 +84,23 @@ class KeyPair {
     return CryptoUtils.getRandomBytes(CryptoUtils.KEY_SIZE);
   }
 
-  /// Creates a random key pair based on the given [signSchema] and, optionally, [hashSize].
+  /// Creates a random key pair based on the given [hashSize] (optional).
   /// By default, the [hashSize] is set to 32-bytes.
-  static KeyPair random(final SignSchema signSchema,
-      [final int hashSize = SignSchema.HASH_SIZE_32_BYTES]) {
-    final Digest hasher = SHA3Hasher.create(signSchema, hashSize: hashSize);
-
+  static KeyPair random([final int hashSize = SHA3Hasher.HASH_SIZE_32_BYTES]) {
     final Uint8List randomBytes = CryptoUtils.getRandomBytes(hashSize);
-    final Uint8List stepOne = new Uint8List(hashSize);
-    hasher.update(randomBytes, 0, hashSize);
-    hasher.doFinal(stepOne, 0);
-    return KeyPair.fromPrivateKey(HexUtils.getString(stepOne), signSchema);
+    return KeyPair.fromPrivateKey(HexUtils.getString(randomBytes));
   }
 
-  /// Verifies that the [signature] is signed using the [publicKey] and the [data] according to
-  /// the [signSchema].
-  static bool verify(final Uint8List publicKey, final Uint8List data, final Uint8List signature,
-      final SignSchema signSchema) {
-    return CryptoUtils.verify(publicKey, data, signature, signSchema);
+  /// Signs the [data] with the given [keyPair].
+  static Uint8List sign(final KeyPair keyPair, final Uint8List data) {
+    final Uint8List secretKey = new Uint8List(64);
+    secretKey.setAll(0, keyPair.privateKey);
+    secretKey.setAll(32, keyPair.publicKey);
+    return CryptoUtils.sign(data, keyPair.publicKey, secretKey);
   }
 
-  /// Creates a shared key given a [keyPair], an arbitrary [publicKey] and an agreed upon [salt]
-  /// using the cryptography algorithm defined in [signSchema]
-  /// This method returns a shared key. The shared key can be used for encrypted message passing
-  /// between the two parties.
-  static Uint8List deriveSharedKey(final KeyPair keyPair, final Uint8List publicKey,
-      final Uint8List salt, final SignSchema signSchema) {
-    return CryptoUtils.deriveSharedKey(salt, keyPair.privateKey, publicKey, signSchema);
-  }
-
-  /// Signs the [data] with the given [keyPair] according to the [signSchema].
-  static Uint8List signData(
-      final KeyPair keyPair, final Uint8List data, final SignSchema signSchema) {
-    return CryptoUtils.signData(data, keyPair.publicKey, keyPair.privateKey, signSchema);
+  /// Verifies that the [signature] is signed using the [publicKey] and the [data].
+  static bool verify(final Uint8List publicKey, final Uint8List data, final Uint8List signature) {
+    return CryptoUtils.verify(publicKey, data, signature);
   }
 }

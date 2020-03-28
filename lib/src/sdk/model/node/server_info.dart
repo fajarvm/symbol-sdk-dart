@@ -14,20 +14,20 @@
 // limitations under the License.
 //
 
-library symbol_sdk_dart.sdk.model.blockchain.network_name;
+library symbol_sdk_dart.sdk.model.node.server_info;
 
-/// Describes the name and description of the network.
-class NetworkName {
-  /// The name of this network.
-  final String name;
+/// Describes technical information of the server.
+class ServerInfo {
+  /// The version of the REST API that this server is using.
+  final String restVersion;
 
-  /// The description of this network.
-  final String description;
+  /// The version of the SDK that this server is using.
+  final String sdkVersion;
 
-  NetworkName(this.name, this.description);
+  ServerInfo(this.restVersion, this.sdkVersion);
 
   @override
   String toString() {
-    return 'NetworkName{name: $name, description: $description}';
+    return 'ServerInfo{restVersion: $restVersion, sdkVersion: $sdkVersion}';
   }
 }

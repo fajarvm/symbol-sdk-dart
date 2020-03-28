@@ -18,7 +18,7 @@ library symbol_sdk_dart.sdk.model.transaction.signed_transaction;
 
 import 'package:symbol_sdk_dart/sdk.dart';
 
-/// Used to transfer the transaction data and the signature to a nem server in order to
+/// Used to transfer the transaction data and the signature to a Symbol server in order to
 /// initiate and broadcast a transaction.
 class SignedTransaction {
   /// The serialized transaction data.

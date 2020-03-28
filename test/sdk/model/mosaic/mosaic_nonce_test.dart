@@ -77,30 +77,26 @@ void main() {
     });
 
     test('Cannot create MosaicNonce with invalid size', () {
-      expect(
-          () => new MosaicNonce(null),
-          throwsA(predicate((e) =>
-              e is ArgumentError &&
-              e.message ==
-                  'Invalid nonce size. The nonce should be ${MosaicNonce.NONCE_SIZE} bytes.')));
+      expect(() => new MosaicNonce(null),
+          throwsA(predicate((e) => e is ArgumentError && e.message.contains('Must not be null'))));
       expect(
           () => new MosaicNonce(Uint8List(0)),
           throwsA(predicate((e) =>
               e is ArgumentError &&
               e.message ==
-                  'Invalid nonce size. The nonce should be ${MosaicNonce.NONCE_SIZE} bytes.')));
+                  'Invalid nonce size. The nonce should be ${MosaicNonce.NONCE_SIZE} bytes but received: 0')));
       expect(
           () => new MosaicNonce(Uint8List(3)),
           throwsA(predicate((e) =>
               e is ArgumentError &&
               e.message ==
-                  'Invalid nonce size. The nonce should be ${MosaicNonce.NONCE_SIZE} bytes.')));
+                  'Invalid nonce size. The nonce should be ${MosaicNonce.NONCE_SIZE} bytes but received: 3')));
       expect(
           () => new MosaicNonce(Uint8List(5)),
           throwsA(predicate((e) =>
               e is ArgumentError &&
               e.message ==
-                  'Invalid nonce size. The nonce should be ${MosaicNonce.NONCE_SIZE} bytes.')));
+                  'Invalid nonce size. The nonce should be ${MosaicNonce.NONCE_SIZE} bytes but received: 5')));
     });
   });
 }

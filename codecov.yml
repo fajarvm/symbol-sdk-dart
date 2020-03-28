@@ -17,5 +17,5 @@ comment:
   require_changes: no
 
 ignore:
-  - "lib/src/core/crypto/catapultnacl.dart"
+  - "lib/src/core/crypto/catapult_nacl.dart"
   - "lib/src/infrastructure/model/**/*"

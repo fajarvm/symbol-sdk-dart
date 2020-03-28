@@ -17,25 +17,26 @@
 library symbol_sdk_dart.test.sdk.model.account.account_test;
 
 import 'package:symbol_sdk_dart/core.dart';
-import 'package:test/test.dart';
-
 import 'package:symbol_sdk_dart/core.dart' show CryptoException, CryptoUtils;
-import 'package:symbol_sdk_dart/sdk.dart' show Account, MessageType, NetworkType;
+import 'package:symbol_sdk_dart/sdk.dart' show Account, NetworkType;
+import 'package:test/test.dart';
 
 void main() {
   const testAccount = {
-    'address': 'SCTVW23D2MN5VE4AQ4TZIDZENGNOZXPRPRLIKCF2',
-    'privateKey': '26b64cb10f005e5988a36744ca19e20d835ccc7c105aaa5f3b212da593180930',
-    'publicKey': 'c2f93346e27ce6ad1a9f8f5e3066f8326593a406bdf357acb041e2f9ab402efe'
+    'address': 'SDLGYM2CBZKBDGK3VT6KFMUM6HE7LXL2WEQE5JCR',
+    'privateKey': '26B64CB10F005E5988A36744CA19E20D835CCC7C105AAA5F3B212DA593180930',
+    'publicKey': '9801508C58666C746F471538E43002B85B1CD542F9874B2861183919BA8787B6'
   };
 
   group('Account creation', () {
     test('can generate a new account for the given network type', () {
-      final account = Account.generate(NetworkType.MIJIN_TEST);
+      for (var type in NetworkType.values) {
+        final account = Account.generate(type);
 
-      expect(account.publicKey, isNotNull);
-      expect(account.privateKey, isNotNull);
-      expect(account.plainAddress, isNotNull);
+        expect(account.publicKey, isNotNull);
+        expect(account.privateKey, isNotNull);
+        expect(account.plainAddress, isNotNull);
+      }
     });
 
     test('can create an account from a private key', () {
@@ -47,14 +48,13 @@ void main() {
     });
 
     test('can create an account from a keypair', () {
-      final SignSchema signSchema = NetworkType.resolveSignSchema(NetworkType.MIJIN_TEST);
-      final keyPair = KeyPair.random(signSchema);
+      final keyPair = KeyPair.random();
       final account = Account.fromKeyPair(keyPair, NetworkType.MIJIN_TEST);
 
       expect(account.keyPair.publicKey, equals(keyPair.publicKey));
       expect(account.keyPair.privateKey, equals(keyPair.privateKey));
-      expect(account.publicKey, equals(HexUtils.getString(keyPair.publicKey)));
-      expect(account.privateKey, equals(HexUtils.getString(keyPair.privateKey)));
+      expect(account.publicKey, equals(ByteUtils.bytesToHex(keyPair.publicKey)));
+      expect(account.privateKey, equals(ByteUtils.bytesToHex(keyPair.privateKey)));
       expect(account.publicAccount.address.networkType, equals(NetworkType.MIJIN_TEST));
     });
 
@@ -92,6 +92,16 @@ void main() {
       expect(publicAccount.verifySignature('catapult rocks!', signedData), isTrue);
     });
 
+    test('UTF-8 - NIS1', () {
+      final account = Account.fromPrivateKey(
+          'AB860ED1FE7C91C02F79C02225DAC708D7BD13369877C1F59E678CC587658C47', NetworkType.TEST_NET);
+
+      final publicAccount = account.publicAccount;
+      final signedData = account.signData('catapult rocks!');
+
+      expect(publicAccount.verifySignature('catapult rocks!', signedData), isTrue);
+    });
+
     test('Hexadecimal', () {
       final account = Account.fromPrivateKey(
           'AB860ED1FE7C91C02F79C02225DAC708D7BD13369877C1F59E678CC587658C47',
@@ -102,27 +112,16 @@ void main() {
 
       expect(publicAccount.verifySignature('0xAA', signedData), isTrue);
     });
-  });
 
-  group('Account messaging', () {
-    test('Can encrypt and decrypt a message', () {
-      const testNetwork = NetworkType.MIJIN_TEST;
-      final sender = Account.fromPrivateKey(testAccount['privateKey'], testNetwork);
-      final recipient = Account.fromPrivateKey(
-          '2602F4236B199B3DF762B2AAB46FC3B77D8DDB214F0B62538D3827576C46C108', testNetwork);
-      const plainMessage = 'Catapult rocks!';
+    test('Hexadecimal - NIS1', () {
+      final account = Account.fromPrivateKey(
+          'AB860ED1FE7C91C02F79C02225DAC708D7BD13369877C1F59E678CC587658C47',
+          NetworkType.MIJIN_TEST);
 
-      // encrypt
-      final encryptedMessage =
-          sender.encryptMessage(plainMessage, recipient.publicAccount, testNetwork);
-      expect(encryptedMessage.type, equals(MessageType.ENCRYPTED_MESSAGE));
-      expect(encryptedMessage.payload, isNotNull);
+      final publicAccount = account.publicAccount;
+      final signedData = account.signData('0xAA');
 
-      // decrypt
-      final decryptedMessage =
-          recipient.decryptMessage(encryptedMessage, sender.publicAccount, testNetwork);
-      expect(decryptedMessage.type, equals(MessageType.PLAIN_MESSAGE));
-      expect(decryptedMessage.payload, equals(plainMessage));
+      expect(publicAccount.verifySignature('0xAA', signedData), isTrue);
     });
   });
 }

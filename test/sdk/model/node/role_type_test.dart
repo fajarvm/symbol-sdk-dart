@@ -24,6 +24,7 @@ void main() {
     test('Valid role types', () {
       expect(RoleType.PEER_NODE.value, 1);
       expect(RoleType.API_NODE.value, 2);
+      expect(RoleType.DUAL_NODE.value, 3);
 
       expect(RoleType.PEER_NODE.toString(), equals('RoleType{value: ${RoleType.PEER_NODE.value}}'));
     });
@@ -31,6 +32,7 @@ void main() {
     test('Can retrieve a valid role type', () {
       expect(RoleType.fromInt(1), RoleType.PEER_NODE);
       expect(RoleType.fromInt(2), RoleType.API_NODE);
+      expect(RoleType.fromInt(3), RoleType.DUAL_NODE);
     });
 
     test('invalid or unknown type should throw an error', () {
@@ -39,7 +41,7 @@ void main() {
           throwsA(predicate((e) => e is ArgumentError && e.message == errorMessage)));
       expect(() => RoleType.fromInt(0),
           throwsA(predicate((e) => e is ArgumentError && e.message == errorMessage)));
-      expect(() => RoleType.fromInt(3),
+      expect(() => RoleType.fromInt(4),
           throwsA(predicate((e) => e is ArgumentError && e.message == errorMessage)));
     });
   });

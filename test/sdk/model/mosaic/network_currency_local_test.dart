@@ -14,23 +14,23 @@
 // limitations under the License.
 //
 
-library symbol_sdk_dart.test.sdk.model.mosaic.network_currency_mosaic_test;
+library symbol_sdk_dart.test.sdk.model.mosaic.network_currency_local_test;
 
 import 'package:test/test.dart';
 
-import 'package:symbol_sdk_dart/sdk.dart' show NamespaceId, Uint64, NetworkCurrencyMosaic;
+import 'package:symbol_sdk_dart/sdk.dart' show NamespaceId, Uint64, NetworkCurrencyLocal;
 
 void main() {
-  group('NetworkCurrencyMosaic', () {
-    test('Can create a NetworkCurrencyMosaic object using createRelative()', () {
-      final currency = NetworkCurrencyMosaic.createRelative(Uint64(1000));
+  group('NetworkCurrencyLocal', () {
+    test('Can create a NetworkCurrencyLocal object using createRelative()', () {
+      final currency = NetworkCurrencyLocal.createRelative(Uint64(1000));
 
       expect(currency.id.id.toHex(), equals('85bbea6cc462b244'));
       expect(currency.amount, equals(Uint64(1000 * 1000000)));
     });
 
-    test('Can create a NetworkCurrencyMosaic object using createAbsolute', () {
-      final currency = NetworkCurrencyMosaic.createAbsolute(Uint64(1000));
+    test('Can create a NetworkCurrencyLocal object using createAbsolute', () {
+      final currency = NetworkCurrencyLocal.createAbsolute(Uint64(1000));
 
       expect(currency.id.id.toHex(), equals('85bbea6cc462b244'));
       expect(currency.amount, equals(Uint64(1000)));
@@ -40,10 +40,10 @@ void main() {
       final namespaceU64 = Uint64.fromHex('85bbea6cc462b244');
       final namespaceId = new NamespaceId(id: namespaceU64);
 
-      expect(NetworkCurrencyMosaic.NAMESPACE_ID, namespaceId);
-      expect(NetworkCurrencyMosaic.DIVISIBILITY, 6);
-      expect(NetworkCurrencyMosaic.TRANSFERABLE, isTrue);
-      expect(NetworkCurrencyMosaic.SUPPLY_MUTABLE, isFalse);
+      expect(NetworkCurrencyLocal.NAMESPACE_ID, namespaceId);
+      expect(NetworkCurrencyLocal.DIVISIBILITY, 6);
+      expect(NetworkCurrencyLocal.TRANSFERABLE, isTrue);
+      expect(NetworkCurrencyLocal.SUPPLY_MUTABLE, isFalse);
     });
   });
 }

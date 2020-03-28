@@ -17,29 +17,23 @@
 library symbol_sdk_dart.test.sdk.model.message.persistent_harvesting_delegation_message_test;
 
 import 'package:convert/convert.dart' show hex;
-
-import 'package:test/test.dart';
-
 import 'package:symbol_sdk_dart/sdk.dart'
-    show Account, EncryptedMessage, MessageType, NetworkType, PersistentHarvestingDelegationMessage;
+    show Account, MessageType, NetworkType, PersistentHarvestingDelegationMessage;
+import 'package:test/test.dart';
 
 void main() {
   group('PersistentHarvestingDelegationMessage', () {
-    const String senderPrivateKey =
-        '2602F4236B199B3DF762B2AAB46FC3B77D8DDB214F0B62538D3827576C46C108';
     const String recipientPrivateKey =
         'B72F2950498111BADF276D6D9D5E345F04E0D5C9B8342DA983C3395B4CF18F08';
     const String delegatedPrivateKey =
         'F0AB1010EFEE19EE5373719881DF5123C13E643C519655F7E97347BFF77175BF';
 
-    final Account sender = Account.fromPrivateKey(senderPrivateKey, NetworkType.MIJIN_TEST);
     final Account recipient = Account.fromPrivateKey(recipientPrivateKey, NetworkType.MIJIN_TEST);
-    final Account sender_nis = Account.fromPrivateKey(senderPrivateKey, NetworkType.TEST_NET);
     final Account recipient_nis = Account.fromPrivateKey(recipientPrivateKey, NetworkType.TEST_NET);
 
     test('Can create a PersistentHarvestingDelegation message', () {
       final encryptedMessage = PersistentHarvestingDelegationMessage.create(
-          delegatedPrivateKey, sender.privateKey, recipient.publicKey, NetworkType.MIJIN_TEST);
+          delegatedPrivateKey, recipient.publicKey, NetworkType.MIJIN_TEST);
       expect(encryptedMessage.payload.length, equals(208));
       expect(encryptedMessage.type, equals(MessageType.PERSISTENT_HARVESTING_DELEGATION_MESSAGE));
     });
@@ -56,7 +50,7 @@ void main() {
       expect(encryptedMessage.payload.length, equals(208));
       expect(encryptedMessage.payload.substring(2), equals(payload));
       expect(encryptedMessage.type, equals(MessageType.PERSISTENT_HARVESTING_DELEGATION_MESSAGE));
-      expect(encryptedMessage.payload.substring(0, 2), equals(messageTypeHex));
+      expect(encryptedMessage.payload.substring(0, 2), equals(messageTypeHex.toUpperCase()));
     });
 
     test('Should throw an error when creating a message from an invalid payload', () {
@@ -72,50 +66,40 @@ void main() {
 
     test('Can create and decrypt message (Catapult Schema)', () {
       final encryptedMessage = PersistentHarvestingDelegationMessage.create(
-          delegatedPrivateKey,
-          sender.privateKey.toUpperCase(),
-          recipient.publicKey.toUpperCase(),
-          NetworkType.MIJIN_TEST);
+          delegatedPrivateKey, recipient.publicKey.toUpperCase(), NetworkType.MIJIN_TEST);
       expect(encryptedMessage.payload, isNotNull);
       expect(encryptedMessage.type, equals(MessageType.PERSISTENT_HARVESTING_DELEGATION_MESSAGE));
 
       final decryptedMessage = PersistentHarvestingDelegationMessage.decrypt(
-          encryptedMessage,
-          recipient.privateKey.toUpperCase(),
-          sender.publicKey.toUpperCase(),
-          NetworkType.MIJIN_TEST);
+          encryptedMessage, recipient.privateKey.toUpperCase(), NetworkType.MIJIN_TEST);
       hex.decode(decryptedMessage);
 
       expect(decryptedMessage.toUpperCase(), equals(delegatedPrivateKey));
     });
 
     test('Can create and decrypt message (NIS1 Schema)', () {
-      final encryptedMessage = PersistentHarvestingDelegationMessage.create(delegatedPrivateKey,
-          sender_nis.privateKey, recipient_nis.publicAccount.publicKey, NetworkType.TEST_NET);
+      final encryptedMessage = PersistentHarvestingDelegationMessage.create(
+          delegatedPrivateKey, recipient_nis.publicAccount.publicKey, NetworkType.TEST_NET);
 
       expect(encryptedMessage.payload, isNotNull);
       expect(encryptedMessage.type, equals(MessageType.PERSISTENT_HARVESTING_DELEGATION_MESSAGE));
 
-      final String decrypted = PersistentHarvestingDelegationMessage.decrypt(encryptedMessage,
-          recipient_nis.privateKey, sender_nis.publicAccount.publicKey, NetworkType.TEST_NET);
+      final String decrypted = PersistentHarvestingDelegationMessage.decrypt(
+          encryptedMessage, recipient_nis.privateKey, NetworkType.TEST_NET);
       expect(decrypted.toUpperCase(), equals(delegatedPrivateKey));
     });
 
     test('Cannot create a message without the message payload', () {
       expect(
           () => PersistentHarvestingDelegationMessage.create(
-              null, sender.privateKey, recipient.publicAccount.publicKey, NetworkType.MIJIN_TEST),
+              null, recipient.publicAccount.publicKey, NetworkType.MIJIN_TEST),
           throwsA(predicate((e) => e is ArgumentError && e.message.contains('Must not be null'))));
     });
 
-    test('Cannot create a message without private/public key', () {
+    test('Cannot create a message without network type', () {
       expect(
           () => PersistentHarvestingDelegationMessage.create(
-              delegatedPrivateKey, null, recipient.publicAccount.publicKey, NetworkType.MIJIN_TEST),
-          throwsA(predicate((e) => e is ArgumentError && e.message.contains('Must not be null'))));
-      expect(() => EncryptedMessage.create('Hello', senderPrivateKey, null, NetworkType.MIJIN_TEST),
-          throwsA(predicate((e) => e is ArgumentError && e.message.contains('Must not be null'))));
-      expect(() => EncryptedMessage.create('Hello', null, null, NetworkType.MIJIN_TEST),
+              delegatedPrivateKey, recipient.publicAccount.publicKey, null),
           throwsA(predicate((e) => e is ArgumentError && e.message.contains('Must not be null'))));
     });
   });

@@ -21,7 +21,7 @@ import 'package:test/test.dart';
 import 'package:symbol_sdk_dart/sdk.dart' show AccountNames, Address, NamespaceId, NamespaceName;
 
 void main() {
-  group('Account creation', () {
+  group('AccountNames', () {
     test('can create an AccountNames object', () {
       final address = Address.fromRawAddress('SDGLFWDSHILTIUHGIBH5UGX2VYF5VNJEKCCDBR26');
       final name1 = new NamespaceName(NamespaceId.fromFullName('alias1'), 'alias1');

@@ -32,8 +32,10 @@ class MosaicNonce {
   MosaicNonce._(this.nonce);
 
   factory MosaicNonce(final Uint8List nonce) {
-    if (nonce == null || NONCE_SIZE != nonce.length) {
-      throw new ArgumentError('Invalid nonce size. The nonce should be $NONCE_SIZE bytes.');
+    ArgumentError.checkNotNull(nonce);
+
+    if (NONCE_SIZE != nonce.length) {
+      throw new ArgumentError('Invalid nonce size. The nonce should be $NONCE_SIZE bytes but received: ${nonce.length}');
     }
 
     return new MosaicNonce._(nonce);

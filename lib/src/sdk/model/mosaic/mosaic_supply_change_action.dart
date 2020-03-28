@@ -14,43 +14,43 @@
 // limitations under the License.
 //
 
-library symbol_sdk_dart.sdk.model.namespace.alias_action_type;
+library symbol_sdk_dart.sdk.model.mosaic.mosaic_supply_change_action;
 
-/// The alias action type.
-class AliasActionType {
-  static const String UNKNOWN_ALIAS_ACTION_TYPE = 'unknown alias action type';
+/// The supply type of a mosaic.
+class MosaicSupplyChangeAction {
+  static const String UNKNOWN_MOSAIC_SUPPLY_CHANGE_ACTION = 'unknown mosaic supply change action';
 
-  /// Links an alias.
-  static const AliasActionType LINK = AliasActionType._(0);
+  /// Mosaic with this type can decrease in supply.
+  static const MosaicSupplyChangeAction DECREASE = MosaicSupplyChangeAction._(0);
 
-  /// Unlinks an alias.
-  static const AliasActionType UNLINK = AliasActionType._(1);
+  /// Mosaic with this type can increase in supply.
+  static const MosaicSupplyChangeAction INCREASE = MosaicSupplyChangeAction._(1);
 
-  /// Supported alias action types.
-  static final List<AliasActionType> values = <AliasActionType>[LINK, UNLINK];
+  /// Supported mosaic supply types.
+  static final List<MosaicSupplyChangeAction> values = <MosaicSupplyChangeAction>[DECREASE, INCREASE];
 
   /// The int value of this type.
   final int value;
 
   // constant constructor: makes this class available on runtime.
   // emulates an enum class with a value.
-  const AliasActionType._(this.value);
+  const MosaicSupplyChangeAction._(this.value);
 
-  /// Returns a [AliasActionType] for the given int value.
+  /// Returns a [MosaicSupplyChangeAction] for the given int value.
   ///
   /// Throws an error when the type is unknown.
-  static AliasActionType fromInt(final int value) {
+  static MosaicSupplyChangeAction fromInt(final int value) {
     for (var type in values) {
       if (type.value == value) {
         return type;
       }
     }
 
-    throw new ArgumentError(UNKNOWN_ALIAS_ACTION_TYPE);
+    throw new ArgumentError(UNKNOWN_MOSAIC_SUPPLY_CHANGE_ACTION);
   }
 
   @override
   String toString() {
-    return 'AliasActionType{value: $value}';
+    return 'MosaicSupplyChangeAction{value: $value}';
   }
 }
