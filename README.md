@@ -7,11 +7,16 @@
 [![Coverage Status](https://codecov.io/gh/fajarvm/symbol-sdk-dart/branch/master/graph/badge.svg)][codecov-build]
 [![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)][apache-license]
 
-> :construction: :warning: :rotating_light: :warning: :construction:
+> :rotating_light: :warning: :rotating_light: :warning: :rotating_light:
+>
+> PLEASE DO NOT USE!
 > 
-> This SDK is currently a work in progress. It is currently being built in the author's best effort. Use it at your own risk. Please, refer to the disclaimer below.
+> THE DEVELOPMENT OF THIS SOFTWARE HAS BEEN DISCONTINUED!  
+> THIS SOFTWARE NO LONGER WORKS WITH THE LATEST VERSION OF THE SYMBOL PROTOCOL! 
 > 
-> :construction: :warning: :rotating_light: :warning: :construction:
+> PLEASE DO NOT USE! 
+> 
+> :rotating_light: :warning: :rotating_light: :warning: :rotating_light:
 
 ## About
 The `symbol-sdk-dart` is an unofficial Software Development Kit for Symbol written in Dart. Developers can use this SDK to build cross-platform applications and communicate with Symbol [(Catapult) REST API][nemtech-api] enabled servers. The application can be deployed on [multiple platforms][dart-platforms] from a single codebase: Mobile for both iOS and Android (with Flutter), Web, or Command-line/Server-side.
